@@ -1,5 +1,11 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
+used:
+
+commitizen
+git-cz
+[https://github.com/jscutlery/semver#jscutlerysemver]
+
 # TODO
 
 - [ ] change [detect-secrets](https://github.com/Yelp/detect-secrets) to be available on install (maybe git-leaks)
