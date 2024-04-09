@@ -2,7 +2,9 @@
   "name": "@its-battistar/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "serve": "nx run-many -t serve"
+  },
   "private": true,
   "engines": {
     "node": ">=20.0.0"
