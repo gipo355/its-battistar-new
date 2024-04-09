@@ -19,6 +19,11 @@ RUN chown -R its-battistar-be:its-battistar-be .
 
 # You can remove this install step if you build with `--bundle` option.
 # The bundled output will include external dependencies.
-RUN npm --prefix its-battistar-be --omit=dev -f install
+# RUN npm --prefix its-battistar-be --omit=dev -f install
+RUN npm install -g pnpm
+
+RUN pnpm --prefix its-battistar-be install --prod
+
+EXPOSE 3000
 
 CMD [ "node", "its-battistar-be" ]

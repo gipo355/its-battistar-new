@@ -2,6 +2,7 @@
  * This is not a production server yet!
  * This is only a minimal backend to get started.
  */
+import 'tslib'; // required for compilation since we are using typescript with webpack
 
 import express = require('express');
 import path = require('path');
