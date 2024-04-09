@@ -6,7 +6,7 @@
     "commit": "git-cz",
     "serve": "nx run-many -t serve",
     "prepare": "husky",
-    "version": "nx run workspace:version"
+    "version": "nx affected --target version"
   },
   "private": true,
   "engines": {
