@@ -1,28 +1,30 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
 import 'tslib'; // required for compilation since we are using typescript with webpack
+import 'dotenv-defaults/config';
 
-import express = require('express');
-import path = require('path');
+import mongoose from 'mongoose';
 
-import { sharedTypes } from '@its-battistar/shared-types';
+import { buildApp } from './app';
+import { logger } from './utils/logger';
 
-console.log(sharedTypes());
+const main = function () {
+  logger.info('🚀 Starting server...');
 
-const app = express();
+  const app = buildApp();
 
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+  const PORT = process.env.PORT ?? '3000';
 
-app.get('/api', (_, response) => {
-  response.send({ message: 'Welcome to its-battistar-be!' });
-});
+  logger.info(`⚡ Starting mongoose`);
+  mongoose.set('debug', true);
+  mongoose
+    .connect('mongodb://127.0.0.1:27017/simulazione-01')
+    .then(() => {
+      app.listen(PORT, () => {
+        logger.info(`🚀 Server started on http://localhost:${PORT}`);
+      });
+    })
+    .catch((error: unknown) => {
+      logger.error('Error connecting to MongoDB', error);
+    });
+};
 
-const port = process.env.PORT ?? '3333';
-
-const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
-});
-
-server.on('error', console.error);
+main();
