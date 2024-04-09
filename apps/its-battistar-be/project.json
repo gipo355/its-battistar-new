@@ -30,6 +30,12 @@
     "docker-build": {
       "dependsOn": ["build"],
       "command": "docker build -f apps/its-battistar-be/Dockerfile . -t its-battistar-be"
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventionalcommits"
+      }
     }
   }
 }

@@ -11,6 +11,12 @@
       "options": {
         "reportsDirectory": "../../coverage/libs/shared-types"
       }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventionalcommits"
+      }
     }
   }
 }
