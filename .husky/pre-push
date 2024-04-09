@@ -1,1 +1,1 @@
-nx run-many -t test
+nx run-many --affected -t test
