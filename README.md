@@ -27,6 +27,7 @@ ghcr
 [https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#labelling-container-images]
 [https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions]
 permission errors [https://github.com/docker/build-push-action/issues/687]
+[https://docs.docker.com/build/ci/github-actions/manage-tags-labels/]
 
 # ItsBattistar
 

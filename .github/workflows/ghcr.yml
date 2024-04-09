@@ -54,6 +54,23 @@ jobs:
       # build and deploy
       - name: Build project
         run: nx run its-battistar-be:build
+        # prepare tags
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            ghcr.io/gipo355/its-battistar-be
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
       ## DOCKER BUILD AND PUSH to GHCR
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -72,4 +89,6 @@ jobs:
           file: ./apps/its-battistar-be/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/its-battistar-be:latest
+          # tags: ghcr.io/${{ github.repository_owner }}/its-battistar-be:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
