@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NxWelcomeComponent } from './nx-welcome.component';
+import { sharedTypes } from '@its-battistar/shared-types';
 import {
   NgbPaginationModule,
   NgbAlertModule,
@@ -20,6 +21,10 @@ import {
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'its-battistar';
+
+  ngOnInit(): void {
+    console.log(sharedTypes());
+  }
 }

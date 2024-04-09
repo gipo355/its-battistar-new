@@ -5,6 +5,9 @@
 
 import express = require('express');
 import * as path from 'path';
+import { sharedTypes } from '@its-battistar/shared-types';
+
+console.log(sharedTypes());
 
 const app = express();
 

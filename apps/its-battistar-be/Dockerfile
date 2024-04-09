@@ -12,9 +12,9 @@ ENV PORT=3000
 WORKDIR /app
 
 RUN addgroup --system its-battistar-be && \
-          adduser --system -G its-battistar-be its-battistar-be
+  adduser --system -G its-battistar-be its-battistar-be
 
-COPY  its-battistar-be
+COPY dist/apps/its-battistar-be its-battistar-be
 RUN chown -R its-battistar-be:its-battistar-be .
 
 # You can remove this install step if you build with `--bundle` option.
