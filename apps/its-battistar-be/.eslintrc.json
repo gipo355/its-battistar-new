@@ -1,5 +1,9 @@
 {
-  "extends": ["../../.eslintrc.json"],
+  "extends": [
+    "../../.eslintrc.json",
+    "plugin:n/recommended",
+    "plugin:security/recommended-legacy"
+  ],
   "ignorePatterns": ["!**/*"],
   "parserOptions": {
     "project": ["tsconfig.*?.json"]
@@ -21,5 +25,8 @@
       "files": ["*.js", "*.jsx"],
       "rules": {}
     }
-  ]
+  ],
+  "rules": {
+    "n/no-missing-import": "off"
+  }
 }

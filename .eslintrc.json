@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nx"],
+  "plugins": ["@nx", "simple-import-sort", "import"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -30,12 +30,35 @@
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/strict-type-checked",
         "plugin:@typescript-eslint/stylistic-type-checked",
-        "plugin:unicorn/recommended"
+        "plugin:unicorn/recommended",
+        "plugin:import/recommended"
       ],
       "rules": {
         "sort-imports": "off",
         "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error"
+        "simple-import-sort/exports": "error",
+        "unicorn/no-abusive-eslint-disable": "off",
+        "import/no-unresolved": "off",
+        "unicorn/no-null": "off",
+        "unicorn/no-array-for-each": "warn",
+        "unicorn/consistent-function-scoping": "warn",
+        "unicorn/prefer-top-level-await": "warn",
+        "unicorn/prefer-module": "warn",
+        "complexity": ["error", 20],
+        "consistent-return": "warn",
+        "no-useless-return": "warn",
+        "prefer-const": "warn",
+        "eqeqeq": "error",
+        "no-console": "warn",
+        "import/no-extraneous-dependencies": "off",
+        "import/first": "error",
+        "import/newline-after-import": "error",
+        "import/no-duplicates": "error",
+        "import/order": "off",
+        "import/export": "warn",
+        "import/prefer-default-export": "off",
+        "import/no-default-export": "warn",
+        "import/namespace": "off"
       }
     },
     {

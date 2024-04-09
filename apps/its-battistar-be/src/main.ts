@@ -4,7 +4,8 @@
  */
 
 import express = require('express');
-import * as path from 'path';
+import path = require('path');
+
 import { sharedTypes } from '@its-battistar/shared-types';
 
 console.log(sharedTypes());
@@ -13,8 +14,8 @@ const app = express();
 
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
-app.get('/api', (_, res) => {
-  res.send({ message: 'Welcome to its-battistar-be!' });
+app.get('/api', (_, response) => {
+  response.send({ message: 'Welcome to its-battistar-be!' });
 });
 
 const port = process.env.PORT ?? '3333';
