@@ -6,6 +6,8 @@
 # Run the container with `docker run -p 3000:3000 -t its-battistar-be`.
 FROM docker.io/node:lts-alpine
 
+LABEL org.opencontainers.image.source=https://github.com/gipo355/its-battistar
+
 ENV HOST=0.0.0.0
 ENV PORT=3000
 
