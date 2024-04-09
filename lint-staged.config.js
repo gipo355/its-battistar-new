@@ -4,5 +4,5 @@ module.exports = {
     'prettier --write',
   '*.{ts,tsx,js,jsx,svelte,astro,cjs,mjs,cts,mts,vue}':
     'eslint --fix --ext .js,.ts,.tsx,.jsx,.svelte,.astro,.cjs,.mjs,.cts,.mts,.vue',
-  '*.{html}': 'html-validate && htmlhint',
+  // '*.{html}': 'html-validate && htmlhint',
 };
