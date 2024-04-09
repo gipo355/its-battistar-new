@@ -30,6 +30,7 @@
     "@angular/language-service": "~17.3.0",
     "@nx/eslint": "18.2.3",
     "@nx/eslint-plugin": "18.2.3",
+    "@nx/express": "^18.2.3",
     "@nx/jest": "18.2.3",
     "@nx/js": "18.2.3",
     "@nx/workspace": "18.2.3",
