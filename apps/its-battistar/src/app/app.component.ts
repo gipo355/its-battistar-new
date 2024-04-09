@@ -6,12 +6,9 @@ import {
   NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 
-import { NxWelcomeComponent } from './nx-welcome.component';
-
 @Component({
   standalone: true,
   imports: [
-    NxWelcomeComponent,
     RouterModule,
 
     // ng-bootstrap modules
@@ -25,4 +22,6 @@ import { NxWelcomeComponent } from './nx-welcome.component';
 })
 export class AppComponent {
   title = 'its-battistar';
+
+  tooltip = 'This is a tooltip';
 }
