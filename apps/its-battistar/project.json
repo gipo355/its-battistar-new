@@ -74,6 +74,10 @@
       "options": {
         "jestConfig": "apps/its-battistar/jest.config.ts"
       }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/its-battistar/Dockerfile . -t its-battistar"
     }
   }
 }
