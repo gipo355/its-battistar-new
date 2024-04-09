@@ -26,6 +26,7 @@ ghcr
 [https://dev.to/ken_mwaura1/automate-docker-image-builds-and-push-to-github-registry-using-github-actions-4h20]
 [https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#labelling-container-images]
 [https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions]
+permission errors [https://github.com/docker/build-push-action/issues/687]
 
 # ItsBattistar
 
