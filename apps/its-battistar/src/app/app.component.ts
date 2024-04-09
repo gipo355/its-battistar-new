@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
 import { sharedTypes } from '@its-battistar/shared-types';
 import {
-  NgbPaginationModule,
   NgbAlertModule,
+  NgbPaginationModule,
 } from '@ng-bootstrap/ng-bootstrap';
+
+import { NxWelcomeComponent } from './nx-welcome.component';
 
 @Component({
   standalone: true,
