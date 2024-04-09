@@ -4,6 +4,7 @@ import { sharedTypes } from '@its-battistar/shared-types';
 import {
   NgbAlertModule,
   NgbPaginationModule,
+  NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { NxWelcomeComponent } from './nx-welcome.component';
@@ -15,6 +16,7 @@ import { NxWelcomeComponent } from './nx-welcome.component';
     RouterModule,
 
     // ng-bootstrap modules
+    NgbTooltipModule,
     NgbPaginationModule,
     NgbAlertModule,
   ],
