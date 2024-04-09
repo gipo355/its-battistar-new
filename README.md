@@ -2,8 +2,7 @@
 
 used:
 
-commitizen
-git-cz
+[git-cz](https://cz-git.qbb.sh/guide/)
 [https://github.com/jscutlery/semver#jscutlerysemver]
 
 # TODO
