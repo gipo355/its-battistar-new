@@ -1,11 +1,12 @@
 {
   "name": "@its-battistar/source",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "commit": "git-cz",
     "serve": "nx run-many -t serve",
-    "prepare": "husky"
+    "prepare": "husky",
+    "version": "nx run workspace:version"
   },
   "private": true,
   "engines": {
