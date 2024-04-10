@@ -1,3 +1,4 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
@@ -10,6 +11,7 @@ import {
   standalone: true,
   imports: [
     RouterModule,
+    HttpClientModule,
 
     // ng-bootstrap modules
     NgbTooltipModule,
@@ -23,5 +25,18 @@ import {
 export class AppComponent {
   title = 'its-battistar';
 
+  constructor(private http: HttpClient) {}
+
   tooltip = 'This is a tooltip';
+
+  onHttp() {
+    this.http.get('/api').subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
 }

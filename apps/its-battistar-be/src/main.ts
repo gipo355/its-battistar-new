@@ -22,8 +22,8 @@ const main = async function () {
 
   logger.info(`⚡ Starting mongoose`);
   mongoose.set('debug', true);
-  await mongoose.connect(MONGO_STRING).catch((error: unknown) => {
-    logger.error('Error connecting to MongoDB', error);
+  await mongoose.connect(MONGO_STRING, {}).catch((error: unknown) => {
+    logger.error(`Error connecting to MongoDB ${JSON.stringify(error)}`);
   });
 
   app.on('close', () => {
