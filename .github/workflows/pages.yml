@@ -49,7 +49,7 @@ jobs:
       - name: Install NX Cli
         run: pnpm add -g nx
       - name: Install dependencies
-        run: pnpm install -r --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       # build and deploy
       - name: Build project
         run: nx run its-battistar:build
