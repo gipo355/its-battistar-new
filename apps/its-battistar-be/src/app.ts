@@ -17,6 +17,10 @@ export const buildApp = function () {
   app.use(pino());
   app.use(bodyParser.json());
 
+  app.get('/healthz', (_, response) => {
+    response.status(200).send('OK');
+  });
+
   app.use('/api', apiRouter);
 
   app.use(errorHandlers);
