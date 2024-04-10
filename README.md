@@ -7,16 +7,20 @@ used:
 
 # TODO
 
+- [ ] init building swagger and angular
+
+- [ ] add swagger to express and other middleware
+
 - [ ] change [detect-secrets](https://github.com/Yelp/detect-secrets) to be
       available on install (maybe git-leaks)
 
 - [ ] Add a description of the project
 
-- [ ] deploy express
+- [x] deploy express
 
 - [x] deploy angular
 
-- [ ] semver with changlog (changeset, semantic-release)
+- [x] semver with changlog (changeset, semantic-release)
 
 # BUGFIXES
 
