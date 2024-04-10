@@ -2,6 +2,7 @@ import bodyParser = require('body-parser');
 import cors = require('cors');
 import express = require('express');
 
+import mongoose from 'mongoose';
 import pino from 'pino-http';
 
 import { apiRouter } from './api/routes';
@@ -18,7 +19,8 @@ export const buildApp = function () {
   app.use(bodyParser.json());
 
   app.get('/healthz', (_, response) => {
-    response.status(200).send('OK');
+    const mongostate = mongoose.connection.readyState;
+    response.status(200).json({ status: 'ok', mongostate });
   });
 
   app.use('/api', apiRouter);
