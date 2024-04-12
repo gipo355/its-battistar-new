@@ -1,7 +1,8 @@
 {
   "name": "its-battistar-be-go",
-  "root": "apps/its-battistar-be-go",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/its-battistar-be-go/cmd/server",
+  "root": "apps/its-battistar-be-go",
   "projectType": "application",
   "targets": {
     "build": {
@@ -15,6 +16,13 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "go run ./cmd/server",
+        "cwd": "apps/its-battistar-be-go"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go-task dev",
         "cwd": "apps/its-battistar-be-go"
       }
     }
