@@ -1,10 +1,16 @@
 import { json, Router, urlencoded } from 'express';
+
+import {
+  corsOptions,
+  helmetOptions,
+  RATE_LIMITER_DURATION,
+  RATE_LIMITER_POINTS,
+} from './config';
 import ExpressMongoSanitize = require('express-mongo-sanitize');
 import helmet from 'helmet';
 import hpp = require('hpp');
 import pino from 'pino-http';
 
-import { corsOptions, helmetOptions } from './config';
 import cors = require('cors');
 import cookieParser = require('cookie-parser');
 
@@ -28,9 +34,29 @@ router.use(
   })
 );
 
-router.use(pino());
+router.use(
+  pino(
+    e.NODE_ENV === 'development'
+      ? {
+          level: 'debug',
+          transport: {
+            target: 'pino-pretty',
+            options: {
+              ignore: 'pid,hostname',
+              colorize: true,
+            },
+          },
+        }
+      : {}
+  )
+);
 
-e.NODE_ENV !== 'development' && router.use(rateLimiterMiddleware);
+if (e.NODE_ENV !== 'development') {
+  router.use(rateLimiterMiddleware);
+  logger.info(
+    `Rate limiter set to ${RATE_LIMITER_POINTS.toString()} requests per ${RATE_LIMITER_DURATION.toString()} seconds`
+  );
+}
 
 // Parsers
 router.use(cookieParser(e.COOKIE_SECRET));
@@ -57,8 +83,11 @@ router.use(
     },
   })
 );
+
 router.use((request, _, next) => {
   request.requestTime = new Date().toISOString();
+  // initialize user for performance and security on every request
+  request.user = null;
   next();
 });
 
