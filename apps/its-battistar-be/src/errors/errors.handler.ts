@@ -83,7 +83,7 @@ const sendErrorProduction = (
   });
 };
 
-export const globalErrorHandler: ErrorRequestHandler = (
+export const errorsHandler: ErrorRequestHandler = (
   error,
   _request,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

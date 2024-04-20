@@ -7,7 +7,7 @@ import { appRouter } from './api/app.router';
 import { NUMBER_OF_PROXIES } from './config';
 import { prepareMongo } from './db/mongo';
 import { environment } from './environment';
-import { globalErrorHandler } from './errors/errors.handler';
+import { errorsHandler } from './errors/errors.handler';
 import { errorsRouter } from './errors/errors.router';
 import { appMiddleware } from './middleware/app.middleware';
 import { logger } from './utils/logger';

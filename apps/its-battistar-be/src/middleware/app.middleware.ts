@@ -3,7 +3,6 @@ import { json, Router, urlencoded } from 'express';
 
 import {
   corsOptions,
-  ENABLE_SENTRY,
   helmetOptions,
   RATE_LIMITER_DURATION,
   RATE_LIMITER_POINTS,
@@ -23,6 +22,9 @@ import { rateLimiterMiddleware } from './rate-limiter.middleware';
 
 const router = Router();
 
+/**
+ * ## Security
+ */
 router.use(cors(corsOptions));
 router.options('*', cors(corsOptions));
 
@@ -31,11 +33,14 @@ router.use(helmet(helmetOptions));
 router.use(
   // prevent parameter pollution
   hpp({
-    // whitelist parameters
+    // whitelist parameters accepted
     whitelist: ['name'],
   })
 );
 
+/**
+ * ## Logging
+ */
 router.use(
   pino(
     e.NODE_ENV === 'development'
@@ -53,43 +58,6 @@ router.use(
   )
 );
 
-if (e.NODE_ENV !== 'development') {
-  router.use(rateLimiterMiddleware);
-  logger.info(
-    `Rate limiter set to ${RATE_LIMITER_POINTS.toString()} requests per ${RATE_LIMITER_DURATION.toString()} seconds`
-  );
-}
-
-// Parsers
-router.use(cookieParser(e.COOKIE_SECRET));
-
-router.use(urlencoded({ extended: true, limit: '10kb' }));
-
-router.use(
-  json({
-    limit: '10kb',
-    type: 'application/json',
-  })
-);
-
-router.use(
-  ExpressMongoSanitize({
-    onSanitize: (object) => {
-      const logObject = {
-        message: `Sanitized a ${object.key} with express-mongo-sanitize`,
-        originalUrl: object.req.originalUrl,
-        query: object.req.query,
-        data: object,
-      };
-      logger.warn(logObject);
-    },
-  })
-);
-
-/**
- * ## SENTRY
- */
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 if (e.SENTRY_DSN) {
   Sentry.init({
     dsn: e.SENTRY_DSN,
@@ -113,6 +81,47 @@ if (e.SENTRY_DSN) {
   // TracingHandler creates a trace for every incoming request
   router.use(Sentry.Handlers.tracingHandler());
 }
+
+/**
+ * ## Rate limiter
+ */
+if (e.NODE_ENV !== 'development') {
+  router.use(rateLimiterMiddleware);
+  logger.info(
+    `Rate limiter set to ${RATE_LIMITER_POINTS.toString()} requests per ${RATE_LIMITER_DURATION.toString()} seconds`
+  );
+}
+
+/**
+ * ## Parsers
+ */
+router.use(cookieParser(e.COOKIE_SECRET));
+
+router.use(urlencoded({ extended: true, limit: '10kb' }));
+
+router.use(
+  json({
+    limit: '10kb',
+    type: 'application/json',
+  })
+);
+
+/**
+ * ## Sanitize
+ */
+router.use(
+  ExpressMongoSanitize({
+    onSanitize: (object) => {
+      const logObject = {
+        message: `Sanitized a ${object.key} with express-mongo-sanitize`,
+        originalUrl: object.req.originalUrl,
+        query: object.req.query,
+        data: object,
+      };
+      logger.warn(logObject);
+    },
+  })
+);
 
 router.use((request, _, next) => {
   request.requestTime = new Date().toISOString();
