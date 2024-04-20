@@ -3,16 +3,19 @@ import {
   ITodo,
   validateTodo,
 } from '@its-battistar/shared-types';
-import { Handler } from 'express';
+import { Handler, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { TypedRequestBody } from '../../types/request-body';
 import { AppError } from '../../utils/app-error';
 import { catchAsync } from '../../utils/catch-async';
-import { TodoModel } from './todo.model';
+import { TodoModel } from './todos.model';
 
-export const getAllTodos: Handler = catchAsync(async (_req, res) => {
-  const todos = await TodoModel.find();
+export const getAllTodos: Handler = catchAsync(async (req, res) => {
+  const { showCompleted } = req.query as { showCompleted: string | undefined };
+
+  const todos = await TodoModel.find({
+    ...(showCompleted && { completed: showCompleted === 'true' }),
+  });
 
   res.status(StatusCodes.OK).json(
     new CustomResponse<ITodo[]>({
@@ -25,17 +28,35 @@ export const getAllTodos: Handler = catchAsync(async (_req, res) => {
 });
 
 export const createTodo: Handler = catchAsync(
-  async (req: TypedRequestBody<ITodo>, res, next) => {
-    const { title, dueDate } = req.body;
+  async (req: Request, res, next) => {
+    const { title, dueDate } = req.body as { title: string; dueDate: string };
 
+    const date = new Date(dueDate).toISOString();
+
+    // BUG: validation error returns html
     if (!validateTodo({ title, dueDate })) {
       next(new AppError('Invalid data', StatusCodes.BAD_REQUEST));
       return;
     }
 
     const newTodo = await TodoModel.create({
-      title: 'New Todo',
-      description: 'New Todo Description',
+      title,
+      dueDate: date,
     });
+
+    if (!newTodo.id) {
+      next(
+        new AppError('Failed to create todo', StatusCodes.INTERNAL_SERVER_ERROR)
+      );
+    }
+
+    res.status(StatusCodes.CREATED).json(
+      new CustomResponse<ITodo>({
+        ok: true,
+        statusCode: StatusCodes.CREATED,
+        message: 'Todo created successfully',
+        data: newTodo,
+      })
+    );
   }
 );

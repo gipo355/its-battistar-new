@@ -33,7 +33,7 @@ router.use(
   // prevent parameter pollution
   hpp({
     // whitelist parameters accepted
-    whitelist: ['name'],
+    whitelist: ['showCompleted', 'limit', 'sort', 'page', 'fields'],
   })
 );
 

@@ -5,7 +5,7 @@ import { Router } from 'express';
 import { e } from '../environment';
 import { logger } from '../utils/logger';
 import { errorsHandler } from './errors.handler';
-import { pageNotFoundController } from './page-not-found/page-not-found.handler';
+import { pageNotFoundHandler } from './page-not-found/page-not-found.handler';
 import { unsupportedMethodHandler } from './unsupported-method/unsupported-method.handler';
 // import { AppError } from '../helpers';
 
@@ -19,7 +19,7 @@ router.route('*').put(unsupportedMethodHandler);
 /**
  * ## catch page not found 404
  */
-router.use('*', pageNotFoundController);
+router.use('*', pageNotFoundHandler);
 
 /**
  * ## sentry

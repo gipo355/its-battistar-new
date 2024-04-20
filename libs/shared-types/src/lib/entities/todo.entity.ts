@@ -2,12 +2,15 @@ import { Type, Static } from '@sinclair/typebox';
 import fastJsonStringify from 'fast-json-stringify';
 import ajvInstance from '../../utils/ajv';
 
-export const todoSchema = Type.Object({
-  id: Type.Optional(Type.String()),
+export const todoSchemaInput = Type.Object({
   title: Type.String(),
   dueDate: Type.String({
     format: 'date-time',
   }),
+});
+
+export const todoSchema = Type.Object({
+  todoSchemaInput,
   completed: Type.Boolean(),
   expired: Type.Boolean(),
   createdAt: Type.String({
@@ -61,4 +64,4 @@ export interface ITodo {
 
 export const stringifyTodo = fastJsonStringify(todoSchema);
 
-export const validateTodo = ajvInstance.compile(todoSchema);
+export const validateTodo = ajvInstance.compile(todoSchemaInput);

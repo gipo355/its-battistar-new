@@ -1,7 +1,10 @@
 /**
  * @description Custom error class to handle operational error
  * IMPORTANT: This class is used to handle operational errors, not programming errors.
+ *
  * When you create a new instance of this class, the isOperationalError property is set to true
+ * by default.
+ *
  * This is used to distinguish between operational errors and programming errors so that we can
  * forward operational errors to the client and not programming errors, to prevent leaking sensitive informations.
  */
@@ -32,7 +35,7 @@ class AppError extends Error {
     // we already set the message prop to incoming message
 
     this.statusCode = statusCode;
-    // this.status = statusCode === 500 ? 'error' : 'fail';
+
     this.status = statusCode.toString().startsWith('4') ? 'fail' : 'error';
 
     // set a property to distinguish between operationa errors we defined with this class
