@@ -16,6 +16,8 @@ const environmentSchema = Type.Object({
   REDIS_USERNAME: Type.String({}),
   REDIS_PASSWORD: Type.String({}),
 
+  SENTRY_DSN: Type.Optional(Type.String()),
+
   NODE_ENV: Type.Union([
     Type.Literal('development'),
     Type.Literal('production'),
@@ -32,7 +34,7 @@ const environmentSchema = Type.Object({
 
 export type TEnvironment = Static<typeof environmentSchema>;
 
-const toCheck = {
+const requiredKeys = {
   UV_THREADPOOL_SIZE: process.env.UV_THREADPOOL_SIZE ?? '4',
 
   MONGO_STRING: process.env.MONGO_STRING,
@@ -58,11 +60,13 @@ const toCheck = {
   SESSION_SECRET: process.env.SESSION_SECRET ?? 'session-secret',
 } as const;
 
-Object.freeze(toCheck);
+const optionalKeys = {
+  SENTRY_DSN: process.env.SENTRY_DSN,
+} as const;
 
-// validate environment variables
-const missingKeys = Object.keys(toCheck).filter(
-  (key) => !toCheck[key as keyof typeof toCheck]
+// validate required environment variables
+const missingKeys = Object.keys(requiredKeys).filter(
+  (key) => !requiredKeys[key as keyof typeof requiredKeys]
 );
 if (missingKeys.length > 0) {
   throw new Error(
@@ -70,6 +74,8 @@ if (missingKeys.length > 0) {
   );
 }
 
-const environment = toCheck as TEnvironment;
+const environment = { ...requiredKeys, ...optionalKeys } as TEnvironment;
 
 export { environment };
+export { environment as e };
+export default environment;

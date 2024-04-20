@@ -18,8 +18,8 @@ import cookieParser = require('cookie-parser');
 
 // eslint-disable-next-line unicorn/prevent-abbreviations
 import { environment as e } from '../environment';
-import { rateLimiterMiddleware } from './rate-limiter.middleware';
 import { logger } from '../utils/logger';
+import { rateLimiterMiddleware } from './rate-limiter.middleware';
 
 const router = Router();
 
@@ -90,9 +90,9 @@ router.use(
  * ## SENTRY
  */
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-if (ENABLE_SENTRY) {
+if (e.SENTRY_DSN) {
   Sentry.init({
-    dsn: process.env.NATOUR_SENTRY_DSN,
+    dsn: e.SENTRY_DSN,
     integrations: [
       // enable HTTP calls tracing
       new Sentry.Integrations.Http({ tracing: true }),
