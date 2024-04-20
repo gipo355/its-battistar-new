@@ -5,6 +5,17 @@ class AppError extends Error {
 
   isOperationalError: boolean;
 
+  path?: string;
+
+  value?: string;
+
+  keyValue?: {
+    email?: string;
+    name: string;
+  };
+
+  errors?: Record<string, string>[];
+
   constructor(message: string, statusCode: number) {
     super(message);
     // we didn't call this.message = message because the parent class is Error and already sets the this.message

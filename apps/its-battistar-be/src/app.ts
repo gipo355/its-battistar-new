@@ -4,11 +4,12 @@ import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 
 import { appRouter } from './api/app.router';
-import { appMiddleware } from './app.middleware';
 import { NUMBER_OF_PROXIES } from './config';
 import { prepareMongo } from './db/mongo';
 import { environment } from './environment';
-import { errorHandlers } from './errors';
+import { errorHandlers } from './errors/errors.handler';
+import { errorsRouter } from './errors/errors.router';
+import { appMiddleware } from './middleware/app.middleware';
 import { logger } from './utils/logger';
 
 export const buildApp = async function () {
@@ -41,7 +42,8 @@ export const buildApp = async function () {
     logger.info('📚 Swagger docs available at /api-docs');
   }
 
-  app.use(errorHandlers);
+  // error handlingj
+  app.use(errorsRouter, errorHandlers);
 
   return app;
 };
