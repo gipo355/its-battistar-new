@@ -1,3 +1,5 @@
+import 'dotenv-defaults/config';
+
 /**
  * Environment variables
  * Prepare the environment variables for the application.
