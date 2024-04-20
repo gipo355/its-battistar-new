@@ -1,8 +1,4 @@
-import {
-  CustomResponse,
-  ITodo,
-  validateTodo,
-} from '@its-battistar/shared-types';
+import { CustomResponse, ITodo } from '@its-battistar/shared-types';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError } from '../../utils/app-error';
@@ -12,13 +8,16 @@ import { TodoModel } from './todos.model';
 export const getAllTodos = catchAsync(async (req, res) => {
   const { showCompleted } = req.query as { showCompleted: string | undefined };
 
+  // TODO: validation for query params
+
   const todos = await TodoModel.find({
-    ...(showCompleted && { completed: showCompleted === 'true' }),
+    ...(showCompleted === 'false' && { completed: { $ne: 'true' } }),
   });
 
   res.status(StatusCodes.OK).json(
     new CustomResponse<ITodo[]>({
       ok: true,
+      length: todos.length,
       statusCode: StatusCodes.OK,
       message: 'Todos fetched successfully',
       data: todos,
@@ -26,19 +25,29 @@ export const getAllTodos = catchAsync(async (req, res) => {
   );
 });
 
+// TODO: validation for all inputs, stringify for responses
+// BUG: all errors returns html
+
 export const createTodo = catchAsync(async (req, res) => {
-  const { title, dueDate } = req.body as { title: string; dueDate: string };
+  const {
+    title,
+    // dueDate
+  } = req.body as { title: string; dueDate: string };
 
-  const date = new Date(dueDate).toISOString();
+  // let date: string | Date | undefined;
+  //
+  // if (dueDate) {
+  //   date = new Date(dueDate).toISOString();
+  // }
 
-  // BUG: all errors returns html
-  if (!validateTodo({ title, dueDate })) {
-    throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
-  }
+  // BUG: this validation doesn't work
+  // if (!validateTodo({ title, dueDate })) {
+  //   throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
+  // }
 
   const newTodo = await TodoModel.create({
     title,
-    dueDate: date,
+    // (dueDate && ...{dueDate: date}),
   });
 
   if (!newTodo.id) {

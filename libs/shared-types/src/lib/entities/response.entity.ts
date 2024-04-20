@@ -19,22 +19,27 @@ export class CustomResponse<T> {
 
   message?: string;
 
+  length?: number;
+
   data?: T;
 
   constructor({
     ok,
     statusCode,
     message,
+    length,
     data,
   }: {
     ok: boolean;
     statusCode: number;
     message?: string;
+    length?: number;
     data?: T;
   }) {
     this.ok = ok;
     this.statusCode = statusCode;
     this.message = message;
+    length && (this.length = length);
     this.data = data;
   }
 }
