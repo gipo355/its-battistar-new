@@ -7,6 +7,8 @@ used:
 
 # TODO
 
+- [ ] add a run guide and requirements
+
 - [ ] init building swagger and angular
 
 - [ ] add swagger to express and other middleware
