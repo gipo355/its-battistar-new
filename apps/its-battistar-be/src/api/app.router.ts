@@ -1,20 +1,9 @@
 import { Router } from 'express';
 
-const router = Router();
+import { todosRouter } from './todos/todos.router';
 
-/**
- * @openapi
- * /api:
- *  get:
- *   tags:
- *    - api
- *   description: create a checkout session
- *   responses:
- *    200:
- *     description: created review
- */
-router.get('/', (_, response) => {
-  response.send('Hello World!');
-});
+const appRouter = Router();
 
-export { router as appRouter };
+appRouter.use('/todos', todosRouter);
+
+export { appRouter };
