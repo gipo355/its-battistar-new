@@ -1,6 +1,6 @@
 import { Type, Static } from '@sinclair/typebox';
 import fastJsonStringify from 'fast-json-stringify';
-import ajvInstance from '../utils/ajv';
+import ajvInstance from '../../utils/ajv';
 
 export const todoSchema = Type.Object({
   id: Type.Optional(Type.String()),

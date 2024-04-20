@@ -1,5 +1,1 @@
-export * from './response/response.entity';
-
-export function sharedTypes(): string {
-  return 'shared-types';
-}
+./entities/response.entity
