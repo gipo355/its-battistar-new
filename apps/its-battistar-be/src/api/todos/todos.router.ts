@@ -1,13 +1,13 @@
 import { Router } from 'express';
 
 import { checkRouter } from './check/check.router';
-import { createTodo, getAllTodos } from './todos.handler';
+import { createTodo, getAllTodos, getOneTodo } from './todos.handler';
 
 const todosRouter = Router({
   mergeParams: true,
 });
 
-todosRouter.use('/:id', checkRouter);
+todosRouter.use('/:id/check', checkRouter);
 
 /**
  * @openapi
@@ -21,6 +21,20 @@ todosRouter.use('/:id', checkRouter);
  *     description: return all todos
  */
 todosRouter.get('/', getAllTodos);
+/**
+ * @openapi
+ * /api/todos/{id}:
+ *  get:
+ *   tags:
+ *    - todos
+ *   description: get one todo
+ *   responses:
+ *    200:
+ *     description: return a todo
+ *    400:
+ *     description: todo not found
+ */
+todosRouter.get('/:id', getOneTodo);
 /**
  * @openapi
  * /api/todos:

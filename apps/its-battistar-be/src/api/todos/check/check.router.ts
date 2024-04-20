@@ -17,11 +17,11 @@ const checkRouter = Router({
  *    200:
  *     description: checked
  */
-checkRouter.patch('/check', markForCheck);
+checkRouter.patch('/', markForCheck);
 /**
  * @openapi
- * /api/todos/:id/uncheck:
- *  patch:
+ * /api/todos/:id/check:
+ *  delete:
  *   tags:
  *    - todos
  *   description: uncheck a todo
@@ -33,6 +33,6 @@ checkRouter.patch('/check', markForCheck);
  *     description: invalid todo
  *
  */
-checkRouter.patch('/uncheck', markForUncheck);
+checkRouter.delete('/', markForUncheck);
 
 export { checkRouter };

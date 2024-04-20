@@ -57,3 +57,26 @@ export const createTodo = catchAsync(async (req, res) => {
     })
   );
 });
+
+export const getOneTodo = catchAsync(async (req, res) => {
+  const { id } = req.params as { id: string };
+
+  console.log('getOneTodo id', id);
+
+  const todo = await TodoModel.findOne({
+    id,
+  });
+
+  if (!todo || !todo.id) {
+    throw new AppError('Todo not found', StatusCodes.NOT_FOUND);
+  }
+
+  res.status(StatusCodes.OK).json(
+    new CustomResponse<ITodo>({
+      ok: true,
+      statusCode: StatusCodes.OK,
+      message: 'Todo checked successfully',
+      data: todo,
+    })
+  );
+});
