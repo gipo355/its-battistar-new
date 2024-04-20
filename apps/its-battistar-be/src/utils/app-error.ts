@@ -1,7 +1,7 @@
 class AppError extends Error {
   statusCode?: number;
 
-  status?: string;
+  status?: 'error' | 'success' | 'fail';
 
   isOperationalError?: boolean;
 

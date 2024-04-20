@@ -1,7 +1,7 @@
 import { Type, TSchema } from '@sinclair/typebox';
 import fastJsonStringify from 'fast-json-stringify';
 
-export const responseSchema = <T extends TSchema>(T: T) =>
+export const customResponseSchemaFactory = <T extends TSchema>(T: T) =>
   Type.Object(
     {
       ok: Type.Boolean(),
@@ -12,7 +12,7 @@ export const responseSchema = <T extends TSchema>(T: T) =>
     { additionalProperties: false }
   );
 
-export class Response<T> {
+export class CustomResponse<T> {
   ok: boolean;
 
   statusCode: number;
@@ -21,7 +21,17 @@ export class Response<T> {
 
   data?: T;
 
-  constructor(ok: boolean, statusCode: number, message?: string, data?: T) {
+  constructor({
+    ok,
+    statusCode,
+    message,
+    data,
+  }: {
+    ok: boolean;
+    statusCode: number;
+    message?: string;
+    data?: T;
+  }) {
     this.ok = ok;
     this.statusCode = statusCode;
     this.message = message;
@@ -33,5 +43,5 @@ export class Response<T> {
  * @description must pass the data schema to the function to stringify the response
  * Do it globally to cache the stringify function on startup
  */
-export const stringifyResponse = <T extends TSchema>(T: T) =>
-  fastJsonStringify(responseSchema(T));
+export const stringifyCustomResponseFactory = <T extends TSchema>(T: T) =>
+  fastJsonStringify(customResponseSchemaFactory(T));
