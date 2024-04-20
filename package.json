@@ -7,7 +7,8 @@
     "serve-all": "nx run-many -t serve",
     "serve-express": "nx run its-battistar-be:build-environment && nx run its-battistar-be:serve",
     "prepare": "husky",
-    "version": "nx affected --target version"
+    "version": "nx affected --target version",
+    "changeset": "changeset"
   },
   "private": true,
   "engines": {
