@@ -1,10 +1,13 @@
 import { Router } from 'express';
 
+import { checkRouter } from './check/check.router';
 import { createTodo, getAllTodos } from './todos.handler';
 
 const todosRouter = Router({
   mergeParams: true,
 });
+
+todosRouter.use('/:id', checkRouter);
 
 /**
  * @openapi
