@@ -1,11 +1,13 @@
 import express = require('express');
 
+import { CustomResponse } from '@its-battistar/shared-types';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 
 import { appRouter } from './api/app.router';
 import { NUMBER_OF_PROXIES } from './config';
 import { prepareMongo } from './db/mongo';
+import { redisConnection } from './db/redis';
 import { environment } from './environment';
 import { errorsRouter } from './errors/errors.router';
 import { appMiddleware } from './middleware/app.middleware';
@@ -29,7 +31,22 @@ export const buildApp = async function () {
 
   app.get('/healthz', (_, response) => {
     const mongostate = mongoose.connection.readyState;
-    response.status(StatusCodes.OK).json({ status: 'ok', mongostate });
+    const redisstate = redisConnection.status;
+
+    response.status(StatusCodes.OK).json(
+      new CustomResponse<{
+        mongostate: number;
+        redisstate: string;
+      }>({
+        ok: true,
+        statusCode: StatusCodes.OK,
+        message: 'Healthy',
+        data: {
+          mongostate,
+          redisstate,
+        },
+      })
+    );
   });
 
   // dev only
