@@ -5,7 +5,9 @@ import ajvInstance from '../../utils/ajv';
 export const todoSchema = Type.Object({
   id: Type.Optional(Type.String()),
   title: Type.String(),
-  dueDate: Type.Date(),
+  dueDate: Type.String({
+    format: 'date-time',
+  }),
   completed: Type.Boolean(),
   expired: Type.Boolean(),
 });
@@ -17,7 +19,7 @@ export class Todo implements TTodo {
 
   title: string;
 
-  dueDate: Date;
+  dueDate: string;
 
   completed: boolean;
 
@@ -36,7 +38,7 @@ export class Todo implements TTodo {
   }: {
     id?: string;
     title: string;
-    dueDate: Date;
+    dueDate: string;
     completed: boolean;
     expired: boolean;
   }) {
