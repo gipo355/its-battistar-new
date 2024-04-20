@@ -4,8 +4,8 @@ import { Router } from 'express';
 
 import { ENABLE_SENTRY } from '../config';
 import { logger } from '../utils/logger';
-import { pageNotFoundController } from './handlers/page-not-found.handler';
-import { unsupportedMethodHandler } from './handlers/unsupported-method.handler';
+import { pageNotFoundController } from './page-not-found/page-not-found.handler';
+import { unsupportedMethodHandler } from './unsupported-method/unsupported-method.handler';
 // import { AppError } from '../helpers';
 
 const router = Router();
