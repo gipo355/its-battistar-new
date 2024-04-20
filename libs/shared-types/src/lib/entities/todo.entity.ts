@@ -10,50 +10,55 @@ export const todoSchema = Type.Object({
   }),
   completed: Type.Boolean(),
   expired: Type.Boolean(),
+  createdAt: Type.String({
+    format: 'date-time',
+  }),
+  updatedAt: Type.String({
+    format: 'date-time',
+  }),
 });
 
 export type TTodo = Static<typeof todoSchema>;
 
-export class Todo implements TTodo {
+export interface ITodo {
   id?: string;
 
   title: string;
 
-  dueDate: string;
+  dueDate: Date;
 
-  completed: boolean;
+  completed?: boolean;
 
-  expired: boolean;
+  expired?: boolean;
 
-  createdAt = new Date();
+  createdAt?: Date;
 
-  updatedAt = new Date();
-
-  constructor({
-    id,
-    title,
-    dueDate,
-    completed,
-    expired,
-  }: {
-    id?: string;
-    title: string;
-    dueDate: string;
-    completed: boolean;
-    expired: boolean;
-  }) {
-    this.id = id;
-    this.title = title;
-    this.dueDate = dueDate;
-    this.completed = completed;
-    this.expired = expired;
-  }
+  updatedAt?: Date;
 }
 
-/**
- * @description must pass the data schema to the function to stringify the response
- * Do it globally to cache the stringify function on startup
- */
+// export class Todo {
+//   id?: string;
+//
+//   title: string;
+//
+//   dueDate: string;
+//
+//   completed = false;
+//
+//   createdAt = new Date().toISOString();
+//
+//   updatedAt = new Date().toISOString();
+//
+//   constructor({ title, dueDate }: { title: string; dueDate: string }) {
+//     this.title = title;
+//     this.dueDate = dueDate;
+//   }
+//
+//   get expired(): boolean {
+//     return Date.now() > new Date(this.dueDate).getTime();
+//   }
+// }
+
 export const stringifyTodo = fastJsonStringify(todoSchema);
 
 export const validateTodo = ajvInstance.compile(todoSchema);
