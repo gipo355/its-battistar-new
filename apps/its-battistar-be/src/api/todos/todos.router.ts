@@ -11,13 +11,37 @@ const todosRouter = Router({
  * /api/todos:
  *  get:
  *   tags:
- *    - api
+ *    - todos
  *   description: get all todos
  *   responses:
  *    200:
- *     description: created review
+ *     description: return all todos
  */
 todosRouter.get('/', getAllTodos);
+/**
+ * @openapi
+ * /api/todos:
+ *  post:
+ *   tags:
+ *    - todos
+ *   description: create a new todo
+ *
+ *   responses:
+ *    200:
+ *     description: created todo
+ *    400:
+ *    description: invalid data
+ *
+ *   requestBody:
+ *    content:
+ *     application/json:
+ *      schema:
+ *       type: object
+ *       properties:
+ *        title:
+ *         type: string
+ *         description: title of the todo
+ */
 todosRouter.post('/', createTodo);
 
 export { todosRouter };

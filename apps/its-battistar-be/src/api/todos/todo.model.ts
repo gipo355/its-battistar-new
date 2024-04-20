@@ -1,6 +1,6 @@
 import { ITodo } from '@its-battistar/shared-types';
 import mongoose from 'mongoose';
-import isAscii from 'validator/es/lib/isAscii';
+import isAscii from 'validator/lib/isAscii';
 
 const todoSchema = new mongoose.Schema<ITodo>(
   {

@@ -5,7 +5,7 @@ export const catchAsync = function catchAsync(
     request: Request,
     response: Response,
     next: NextFunction
-  ) => Promise<void>
+  ) => Promise<unknown>
 ): Handler {
   // we need to return the same function here to avoid calling it on assignment
   return function (request, response, next) {
