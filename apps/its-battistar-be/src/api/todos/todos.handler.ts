@@ -31,7 +31,7 @@ export const createTodo = catchAsync(async (req, res) => {
 
   const date = new Date(dueDate).toISOString();
 
-  // BUG: validation error returns html
+  // BUG: all errors returns html
   if (!validateTodo({ title, dueDate })) {
     throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
   }
@@ -61,11 +61,7 @@ export const createTodo = catchAsync(async (req, res) => {
 export const getOneTodo = catchAsync(async (req, res) => {
   const { id } = req.params as { id: string };
 
-  console.log('getOneTodo id', id);
-
-  const todo = await TodoModel.findOne({
-    id,
-  });
+  const todo = await TodoModel.findById(id);
 
   if (!todo || !todo.id) {
     throw new AppError('Todo not found', StatusCodes.NOT_FOUND);

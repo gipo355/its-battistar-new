@@ -38,12 +38,12 @@ const todoSchema = new mongoose.Schema<ITodo>(
   {
     toJSON: {
       virtuals: true,
-      // transform: function (_, ret) {
-      //   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      //   ret.id = ret._id;
-      //   delete ret._id;
-      //   delete ret.__v;
-      // },
+      transform: function (_, ret) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+      },
     },
     toObject: { virtuals: true },
   }

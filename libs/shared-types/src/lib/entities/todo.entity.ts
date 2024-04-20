@@ -4,14 +4,14 @@ import ajvInstance from '../../utils/ajv';
 
 export const todoSchemaInput = Type.Object({
   title: Type.String(),
-  dueDate: Type.String({
-    format: 'date-time',
-  }),
+  completed: Type.Boolean(),
 });
 
 export const todoSchema = Type.Object({
   todoSchemaInput,
-  completed: Type.Boolean(),
+  dueDate: Type.String({
+    format: 'date-time',
+  }),
   expired: Type.Boolean(),
   createdAt: Type.String({
     format: 'date-time',
