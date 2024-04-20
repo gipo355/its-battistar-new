@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 
 import { appRouter } from './api/app.router';
 import { appMiddleware } from './app.middleware';
+import { NUMBER_OF_PROXIES } from './config';
 import { errorHandlers } from './errors';
 import { prepareMongo } from './mongo/mongoose';
 import { logger } from './utils/logger';
@@ -13,6 +14,10 @@ export const buildApp = async function () {
   logger.info('🏠 Building app...');
 
   const app = express();
+
+  // prevents fingerprint
+  app.disable('x-powered-by');
+  app.set('trust proxy', NUMBER_OF_PROXIES);
 
   await prepareMongo();
 

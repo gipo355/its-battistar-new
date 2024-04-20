@@ -15,6 +15,8 @@ export const prepareMongo = async () => {
     logger.info(`⚡ Starting mongoose`);
 
     mongoose.set('debug', true);
+    // handle deprecation warning
+    mongoose.set('strictQuery', false);
 
     await mongoose.connect(MONGO_STRING, {});
   } catch (error) {
