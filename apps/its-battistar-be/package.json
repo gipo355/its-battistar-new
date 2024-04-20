@@ -1,6 +1,6 @@
 {
   "name": "@its-battistar/its-battistar-be",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
     "pino-pretty": "^11.0.0",
     "pino-loki": "^2.2.1"

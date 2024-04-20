@@ -3,6 +3,13 @@
 This file was generated using
 [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [1.0.1](https://github.com/gipo355/its-battistar/compare/its-battistar-be-1.0.0...its-battistar-be-1.0.1) (2024-4-20)
+
+### Bug Fixes
+
+- **its-battistar-be:** :bug: pino pretty http logger, rate limiter log moved
+  ([f586b67](https://github.com/gipo355/its-battistar/commit/f586b67ea571aa8c3aa8255d8fffa23c9b360b2f))
+
 ## [1.0.0](https://github.com/gipo355/its-battistar/compare/its-battistar-be-0.0.1...its-battistar-be-1.0.0) (2024-4-20)
 
 ### ⚠ BREAKING CHANGES
