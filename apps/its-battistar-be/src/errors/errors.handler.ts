@@ -1,7 +1,4 @@
-import { ErrorRequestHandler, Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
-
-//
+// battistar way
 // import { logger } from '../utils/logger';
 //
 // const errorHandler: ErrorRequestHandler = (error, request, response, next) => {
@@ -11,13 +8,16 @@ import { StatusCodes } from 'http-status-codes';
 // };
 //
 // export const errorHandlers = [errorHandler];
+import { ErrorRequestHandler, Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+
 import { AppError } from '../utils/app-error';
 import { logger } from '../utils/logger';
 
 const handleCastError = (error: AppError) => {
   if (error.path && error.value) {
     const message = `invalid ${error.path}: ${error.value}`;
-    return new AppError(message, 400);
+    return new AppError(message, StatusCodes.BAD_REQUEST);
   }
 
   return error;
@@ -34,32 +34,33 @@ const handleDuplicateError = (error: AppError) => {
   if (error.keyValue?.name) {
     message = `this name is already in use`;
   }
-  return new AppError(message, 400);
+  return new AppError(message, StatusCodes.BAD_REQUEST);
 };
 
-const handleValidationError = async (error: AppError) => {
+const handleValidationError = (error: AppError) => {
   if (!error.errors) return error;
   const subObjectsArray: Record<string, string>[] = Object.values(error.errors);
 
   // Promisify the map function
-  const errorMessagesArray = await Promise.all(
-    subObjectsArray
-      // for every key in errors ( price, duration ) return the value of it's name field
-      // .map(async ([_, subErrorObject]) => (subErrorObject as any).message)
-      .map(({ message }) => message)
-  );
+  const errorMessagesArray = subObjectsArray
+    // for every key in errors ( price, duration ) return the value of it's name field
+    // .map(async ([_, subErrorObject]) => (subErrorObject as any).message)
+    .map(({ message }) => message);
   const errorMessages = errorMessagesArray.join('. ');
-  return new AppError(`Invalid input data. ${errorMessages}`, 400);
+  return new AppError(
+    `Invalid input data. ${errorMessages}`,
+    StatusCodes.BAD_REQUEST
+  );
 };
 
 const handleJWTexpirationError = () => {
   const message = `Session expired. Please login again.`;
-  return new AppError(message, 401);
+  return new AppError(message, StatusCodes.UNAUTHORIZED);
 };
 
 const handleJWTUnauthorized = () => {
   const message = `Something went wrong. Please login or signup`;
-  return new AppError(message, 401);
+  return new AppError(message, StatusCodes.UNAUTHORIZED);
 };
 
 const sendErrorDevelopment = (
@@ -95,12 +96,6 @@ const sendErrorProduction = (
   newError: AppError,
   response: Response
 ) => {
-  /**
-   * ## check if error is from frontend or api
-   * BELOW DOESN'T WORK
-   * REQ.ORIGINALURL IS ALWAYS /API/USERS/LOGIN
-   */
-
   if (newError.isOperationalError) {
     // ! OPERATIONAL ERROR, TRUSTED, result of AppError
     response.status(newError.statusCode).json({
@@ -124,7 +119,7 @@ const sendErrorProduction = (
   // NOTE: console.log is bad but usually available in hosting platforms
 
   // send generic message
-  response.status(500).json({
+  response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
     status: 'error',
     message: 'something went wrong!',
   });
@@ -133,50 +128,48 @@ const sendErrorProduction = (
 export const globalErrorController: ErrorRequestHandler = (
   error,
   _request,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next
 ) => {
-  (async () => {
-    // assign the vars as spreading the object won't inherit Prototype methods
-    // only hasOwnProperty is passed on spread ( message is not )
-    // set defaults
-    const {
-      statusCode = 500,
-      status = 'error',
-      message = 'internal server error',
-    } = error;
-    // reassign to new object to avoid mutation
-    let newError = { statusCode, status, message, ...error };
+  // assign the vars as spreading the object won't inherit Prototype methods
+  // only hasOwnProperty is passed on spread ( message is not )
+  // set defaults
+  const {
+    statusCode = StatusCodes.INTERNAL_SERVER_ERROR,
+    status = 'error',
+    message = 'internal server error',
+  } = error;
 
-    if (process.env.NODE_ENV === 'development') {
-      logger.error('error', error);
+  // reassign to new object to avoid mutation
+  let newError = { statusCode, status, message, ...error };
 
-      sendErrorDevelopment(error, newError, _res, _request);
-    } else {
-      // console.log('globalErrorController prod');
-      // console.log(newErr, 'newErr');
-      // console.log(err, 'err');
-      // console.log(err.code);
-      // console.log(err.name);
+  if (process.env.NODE_ENV === 'development') {
+    logger.error('error', error);
 
-      // if it's a wrong ID search
-      if (error.name === 'CastError') newError = handleCastError(newError);
-      // keyPattern.Name is a prop that exists on duplicate error
-      if (error.code === 11_000) newError = handleDuplicateError(newError);
+    return sendErrorDevelopment(error, newError, _response, _request);
+  } else {
+    // console.log('globalErrorController prod');
+    // console.log(newErr, 'newErr');
+    // console.log(err, 'err');
+    // console.log(err.code);
+    // console.log(err.name);
 
-      if (error.name === 'ValidationError')
-        newError = await handleValidationError(newError);
+    // if it's a wrong ID search
+    if (error.name === 'CastError') newError = handleCastError(newError);
+    // keyPattern.Name is a prop that exists on duplicate error
+    if (error.code === 11_000) newError = handleDuplicateError(newError);
 
-      if (error.message.startsWith('JsonWebTokenError')) {
-        newError = handleJWTUnauthorized(newError);
-      }
-      if (error.message.startsWith('TokenExpiredError')) {
-        newError = handleJWTexpirationError(newError);
-      }
-      sendErrorProduction(error, newError, _res, _request);
+    if (error.name === 'ValidationError')
+      newError = handleValidationError(newError);
+
+    if (error.message.startsWith('JsonWebTokenError')) {
+      newError = handleJWTUnauthorized(newError);
     }
-  })().catch((error) => {
-    throw error;
-  });
+    if (error.message.startsWith('TokenExpiredError')) {
+      newError = handleJWTexpirationError(newError);
+    }
+    sendErrorProduction(error, newError, _response, _request);
+  }
 };

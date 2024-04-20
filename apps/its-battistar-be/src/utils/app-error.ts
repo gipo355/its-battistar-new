@@ -1,9 +1,9 @@
 class AppError extends Error {
-  statusCode: number;
+  statusCode?: number;
 
-  status: string;
+  status?: string;
 
-  isOperationalError: boolean;
+  isOperationalError?: boolean;
 
   path?: string;
 
@@ -11,7 +11,7 @@ class AppError extends Error {
 
   keyValue?: {
     email?: string;
-    name: string;
+    name?: string;
   };
 
   errors?: Record<string, string>[];
