@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { getAllTodos } from './todos.handler';
+import { createTodo, getAllTodos } from './todos.handler';
 
 const todosRouter = Router({
   mergeParams: true,
@@ -18,5 +18,6 @@ const todosRouter = Router({
  *     description: created review
  */
 todosRouter.get('/', getAllTodos);
+todosRouter.post('/', createTodo);
 
 export { todosRouter };
