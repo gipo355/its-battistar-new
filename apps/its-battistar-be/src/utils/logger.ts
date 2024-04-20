@@ -1,8 +1,7 @@
 import pino from 'pino';
 
 import { ENABLE_LOKI } from '../config';
-// eslint-disable-next-line unicorn/prevent-abbreviations
-import { environment as e } from '../environment';
+import { e } from '../environment';
 
 const streams: (pino.DestinationStream | pino.StreamEntry<string>)[] = [
   {

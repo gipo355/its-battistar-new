@@ -1,7 +1,6 @@
 import IORedis from 'ioredis';
 
-// eslint-disable-next-line unicorn/prevent-abbreviations
-import { environment as e } from '../../environment';
+import { e } from '../../environment';
 
 const connection = {
   host: e.REDIS_HOST,

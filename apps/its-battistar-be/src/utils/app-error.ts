@@ -1,3 +1,10 @@
+/**
+ * @description Custom error class to handle operational error
+ * IMPORTANT: This class is used to handle operational errors, not programming errors.
+ * When you create a new instance of this class, the isOperationalError property is set to true
+ * This is used to distinguish between operational errors and programming errors so that we can
+ * forward operational errors to the client and not programming errors, to prevent leaking sensitive informations.
+ */
 class AppError extends Error {
   statusCode?: number;
 

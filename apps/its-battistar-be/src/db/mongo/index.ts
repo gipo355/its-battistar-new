@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 
-// eslint-disable-next-line unicorn/prevent-abbreviations
-import { environment as e } from '../../environment';
+import { e } from '../../environment';
 import { logger } from '../../utils/logger';
 
 export const prepareMongo = async () => {

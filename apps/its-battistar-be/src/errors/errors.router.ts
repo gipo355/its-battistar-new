@@ -2,7 +2,6 @@ import * as Sentry from '@sentry/node';
 // import type { NextFunction, Request, Response } from 'express';
 import { Router } from 'express';
 
-// eslint-disable-next-line unicorn/prevent-abbreviations
 import { e } from '../environment';
 import { logger } from '../utils/logger';
 import { errorsHandler } from './errors.handler';

@@ -15,7 +15,6 @@ import pino from 'pino-http';
 import cors = require('cors');
 import cookieParser = require('cookie-parser');
 
-// eslint-disable-next-line unicorn/prevent-abbreviations
 import { environment as e } from '../environment';
 import { logger } from '../utils/logger';
 import { rateLimiterMiddleware } from './rate-limiter.middleware';
