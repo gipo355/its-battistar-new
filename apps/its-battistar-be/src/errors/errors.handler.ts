@@ -67,7 +67,8 @@ export const errorsHandler: ErrorRequestHandler = (
 
   if (e.NODE_ENV === 'development') {
     logger.error('error', error);
-    return sendErrorDevelopment(error, newError, response, request);
+    sendErrorDevelopment(error, newError, response, request);
+    return;
   }
 
   // if it's a wrong ID search

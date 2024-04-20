@@ -35,9 +35,6 @@ export const handleCastError = (error: AppError) => {
 };
 
 export const handleDuplicateError = (error: AppError) => {
-  // BUG: keyvalue can be
-  // { name: 'test', email: 'test@test' }
-  // let message = `invalid name: ${err.keyValue.name} is a duplicate`;
   let message = 'Something went wrong. Please try again later. (code: 17ec2)';
   if (error.keyValue?.email) {
     message = `this email is already in use`;
@@ -79,7 +76,8 @@ export const sendErrorDevelopment = (
   return response
     .status(newError.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR)
     .json(
-      // BUG: eslint has problems resolving types with path aliases
+      // NOTE: eslint has problems resolving types with path aliases
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       new CustomResponse<DevelopmentResponseData>({
         ok: false,

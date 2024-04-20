@@ -26,7 +26,7 @@ export const getAllTodos = catchAsync(async (req, res) => {
 });
 
 // TODO: validation for all inputs, stringify for responses
-// BUG: all errors returns html
+// FIXME: all errors returns html
 
 export const createTodo = catchAsync(async (req, res) => {
   const {
@@ -40,7 +40,7 @@ export const createTodo = catchAsync(async (req, res) => {
   //   date = new Date(dueDate).toISOString();
   // }
 
-  // BUG: this validation doesn't work
+  // FIXME: this validation doesn't work
   // if (!validateTodo({ title, dueDate })) {
   //   throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
   // }

@@ -49,6 +49,7 @@ export const buildApp = async function () {
     );
   });
 
+  logger.info(`🍀 Environment: ${environment.NODE_ENV}`);
   // dev only
   if (environment.NODE_ENV === 'development') {
     const swaggerUi = await import('swagger-ui-express');

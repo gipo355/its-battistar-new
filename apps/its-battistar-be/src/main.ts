@@ -26,6 +26,7 @@ const main = async function () {
   });
 };
 
+// FIXME: handle memory leaks, process hangs on dev restart
 function handleExit() {
   server?.close(() => {
     // eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
