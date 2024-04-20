@@ -6,8 +6,10 @@ import type { Server } from 'node:http';
 import mongoose from 'mongoose';
 
 import { buildApp } from './app';
+import { redisConnection } from './db/redis';
 import { environment } from './environment';
 import { logger } from './utils/logger';
+import { exitTimer } from './utils/timer';
 
 let server: Server | null = null;
 // eslint-disable-next-line @typescript-eslint/require-await
@@ -25,15 +27,34 @@ const main = async function () {
   });
 };
 
-main().catch((error: unknown) => {
+async function handleExit() {
+  await Promise.race([
+    exitTimer(5000),
+    new Promise<void>((resolve) =>
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      server?.close(async () => {
+        await mongoose.connection.close();
+        await redisConnection.quit();
+        resolve();
+      })
+    ),
+  ]);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+process.on('unhandledRejection', async (err) => {
+  logger.error(err);
+  logger.error('unhandler rejection, shutting down...');
+  await handleExit();
+});
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+process.on('SIGTERM', async () => {
+  logger.info('SIGTERM received, shutting down...');
+  await handleExit();
+});
+
+main().catch(async (error: unknown) => {
   logger.error(`Unexpected error: ${JSON.stringify(error)}. Closing server...`);
-
-  server?.close(() => {
-    mongoose.connection.close().catch(() => {
-      logger.error('Error closing mongoose connection');
-    });
-
-    // eslint-disable-next-line n/no-process-exit, unicorn/no-process-exit
-    process.exit(1);
-  });
+  await handleExit();
 });
