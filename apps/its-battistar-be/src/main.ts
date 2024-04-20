@@ -30,9 +30,16 @@ const main = async function () {
 function handleExit() {
   server?.close(() => {
     // eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
-    mongoose.connection.close().then().catch(logger.error);
+    mongoose.connection.close().catch(logger.error);
     // eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
-    redisConnection.quit().then().catch(logger.error);
+    redisConnection.quit().catch(logger.error);
+    logger.removeAllListeners();
+
+    setTimeout(() => {
+      logger.error('💥 Force close server');
+      // eslint-disable-next-line n/no-process-exit, unicorn/no-process-exit
+      process.exit(1);
+    }, 2000);
   });
 }
 
