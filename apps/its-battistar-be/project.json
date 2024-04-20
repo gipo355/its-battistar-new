@@ -13,6 +13,7 @@
       }
     },
     "serve": {
+      "dependsOn": ["build-environment"],
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
