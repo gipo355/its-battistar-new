@@ -1,7 +1,7 @@
 import 'tslib'; // required for compilation since we are using typescript with webpack
 import 'dotenv-defaults/config';
 
-import type { IncomingMessage, Server, ServerResponse } from 'node:http';
+import type { Server } from 'node:http';
 
 import mongoose from 'mongoose';
 
@@ -20,6 +20,7 @@ const main = async function () {
   app.on('close', () => {
     logger.info('🚀 Server closed');
   });
+
   server = app.listen(PORT, () => {
     logger.info(`🚀 Server started on http://localhost:${PORT}`);
   });
