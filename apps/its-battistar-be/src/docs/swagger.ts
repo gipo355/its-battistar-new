@@ -37,12 +37,48 @@ const options: swaggerJSDocument.Options = {
         },
       },
       schemas: {
-        SuccessResponse: {
+        Todo: {
           type: 'object',
           properties: {
-            status: {
+            id: {
+              type: 'string',
+              description: 'id univoco generato lato server',
+            },
+            title: {
+              type: 'string',
+            },
+            dueDate: {
+              type: 'string',
+              format: 'date',
+              description: 'data entro la quale completare il task',
+            },
+            completed: {
+              type: 'boolean',
+            },
+            expired: {
+              type: 'boolean',
+              description:
+                'true se il todo ha una dueDate, la data è passata e il task non è completato',
+            },
+          },
+        },
+        Response: {
+          type: 'object',
+          properties: {
+            ok: {
+              type: 'boolean',
+              example: true,
+            },
+            statusCode: {
+              type: 'number',
+              example: 200,
+            },
+            message: {
               type: 'string',
               example: 'success',
+            },
+            data: {
+              type: 'object',
             },
           },
         },
