@@ -57,7 +57,13 @@ export const errorsHandler: ErrorRequestHandler = (
   } = error;
 
   // reassign to new object to avoid mutation, or we lose the stack
-  let newError = { statusCode, status, message, ...error };
+  let newError: AppError = { statusCode, status, ...error, message };
+  // let newError: AppError | null = null;
+
+  // if (error instanceof AppError && error.isOperationalError) {
+  //   newError = structuredClone(error);
+  // } else {
+  // }
 
   if (e.NODE_ENV === 'development') {
     logger.error('error', error);
@@ -66,17 +72,21 @@ export const errorsHandler: ErrorRequestHandler = (
 
   // if it's a wrong ID search
   if (error.name === 'CastError') newError = handleCastError(newError);
+
   // keyPattern.Name is a prop that exists on duplicate error
   if (error.code === 11_000) newError = handleDuplicateError(newError);
 
+  // if it's a validation error (mongoose)
   if (error.name === 'ValidationError')
     newError = handleValidationError(newError);
 
+  // if it's a JWT error
   if (error.message.startsWith('JsonWebTokenError')) {
     newError = handleJWTUnauthorized();
   }
   if (error.message.startsWith('TokenExpiredError')) {
     newError = handleJWTexpirationError();
   }
+
   sendErrorProduction(error, newError, request, response);
 };

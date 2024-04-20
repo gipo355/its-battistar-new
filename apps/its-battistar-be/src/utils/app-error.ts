@@ -14,6 +14,8 @@ class AppError extends Error {
 
   path?: string;
 
+  code?: number;
+
   value?: string;
 
   keyValue?: {
@@ -23,7 +25,8 @@ class AppError extends Error {
 
   errors?: Record<string, string>[];
 
-  constructor(message: string, statusCode: number) {
+  // Those are the only values i need to set. The rest is set by other parties (mongoose, express, etc.)
+  constructor(message: string, statusCode: number, operational = true) {
     super(message);
     // we didn't call this.message = message because the parent class is Error and already sets the this.message
     // we already set the message prop to incoming message
@@ -33,7 +36,7 @@ class AppError extends Error {
     this.status = statusCode.toString().startsWith('4') ? 'fail' : 'error';
 
     // set a property to distinguish between operationa errors we defined with this class
-    this.isOperationalError = true;
+    this.isOperationalError = operational;
 
     // this is object itself, AppError is this.constructor
     // when a new object is created and a constructor function is called, the function call is not going to appear in the stack trace and will not pollute it
