@@ -9,7 +9,8 @@ import { NUMBER_OF_PROXIES } from './config';
 import { prepareMongo } from './db/mongo';
 import { redisConnection } from './db/redis';
 import { environment } from './environment';
-import { errorsRouter } from './errors/errors.router';
+import { errorsHandler } from './errors/errors.handler';
+import { preErrorsRouter } from './errors/pre-errors.router';
 import { appMiddleware } from './middleware/app.middleware';
 import { logger } from './utils/logger';
 
@@ -60,7 +61,33 @@ export const buildApp = async function () {
   }
 
   // error handling
-  app.use(errorsRouter);
+  // app.use(
+  //   (
+  //     err: Error,
+  //     req: express.Request,
+  //     res: express.Response,
+  //     next: express.NextFunction
+  //   ) => {
+  //     console.log(err, req.path, next);
+  //     logger.error(err);
+  //     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+  //       status: 'error',
+  //       message: 'Something went wrong',
+  //     });
+  //   }
+  // );
+
+  app.use(preErrorsRouter);
+
+  /**
+   * ## IMP: Error handling
+   *
+   * Global error handler, gets passed the error object from all previous middlewares after every route is checked
+   * Lifecycle ends here
+   *
+   * Can't be put inside a router or it won't catch errors
+   */
+  app.use([errorsHandler]);
 
   return app;
 };

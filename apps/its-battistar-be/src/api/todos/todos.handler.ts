@@ -1,4 +1,8 @@
-import { CustomResponse, ITodo } from '@its-battistar/shared-types';
+import {
+  CustomResponse,
+  ITodo,
+  validateTodo,
+} from '@its-battistar/shared-types';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError } from '../../utils/app-error';
@@ -26,28 +30,23 @@ export const getAllTodos = catchAsync(async (req, res) => {
 });
 
 // TODO: validation for all inputs, stringify for responses
-// FIXME: all errors returns html
-
 export const createTodo = catchAsync(async (req, res) => {
-  const {
-    title,
-    // dueDate
-  } = req.body as { title: string; dueDate: string };
+  const { title, dueDate } = req.body as { title: string; dueDate: string };
 
   // let date: string | Date | undefined;
-  //
+
   // if (dueDate) {
-  //   date = new Date(dueDate).toISOString();
+  //   date = new Date(dueDate);
   // }
 
   // FIXME: this validation doesn't work
-  // if (!validateTodo({ title, dueDate })) {
-  //   throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
-  // }
+  if (!validateTodo({ title, dueDate })) {
+    throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
+  }
 
   const newTodo = await TodoModel.create({
     title,
-    // (dueDate && ...{dueDate: date}),
+    // (dueDate && ...{dueDate}),
   });
 
   if (!newTodo.id) {

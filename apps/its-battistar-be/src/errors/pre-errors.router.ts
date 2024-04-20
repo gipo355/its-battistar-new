@@ -4,7 +4,6 @@ import { Router } from 'express';
 
 import { e } from '../environment';
 import { logger } from '../utils/logger';
-import { errorsHandler } from './errors.handler';
 import { pageNotFoundHandler } from './page-not-found/page-not-found.handler';
 import { unsupportedMethodHandler } from './unsupported-method/unsupported-method.handler';
 // import { AppError } from '../helpers';
@@ -30,11 +29,4 @@ if (e.SENTRY_DSN) {
   logger.info('Sentry enabled');
 }
 
-/**
- * ## IMP: Error handling
- * Global error handler, gets passed the error object from all previous middlewares after every route is checked
- * Lifecycle ends here
- */
-router.use(errorsHandler);
-
-export { router as errorsRouter };
+export { router as preErrorsRouter };

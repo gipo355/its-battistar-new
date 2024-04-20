@@ -27,6 +27,7 @@ const main = async function () {
 };
 
 // FIXME: handle memory leaks, process hangs on dev restart
+// possibly nx webpack issue
 function handleExit() {
   server?.close(() => {
     // eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
@@ -43,20 +44,28 @@ function handleExit() {
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-process.on('unhandledRejection', (err) => {
-  logger.error(err);
-  logger.error('unhandler rejection, shutting down...');
-  handleExit();
-});
+if (e.NODE_ENV !== 'development') {
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  process.on('unhandledRejection', (err) => {
+    logger.error(err);
+    logger.error('unhandler rejection, shutting down...');
+    handleExit();
+  });
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-process.on('SIGTERM', () => {
-  logger.info('SIGTERM received, shutting down...');
-  handleExit();
-});
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  process.on('SIGTERM', () => {
+    logger.info('SIGTERM received, shutting down...');
+    handleExit();
+  });
+}
 
 main().catch((error: unknown) => {
   logger.error(`Unexpected error: ${JSON.stringify(error)}. Closing server...`);
-  handleExit();
+  if (e.NODE_ENV === 'development') {
+    // eslint-disable-next-line n/no-process-exit, unicorn/no-process-exit
+    process.exit(1);
+  } else {
+    logger.error('💥 Force close server');
+    handleExit();
+  }
 });

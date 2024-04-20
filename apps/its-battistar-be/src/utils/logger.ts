@@ -17,7 +17,10 @@ const streams: (pino.DestinationStream | pino.StreamEntry<string>)[] = [
   },
 ];
 
+// TODO: change console to file stream for prod
+
 // TODO: remote and security for loki
+// TODO: change ports and addresses for grafana loki, put into configs and envs
 
 // https://skaug.dev/node-js-app-with-loki/
 // grafana UI will be on http://localhost:3200 and will contain all logs
@@ -30,12 +33,11 @@ if (ENABLE_LOKI) {
       target: 'pino-loki',
       options: {
         host: 'http://localhost:3100', // Change if Loki hostname is different
-        labels: { application: 'fastify-test-application' },
+        labels: { application: 'its-battistar-be' },
       },
     }),
   });
 
-  // TODO: change ports and addresses for grafana loki, put into configs and envs
   // eslint-disable-next-line no-console
   console.log('🚀 Loki enabled. Check grafana on http://localhost:3200');
 }

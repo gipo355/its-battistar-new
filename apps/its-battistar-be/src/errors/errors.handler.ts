@@ -38,6 +38,13 @@ export const errorsHandler: ErrorRequestHandler = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next
 ) => {
+  logger.debug('error handler');
+
+  response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    status: 'error',
+    message: 'Something went wrong',
+  });
+
   // FIXME: this code is a mess of mutations and reassignments
   // and prototype inheritance loss
 
