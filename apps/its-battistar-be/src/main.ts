@@ -6,6 +6,7 @@ import type { Server } from 'node:http';
 import mongoose from 'mongoose';
 
 import { buildApp } from './app';
+import { environment } from './environment';
 import { logger } from './utils/logger';
 
 let server: Server | null = null;
@@ -13,16 +14,14 @@ let server: Server | null = null;
 const main = async function () {
   logger.info('🚀 Starting server...');
 
-  const PORT = process.env.PORT ?? '3000';
-
   const app = await buildApp();
 
   app.on('close', () => {
     logger.info('🚀 Server closed');
   });
 
-  server = app.listen(PORT, () => {
-    logger.info(`🚀 Server started on http://localhost:${PORT}`);
+  server = app.listen(environment.PORT, () => {
+    logger.info(`🚀 Server started on http://localhost:${environment.PORT}`);
   });
 };
 
@@ -33,5 +32,8 @@ main().catch((error: unknown) => {
     mongoose.connection.close().catch(() => {
       logger.error('Error closing mongoose connection');
     });
+
+    // eslint-disable-next-line n/no-process-exit, unicorn/no-process-exit
+    process.exit(1);
   });
 });

@@ -6,8 +6,8 @@ import mongoose from 'mongoose';
 import { appRouter } from './api/app.router';
 import { appMiddleware } from './app.middleware';
 import { NUMBER_OF_PROXIES } from './config';
+import { prepareMongo } from './db/mongo';
 import { errorHandlers } from './errors';
-import { prepareMongo } from './mongo/mongoose';
 import { logger } from './utils/logger';
 
 export const buildApp = async function () {
