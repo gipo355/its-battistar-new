@@ -134,7 +134,7 @@ export const sendErrorProduction = (
   });
 
   // send generic message
-  return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json(
+  response.status(StatusCodes.INTERNAL_SERVER_ERROR).json(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     new CustomResponse({
       ok: false,

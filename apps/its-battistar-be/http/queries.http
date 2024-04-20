@@ -6,5 +6,15 @@ GET http://localhost:3000/healthz
 GET http://localhost:3000/apiaa
 
 ---
-GET http://localhost:3000/api
+# fetch all todos
+GET http://localhost:3000/api/todos
 
+---
+# create a todo
+POST http://localhost:3000/api/todos
+Content-Type: application/json
+
+{
+  "title": "Learn Node.js",
+  "dueDate": "2020-12-31"
+}
