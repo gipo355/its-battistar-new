@@ -1,4 +1,6 @@
 import { Type, Static } from '@sinclair/typebox';
+import fastJsonStringify from 'fast-json-stringify';
+import ajvInstance from '../utils/ajv';
 
 export const responseSchema = Type.Object(
   {
@@ -24,3 +26,7 @@ export class Response implements TResponse {
     this.message = message;
   }
 }
+
+export const stringifyResponse = fastJsonStringify(responseSchema);
+
+export const validateResponse = ajvInstance.compile(responseSchema);
