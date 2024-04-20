@@ -158,6 +158,9 @@ importers:
       tslib:
         specifier: ^2.3.0
         version: 2.6.2
+      validator:
+        specifier: ^13.11.0
+        version: 13.11.0
       xss-clean:
         specifier: ^0.1.4
         version: 0.1.4

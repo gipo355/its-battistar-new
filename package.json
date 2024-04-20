@@ -64,6 +64,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "validator": "^13.11.0",
     "xss-clean": "^0.1.4",
     "zone.js": "~0.14.3"
   },

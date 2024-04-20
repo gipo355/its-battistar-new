@@ -27,13 +27,13 @@ export interface ITodo {
 
   dueDate: Date;
 
-  completed?: boolean;
+  completed: boolean;
 
-  expired?: boolean;
+  expired: boolean;
 
-  createdAt?: Date;
+  createdAt: Date;
 
-  updatedAt?: Date;
+  updatedAt: Date;
 }
 
 // export class Todo {

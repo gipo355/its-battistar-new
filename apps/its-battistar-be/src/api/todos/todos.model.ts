@@ -1,36 +1,33 @@
-import { TTodo } from '@its-battistar/shared-types';
+import { ITodo } from '@its-battistar/shared-types';
 import mongoose from 'mongoose';
 
-const bookingSchema = new mongoose.Schema<TTodo>(
+const todoSchema = new mongoose.Schema<ITodo>(
   {
-    // tour: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Tour',
-    //   required: [true, 'Booking must belong to a tour!'],
-    // },
-    // user: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'User',
-    //   required: [true, 'Booking must belong to a user!'],
-    // },
-    // price: {
-    //   type: Number,
-    //   required: [true, 'Booking must have a price!'],
-    // },
+    title: {
+      type: String,
+      required: [true, 'A todo must have a title'],
+      trim: true,
+      maxlength: [
+        40,
+        'A todo title must have less or equal then 40 characters',
+      ],
+      validate: {
+        validator: function validator(value: string) {
+          return value !== '';
+        },
+        message: 'A todo title must not be empty',
+      },
+    },
+    dueDate: {
+      type: Date,
+    },
+    completed: {
+      type: Boolean,
+      default: false,
+    },
     createdAt: {
       type: Date,
       default: Date.now(),
-    },
-
-    /**
-     * ## paid
-     * @description If the booking is paid or not
-     * @type {boolean} defaults to true in case an administrator wants to manually create a booking outside of stripe (store with cash)
-     * we will use webhooks to update the booking to paid?
-     */
-    paid: {
-      type: Boolean,
-      default: true,
     },
   },
   {
@@ -39,11 +36,15 @@ const bookingSchema = new mongoose.Schema<TTodo>(
   }
 );
 
+todoSchema.virtual('expired').get(function getDurationWeeks() {
+  return this.dueDate < new Date();
+});
+
 /**
  * ## No big performance overhead
  * only guides and admins will be able to see the bookings
  */
-bookingSchema.pre(/^find/, function preFind(next) {
+todoSchema.pre(/^find/, function preFind(next) {
   /**
    * ## populate
    */
@@ -66,6 +67,6 @@ bookingSchema.pre(/^find/, function preFind(next) {
   next();
 });
 
-const Booking = mongoose.model('Booking', bookingSchema);
+const TodoModel = mongoose.model('Todo', todoSchema);
 
-export { Booking };
+export { TodoModel };
