@@ -5,6 +5,13 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "build-environment": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d --no-recreate",
+        "cwd": "apps/its-battistar-be"
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",

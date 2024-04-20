@@ -11,4 +11,4 @@ router.use(cors(corsOptions));
 router.use(pino());
 router.use(bodyParser.json());
 
-export { router as globalMiddleware };
+export { router as appMiddleware };

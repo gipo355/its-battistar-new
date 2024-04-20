@@ -1,24 +1,29 @@
 import express = require('express');
 
+import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 
-import { apiRouter } from './api/routes';
+import { appRouter } from './api/app.router';
+import { appMiddleware } from './app.middleware';
 import { errorHandlers } from './errors';
 import { prepareMongo } from './mongo/mongoose';
 import { logger } from './utils/logger';
 
 export const buildApp = async function () {
   logger.info('🏠 Building app...');
+
   const app = express();
 
   await prepareMongo();
 
+  app.use(appMiddleware);
+
+  app.use('/api', appRouter);
+
   app.get('/healthz', (_, response) => {
     const mongostate = mongoose.connection.readyState;
-    response.status(200).json({ status: 'ok', mongostate });
+    response.status(StatusCodes.OK).json({ status: 'ok', mongostate });
   });
-
-  app.use('/api', apiRouter);
 
   app.use(errorHandlers);
 
