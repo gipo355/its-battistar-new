@@ -1,5 +1,6 @@
 import { ITodo } from '@its-battistar/shared-types';
 import mongoose from 'mongoose';
+import isAscii from 'validator/es/lib/isAscii';
 
 const todoSchema = new mongoose.Schema<ITodo>(
   {
@@ -13,9 +14,9 @@ const todoSchema = new mongoose.Schema<ITodo>(
       ],
       validate: {
         validator: function validator(value: string) {
-          return value !== '';
+          return isAscii(value);
         },
-        message: 'A todo title must not be empty',
+        message: 'A todo title must only contain ASCII characters',
       },
     },
     dueDate: {
@@ -29,9 +30,21 @@ const todoSchema = new mongoose.Schema<ITodo>(
       type: Date,
       default: Date.now(),
     },
+    updatedAt: {
+      type: Date,
+      default: Date.now(),
+    },
   },
   {
-    toJSON: { virtuals: true },
+    toJSON: {
+      virtuals: true,
+      transform: function (_, ret) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+      },
+    },
     toObject: { virtuals: true },
   }
 );
@@ -40,30 +53,8 @@ todoSchema.virtual('expired').get(function getDurationWeeks() {
   return this.dueDate < new Date();
 });
 
-/**
- * ## No big performance overhead
- * only guides and admins will be able to see the bookings
- */
-todoSchema.pre(/^find/, function preFind(next) {
-  /**
-   * ## populate
-   */
-  // TODO: typescript remove any?
-  void (this as mongoose.Query<any, any>)
-    // .populate('user')
-    .populate({
-      path: 'tour',
-      /**
-       * ## this will populate with guides too:
-       * in the pre find tour we add all the guides with populate
-       */
-      select: 'name id',
-    })
-    .populate({
-      path: 'user',
-      select: 'name email id',
-    });
-
+todoSchema.pre<ITodo>('save', function setUpdatedAt(next) {
+  this.updatedAt = new Date();
   next();
 });
 
