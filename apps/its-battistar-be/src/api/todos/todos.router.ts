@@ -30,7 +30,7 @@ todosRouter.get('/', getAllTodos);
  *    200:
  *     description: created todo
  *    400:
- *    description: invalid data
+ *     description: invalid data
  *
  *   requestBody:
  *    content:
@@ -41,6 +41,9 @@ todosRouter.get('/', getAllTodos);
  *        title:
  *         type: string
  *         description: title of the todo
+ *        dueDate:
+ *         type: string
+ *         description: due date of the todo
  */
 todosRouter.post('/', createTodo);
 
