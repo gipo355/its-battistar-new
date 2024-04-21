@@ -20,7 +20,7 @@ $ git clone https://github.com/gipo355/its-battistar & cd its-battistar
 $ pnpm install
 $ cp apps/its-battistar-be/.env.example apps/its-battistar-be/.env
 # edit the .env with you own values for production
-$ pnpm run serve
+$ pnpm run serve-all
 ```
 
 used:
@@ -32,14 +32,13 @@ used:
 
 # TODO
 
-- [ ] add a run guide and requirements
+- [x] add a run guide and requirements
 
-- [ ] init building swagger and angular
+- [x] init building swagger and angular
 
-- [ ] add swagger to express and other middleware
+- [x] add swagger to express and other middleware
 
-- [ ] change [detect-secrets](https://github.com/Yelp/detect-secrets) to be
-      available on install (maybe git-leaks)
+- [x] change [detect-secrets](https://github.com/Yelp/detect-secrets) to be
 
 - [ ] Add a description of the project
 
@@ -48,6 +47,11 @@ used:
 - [x] deploy angular
 
 - [x] semver with changlog (changeset, semantic-release)
+
+# Possible improvements
+
+- auto k3s
+- docusaurus or vitepress
 
 # BUGFIXES
 
