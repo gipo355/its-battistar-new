@@ -1,4 +1,4 @@
-import { Type, TSchema } from '@sinclair/typebox';
+import { TSchema, Type } from '@sinclair/typebox';
 import fastJsonStringify from 'fast-json-stringify';
 
 export const customResponseSchemaFactory = <T extends TSchema>(T: T) =>

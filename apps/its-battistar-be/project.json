@@ -12,12 +12,16 @@
         "cwd": "apps/its-battistar-be"
       }
     },
-    "lint": {
+    "pre-lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "tsc --noEmit --p ./tsconfig.app.json && eslint --ext .ts,.tsx,.js,.jsx --no-error-on-unmatched-pattern . && prettier -c .",
+        "command": "tsc --noEmit --p ./tsconfig.app.json && prettier -c ./src",
         "cwd": "apps/its-battistar-be"
       }
+    },
+    "lint": {
+      "dependsOn": ["pre-lint"],
+      "executor": "@nx/eslint:lint"
     },
     "serve": {
       "dependsOn": ["build-environment"],

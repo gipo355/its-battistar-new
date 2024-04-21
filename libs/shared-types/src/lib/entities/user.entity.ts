@@ -1,7 +1,8 @@
-import { Type, Static, TSchema, TString } from '@sinclair/typebox';
+import { Static, TSchema, TString, Type } from '@sinclair/typebox';
 import fastJsonStringify from 'fast-json-stringify';
+
 import ajvInstance from '../../utils/ajv';
-import { TAccount, accountsSchema } from './account.entity';
+import { accountsSchema, TAccount } from './account.entity';
 
 export const userSchemaUserInput = Type.Object({
   name: Type.String(),

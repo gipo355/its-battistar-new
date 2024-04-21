@@ -1,4 +1,4 @@
-import { Type, Static } from '@sinclair/typebox';
+import { Static, Type } from '@sinclair/typebox';
 
 export const accountsSchema = Type.Object({
   id: Type.Optional(Type.String()),
@@ -40,4 +40,18 @@ export const accountsSchema = Type.Object({
 
 export type TAccount = Static<typeof accountsSchema>;
 
-export interface IAccount {}
+export interface IAccount {
+  id?: string;
+  UserId: string;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+  strategy: 'local' | 'google' | 'facebook' | 'twitter' | 'github';
+  providerId: string;
+  password?: string;
+  passwordConfirm?: string;
+  passwordResetToken?: string;
+  passwordResetExpires?: string;
+  passwordChangedAt?: string;
+}
