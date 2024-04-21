@@ -7,7 +7,7 @@ export const appRoutes: Route[] = [
   //   pathMatch: 'full'
   // },
   {
-    path: '/',
+    path: '',
     loadComponent: () =>
       import('./pages/home/home.component').then((m) => m.HomeComponent),
     pathMatch: 'full',
