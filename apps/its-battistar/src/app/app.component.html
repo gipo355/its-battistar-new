@@ -1,5 +1,11 @@
 <title>{{title}}</title>
 
 <app-header></app-header>
-
-<router-outlet> </router-outlet>
+<div class="grid">
+  <nav class="left">left navigation</nav>
+  <header class="header-bar">top bar</header>
+  <main class="main container">
+    <router-outlet> </router-outlet>
+  </main>
+</div>
+<div class="container-sm"></div>
