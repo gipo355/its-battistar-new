@@ -11,19 +11,5 @@
   "quoteProps": "as-needed",
   "bracketSameLine": false,
   "proseWrap": "always",
-  "endOfLine": "lf",
-  "overrides": [
-    {
-      "files": "*.css",
-      "options": {
-        "parser": "css"
-      }
-    },
-    {
-      "files": "*.html",
-      "options": {
-        "parser": "html"
-      }
-    }
-  ]
+  "endOfLine": "lf"
 }

@@ -92,6 +92,48 @@
       "options": {
         "preset": "conventionalcommits"
       }
+    },
+    "storybook": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "apps/its-battistar/.storybook",
+        "browserTarget": "its-battistar:build",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/its-battistar",
+        "configDir": "apps/its-battistar/.storybook",
+        "browserTarget": "its-battistar:build",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "its-battistar:build-storybook",
+        "staticFilePath": "dist/storybook/its-battistar",
+        "spa": true
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "its-battistar:build-storybook:ci"
+        }
+      }
     }
   }
 }

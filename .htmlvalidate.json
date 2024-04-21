@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "html-validate:recommended",
+    "html-validate:document",
+    "html-validate:a11y",
+    "html-validate:prettier"
+  ],
+  "rules": {
+    "close-order": "error",
+    "missing-doctype": "off",
+    "attr-case": "off",
+    "doctype-style": [
+      "error",
+      {
+        "style": "lowercase"
+      }
+    ],
+    "require-sri": "warn"
+  }
+}
