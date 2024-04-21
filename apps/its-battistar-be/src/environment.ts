@@ -68,6 +68,7 @@ const optionalKeys = {
 const missingKeys = Object.keys(requiredKeys).filter(
   (key) => !requiredKeys[key as keyof typeof requiredKeys]
 );
+// eslint-disable-next-line no-magic-numbers
 if (missingKeys.length > 0) {
   throw new Error(
     `Environment variables ${missingKeys.join(', ')} are not defined`

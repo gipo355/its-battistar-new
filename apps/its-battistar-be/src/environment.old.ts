@@ -26,9 +26,6 @@ const environment = {
   SESSION_SECRET: process.env.SESSION_SECRET ?? 'session-secret',
 } as const;
 
-logger.debug(`Environment
-  ${JSON.stringify(environment, null, 2)}`);
-
 Object.freeze(environment);
 
 for (const key of Object.keys(environment)) {
