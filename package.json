@@ -24,6 +24,7 @@
     "@angular/router": "~17.3.0",
     "@changesets/cli": "^2.27.1",
     "@ng-bootstrap/ng-bootstrap": "^16.0.0",
+    "@ngrx/effects": "^17.2.0",
     "@ngrx/signals": "^17.2.0",
     "@ngrx/store": "^17.2.0",
     "@nx/angular": "18.2.3",
