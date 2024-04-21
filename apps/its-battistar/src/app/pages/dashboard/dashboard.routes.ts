@@ -10,8 +10,13 @@ import { Route } from '@angular/router';
 export const dashboardRoutes: Route[] = [
   // works with external component, but how would i inject stores and services?
   {
-    path: 'todos',
+    path: '',
     loadComponent: () =>
-      import('./todos/todos.component').then((m) => m.TodosComponent),
+      import('./dashboard.component').then((m) => m.DashboardComponent),
+  },
+  {
+    path: 'todos',
+    loadChildren: () =>
+      import('../../todos/todos.component').then((m) => m.TodosComponent),
   },
 ];
