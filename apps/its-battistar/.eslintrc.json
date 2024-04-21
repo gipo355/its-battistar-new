@@ -1,8 +1,11 @@
 {
   "extends": ["../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*"],
+  "ignorePatterns": ["!**/*", "storybook-static"],
   "parserOptions": {
-    "project": ["tsconfig.*?.json"]
+    "project": [
+      "tsconfig.*?.json",
+      "apps/its-battistar/.storybook/tsconfig.json"
+    ]
   },
   "overrides": [
     {
