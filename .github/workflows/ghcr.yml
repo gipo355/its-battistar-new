@@ -19,6 +19,7 @@ on:
         description: 'Test scenario tags'
 jobs:
   deploy:
+    name: GHCR Deploy
     runs-on: ubuntu-22.04
     permissions:
       contents: write

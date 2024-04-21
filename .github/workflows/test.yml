@@ -12,6 +12,7 @@ on:
         description: 'Test scenario tags'
 jobs:
   deploy:
+    name: Lint and Test
     runs-on: ubuntu-22.04
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
