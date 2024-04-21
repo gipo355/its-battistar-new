@@ -8,7 +8,7 @@ export const todoSchemaInput = Type.Object({
 });
 
 export const todoSchema = Type.Object({
-  todoSchemaInput,
+  ...todoSchemaInput.properties,
   dueDate: Type.String({
     format: 'date-time',
   }),

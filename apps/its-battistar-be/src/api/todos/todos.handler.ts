@@ -15,7 +15,7 @@ export const getAllTodos = catchAsync(async (req, res) => {
   // TODO: validation for query params
 
   const todos = await TodoModel.find({
-    ...(showCompleted === 'false' && { completed: { $ne: 'true' } }),
+    ...(showCompleted !== 'true' && { completed: { $ne: 'true' } }),
   });
 
   res.status(StatusCodes.OK).json(
