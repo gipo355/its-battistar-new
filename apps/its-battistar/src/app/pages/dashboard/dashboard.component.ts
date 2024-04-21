@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { initFlowbite } from 'flowbite';
 
 import { HeaderComponent } from '../../shared/header/header.component';
 
@@ -12,6 +13,9 @@ import { HeaderComponent } from '../../shared/header/header.component';
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   title = 'Dashboard';
+  ngOnInit(): void {
+    initFlowbite();
+  }
 }
