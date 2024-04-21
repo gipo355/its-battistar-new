@@ -20,12 +20,8 @@
           "apps/its-battistar/src/favicon.ico",
           "apps/its-battistar/src/assets"
         ],
-        "styles": [
-          "node_modules/bootstrap/scss/bootstrap.scss",
-          "node_modules/bootstrap-icons/font/bootstrap-icons.css",
-          "apps/its-battistar/src/styles.scss"
-        ],
-        "scripts": ["node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
+        "styles": ["apps/its-battistar/src/styles.scss"],
+        "scripts": []
       },
       "configurations": {
         "production": {
