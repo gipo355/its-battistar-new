@@ -1,3 +1,24 @@
-GET http://localhost:3333/api
+# health
+GET http://localhost:3000/healthz
 
 ---
+# wrong url
+GET http://localhost:3000/apiaa
+
+---
+# fetch all todos (no completed)
+GET http://localhost:3000/api/todos
+
+---
+# fetch all todos with completed
+GET http://localhost:3000/api/todos?showCompleted=true
+
+---
+# create a todo
+POST http://localhost:3000/api/todos
+Content-Type: application/json
+
+{
+  "title": "Learn Node.js",
+  "dueDate": "2020-12-31"
+}

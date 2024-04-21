@@ -1,0 +1,56 @@
+name: Lint and Test
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'
+jobs:
+  deploy:
+    name: Lint and Test
+    runs-on: ubuntu-22.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      # checkout
+      - name: Checkout
+        uses: actions/checkout@v4
+      # setup node
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.5.0
+      # setup pnpm
+      - uses: pnpm/action-setup@v3
+        name: Install pnpm
+        with:
+          version: 8.14.0
+          run_install: false
+      # get cache
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      # install dependencies
+      - name: Install NX Cli
+        run: pnpm add -g nx
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      # Test
+      - name: Lint
+        run: nx affected -t lint
+      # Test
+      - name: Test
+        run: nx affected -t test

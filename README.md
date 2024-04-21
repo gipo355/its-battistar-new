@@ -1,22 +1,57 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+![Tests](https://github.com/gipo355/its-battistar/actions/workflows/test.yml/badge.svg?branch=main)
+![Security](https://github.com/gipo355/its-battistar/actions/workflows/snyk.yml/badge.svg?branch=main)
+![Docker](https://github.com/gipo355/its-battistar/actions/workflows/ghcr.yml/badge.svg?branch=main)
+![Pages](https://github.com/gipo355/its-battistar/actions/workflows/pages.yml/badge.svg?branch=main)
+![Release](https://github.com/gipo355/its-battistar/actions/workflows/release.yml/badge.svg?branch=main)
+
+## Requirements
+
+- [Node.js](https://nodejs.org/en/download/) >= 20.5
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Nx CLI](https://nx.dev/latest/angular/getting-started/nx-setup) >= 18
+- [Pnpm](https://pnpm.io/installation) >= 8.5.0
+
+## Installation
+
+```bash
+$ git clone https://github.com/gipo355/its-battistar & cd its-battistar
+$ pnpm install
+$ cp apps/its-battistar-be/.env.example apps/its-battistar-be/.env
+# edit the .env with you own values for production
+$ pnpm run serve-all
+```
 
 used:
 
-[git-cz](https://cz-git.qbb.sh/guide/)
-[https://github.com/jscutlery/semver#jscutlerysemver]
+- [git-cz](https://cz-git.qbb.sh/guide/)
+- [semver](https://github.com/jscutlery/semver#jscutlerysemver)
+- [nx](https://nx.dev/latest/angular/getting-started/nx-setup)
+- [detect-secrets](https://github.com/Yelp/detect-secrets)
 
 # TODO
 
-- [ ] change [detect-secrets](https://github.com/Yelp/detect-secrets) to be
-      available on install (maybe git-leaks)
+- [x] add a run guide and requirements
+
+- [x] init building swagger and angular
+
+- [x] add swagger to express and other middleware
+
+- [x] change [detect-secrets](https://github.com/Yelp/detect-secrets) to be
 
 - [ ] Add a description of the project
 
-- [ ] deploy express
+- [x] deploy express
 
 - [x] deploy angular
 
-- [ ] semver with changlog (changeset, semantic-release)
+- [x] semver with changlog (changeset, semantic-release)
+
+# Possible improvements
+
+- auto k3s
+- docusaurus or vitepress
 
 # BUGFIXES
 

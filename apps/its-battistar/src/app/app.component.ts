@@ -1,20 +1,18 @@
+import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import {
-  NgbAlertModule,
-  NgbPaginationModule,
-  NgbTooltipModule,
-} from '@ng-bootstrap/ng-bootstrap';
+
+import { HeaderComponent } from './shared/header/header.component';
 
 @Component({
   standalone: true,
   imports: [
     RouterModule,
+    HttpClientModule,
+
+    HeaderComponent,
 
     // ng-bootstrap modules
-    NgbTooltipModule,
-    NgbPaginationModule,
-    NgbAlertModule,
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -22,6 +20,4 @@ import {
 })
 export class AppComponent {
   title = 'its-battistar';
-
-  tooltip = 'This is a tooltip';
 }

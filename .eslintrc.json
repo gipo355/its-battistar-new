@@ -34,6 +34,7 @@
         "plugin:import/recommended"
       ],
       "rules": {
+        "no-magic-numbers": "error",
         "sort-imports": "off",
         "simple-import-sort/imports": "error",
         "simple-import-sort/exports": "error",
@@ -43,6 +44,7 @@
         "unicorn/no-array-for-each": "warn",
         "unicorn/consistent-function-scoping": "warn",
         "unicorn/prefer-top-level-await": "warn",
+        "unicorn/prevent-abbreviations": "off",
         "unicorn/prefer-module": "warn",
         "complexity": ["error", 20],
         "consistent-return": "warn",

@@ -1,6 +1,5 @@
-# * random example, demo from website
-# ! SPECIFY IMAGE VERSIONS IN PRODUCTION, USE EVEN NODE VER
-version: '3.9' # optional since v1.27.0
+# TODO:  SPECIFY IMAGE VERSIONS IN PRODUCTION, USE EVEN NODE VER
+version: '3.9'
 services:
   ########## mongo
   mongo:
@@ -27,4 +26,59 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@127.0.0.1:27017/
+      ME_CONFIG_MONGODB_URL: ${MONGO_STRING}
+  ########## redis
+  redisdev:
+    env_file: ./.env
+    image: redis/redis-stack:latest
+    # user: redis
+    network_mode: host
+    ports:
+      - 127.0.0.1:6379:6379
+      #  redis insight
+      - 127.0.0.1:9002:8001
+    container_name: redisdev
+    volumes:
+      - /tmp/db/redis:/data
+    environment:
+      # default user is: default
+      - REDIS_ARGS=--save 60 1000 --appendonly yes --loglevel warning
+        --requirepass ${REDIS_PASSWORD}
+  ########## loki and grafana
+  loki:
+    image: grafana/loki:2.9.0
+    ports:
+      - '3100:3100'
+    command: -config.file=/etc/loki/local-config.yaml
+  promtail:
+    image: grafana/promtail:2.9.0
+    volumes:
+      - /tmp/loki/promtail/var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
+  grafana:
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+        EOF
+        /run.sh
+    image: grafana/grafana:latest
+    ports:
+      - '127.0.0.1:3200:3000'

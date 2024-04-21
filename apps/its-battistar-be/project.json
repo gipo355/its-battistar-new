@@ -5,11 +5,31 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "build-environment": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d --no-recreate",
+        "cwd": "apps/its-battistar-be"
+      }
+    },
+    "pre-lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit --p ./tsconfig.app.json && prettier -c ./src",
+        "cwd": "apps/its-battistar-be"
+      }
+    },
+    "lint": {
+      "dependsOn": ["pre-lint"],
+      "executor": "@nx/eslint:lint"
+    },
     "serve": {
+      "dependsOn": ["build-environment"],
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "its-battistar-be:build"
+        "buildTarget": "its-battistar-be:build",
+        "inspect": false
       },
       "configurations": {
         "development": {

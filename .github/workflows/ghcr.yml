@@ -4,6 +4,12 @@ on:
     branches:
       - main
     paths: ['apps/its-battistar-be/**']
+  # workflow_run:
+  #   # This workflow is triggered when a workflow run is completed successfully
+  #   # Use the name of the workflow
+  #   workflows: ['CI']
+  #   types:
+  #     - completed
   workflow_dispatch:
     inputs:
       logLevel:
@@ -13,6 +19,7 @@ on:
         description: 'Test scenario tags'
 jobs:
   deploy:
+    name: GHCR Deploy
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -22,10 +29,10 @@ jobs:
     steps:
       # checkout
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       # setup node
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20.5.0
       # setup pnpm
