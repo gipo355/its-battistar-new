@@ -36,6 +36,8 @@ export const accountsSchema = Type.Object({
   passwordChangedAt: Type.Optional(Type.String({ format: 'date-time' })),
 });
 
+// NOTE: session, refreshToken, accessToken, etc. are redis specific
+
 export type TAccount = Static<typeof accountsSchema>;
 
 export interface IAccount {}
