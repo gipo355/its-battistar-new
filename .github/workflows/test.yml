@@ -49,7 +49,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       # Test
       - name: Lint
-        run: nx affected --base=origin/main -t lint
+        run: nx affected -t lint
       # Test
       - name: Test
-        run: nx affected --base=origin/main -t test
+        run: nx affected -t test
