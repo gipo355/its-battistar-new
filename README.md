@@ -7,19 +7,19 @@
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/en/download/)
+- [Node.js](https://nodejs.org/en/download/) >= 20.5
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
-- [Nx CLI](https://nx.dev/latest/angular/getting-started/nx-setup)
-- [Pnpm](https://pnpm.io/installation)
+- [Nx CLI](https://nx.dev/latest/angular/getting-started/nx-setup) >= 18
+- [Pnpm](https://pnpm.io/installation) >= 8.5.0
 
 ## Installation
 
-```console
+```bash
 $ git clone https://github.com/gipo355/its-battistar & cd its-battistar
 $ pnpm install
 $ cd apps/its-battistar-be/.env.example apps/its-battistar-be/.env
-# # edit .env with you own values
+# edit .env with you own values
 $ pnpm run serve
 ```
 
