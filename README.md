@@ -28,6 +28,7 @@ used:
 - [git-cz](https://cz-git.qbb.sh/guide/)
 - [semver](https://github.com/jscutlery/semver#jscutlerysemver)
 - [nx](https://nx.dev/latest/angular/getting-started/nx-setup)
+- [detect-secrets](https://github.com/Yelp/detect-secrets)
 
 # TODO
 
