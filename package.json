@@ -10,7 +10,7 @@
     "prepare": "husky",
     "version": "nx affected --target version",
     "create-angular-lib": "nx g @nx/angular:lib --directory=libs --style=scss --lazy=true --routing=true --changeDetection=OnPush --standalone=true --setParserOptionsProject=true",
-    "create-angular-component": "nx g @nx/angular:component --directory=libs --style=scss --lazy=true --routing=true --changeDetection=OnPush --standalone=true --setParserOptionsProject=true"
+    "create-angular-component": "nx g @nx/angular:component --style=scss --changeDetection=OnPush --standalone=true "
   },
   "private": true,
   "engines": {
