@@ -1,5 +1,23 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
+## Requirements
+
+- [Node.js](https://nodejs.org/en/download/)
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Nx CLI](https://nx.dev/latest/angular/getting-started/nx-setup)
+- [Pnpm](https://pnpm.io/installation)
+
+## Installation
+
+```bash
+$ git clone https://github.com/gipo355/its-battistar & cd its-battistar
+$ pnpm install
+$ cd apps/its-battistar-be/.env.example apps/its-battistar-be/.env
+# edit .env with you own values
+$ pnpm run serve
+```
+
 used:
 
 [git-cz](https://cz-git.qbb.sh/guide/)
