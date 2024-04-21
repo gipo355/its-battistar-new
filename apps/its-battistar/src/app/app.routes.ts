@@ -24,6 +24,6 @@ export const appRoutes: Route[] = [
   {
     path: 'todos',
     loadComponent: () =>
-      import('./pages/todos.component').then((m) => m.TodosComponent),
+      import('./pages/todos/todos.component').then((m) => m.TodosComponent),
   },
 ];
