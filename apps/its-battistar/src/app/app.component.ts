@@ -1,15 +1,12 @@
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { TodosComponent } from '@its-battistar/todos';
 
 @Component({
   standalone: true,
   imports: [
     RouterModule,
     HttpClientModule,
-
-    TodosComponent,
 
     // ng-bootstrap modules
   ],
@@ -19,6 +16,4 @@ import { TodosComponent } from '@its-battistar/todos';
 })
 export class AppComponent {
   title = 'its-battistar';
-
-  tooltip = 'This is a tooltip';
 }
