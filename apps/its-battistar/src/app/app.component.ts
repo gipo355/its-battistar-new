@@ -1,6 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { HeaderComponent } from './shared/header/header.component';
 
@@ -13,6 +15,8 @@ import { HeaderComponent } from './shared/header/header.component';
     HeaderComponent,
 
     // ng-bootstrap modules
+    BrowserModule,
+    NgbModule,
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',
