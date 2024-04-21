@@ -1,4 +1,9 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+![Tests](https://github.com/github/docs/actions/workflows/snyk.yml/badge.svg)
+![Security](https://github.com/github/docs/actions/workflows/snyk.yml/badge.svg)
+![Docker](https://github.com/github/docs/actions/workflows/ghcr.yml/badge.svg)
+![Pages](https://github.com/github/docs/actions/workflows/pages.yml/badge.svg)
+![Release](https://github.com/github/docs/actions/workflows/release.yml/badge.svg)
 
 ## Requirements
 
