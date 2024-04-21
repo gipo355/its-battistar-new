@@ -3,6 +3,25 @@
 This file was generated using
 [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [1.1.0](https://github.com/gipo355/its-battistar/compare/its-battistar-be-1.0.1...its-battistar-be-1.1.0) (2024-4-21)
+
+### Features
+
+- **its-battistar-be:** :sparkles: add first todos structure
+  ([e018a29](https://github.com/gipo355/its-battistar/commit/e018a2919fb6e89161b9b0c60debd118886f758c))
+- **its-battistar-be:** :sparkles: get todos work
+  ([00ab669](https://github.com/gipo355/its-battistar/commit/00ab669f58fc1ff2b42eeb2f4d0385d5aaa487e8))
+- **its-battistar-be:** :sparkles: prepare check endpoints
+  ([0eb90bc](https://github.com/gipo355/its-battistar/commit/0eb90bc2ee8773a8de239b365e87a036c15f475a))
+- **its-battistar-be:** :sparkles: redis and mongo state health
+  ([9fabeef](https://github.com/gipo355/its-battistar/commit/9fabeefa479339a88714f7d1520cbccb47a8c9c2))
+
+### Bug Fixes
+
+- **its-battistar-be:** :bug: fIX errors catching bypass, wrong error handler
+  position
+  ([4c46d7f](https://github.com/gipo355/its-battistar/commit/4c46d7fc0866a9d751612b3a83457909f5fc87d6))
+
 ## [1.0.1](https://github.com/gipo355/its-battistar/compare/its-battistar-be-1.0.0...its-battistar-be-1.0.1) (2024-4-20)
 
 ### Bug Fixes
