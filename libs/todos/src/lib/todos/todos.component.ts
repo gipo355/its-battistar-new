@@ -9,4 +9,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './todos.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TodosComponent {}
+export class TodosComponent {
+  text = 'todos works!';
+}
