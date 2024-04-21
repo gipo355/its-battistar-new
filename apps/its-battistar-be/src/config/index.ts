@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import environment from '../environment';
 
 export const API_VERSION = 'v1';

@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import { ITodo } from '@its-battistar/shared-types';
 import mongoose from 'mongoose';
 import isAscii from 'validator/lib/isAscii';

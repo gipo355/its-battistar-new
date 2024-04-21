@@ -82,6 +82,8 @@ export const errorsHandler: ErrorRequestHandler = (
   if (error.name === 'CastError') newError = handleCastError(newError);
 
   // keyPattern.Name is a prop that exists on duplicate error
+  // TODO: create an enum for error codes
+  // eslint-disable-next-line no-magic-numbers
   if (error.code === 11_000) newError = handleDuplicateError(newError);
 
   // if it's a validation error (mongoose)

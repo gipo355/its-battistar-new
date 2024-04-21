@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import 'tslib'; // required for compilation since we are using typescript with webpack
 import 'dotenv-defaults/config';
 
