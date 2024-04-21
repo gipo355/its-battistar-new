@@ -3,11 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { initFlowbite } from 'flowbite';
 
-import { HeaderComponent } from './shared/header/header.component';
-
 @Component({
   standalone: true,
-  imports: [RouterModule, HttpClientModule, HeaderComponent],
+  imports: [RouterModule, HttpClientModule],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

@@ -23,7 +23,7 @@ export const appRoutes: Route[] = [
   // },
 
   {
-    path: '/app',
+    path: 'dashboard',
     loadComponent: () =>
       import('./pages/dashboard/dashboard.component').then(
         (m) => m.DashboardComponent
@@ -31,9 +31,9 @@ export const appRoutes: Route[] = [
   },
 
   // IN app component
-  {
-    path: '/app/todos',
-    loadComponent: () =>
-      import('./pages/todos/todos.component').then((m) => m.TodosComponent),
-  },
+  // {
+  //   path: '/app/todos',
+  //   loadComponent: () =>
+  //     import('./pages/todos/todos.component').then((m) => m.TodosComponent),
+  // },
 ];
