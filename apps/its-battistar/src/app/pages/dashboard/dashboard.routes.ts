@@ -15,6 +15,14 @@ export const dashboardRoutes: Route[] = [
       import('./dashboard.component').then((m) => m.DashboardComponent),
   },
   {
+    path: 'overview',
+    loadChildren: () =>
+      import('../../components/overview/overview.component').then(
+        (m) => m.OverviewComponent
+      ),
+    outlet: 'dashboard-content-outlet',
+  },
+  {
     path: 'todos',
     loadChildren: () =>
       import('../../components/todos/todos.component').then(
