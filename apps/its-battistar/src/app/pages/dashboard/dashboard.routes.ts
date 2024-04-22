@@ -29,7 +29,8 @@ export const dashboardRoutes: Route[] = [
           import('../../components/overview/overview.component').then(
             (m) => m.OverviewComponent
           ),
-        outlet: 'content',
+        // FIXME: why named outlet is not working?
+        // outlet: 'content',
       },
       {
         path: 'todos',
@@ -37,7 +38,8 @@ export const dashboardRoutes: Route[] = [
           import('../../components/todos/todos.component').then(
             (m) => m.TodosComponent
           ),
-        outlet: 'content',
+        // FIXME: why named outlet is not working?
+        // outlet: 'content',
       },
     ],
   },
