@@ -5,12 +5,12 @@ import {
   type StoryObj,
 } from '@storybook/angular';
 
-import { DashboardComponent } from './dashboard.component';
-import { dashboardRoutes } from './dashboard.routes';
+import { dashboardRoutes } from '../../pages/dashboard/dashboard.routes';
+import { SidebarComponent } from './sidebar.component';
 
-const meta: Meta<DashboardComponent> = {
-  title: 'DashboardComponent',
-  component: DashboardComponent,
+const meta: Meta<SidebarComponent> = {
+  title: 'SidebarComponent',
+  component: SidebarComponent,
   decorators: [
     applicationConfig({
       providers: [provideRouter(dashboardRoutes)],
@@ -18,7 +18,7 @@ const meta: Meta<DashboardComponent> = {
   ],
 };
 export default meta;
-type Story = StoryObj<DashboardComponent>;
+type Story = StoryObj<SidebarComponent>;
 
 export const Primary: Story = {
   args: {},
