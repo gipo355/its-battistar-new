@@ -1,23 +1,19 @@
 <title>{{ title }}</title>
 
-<app-header></app-header>
-<div class="custom-grid">
-  <nav class="left">
-    <ul>
-      <li><a routerLink="/dashboard">Dashboard</a></li>
-      <li><a routerLink="/settings">Settings</a></li>
-      <li>
-        <a
-          routerLink="/todos"
-          class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-          >Todos</a
-        >
-      </li>
-    </ul>
-  </nav>
-  <header class="header-bar">top bar</header>
-  <main class="main container">
-    <router-outlet> </router-outlet>
-    dashboard works!
-  </main>
+<div class="min-h-screen flex flex-col">
+  <app-header></app-header>
+  <div class="custom-grid flex-grow">
+    <nav class="left bg-slate-800 text-slate-200">
+      <app-sidebar></app-sidebar>
+    </nav>
+    <header class="header-bar bg-slate-500 text-slate-200">
+      <app-top-bar></app-top-bar>
+    </header>
+    <main class="main container bg-slate-300">
+      <!-- FIXME named nested route -->
+      <!-- <router-outlet name="content"> </router-outlet> -->
+      <router-outlet> </router-outlet>
+      <!-- TODO: test named router-outlet -->
+    </main>
+  </div>
 </div>

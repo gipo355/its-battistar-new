@@ -1,17 +1,29 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { initFlowbite } from 'flowbite';
 
-import { HeaderComponent } from '../../shared/header/header.component';
+import { HeaderComponent } from '../../components/header/header.component';
+import { SidebarComponent } from '../../components/sidebar/sidebar.component';
+import { TopBarComponent } from '../../components/top-bar/top-bar.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, RouterModule],
+  imports: [
+    CommonModule,
+    HeaderComponent,
+    SidebarComponent,
+    RouterModule,
+    TopBarComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   title = 'Dashboard';
+  ngOnInit(): void {
+    initFlowbite();
+  }
 }

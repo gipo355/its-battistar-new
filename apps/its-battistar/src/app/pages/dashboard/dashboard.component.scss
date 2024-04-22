@@ -1,17 +1,18 @@
 .custom-grid {
   display: grid;
   height: auto;
+  grid-template: auto 1fr / minmax(0, 1fr) minmax(300px, 5fr);
   grid-template-areas:
     'left header'
     'left main';
-  grid-template-columns: 1fr 3fr;
+
+  // grid-template-columns: minmax(0, 1fr) minmax(300px, 5fr);
+  // grid-template-rows: auto 1fr;
 }
 
 .left {
   display: flex;
   padding: 2rem;
-  background-color: var(--primary-color);
-  color: var(--text-color-light);
   grid-area: left;
 }
 
@@ -19,9 +20,9 @@
   display: flex;
   width: 100%;
   height: 100%;
+  align-items: center;
+  justify-content: right;
   padding: 1rem;
-  background-color: var(--secondary-color-light);
-  color: var(--text-color-dark);
   grid-area: header;
 }
 
@@ -30,7 +31,5 @@
   width: 100%;
   height: 100%;
   padding: 2rem;
-  background-color: var(--bg-color-light);
-  color: var(--text-color-dark);
   grid-area: main;
 }

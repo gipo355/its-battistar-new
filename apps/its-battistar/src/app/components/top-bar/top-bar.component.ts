@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-todos',
+  selector: 'app-top-bar',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './todos.component.html',
-  styleUrl: './todos.component.scss',
+  templateUrl: './top-bar.component.html',
+  styleUrl: './top-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TodosComponent {
-  title = 'Todos';
+export class TopBarComponent {
+  title = 'TopBar';
 }

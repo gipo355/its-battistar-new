@@ -5,12 +5,12 @@ import {
   type StoryObj,
 } from '@storybook/angular';
 
-import { AppComponent } from './app.component';
-import { appRoutes } from './app.routes';
+import { appRoutes } from '../../app.routes';
+import { HeaderComponent } from './header.component';
 
-const meta: Meta<AppComponent> = {
-  component: AppComponent,
-  title: 'AppComponent',
+const meta: Meta<HeaderComponent> = {
+  component: HeaderComponent,
+  title: 'HeaderComponent',
   decorators: [
     applicationConfig({
       providers: [provideRouter(appRoutes)],
@@ -18,7 +18,7 @@ const meta: Meta<AppComponent> = {
   ],
 };
 export default meta;
-type Story = StoryObj<AppComponent>;
+type Story = StoryObj<HeaderComponent>;
 
 export const Primary: Story = {
   args: {},

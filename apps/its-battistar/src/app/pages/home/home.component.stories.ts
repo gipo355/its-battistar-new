@@ -1,29 +1,24 @@
 import { provideRouter } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import {
   applicationConfig,
   type Meta,
-  moduleMetadata,
   type StoryObj,
 } from '@storybook/angular';
 
 import { appRoutes } from '../../app.routes';
-import { HeaderComponent } from './header.component';
+import { HomeComponent } from './home.component';
 
-const meta: Meta<HeaderComponent> = {
-  component: HeaderComponent,
-  title: 'HeaderComponent',
+const meta: Meta<HomeComponent> = {
+  component: HomeComponent,
+  title: 'HomeComponent',
   decorators: [
     applicationConfig({
       providers: [provideRouter(appRoutes)],
     }),
-    moduleMetadata({
-      imports: [RouterTestingModule],
-    }),
   ],
 };
 export default meta;
-type Story = StoryObj<HeaderComponent>;
+type Story = StoryObj<HomeComponent>;
 
 export const Primary: Story = {
   args: {},
