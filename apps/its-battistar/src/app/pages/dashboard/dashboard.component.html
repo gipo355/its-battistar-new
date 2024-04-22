@@ -5,9 +5,12 @@
   <nav class="left">
     <app-sidebar></app-sidebar>
   </nav>
-  <header class="header-bar">top bar</header>
+  <header class="header-bar">
+    <app-top-bar></app-top-bar>
+  </header>
   <main class="main container">
     dashboard works!
-    <router-outlet> </router-outlet>
+    <!-- FIXME nested route -->
+    <router-outlet name="dashboard-content-outlet"> </router-outlet>
   </main>
 </div>

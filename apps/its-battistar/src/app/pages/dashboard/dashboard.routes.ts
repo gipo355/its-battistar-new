@@ -20,5 +20,6 @@ export const dashboardRoutes: Route[] = [
       import('../../components/todos/todos.component').then(
         (m) => m.TodosComponent
       ),
+    outlet: 'dashboard-content-outlet',
   },
 ];
