@@ -1,3 +1,7 @@
+// https://stackoverflow.com/questions/76256432/angular-router-named-router-outlet
+// https://stackoverflow.com/questions/41857876/angular-2-submodule-routing-and-nested-router-outlet
+// https://medium.com/@oranaki9910/how-to-create-a-dynamic-layout-using-a-named-router-outlet-in-angular-8f211afe4ea2
+
 import { Route } from '@angular/router';
 
 // this is the schema for the routes:
@@ -25,8 +29,7 @@ export const dashboardRoutes: Route[] = [
           import('../../components/overview/overview.component').then(
             (m) => m.OverviewComponent
           ),
-        // FIXME: why named outlet is not working?
-        // outlet: 'dashboard-content-outlet',
+        outlet: 'content',
       },
       {
         path: 'todos',
@@ -34,8 +37,7 @@ export const dashboardRoutes: Route[] = [
           import('../../components/todos/todos.component').then(
             (m) => m.TodosComponent
           ),
-        // FIXME: why named outlet is not working?
-        // outlet: 'dashboard-content-outlet',
+        outlet: 'content',
       },
     ],
   },
