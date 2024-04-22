@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { IMenuItem } from '../../pages/dashboard/dashboard.service';
+
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -13,22 +15,7 @@ import { RouterModule } from '@angular/router';
 export class SidebarComponent {
   title = 'Sidebar';
 
+  // TODO: move to signal input
   @Input()
-  menuItems = [
-    {
-      title: 'Overview',
-      icon: '🛖',
-      link: 'overview',
-    },
-    {
-      title: 'Todos',
-      icon: '✅',
-      link: 'todos',
-    },
-    {
-      title: 'Settings',
-      icon: '⚙️',
-      link: 'settings',
-    },
-  ];
+  menuItems: IMenuItem[] = [];
 }

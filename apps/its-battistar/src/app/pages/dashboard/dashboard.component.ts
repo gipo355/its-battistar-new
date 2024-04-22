@@ -1,11 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { initFlowbite } from 'flowbite';
 
 import { HeaderComponent } from '../../components/header/header.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopBarComponent } from '../../components/top-bar/top-bar.component';
+import { DashboardService } from './dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,6 +29,12 @@ import { TopBarComponent } from '../../components/top-bar/top-bar.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit {
+  http = inject(HttpClient);
+
+  dashboardService = inject(DashboardService);
+
+  menuItems = this.dashboardService.menuItems;
+
   title = 'Dashboard';
   ngOnInit(): void {
     initFlowbite();
