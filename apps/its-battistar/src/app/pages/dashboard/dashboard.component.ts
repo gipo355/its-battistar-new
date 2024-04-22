@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { initFlowbite } from 'flowbite';
 
-import { MainContentComponent } from '../../components/overview-content/main-content.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopBarComponent } from '../../components/top-bar/top-bar.component';
 import { HeaderComponent } from '../../shared/header/header.component';
@@ -15,7 +14,6 @@ import { HeaderComponent } from '../../shared/header/header.component';
     CommonModule,
     HeaderComponent,
     SidebarComponent,
-    MainContentComponent,
     RouterModule,
     TopBarComponent,
   ],
