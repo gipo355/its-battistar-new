@@ -10,5 +10,6 @@ import { RouterModule } from '@angular/router';
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export class HeaderComponent {}
+export class HeaderComponent {
+  title = 'its-battistar';
+}

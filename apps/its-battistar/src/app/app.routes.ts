@@ -29,24 +29,11 @@ export const appRoutes: Route[] = [
       import('./pages/dashboard/dashboard.routes').then(
         (routes) => routes.dashboardRoutes
       ),
-
-    // Load component lazy loads it but won't allow nested routes
-    // loadComponent: () =>
-    //   import('./pages/dashboard/dashboard.component').then(
-    //     (m) => m.DashboardComponent
-    //   ),
   },
 
-  // works with external component, but how would i inject stores and services?
-  // {
-  //   path: 'todos',
-  //   loadComponent: () =>
-  //     import('@its-battistar/todos').then((m) => m.TodosComponent),
-  // },
-  // IN app component
-  // {
-  //   path: '/app/todos',
-  //   loadComponent: () =>
-  //     import('./pages/todos/todos.component').then((m) => m.TodosComponent),
-  // },
+  // TODO: guard, redirect to home
+  {
+    path: '*',
+    redirectTo: '',
+  },
 ];

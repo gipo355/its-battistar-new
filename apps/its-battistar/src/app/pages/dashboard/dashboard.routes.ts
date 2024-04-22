@@ -11,8 +11,6 @@ export const dashboardRoutes: Route[] = [
   // works with external component, but how would i inject stores and services?
   {
     path: '',
-    // redirectTo: 'overview',
-    // pathMatch: 'full',
     loadComponent: () =>
       import('./dashboard.component').then((m) => m.DashboardComponent),
     children: [
@@ -20,11 +18,6 @@ export const dashboardRoutes: Route[] = [
         path: '',
         redirectTo: 'overview',
         pathMatch: 'full',
-        // loadComponent: () =>
-        //   import('../../components/overview/overview.component').then(
-        //     (m) => m.OverviewComponent
-        //   ),
-        // outlet: 'dashboard-content-outlet',
       },
       {
         path: 'overview',
@@ -32,6 +25,7 @@ export const dashboardRoutes: Route[] = [
           import('../../components/overview/overview.component').then(
             (m) => m.OverviewComponent
           ),
+        // FIXME: why named outlet is not working?
         // outlet: 'dashboard-content-outlet',
       },
       {
@@ -40,24 +34,9 @@ export const dashboardRoutes: Route[] = [
           import('../../components/todos/todos.component').then(
             (m) => m.TodosComponent
           ),
+        // FIXME: why named outlet is not working?
         // outlet: 'dashboard-content-outlet',
       },
     ],
   },
-  // {
-  //   path: 'overview',
-  //   loadChildren: () =>
-  //     import('../../components/overview/overview.component').then(
-  //       (m) => m.OverviewComponent
-  //     ),
-  //   outlet: 'dashboard-content-outlet',
-  // },
-  // {
-  //   path: 'todos',
-  //   loadChildren: () =>
-  //     import('../../components/todos/todos.component').then(
-  //       (m) => m.TodosComponent
-  //     ),
-  //   outlet: 'dashboard-content-outlet',
-  // },
 ];
