@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-sidebar',
+  selector: 'app-top-bar',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss',
+  templateUrl: './top-bar.component.html',
+  styleUrl: './top-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SidebarComponent {
-  title = 'Sidebar';
+export class TopBarComponent {
+  title = 'TopBar';
 }
