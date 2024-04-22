@@ -1,17 +1,19 @@
 <title>{{ title }}</title>
 
-<app-header></app-header>
-<div class="custom-grid">
-  <nav class="left">
-    <app-sidebar></app-sidebar>
-  </nav>
-  <header class="header-bar">
-    <app-top-bar></app-top-bar>
-  </header>
-  <main class="main container">
-    <!-- FIXME named nested route -->
-    <!-- <router-outlet name="content"> </router-outlet> -->
-    <router-outlet> </router-outlet>
-    <!-- TODO: test named router-outlet -->
-  </main>
+<div class="min-h-screen flex flex-col">
+  <app-header></app-header>
+  <div class="custom-grid flex-grow">
+    <nav class="left bg-slate-800 text-slate-200">
+      <app-sidebar></app-sidebar>
+    </nav>
+    <header class="header-bar">
+      <app-top-bar></app-top-bar>
+    </header>
+    <main class="main container">
+      <!-- FIXME named nested route -->
+      <!-- <router-outlet name="content"> </router-outlet> -->
+      <router-outlet> </router-outlet>
+      <!-- TODO: test named router-outlet -->
+    </main>
+  </div>
 </div>

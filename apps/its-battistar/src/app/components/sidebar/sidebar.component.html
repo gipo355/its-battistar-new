@@ -1,19 +1,32 @@
 <nav class="left">
-  <ul>
-    <li>
+  <ul class="flex justify-center items-start flex-col">
+    @for (menuItem of menuItems; track menuItem.title){
+    <li
+      class="p-2"
+      [routerLinkActive]="'active'"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
       <a
-        [routerLink]="['overview']"
-        class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-        >Overview</a
+        [routerLink]="[menuItem.link]"
+        class="block rounded px-3 py-2 text-slate-200 font-bold hover:bg-green-500 dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-green-500 md:dark:hover:bg-transparent md:dark:hover:text-green-500"
+        >{{ menuItem.title }}</a
       >
     </li>
-    <li>
-      <a
-        [routerLink]="['todos']"
-        class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-        >Todos</a
-      >
-    </li>
-    <li><a [routerLink]="['settings']">Settings</a></li>
+    }
+    <!-- <li> -->
+    <!--   <a -->
+    <!--     [routerLink]="['overview']" -->
+    <!--     class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" -->
+    <!--     >Overview</a -->
+    <!--   > -->
+    <!-- </li> -->
+    <!-- <li> -->
+    <!--   <a -->
+    <!--     [routerLink]="['todos']" -->
+    <!--     class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" -->
+    <!--     >Todos</a -->
+    <!--   > -->
+    <!-- </li> -->
+    <!-- <li><a [routerLink]="['settings']">Settings</a></li> -->
   </ul>
 </nav>

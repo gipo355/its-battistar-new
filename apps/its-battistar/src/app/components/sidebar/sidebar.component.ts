@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -12,4 +12,23 @@ import { RouterModule } from '@angular/router';
 })
 export class SidebarComponent {
   title = 'Sidebar';
+
+  @Input()
+  menuItems = [
+    {
+      title: 'Overview',
+      icon: 'overview',
+      link: 'overview',
+    },
+    {
+      title: 'Todos',
+      icon: 'todo',
+      link: 'todos',
+    },
+    {
+      title: 'Settings',
+      icon: 'setting',
+      link: 'settings',
+    },
+  ];
 }
