@@ -17,17 +17,17 @@ export class SidebarComponent {
   menuItems = [
     {
       title: 'Overview',
-      icon: 'overview',
+      icon: '🛖',
       link: 'overview',
     },
     {
       title: 'Todos',
-      icon: 'todo',
+      icon: '✅',
       link: 'todos',
     },
     {
       title: 'Settings',
-      icon: 'setting',
+      icon: '⚙️',
       link: 'settings',
     },
   ];
