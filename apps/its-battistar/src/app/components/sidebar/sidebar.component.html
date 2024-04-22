@@ -1,14 +1,14 @@
-<nav class="left">
-  <ul class="flex justify-center items-start flex-col">
+<nav class="h-full">
+  <ul class="flex w-full h-full flex-wrap flex-col justify-start items-center">
     @for (menuItem of menuItems; track menuItem.title){
     <li
-      class="p-2"
+      class="w-full p-2"
       [routerLinkActive]="'active'"
       [routerLinkActiveOptions]="{ exact: true }"
     >
       <a
         [routerLink]="[menuItem.link]"
-        class="block rounded px-3 py-2 text-slate-200 font-bold hover:bg-green-500 dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-green-500 md:dark:hover:bg-transparent md:dark:hover:text-green-500"
+        class="block w-full rounded font-bold text-slate-200 hover:bg-green-500 dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-green-500 md:dark:hover:bg-transparent md:dark:hover:text-green-500"
         >{{ menuItem.icon }} {{ menuItem.title }}</a
       >
     </li>
