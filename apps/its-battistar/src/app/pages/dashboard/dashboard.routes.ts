@@ -17,6 +17,8 @@ export const dashboardRoutes: Route[] = [
   {
     path: 'todos',
     loadChildren: () =>
-      import('../../todos/todos.component').then((m) => m.TodosComponent),
+      import('../../components/todos/todos.component').then(
+        (m) => m.TodosComponent
+      ),
   },
 ];
