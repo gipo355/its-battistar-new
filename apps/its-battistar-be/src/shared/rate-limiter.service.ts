@@ -2,9 +2,9 @@ import type { NextFunction, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { RateLimiterRedis } from 'rate-limiter-flexible';
 
+import { rateLimiterOptions } from '../app.config';
 import { AppError } from '../utils/app-error';
 import { catchAsync } from '../utils/catch-async';
-import { rateLimiterOptions } from '../app.config';
 
 const rateLimiterRedis = new RateLimiterRedis(rateLimiterOptions);
 
