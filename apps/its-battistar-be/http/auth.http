@@ -1,18 +1,15 @@
+# TODO: must implement
 ---
-# wrong url
 GET http://localhost:3000/auth/login
 
 ---
-# fetch all todos (no completed)
 GET http://localhost:3000/auth/signup
 
 ---
-# fetch all todos with completed
 GET http://localhost:3000/auth/refresh
 
 ---
-# create a todo
-POST http://localhost:3000/api/logout
+POST http://localhost:3000/auth/logout
 Content-Type: application/json
 
 {
