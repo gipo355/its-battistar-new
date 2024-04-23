@@ -5,8 +5,8 @@ import {
 } from '@its-battistar/shared-types';
 import { StatusCodes } from 'http-status-codes';
 
-import { AppError } from '../../utils/app-error';
-import { catchAsync } from '../../utils/catch-async';
+import { AppError } from '../../../utils/app-error';
+import { catchAsync } from '../../../utils/catch-async';
 import { TodoModel } from './todos.model';
 
 export const getAllTodos = catchAsync(async (req, res) => {

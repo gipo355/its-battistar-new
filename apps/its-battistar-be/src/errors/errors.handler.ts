@@ -31,7 +31,7 @@ import {
   sendErrorProduction,
 } from './errors.service';
 
-export const errorsHandler: ErrorRequestHandler = (
+export const finalErrorHandler: ErrorRequestHandler = (
   error: AppError,
   request,
   response,

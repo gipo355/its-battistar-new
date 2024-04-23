@@ -19,4 +19,4 @@ const r = Router({
  */
 r.get('/', refreshHandler);
 
-export { r as loginRouter };
+export { r as refreshRouter };

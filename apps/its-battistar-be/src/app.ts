@@ -10,7 +10,7 @@ import { appMiddleware } from './app.service';
 import { prepareMongo } from './db/mongo';
 import { redisConnection } from './db/redis';
 import { environment } from './environments';
-import { errorsHandler } from './errors/errors.handler';
+import { finalErrorHandler } from './errors/errors.handler';
 import { preErrorsRouter } from './errors/pre-errors.router';
 import { logger } from './utils/logger';
 
@@ -87,7 +87,7 @@ export const buildApp = async function () {
    *
    * Can't be put inside a router or it won't catch errors
    */
-  app.use([errorsHandler]);
+  app.use([finalErrorHandler]);
 
   return app;
 };

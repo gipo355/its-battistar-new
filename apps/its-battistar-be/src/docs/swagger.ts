@@ -27,7 +27,13 @@ const options: swaggerJSDocument.Options = {
       },
       termsOfService: '/terms-of-use',
     },
-    tags: [{ name: 'api', description: 'api desc' }],
+    tags: [
+      // manual tags
+      //   {
+      //   name: 'api',
+      //   description: 'api desc'
+      // }
+    ],
     components: {
       securitySchemes: {
         BearerAuth: {

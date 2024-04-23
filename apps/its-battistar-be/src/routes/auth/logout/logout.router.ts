@@ -19,4 +19,4 @@ const r = Router({
  */
 r.post('/', logoutHandler);
 
-export { r as loginRouter };
+export { r as logoutRouter };
