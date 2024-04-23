@@ -1,13 +1,16 @@
 import { Router } from 'express';
 
-import { checkRouter } from './check/check.router';
-import { createTodo, getAllTodos, getOneTodo } from './todos.handler';
+import {
+  createTodo,
+  deleteOneTodo,
+  getAllTodos,
+  getOneTodo,
+  patchOneTodo,
+} from './todos.handler';
 
 const todosRouter = Router({
   mergeParams: true,
 });
-
-todosRouter.use('/:id/check', checkRouter);
 
 /**
  * @openapi
@@ -21,6 +24,7 @@ todosRouter.use('/:id/check', checkRouter);
  *     description: return all todos
  */
 todosRouter.get('/', getAllTodos);
+
 /**
  * @openapi
  * /api/todos/{id}:
@@ -35,6 +39,37 @@ todosRouter.get('/', getAllTodos);
  *     description: todo not found
  */
 todosRouter.get('/:id', getOneTodo);
+
+/**
+ * @openapi
+ * /api/todos/{id}:
+ *  patch:
+ *   tags:
+ *    - todos
+ *   description: get one todo
+ *   responses:
+ *    200:
+ *     description: return a todo
+ *    400:
+ *     description: todo not found
+ */
+todosRouter.patch('/:id', patchOneTodo);
+
+/**
+ * @openapi
+ * /api/todos/{id}:
+ *  delete:
+ *   tags:
+ *    - todos
+ *   description: delete one todo
+ *   responses:
+ *    204:
+ *     description: return null
+ *    400:
+ *     description: todo not found
+ */
+todosRouter.delete('/:id', deleteOneTodo);
+
 /**
  * @openapi
  * /api/todos:
