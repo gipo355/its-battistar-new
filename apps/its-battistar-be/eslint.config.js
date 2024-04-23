@@ -25,6 +25,7 @@ module.exports = [
       'n/no-missing-import': 'off',
       'n/no-extraneous-import': 'off',
       'n/no-extraneous-require': 'off',
+      'n/no-unpublished-require': 'off',
     },
   },
   {
