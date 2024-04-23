@@ -6,7 +6,7 @@ import {
   helmetOptions,
   RATE_LIMITER_DURATION,
   RATE_LIMITER_POINTS,
-} from '../config';
+} from '../config/app.config';
 import ExpressMongoSanitize = require('express-mongo-sanitize');
 import helmet from 'helmet';
 import hpp = require('hpp');
