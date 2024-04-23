@@ -9,6 +9,8 @@ export const userSchemaUserInput = Type.Object({
   email: Type.Boolean(),
 });
 
+export type TUserInput = Static<typeof userSchemaUserInput>;
+
 export const userSchema = Type.Object({
   ...userSchemaUserInput.properties,
 

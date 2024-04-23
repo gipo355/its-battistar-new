@@ -3,13 +3,31 @@ import fastJsonStringify from 'fast-json-stringify';
 
 import ajvInstance from '../../utils/ajv';
 
+// TODO: fix this type mess, must be able to:
+// 1- define mongoose schema
+// 2- validate user input with ajv
+// 3- stringify the object to be sent to the client with fast-json-stringify
+// 4- be used in the backend and frontend to type the object
+// 5- instantiate a new object with the class
+//
+// same for user.entity.ts and account.entity.ts
+
+// Required different schema for input and strict schema
+// we need to validate against the input schema
 export const todoSchemaInput = Type.Object({
   title: Type.String(),
-  completed: Type.Boolean(),
+  completed: Type.Optional(Type.Boolean()),
+  dueDate: Type.Optional(
+    Type.String({
+      format: 'date-time',
+    })
+  ),
 });
+export type TTodoInput = Static<typeof todoSchemaInput>;
 
 export const todoSchema = Type.Object({
-  ...todoSchemaInput.properties,
+  title: Type.String(),
+  completed: Type.Boolean(),
   dueDate: Type.String({
     format: 'date-time',
   }),
@@ -24,6 +42,8 @@ export const todoSchema = Type.Object({
 
 export type TTodo = Static<typeof todoSchema>;
 
+// MONGOOSE requires a date type which ajv does not support
+// so we use this interface to pass to mongoose
 export interface ITodo {
   id?: string;
 
@@ -40,6 +60,7 @@ export interface ITodo {
   updatedAt: Date;
 }
 
+// Tried with a class, to be able to instantiate a new Todo
 // export class Todo {
 //   id?: string;
 //
