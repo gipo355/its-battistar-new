@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "commit": "git-cz",
     "serve-all": "nx run-many -t serve",
     "serve-express": "nx run its-battistar-be:serve",
