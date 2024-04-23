@@ -6,12 +6,12 @@ import mongoose from 'mongoose';
 
 import { appRouter } from './api/app.router';
 import { NUMBER_OF_PROXIES } from './app.config';
+import { appMiddleware } from './app.service';
 import { prepareMongo } from './db/mongo';
 import { redisConnection } from './db/redis';
 import { environment } from './environments';
 import { errorsHandler } from './errors/errors.handler';
 import { preErrorsRouter } from './errors/pre-errors.router';
-import { appMiddleware } from './utils/app.service';
 import { logger } from './utils/logger';
 
 export const buildApp = async function () {

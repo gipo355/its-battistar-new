@@ -6,7 +6,7 @@ import {
   helmetOptions,
   RATE_LIMITER_DURATION,
   RATE_LIMITER_POINTS,
-} from '../app.config';
+} from './app.config';
 import ExpressMongoSanitize = require('express-mongo-sanitize');
 import helmet from 'helmet';
 import hpp = require('hpp');
@@ -15,9 +15,9 @@ import pino from 'pino-http';
 import cors = require('cors');
 import cookieParser = require('cookie-parser');
 
-import { environment as e } from '../environments';
-import { rateLimiterMiddleware } from '../middleware/rate-limiter.service';
-import { logger } from './logger';
+import { environment as e } from './environments';
+import { rateLimiterMiddleware } from './middleware/rate-limiter.service';
+import { logger } from './utils/logger';
 
 const router = Router();
 
