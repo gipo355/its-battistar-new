@@ -13,77 +13,88 @@ const r = Router({
   mergeParams: true,
 });
 
+/**
+ * @openapi
+ * /api/users/me:
+ *  get:
+ *   tags:
+ *    - users
+ *   description: get all users
+ *   responses:
+ *    200:
+ *     description: return all users
+ */
 r.get('/me', getMeHandler);
 
 /**
  * @openapi
- * /api/todos:
+ * /api/users:
  *  get:
  *   tags:
- *    - todos
- *   description: get all todos
+ *    - users
+ *   description: get all users
  *   responses:
  *    200:
- *     description: return all todos
+ *     description: return all users
  */
 r.get('/', getAllUsersHandler);
 
 /**
  * @openapi
- * /api/todos/{id}:
+ * /api/users/{id}:
  *  get:
  *   tags:
- *    - todos
- *   description: get one todo
+ *    - users
+ *   description: get one user
  *   responses:
  *    200:
- *     description: return a todo
+ *     description: return a user
  *    400:
- *     description: todo not found
+ *     description: user not found
  */
 r.get('/:id', getOneUserHandler);
 
 /**
  * @openapi
- * /api/todos/{id}:
+ * /api/users/{id}:
  *  patch:
  *   tags:
- *    - todos
- *   description: get one todo
+ *    - users
+ *   description: update one user
  *   responses:
  *    200:
- *     description: return a todo
+ *     description: return a user
  *    400:
- *     description: todo not found
+ *     description: user not found
  */
 r.patch('/:id', patchOneUserHandler);
 
 /**
  * @openapi
- * /api/todos/{id}:
+ * /api/users/{id}:
  *  delete:
  *   tags:
- *    - todos
- *   description: delete one todo
+ *    - users
+ *   description: delete one user
  *   responses:
  *    204:
  *     description: return null
  *    400:
- *     description: todo not found
+ *     description: user not found
  */
 r.delete('/:id', deleteOneUserHandler);
 
 /**
  * @openapi
- * /api/todos:
+ * /api/users:
  *  post:
  *   tags:
- *    - todos
- *   description: create a new todo
+ *    - users
+ *   description: create a new user
  *
  *   responses:
  *    200:
- *     description: created todo
+ *     description: created user
  *    400:
  *     description: invalid data
  *
@@ -93,12 +104,9 @@ r.delete('/:id', deleteOneUserHandler);
  *      schema:
  *       type: object
  *       properties:
- *        title:
+ *        email:
  *         type: string
- *         description: title of the todo
- *        dueDate:
- *         type: string
- *         description: due date of the todo
+ *         description: created user
  */
 r.post('/', createUserHandler);
 

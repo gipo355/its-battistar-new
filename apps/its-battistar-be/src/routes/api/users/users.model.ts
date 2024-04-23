@@ -33,6 +33,6 @@ userSchema.pre<IUser>('save', function setUpdatedAt(next) {
   next();
 });
 
-const UserModel = mongoose.model('Todo', userSchema);
+const UserModel = mongoose.model('User', userSchema);
 
 export { UserModel };
