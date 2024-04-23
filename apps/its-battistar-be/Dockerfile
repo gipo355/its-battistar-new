@@ -6,9 +6,9 @@
 # Run the container with `docker run -p 3000:3000 -t its-battistar-be`.
 FROM docker.io/node:lts-alpine as builder
 
-# TODO: ENV vars for production usage
-
 LABEL org.opencontainers.image.source=https://github.com/gipo355/its-battistar
+
+# TODO: ENV vars for production usage if not using infisical
 
 ENV HOST=0.0.0.0
 ENV PORT=3000
