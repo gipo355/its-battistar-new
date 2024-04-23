@@ -6,6 +6,17 @@ const r = Router({
   mergeParams: true,
 });
 
+/**
+ * @openapi
+ * /auth/refresh:
+ *  get:
+ *   tags:
+ *    - auth
+ *   description: get refresh token
+ *   responses:
+ *    200:
+ *     description: logged in
+ */
 r.get('/', refreshHandler);
 
 export { r as loginRouter };

@@ -6,6 +6,17 @@ const r = Router({
   mergeParams: true,
 });
 
-r.get('/', logoutHandler);
+/**
+ * @openapi
+ * /auth/logout:
+ *  post:
+ *   tags:
+ *    - auth
+ *   description: logout
+ *   responses:
+ *    200:
+ *     description: logged out
+ */
+r.post('/', logoutHandler);
 
 export { r as loginRouter };
