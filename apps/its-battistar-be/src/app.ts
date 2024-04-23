@@ -4,8 +4,8 @@ import { CustomResponse } from '@its-battistar/shared-types';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 
-import { appRouter } from './api/app.router';
 import { NUMBER_OF_PROXIES } from './app.config';
+import { appRouter } from './app.router';
 import { appMiddleware } from './app.service';
 import { prepareMongo } from './db/mongo';
 import { redisConnection } from './db/redis';
@@ -28,7 +28,7 @@ export const buildApp = async function () {
 
   app.use(appMiddleware);
 
-  app.use('/api', appRouter);
+  app.use(appRouter);
 
   app.get('/healthz', (_, response) => {
     const mongostate = mongoose.connection.readyState;
