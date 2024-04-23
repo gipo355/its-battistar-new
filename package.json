@@ -153,7 +153,6 @@
     "eslint-plugin-security": "^3.0.0",
     "eslint-plugin-simple-import-sort": "^12.1.0",
     "eslint-plugin-unicorn": "^52.0.0",
-    "faker": "^6.6.6",
     "globals": "^15.0.0",
     "html-validate": "^8.18.2",
     "htmlhint": "^1.1.4",

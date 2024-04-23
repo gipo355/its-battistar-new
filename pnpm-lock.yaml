@@ -402,9 +402,6 @@ importers:
       eslint-plugin-unicorn:
         specifier: ^52.0.0
         version: 52.0.0(eslint@9.1.1)
-      faker:
-        specifier: ^6.6.6
-        version: 6.6.6
       globals:
         specifier: ^15.0.0
         version: 15.0.0
@@ -10944,10 +10941,6 @@ packages:
       chardet: 0.7.0
       iconv-lite: 0.4.24
       tmp: 0.0.33
-
-  /faker@6.6.6:
-    resolution: {integrity: sha512-9tCqYEDHI5RYFQigXFwF1hnCwcWCOJl/hmll0lr5D2Ljjb0o4wphb69wikeJDz5qCEzXCoPvG6ss5SDP6IfOdg==}
-    dev: true
 
   /fast-copy@3.0.2:
     resolution: {integrity: sha512-dl0O9Vhju8IrcLndv2eU4ldt1ftXMqqfgN4H1cpmGV7P6jeB9FwpN9a2c8DPGE1Ys88rNUJVYDHq73CGAGOPfQ==}

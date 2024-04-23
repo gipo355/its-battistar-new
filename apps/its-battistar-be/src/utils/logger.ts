@@ -5,7 +5,7 @@ import { e } from '../environments';
 const streams: (pino.DestinationStream | pino.StreamEntry<string>)[] = [
   {
     level: e.NODE_ENV === 'production' ? 'info' : 'debug',
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     stream: pino.transport({
       target: 'pino-pretty',
       options: {
@@ -23,11 +23,11 @@ const streams: (pino.DestinationStream | pino.StreamEntry<string>)[] = [
 
 // https://skaug.dev/node-js-app-with-loki/
 // grafana UI will be on http://localhost:3200 and will contain all logs
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-if (e.ENABLE_LOKI) {
+
+if (e.ENABLE_LOKI === 'true') {
   streams.push({
     level: e.NODE_ENV === 'production' ? 'warn' : 'debug',
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     stream: pino.transport({
       target: 'pino-loki',
       options: {

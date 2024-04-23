@@ -4,23 +4,25 @@
 
 // https://www.mongodb.com/developer/products/mongodb/seed-database-with-fake-data/
 
-const faker = require('faker');
+import { faker } from '@faker-js/faker';
 import mongoose from 'mongoose';
 
-import type {
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import {
   TTodoInput,
   TUserInput,
-} from '../../../libs/shared-types/src/index';
+  // eslint-disable-next-line n/no-unpublished-import
+} from '../../../libs/shared-types/src/lib/index';
 import { prepareMongo } from '../src/db/mongo';
 import { TodoModel } from '../src/routes/api/todos/todos.model';
 import { UserModel } from '../src/routes/api/users/users.model';
 
-function randomIntFromInterval(min: number, max: number) {
-  // min and max included
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
+// function randomIntFromInterval(min: number, max: number) {
+//   // min and max included
+//   return Math.floor(Math.random() * (max - min + 1) + min);
+// }
 
-async function seedDB() {
+export async function seedDB() {
   // Connection URL
   // const uri = process.env.MONGO_STRING;
 
@@ -41,7 +43,7 @@ async function seedDB() {
       // users
       const newUser = {
         email: faker.internet.email(),
-        name: faker.internet.name(),
+        name: faker.internet.userName(),
       };
       for (let j = 0; j < 2; j++) {}
       userData.push(newUser);
@@ -49,7 +51,7 @@ async function seedDB() {
       // todos
       const newTodo: TTodoInput = {
         title: faker.lorem.sentence(),
-        dueDate: faker.date.future(),
+        dueDate: faker.date.future().toString(),
       };
 
       todoData.push(newTodo);
@@ -65,4 +67,4 @@ async function seedDB() {
   }
 }
 
-seedDB().catch(console.dir);
+// seedDB().catch(console.dir);
