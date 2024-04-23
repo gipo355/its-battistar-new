@@ -1,9 +1,7 @@
-/* eslint-disable no-magic-numbers */
-// require the necessary libraries
-// const MongoClient = require('mongodb').MongoClient;
+import 'dotenv-defaults/config.js';
 
 // https://www.mongodb.com/developer/products/mongodb/seed-database-with-fake-data/
-
+/* eslint-disable no-magic-numbers */
 import { faker } from '@faker-js/faker';
 import mongoose from 'mongoose';
 
@@ -13,7 +11,6 @@ import {
   TUserInput,
   // eslint-disable-next-line n/no-unpublished-import
 } from '../../../libs/shared-types/src/lib/index';
-import { prepareMongo } from '../src/db/mongo';
 import { TodoModel } from '../src/routes/api/todos/todos.model';
 import { UserModel } from '../src/routes/api/users/users.model';
 
@@ -24,10 +21,7 @@ import { UserModel } from '../src/routes/api/users/users.model';
 
 export async function seedDB() {
   // Connection URL
-  // const uri = process.env.MONGO_STRING;
-
   try {
-    await prepareMongo();
     console.log('Connected correctly to server');
 
     // The drop() command destroys all data from a collection.
@@ -50,10 +44,10 @@ export async function seedDB() {
 
       // todos
       const newTodo: TTodoInput = {
-        title: faker.lorem.sentence(),
+        // title: faker.lorem.sentence(),
+        title: 'alkdfldkfafl askdfalskf asdfk',
         dueDate: faker.date.future().toString(),
       };
-
       todoData.push(newTodo);
     }
 
@@ -63,7 +57,9 @@ export async function seedDB() {
     console.log('Database seeded! :)');
     mongoose.connection.close();
   } catch (err) {
-    console.log(err.stack);
+    console.error(err.stack);
+    mongoose.connection.close();
+    throw new Error(err);
   }
 }
 

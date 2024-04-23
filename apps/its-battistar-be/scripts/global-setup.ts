@@ -4,17 +4,30 @@
  * must be activated in vitest.config.ts
  */
 
-import 'dotenv-defaults/config.js';
-
 import { execSync } from 'node:child_process';
 
 import dockerCompose from 'docker-compose';
 
 import { e } from '../src/environments/environment.dev';
 import { isPortReachable } from './is-port-reachable.js';
-import { seedDB } from './seed-mongo.js';
 
 console.info('🌐 global-setup');
+
+let lokiStarted = false;
+let commonStarted = false;
+
+const dockerComposeItems = {
+  loki: {
+    cwd: new URL('../', import.meta.url).pathname,
+    log: true,
+    config: 'docker-compose.loki.yaml',
+  },
+  common: {
+    cwd: new URL('../', import.meta.url).pathname,
+    log: true,
+    config: 'docker-compose.yaml',
+  },
+};
 
 const buildTestEnvironment = async () => {
   if (!process.env.MONGO_PORT) {
@@ -27,21 +40,20 @@ const buildTestEnvironment = async () => {
     port: +process.env.MONGO_PORT,
   });
 
+  console.log('isDBReachable', isDBReachable);
+
   if (!isDBReachable) {
     // TODO:  if e.ENABLE_LOKI is true, then start the full docker-compose with profile full
+    //
+    // const { seedDB } = await import('./seed-mongo.js');
 
     // ️️️✅ Best Practice: Start the infrastructure within a test hook - No failures occur because the DB is down
-    await dockerCompose.upAll({
-      cwd: new URL('../', import.meta.url).pathname,
-      log: true,
-    });
+    await dockerCompose.upAll(dockerComposeItems.common);
+    commonStarted = true;
 
     if (e.ENABLE_LOKI === 'true') {
-      await dockerCompose.upAll({
-        cwd: new URL('../', import.meta.url).pathname,
-        log: true,
-        config: 'docker-compose.loki.yaml',
-      });
+      await dockerCompose.upAll(dockerComposeItems.loki);
+      lokiStarted = true;
     }
 
     // await dockerCompose.exec(
@@ -54,10 +66,12 @@ const buildTestEnvironment = async () => {
 
     // ️️️✅ Best Practice: Use npm script for data seeding and migrations
     // execSync('npx pri/* sm */a migrate dev');
-    execSync('echo "🌱 Seeding database"');
+    // execSync('echo "🌱 Seeding database"');
     // execSync('tsx ./scripts/seed-mongo.ts');
 
-    await seedDB();
+    // await seedDB();
+
+    commonStarted = true;
 
     // ✅ Best Practice: Seed only metadata and not test record, read "Dealing with data" section for further information
     // execSync('npx prisma run db:seed');
@@ -67,13 +81,25 @@ const buildTestEnvironment = async () => {
   console.info('🌐 global-setup: done');
 };
 
+const teardown = async () => {
+  if (lokiStarted) {
+    await dockerCompose.down(dockerComposeItems.loki);
+  }
+
+  if (commonStarted) {
+    await dockerCompose.down(dockerComposeItems.common);
+  }
+};
+
 /**
  * ## This is a shared setup hook from globalSetup
  */
 const setup = async () => {
-  await buildTestEnvironment();
+  try {
+    await buildTestEnvironment();
+  } catch (e) {
+    await teardown();
+  }
 };
-
-const teardown = async () => {};
 
 export { setup, teardown };

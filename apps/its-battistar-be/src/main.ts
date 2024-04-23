@@ -12,8 +12,8 @@ import { e } from './environments';
 import { logger } from './utils/logger';
 
 let server: Server | null = null;
-// eslint-disable-next-line @typescript-eslint/require-await
-const main = async function () {
+
+export const main = async function () {
   logger.info('🚀 Starting server...');
 
   const app = await buildApp();
@@ -29,31 +29,28 @@ const main = async function () {
 
 // FIXME: handle memory leaks, process hangs on dev restart
 // possibly nx webpack issue
-function handleExit() {
+export function handleExit() {
   server?.close(() => {
-    // eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
     mongoose.connection.close().catch(logger.error);
-    // eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
+
     redisConnection.quit().catch(logger.error);
     logger.removeAllListeners();
 
     setTimeout(() => {
       logger.error('💥 Force close server');
-      // eslint-disable-next-line n/no-process-exit, unicorn/no-process-exit
+      // eslint-disable-next-line n/no-process-exit
       process.exit(1);
     }, 2000);
   });
 }
 
 if (e.NODE_ENV !== 'development') {
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   process.on('unhandledRejection', (err) => {
     logger.error(err);
     logger.error('unhandler rejection, shutting down...');
     handleExit();
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   process.on('SIGTERM', () => {
     logger.info('SIGTERM received, shutting down...');
     handleExit();
@@ -63,7 +60,7 @@ if (e.NODE_ENV !== 'development') {
 main().catch((error: unknown) => {
   logger.error(`Unexpected error: ${JSON.stringify(error)}. Closing server...`);
   if (e.NODE_ENV === 'development') {
-    // eslint-disable-next-line n/no-process-exit, unicorn/no-process-exit
+    // eslint-disable-next-line n/no-process-exit
     process.exit(1);
   } else {
     logger.error('💥 Force close server');
