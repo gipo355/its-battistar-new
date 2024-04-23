@@ -1,6 +1,6 @@
 import swaggerJSDocument = require('swagger-jsdoc');
 
-import { API_VERSION } from '../config/app.config';
+import { API_VERSION } from '../app.config';
 import path = require('path');
 
 const appVersion = API_VERSION;

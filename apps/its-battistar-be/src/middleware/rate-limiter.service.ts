@@ -2,10 +2,7 @@ import type { NextFunction, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { RateLimiterRedis } from 'rate-limiter-flexible';
 
-import {
-  RATE_LIMITER_DURATION,
-  RATE_LIMITER_POINTS,
-} from '../config/app.config';
+import { RATE_LIMITER_DURATION, RATE_LIMITER_POINTS } from '../app.config';
 import { redisConnection } from '../db/redis';
 import { AppError } from '../utils/app-error';
 import { catchAsync } from '../utils/catch-async';

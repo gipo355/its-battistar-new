@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 
 import { appRouter } from './api/app.router';
-import { NUMBER_OF_PROXIES } from './config/app.config';
+import { NUMBER_OF_PROXIES } from './app.config';
 import { prepareMongo } from './db/mongo';
 import { redisConnection } from './db/redis';
 import { environment } from './environments';

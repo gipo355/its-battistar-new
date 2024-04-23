@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import { e } from '../environments';
+import { e } from './environments';
 
 export const API_VERSION = 'v1';
 
