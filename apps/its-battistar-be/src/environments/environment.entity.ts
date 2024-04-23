@@ -1,8 +1,6 @@
 import { Static, Type } from '@sinclair/typebox';
 
-export const environmentSchema = Type.Object({
-  UV_THREADPOOL_SIZE: Type.Optional(Type.String()),
-
+export const requiredEnvironmentSchema = Type.Object({
   MONGO_STRING: Type.String({}),
 
   REDIS_HOST: Type.String({}),
@@ -26,4 +24,19 @@ export const environmentSchema = Type.Object({
   SESSION_SECRET: Type.String(),
 });
 
-export type TEnvironment = Static<typeof environmentSchema>;
+export const optionalEnvironmentSchema = Type.Object({
+  UV_THREADPOOL_SIZE: Type.Optional(Type.String()),
+
+  SENTRY_DSN: Type.Optional(Type.String()),
+
+  ENABLE_RATE_LIMITER: Type.String(),
+  RATE_LIMITER_POINTS: Type.String(),
+  RATE_LIMITER_DURATION: Type.String(),
+
+  EXPRESS_TRUST_NUMBER_OF_PROXIES: Type.String(),
+
+  ENABLE_LOKI: Type.String(),
+});
+
+export type TRequiredEnvironment = Static<typeof requiredEnvironmentSchema>;
+export type TOptionalEnvironment = Static<typeof optionalEnvironmentSchema>;

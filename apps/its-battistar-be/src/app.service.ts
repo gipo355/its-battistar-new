@@ -1,12 +1,7 @@
 import * as Sentry from '@sentry/node';
 import { json, Router, urlencoded } from 'express';
 
-import {
-  corsOptions,
-  helmetOptions,
-  RATE_LIMITER_DURATION,
-  RATE_LIMITER_POINTS,
-} from './app.config';
+import { corsOptions, helmetOptions } from './app.config';
 import ExpressMongoSanitize = require('express-mongo-sanitize');
 import helmet from 'helmet';
 import hpp = require('hpp');
@@ -84,10 +79,10 @@ if (e.SENTRY_DSN) {
 /**
  * ## Rate limiter
  */
-if (e.NODE_ENV !== 'development') {
+if (e.ENABLE_RATE_LIMITER !== 'false') {
   router.use(rateLimiterMiddleware);
   logger.info(
-    `Rate limiter set to ${RATE_LIMITER_POINTS.toString()} requests per ${RATE_LIMITER_DURATION.toString()} seconds`
+    `Rate limiter set to ${e.RATE_LIMITER_POINTS.toString()} requests per ${e.RATE_LIMITER_DURATION.toString()} seconds`
   );
 }
 

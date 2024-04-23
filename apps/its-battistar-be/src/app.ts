@@ -4,12 +4,11 @@ import { CustomResponse } from '@its-battistar/shared-types';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 
-import { NUMBER_OF_PROXIES } from './app.config';
 import { appRouter } from './app.router';
 import { appMiddleware } from './app.service';
 import { prepareMongo } from './db/mongo';
 import { redisConnection } from './db/redis';
-import { environment } from './environments';
+import { e } from './environments';
 import { finalErrorHandler } from './errors/errors.handler';
 import { preErrorsRouter } from './errors/pre-errors.router';
 import { logger } from './utils/logger';
@@ -22,7 +21,7 @@ export const buildApp = async function () {
   // prevents fingerprint
   app.disable('x-powered-by');
   // allow caddy/nginx to handle proxy headers
-  app.set('trust proxy', NUMBER_OF_PROXIES);
+  app.set('trust proxy', +e.EXPRESS_TRUST_NUMBER_OF_PROXIES);
 
   await prepareMongo();
 
@@ -50,9 +49,9 @@ export const buildApp = async function () {
     );
   });
 
-  logger.info(`🍀 Environment: ${environment.NODE_ENV}`);
+  logger.info(`🍀 Environment: ${e.NODE_ENV}`);
   // dev only
-  if (environment.NODE_ENV === 'development') {
+  if (e.NODE_ENV === 'development') {
     const swaggerUi = await import('swagger-ui-express');
     const { swaggerSpec } = await import('./docs/swagger');
 

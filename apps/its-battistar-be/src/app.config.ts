@@ -1,4 +1,5 @@
 /* eslint-disable no-magic-numbers */
+import { redisConnection } from './db/redis';
 import { e } from './environments';
 
 export const API_VERSION = 'v1';
@@ -7,10 +8,14 @@ export const corsOptions = {};
 
 export const helmetOptions = {};
 
-export const NUMBER_OF_PROXIES = 0;
-
 // rate limiting
-export const RATE_LIMITER_POINTS = 100;
-export const RATE_LIMITER_DURATION = 60 * 60; // seconds
+export const rateLimiterOptions = {
+  storeClient: redisConnection,
+  points: +e.RATE_LIMITER_POINTS, // Number of points
+  duration: +e.RATE_LIMITER_DURATION, // Per second(s)
+  keyPrefix: 'rateLimiter',
 
-export const ENABLE_LOKI = e.NODE_ENV !== 'development' && true;
+  // Custom
+  execEvenly: false, // Do not delay actions evenly
+  // blockDuration: 0, // Do not block if consumed more than points
+};

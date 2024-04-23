@@ -1,15 +1,16 @@
 import 'dotenv-defaults/config';
 
-import { TEnvironment } from './environment.entity';
+import {
+  TOptionalEnvironment,
+  TRequiredEnvironment,
+} from './environment.entity';
 
 /**
  * Environment variables
  * Prepare the environment variables for the application.
  */
 
-const requiredKeys = {
-  UV_THREADPOOL_SIZE: process.env.UV_THREADPOOL_SIZE ?? '4',
-
+const requiredKeys: Partial<TRequiredEnvironment> = {
   MONGO_STRING: process.env.MONGO_STRING,
 
   REDIS_HOST: process.env.REDIS_HOST,
@@ -27,14 +28,25 @@ const requiredKeys = {
   PORT: process.env.PORT ?? '3000',
 
   // TODO: CHANGE STRICT REQUIREMENT IN PRODUCTION
-  CSRF_SECRET: process.env.CSRF_SECRET ?? 'csrf-secret',
-  JWT_SECRET: process.env.JWT_SECRET ?? 'jwt-secret',
-  COOKIE_SECRET: process.env.COOKIE_SECRET ?? 'cookie-secret',
-  SESSION_SECRET: process.env.SESSION_SECRET ?? 'session-secret',
+  CSRF_SECRET: process.env.CSRF_SECRET,
+  JWT_SECRET: process.env.JWT_SECRET,
+  COOKIE_SECRET: process.env.COOKIE_SECRET,
+  SESSION_SECRET: process.env.SESSION_SECRET,
 } as const;
 
-const optionalKeys = {
-  SENTRY_DSN: process.env.SENTRY_DSN,
+const optionalKeys: TOptionalEnvironment = {
+  UV_THREADPOOL_SIZE: process.env.UV_THREADPOOL_SIZE ?? '4',
+
+  SENTRY_DSN: process.env.SENTRY_DSN ?? '',
+
+  ENABLE_RATE_LIMITER: process.env.ENABLE_RATE_LIMITER ?? 'true',
+  RATE_LIMITER_POINTS: process.env.RATE_LIMITER_POINTS ?? '100',
+  RATE_LIMITER_DURATION: process.env.RATE_LIMITER_DURATION ?? '3600',
+
+  EXPRESS_TRUST_NUMBER_OF_PROXIES:
+    process.env.EXPRESS_TRUST_NUMBER_OF_PROXIES ?? '0',
+
+  ENABLE_LOKI: process.env.ENABLE_LOKI ?? 'true',
 } as const;
 
 // validate required environment variables
@@ -48,7 +60,10 @@ if (missingKeys.length > 0) {
   );
 }
 
-const environment = { ...requiredKeys, ...optionalKeys } as TEnvironment;
+const environment = {
+  ...requiredKeys,
+  ...optionalKeys,
+} as TRequiredEnvironment & TOptionalEnvironment;
 
 export { environment };
 export { environment as e };

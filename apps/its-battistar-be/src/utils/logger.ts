@@ -1,6 +1,5 @@
 import pino from 'pino';
 
-import { ENABLE_LOKI } from '../app.config';
 import { e } from '../environments';
 
 const streams: (pino.DestinationStream | pino.StreamEntry<string>)[] = [
@@ -25,7 +24,7 @@ const streams: (pino.DestinationStream | pino.StreamEntry<string>)[] = [
 // https://skaug.dev/node-js-app-with-loki/
 // grafana UI will be on http://localhost:3200 and will contain all logs
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-if (ENABLE_LOKI) {
+if (e.ENABLE_LOKI) {
   streams.push({
     level: e.NODE_ENV === 'production' ? 'warn' : 'debug',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
