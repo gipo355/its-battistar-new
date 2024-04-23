@@ -16,8 +16,8 @@ import cors = require('cors');
 import cookieParser = require('cookie-parser');
 
 import { environment as e } from '../environments';
-import { logger } from '../utils/logger';
-import { rateLimiterMiddleware } from './rate-limiter.service';
+import { rateLimiterMiddleware } from '../middleware/rate-limiter.service';
+import { logger } from './logger';
 
 const router = Router();
 
