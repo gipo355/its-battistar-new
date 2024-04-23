@@ -1,0 +1,21 @@
+---
+# wrong url
+GET http://localhost:3000/auth/login
+
+---
+# fetch all todos (no completed)
+GET http://localhost:3000/auth/signup
+
+---
+# fetch all todos with completed
+GET http://localhost:3000/auth/refresh
+
+---
+# create a todo
+POST http://localhost:3000/api/logout
+Content-Type: application/json
+
+{
+  "title": "Learn Node.js",
+  "dueDate": "2020-12-31"
+}
