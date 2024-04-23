@@ -8,7 +8,7 @@ import { appRouter } from './api/app.router';
 import { NUMBER_OF_PROXIES } from './config';
 import { prepareMongo } from './db/mongo';
 import { redisConnection } from './db/redis';
-import { environment } from './environment';
+import { environment } from './environments';
 import { errorsHandler } from './errors/errors.handler';
 import { preErrorsRouter } from './errors/pre-errors.router';
 import { appMiddleware } from './middleware/app.middleware';

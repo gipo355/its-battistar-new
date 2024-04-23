@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/node';
 // import type { NextFunction, Request, Response } from 'express';
 import { Router } from 'express';
 
-import { e } from '../environment';
+import { e } from '../environments';
 import { logger } from '../utils/logger';
 import { pageNotFoundHandler } from './page-not-found/page-not-found.handler';
 import { unsupportedMethodHandler } from './unsupported-method/unsupported-method.handler';

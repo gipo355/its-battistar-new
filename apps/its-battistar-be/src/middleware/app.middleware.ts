@@ -15,7 +15,7 @@ import pino from 'pino-http';
 import cors = require('cors');
 import cookieParser = require('cookie-parser');
 
-import { environment as e } from '../environment';
+import { environment as e } from '../environments';
 import { logger } from '../utils/logger';
 import { rateLimiterMiddleware } from './rate-limiter.middleware';
 

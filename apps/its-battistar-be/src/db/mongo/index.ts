@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { e } from '../../environment';
+import { e } from '../../environments';
 import { logger } from '../../utils/logger';
 
 export const prepareMongo = async () => {

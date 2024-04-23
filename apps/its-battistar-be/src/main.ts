@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 
 import { buildApp } from './app';
 import { redisConnection } from './db/redis';
-import { e } from './environment';
+import { e } from './environments';
 import { logger } from './utils/logger';
 
 let server: Server | null = null;

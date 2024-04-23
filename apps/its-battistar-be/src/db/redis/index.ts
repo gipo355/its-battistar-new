@@ -1,6 +1,6 @@
 import IORedis from 'ioredis';
 
-import { e } from '../../environment';
+import { e } from '../../environments';
 
 const connection = {
   host: e.REDIS_HOST,

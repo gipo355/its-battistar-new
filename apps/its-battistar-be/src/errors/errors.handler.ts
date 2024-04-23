@@ -18,7 +18,7 @@
 import { ErrorRequestHandler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { e } from '../environment';
+import { e } from '../environments';
 import { AppError } from '../utils/app-error';
 import { logger } from '../utils/logger';
 import {

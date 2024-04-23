@@ -1,7 +1,7 @@
 import pino from 'pino';
 
 import { ENABLE_LOKI } from '../config';
-import { e } from '../environment';
+import { e } from '../environments';
 
 const streams: (pino.DestinationStream | pino.StreamEntry<string>)[] = [
   {

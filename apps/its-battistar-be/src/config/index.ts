@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import environment from '../environment';
+import { e } from '../environments';
 
 export const API_VERSION = 'v1';
 
@@ -13,4 +13,4 @@ export const NUMBER_OF_PROXIES = 0;
 export const RATE_LIMITER_POINTS = 100;
 export const RATE_LIMITER_DURATION = 60 * 60; // seconds
 
-export const ENABLE_LOKI = environment.NODE_ENV !== 'development' && true;
+export const ENABLE_LOKI = e.NODE_ENV !== 'development' && true;
