@@ -1,16 +1,19 @@
 import { Router } from 'express';
 
 import {
-  createTodo,
-  deleteOneTodo,
-  getAllTodos,
-  getOneTodo,
-  patchOneTodo,
+  createUserHandler,
+  deleteOneUserHandler,
+  getAllUsersHandler,
+  getMeHandler,
+  getOneUserHandler,
+  patchOneUserHandler,
 } from './users.handler';
 
-const todosRouter = Router({
+const r = Router({
   mergeParams: true,
 });
+
+r.get('/me', getMeHandler);
 
 /**
  * @openapi
@@ -23,7 +26,7 @@ const todosRouter = Router({
  *    200:
  *     description: return all todos
  */
-todosRouter.get('/', getAllTodos);
+r.get('/', getAllUsersHandler);
 
 /**
  * @openapi
@@ -38,7 +41,7 @@ todosRouter.get('/', getAllTodos);
  *    400:
  *     description: todo not found
  */
-todosRouter.get('/:id', getOneTodo);
+r.get('/:id', getOneUserHandler);
 
 /**
  * @openapi
@@ -53,7 +56,7 @@ todosRouter.get('/:id', getOneTodo);
  *    400:
  *     description: todo not found
  */
-todosRouter.patch('/:id', patchOneTodo);
+r.patch('/:id', patchOneUserHandler);
 
 /**
  * @openapi
@@ -68,7 +71,7 @@ todosRouter.patch('/:id', patchOneTodo);
  *    400:
  *     description: todo not found
  */
-todosRouter.delete('/:id', deleteOneTodo);
+r.delete('/:id', deleteOneUserHandler);
 
 /**
  * @openapi
@@ -97,6 +100,6 @@ todosRouter.delete('/:id', deleteOneTodo);
  *         type: string
  *         description: due date of the todo
  */
-todosRouter.post('/', createTodo);
+r.post('/', createUserHandler);
 
-export { todosRouter };
+export { r as usersRouter };

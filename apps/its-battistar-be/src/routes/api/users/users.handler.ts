@@ -1,36 +1,35 @@
 import {
   CustomResponse,
-  ITodo,
-  validateTodo,
+  // IUser,
+  validateTodo as validateUser,
 } from '@its-battistar/shared-types';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError } from '../../../utils/app-error';
 import { catchAsync } from '../../../utils/catch-async';
-import { TodoModel } from './todos.model';
+import { UserModel } from './users.model';
 
-export const getAllTodos = catchAsync(async (req, res) => {
+export const getAllUsersHandler = catchAsync(async (req, res) => {
   const { showCompleted } = req.query as { showCompleted: string | undefined };
 
   // TODO: validation for query params
 
-  const todos = await TodoModel.find({
+  const foundUsers = await UserModel.find({
     ...(showCompleted !== 'true' && { completed: { $ne: 'true' } }),
   });
 
   res.status(StatusCodes.OK).json(
-    new CustomResponse<ITodo[]>({
+    new CustomResponse<void>({
       ok: true,
-      length: todos.length,
+      length: foundUsers.length,
       statusCode: StatusCodes.OK,
-      message: 'Todos fetched successfully',
-      data: todos,
+      message: 'Users fetched successfully',
     })
   );
 });
 
 // TODO: validation for all inputs, stringify for responses
-export const createTodo = catchAsync(async (req, res) => {
+export const createUserHandler = catchAsync(async (req, res) => {
   const { title, dueDate } = req.body as { title: string; dueDate: string };
 
   // let date: string | Date | undefined;
@@ -40,100 +39,110 @@ export const createTodo = catchAsync(async (req, res) => {
   // }
 
   // FIXME: this validation doesn't work
-  if (!validateTodo({ title, dueDate })) {
+  if (!validateUser({ title, dueDate })) {
     throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
   }
 
-  const newTodo = await TodoModel.create({
+  const newUser = await UserModel.create({
     title,
     // (dueDate && ...{dueDate}),
   });
 
-  if (!newTodo.id) {
+  if (!newUser.id) {
     throw new AppError(
-      'Failed to create todo',
+      'Failed to create user',
       StatusCodes.INTERNAL_SERVER_ERROR
     );
   }
 
   res.status(StatusCodes.CREATED).json(
-    new CustomResponse<ITodo>({
+    new CustomResponse<void>({
       ok: true,
       statusCode: StatusCodes.CREATED,
-      message: 'Todo created successfully',
-      data: newTodo,
+      message: 'User created successfully',
     })
   );
 });
 
-export const getOneTodo = catchAsync(async (req, res) => {
+export const getOneUserHandler = catchAsync(async (req, res) => {
   const { id } = req.params as { id: string };
 
-  const todo = await TodoModel.findById(id);
+  const foundUser = await UserModel.findById(id);
 
-  if (!todo || !todo.id) {
-    throw new AppError('Todo not found', StatusCodes.NOT_FOUND);
+  if (!foundUser || !foundUser.id) {
+    throw new AppError('User not found', StatusCodes.NOT_FOUND);
   }
 
   res.status(StatusCodes.OK).json(
-    new CustomResponse<ITodo>({
+    new CustomResponse<void>({
       ok: true,
       statusCode: StatusCodes.OK,
-      message: 'Todo checked successfully',
-      data: todo,
+      message: 'User checked successfully',
     })
   );
 });
 
-export const patchOneTodo = catchAsync(async (req, res) => {
+export const patchOneUserHandler = catchAsync(async (req, res) => {
   const { id } = req.params as { id: string };
-  const { title, completed, dueDate } = req.body as Partial<ITodo>;
 
-  const todo = await TodoModel.findById(id);
+  const foundUser = await UserModel.findById(id);
 
-  if (!todo || !todo.id) {
-    throw new AppError('Todo not found', StatusCodes.NOT_FOUND);
+  if (!foundUser || !foundUser.id) {
+    throw new AppError('User not found', StatusCodes.NOT_FOUND);
   }
 
   // FIXME: fix validation
-  // if (!validateTodo({ title, dueDate })) {
+  // if (!validateUser({ title, dueDate })) {
   //   throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
   // }
 
-  title && (todo.title = title);
-  completed && (todo.completed = completed);
-  dueDate && (todo.dueDate = dueDate);
-
-  await todo.save();
+  await foundUser.save();
 
   res.status(StatusCodes.OK).json(
-    new CustomResponse<ITodo>({
+    new CustomResponse<void>({
       ok: true,
       statusCode: StatusCodes.OK,
-      message: 'Todo updated successfully',
-      data: todo,
+      message: 'User updated successfully',
     })
   );
 });
 
-export const deleteOneTodo = catchAsync(async (req, res) => {
+export const deleteOneUserHandler = catchAsync(async (req, res) => {
   const { id } = req.params as { id: string };
 
   // TODO: is this double query necessary?
-  const todo = await TodoModel.findById(id);
+  const foundUser = await UserModel.findById(id);
 
-  if (!todo || !todo.id) {
-    throw new AppError('Todo not found', StatusCodes.NOT_FOUND);
+  if (!foundUser || !foundUser.id) {
+    throw new AppError('User not found', StatusCodes.NOT_FOUND);
   }
 
-  await TodoModel.findByIdAndDelete(id);
+  await UserModel.findByIdAndDelete(id);
 
   res.status(StatusCodes.OK).json(
-    new CustomResponse<ITodo | null>({
+    new CustomResponse<null>({
       ok: true,
       statusCode: StatusCodes.NO_CONTENT,
-      message: 'Todo deleted successfully',
+      message: 'User deleted successfully',
       data: null,
+    })
+  );
+});
+
+export const getMeHandler = catchAsync(async (_, res) => {
+  // const { user } = req as { user: IUser };
+
+  const foundUser = await UserModel.findById({ id: '123' });
+
+  if (!foundUser || !foundUser.id) {
+    throw new AppError('User not found', StatusCodes.NOT_FOUND);
+  }
+
+  res.status(StatusCodes.OK).json(
+    new CustomResponse<void>({
+      ok: true,
+      statusCode: StatusCodes.OK,
+      message: 'User fetched successfully',
     })
   );
 });

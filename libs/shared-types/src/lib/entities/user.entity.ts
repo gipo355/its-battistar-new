@@ -35,6 +35,11 @@ export const userSchema = Type.Object({
   accounts: Type.Array(accountsSchema),
 });
 
+export enum ERole {
+  SUPER = 'super',
+  USER = 'user',
+}
+
 export type TUser = Static<typeof userSchema>;
 
 export interface IUser {
@@ -44,7 +49,7 @@ export interface IUser {
 
   email: string;
 
-  role: string;
+  role: keyof typeof ERole;
 
   createdAt: Date;
 
