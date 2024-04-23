@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import { redisConnection } from './db/redis';
 import { e } from './environments';
 
