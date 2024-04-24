@@ -17,6 +17,7 @@ import ajvInstance from '../../utils/ajv';
 export const todoSchemaInput = Type.Object({
   title: Type.String(),
   completed: Type.Optional(Type.Boolean()),
+  description: Type.Optional(Type.String()),
   dueDate: Type.Optional(
     Type.String({
       format: 'date-time',
@@ -48,6 +49,8 @@ export interface ITodo {
   id?: string;
 
   title: string;
+
+  description: string;
 
   dueDate: Date;
 
