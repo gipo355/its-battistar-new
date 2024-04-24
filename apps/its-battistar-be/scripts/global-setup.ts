@@ -4,7 +4,7 @@
  * must be activated in vitest.config.ts
  */
 
-import { execSync } from 'node:child_process';
+// import { execSync } from 'node:child_process';
 
 import dockerCompose from 'docker-compose';
 
@@ -40,12 +40,10 @@ const buildTestEnvironment = async () => {
     port: +process.env.MONGO_PORT,
   });
 
-  console.log('isDBReachable', isDBReachable);
-
   if (!isDBReachable) {
-    // TODO:  if e.ENABLE_LOKI is true, then start the full docker-compose with profile full
-    //
-    // const { seedDB } = await import('./seed-mongo.js');
+    console.warn(
+      '🚨 Database is not reachable, starting the infrastructure...'
+    );
 
     // ️️️✅ Best Practice: Start the infrastructure within a test hook - No failures occur because the DB is down
     await dockerCompose.upAll(dockerComposeItems.common);
@@ -64,31 +62,42 @@ const buildTestEnvironment = async () => {
     //     }
     // );
 
-    // ️️️✅ Best Practice: Use npm script for data seeding and migrations
-    // execSync('npx pri/* sm */a migrate dev');
-    // execSync('echo "🌱 Seeding database"');
+    //example, seeding the database
+    // we could write it here or create a separate script
+    //✅ Best Practice: Use npm script for data seeding and migrations
+    // execSync('npx prisma migrate dev');
     // execSync('tsx ./scripts/seed-mongo.ts');
 
+    // const { seedDB } = await import('./seed-mongo.js');
     // await seedDB();
 
     commonStarted = true;
 
     // ✅ Best Practice: Seed only metadata and not test record, read "Dealing with data" section for further information
     // execSync('npx prisma run db:seed');
+  } else {
+    console.warn(
+      '🚀 Database is already reachable, skipping the infrastructure...'
+    );
   }
 
   // 👍🏼 We're ready
   console.info('🌐 global-setup: done');
+
+  return {
+    commonStarted,
+    lokiStarted,
+  };
 };
 
 const teardown = async () => {
-  if (lokiStarted) {
-    await dockerCompose.down(dockerComposeItems.loki);
-  }
+  // if (lokiStarted) {
+  await dockerCompose.down(dockerComposeItems.loki);
+  // }
 
-  if (commonStarted) {
-    await dockerCompose.down(dockerComposeItems.common);
-  }
+  // if (commonStarted) {
+  await dockerCompose.down(dockerComposeItems.common);
+  // }
 };
 
 /**
@@ -96,7 +105,11 @@ const teardown = async () => {
  */
 const setup = async () => {
   try {
-    await buildTestEnvironment();
+    const { commonStarted, lokiStarted } = await buildTestEnvironment();
+    return {
+      commonStarted,
+      lokiStarted,
+    };
   } catch (e) {
     await teardown();
   }
