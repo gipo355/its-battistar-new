@@ -6,7 +6,7 @@ module.exports = tseslint.config(
   ...baseConfig,
 
   {
-    ignores: ['!**/*'],
+    ignores: ['!**/*', 'node_modules', 'dist'],
   },
 
   {

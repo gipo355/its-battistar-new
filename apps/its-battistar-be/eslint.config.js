@@ -19,7 +19,7 @@ module.exports = tseslint.config(
   // https://www.reddit.com/r/learnjavascript/comments/xsiowg/i_need_some_help_configuring_my_eslint_correctly/
   {
     // default is ignore all
-    ignores: ['!**/*'],
+    ignores: ['!**/*', 'node_modules', 'dist'],
   },
 
   {

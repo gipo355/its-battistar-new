@@ -24,8 +24,9 @@ const compat = new FlatCompat({
 // to provide type safety and intellisense to the configuration
 module.exports = tseslint.config(
   {
+    // TODO: fix ignores chains
     // must be on its own for glob pattern to work
-    ignores: ['!**/*'],
+    ignores: ['!**/*', 'node_modules', 'dist', 'tmp', '.angular'],
   },
 
   {

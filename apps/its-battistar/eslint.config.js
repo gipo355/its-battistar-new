@@ -14,7 +14,7 @@ module.exports = tseslint.config(
   ...baseConfig,
 
   {
-    ignores: ['!**/*', 'storybook-static'],
+    ignores: ['!**/*', 'storybook-static', 'node_modules', 'dist'],
   },
 
   {
