@@ -39,7 +39,6 @@ export function handleExit(): void {
     redisConnection.quit().catch((err: unknown) => {
       logger.error(err);
     });
-    logger.removeAllListeners();
 
     setTimeout(() => {
       logger.error('💥 Force close server');
