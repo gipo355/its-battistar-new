@@ -12,10 +12,7 @@ module.exports = [
   {
     languageOptions: {
       parserOptions: {
-        project: [
-          'tsconfig.*?.json',
-          'apps/its-battistar/.storybook/tsconfig.json',
-        ],
+        project: ['tsconfig.*?.json', '.storybook/tsconfig.json'],
       },
     },
   },
