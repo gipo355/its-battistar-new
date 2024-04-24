@@ -40,7 +40,7 @@ const todoSchema = new mongoose.Schema<ITodo>(
     toJSON: {
       virtuals: true,
       transform: function (_, ret) {
-        ret.id = ret._id;
+        ret.id = ret._id as string;
         delete ret._id;
         delete ret.__v;
       },
@@ -50,7 +50,7 @@ const todoSchema = new mongoose.Schema<ITodo>(
 );
 
 todoSchema.virtual('expired').get(function getDurationWeeks() {
-  if (!this.dueDate) return false;
+  if (!(this.dueDate as Date | undefined)) return false;
   return this.dueDate < new Date();
 });
 

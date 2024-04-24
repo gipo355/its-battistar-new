@@ -9,7 +9,7 @@ import { StatusCodes } from 'http-status-codes';
 import { AppError } from '../utils/app-error';
 import { logger } from '../utils/logger';
 
-export const handleValidationError = (error: AppError) => {
+export const handleValidationError = (error: AppError): AppError => {
   if (!error.errors) return error;
   const subObjectsArray: Record<string, string>[] = Object.values(error.errors);
 
@@ -25,7 +25,7 @@ export const handleValidationError = (error: AppError) => {
   );
 };
 
-export const handleCastError = (error: AppError) => {
+export const handleCastError = (error: AppError): AppError => {
   if (error.path && error.value) {
     const message = `invalid ${error.path}: ${error.value}`;
     return new AppError(message, StatusCodes.BAD_REQUEST);
@@ -34,7 +34,7 @@ export const handleCastError = (error: AppError) => {
   return error;
 };
 
-export const handleDuplicateError = (error: AppError) => {
+export const handleDuplicateError = (error: AppError): AppError => {
   let message = 'Something went wrong. Please try again later. (code: 17ec2)';
   if (error.keyValue?.email) {
     message = `this email is already in use`;
@@ -45,12 +45,12 @@ export const handleDuplicateError = (error: AppError) => {
   return new AppError(message, StatusCodes.BAD_REQUEST);
 };
 
-export const handleJWTexpirationError = () => {
+export const handleJWTexpirationError = (): AppError => {
   const message = `Session expired. Please login again.`;
   return new AppError(message, StatusCodes.UNAUTHORIZED);
 };
 
-export const handleJWTUnauthorized = () => {
+export const handleJWTUnauthorized = (): AppError => {
   const message = `Something went wrong. Please login or signup`;
   return new AppError(message, StatusCodes.UNAUTHORIZED);
 };
@@ -70,15 +70,14 @@ export const sendErrorDevelopment = (
   // need 4 params for express to recognize it as an error handler (bad express design)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _request: Request
-) => {
+): void => {
   logger.error(newError);
 
-  return response
+  response
     .status(newError.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR)
     .json(
       // NOTE: eslint has problems resolving types with path aliases
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       new CustomResponse<DevelopmentResponseData>({
         ok: false,
         statusCode: newError.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
@@ -99,7 +98,7 @@ export const sendErrorProduction = (
   newError: AppError,
   request: Request,
   response: Response
-) => {
+): void => {
   const statusCode = newError.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR;
   if (newError.isOperationalError) {
     // ! OPERATIONAL ERROR, TRUSTED, result of AppError
@@ -109,7 +108,6 @@ export const sendErrorProduction = (
     // });
 
     response.status(statusCode).json(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       new CustomResponse({
         ok: false,
         statusCode,
@@ -133,7 +131,6 @@ export const sendErrorProduction = (
 
   // send generic message
   response.status(StatusCodes.INTERNAL_SERVER_ERROR).json(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     new CustomResponse({
       ok: false,
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

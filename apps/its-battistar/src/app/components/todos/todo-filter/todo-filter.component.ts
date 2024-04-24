@@ -9,8 +9,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './todo-filter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TodoFilterComponent {}
-
-function test() {}
-
-const x = 3;
+export class TodoFilterComponent {
+  name = 'TodoFilterComponent';
+}

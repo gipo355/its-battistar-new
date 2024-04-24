@@ -1,6 +1,7 @@
 import express = require('express');
 
 import { CustomResponse } from '@its-battistar/shared-types';
+import type { Express } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 
@@ -13,7 +14,7 @@ import { finalErrorHandler } from './errors/errors.handler';
 import { preErrorsRouter } from './errors/pre-errors.router';
 import { logger } from './utils/logger';
 
-export const buildApp = async function () {
+export const buildApp = async function (): Promise<Express> {
   logger.info('🏠 Building app...');
 
   const app = express();

@@ -6,6 +6,7 @@ const streams: (pino.DestinationStream | pino.StreamEntry<string>)[] = [
   {
     level: e.NODE_ENV === 'production' ? 'info' : 'debug',
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     stream: pino.transport({
       target: 'pino-pretty',
       options: {
@@ -28,6 +29,7 @@ if (e.ENABLE_LOKI === 'true') {
   streams.push({
     level: e.NODE_ENV === 'production' ? 'warn' : 'debug',
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     stream: pino.transport({
       target: 'pino-loki',
       options: {

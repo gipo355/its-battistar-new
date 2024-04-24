@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { e } from '../../environments';
 import { logger } from '../../utils/logger';
 
-export const prepareMongo = async () => {
+export const prepareMongo = async (): Promise<void> => {
   try {
     if (!e.MONGO_STRING) {
       throw new Error(

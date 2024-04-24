@@ -68,11 +68,13 @@ module.exports = tseslint.config(
     rules: {
       'no-magic-numbers': 'error',
       complexity: ['error', 20],
-      'consistent-return': 'warn',
-      'no-useless-return': 'warn',
       'prefer-const': 'warn',
       eqeqeq: 'error',
       'no-console': 'warn',
+
+      // using tsconfig noImplicitReturns
+      'consistent-return': 'off', // force explicit return, prevents bugs
+      'no-useless-return': 'off',
 
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',

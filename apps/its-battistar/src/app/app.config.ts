@@ -15,5 +15,3 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
   ],
 };
-
-console.log(3);
