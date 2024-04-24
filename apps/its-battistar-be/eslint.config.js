@@ -1,15 +1,16 @@
-const { FlatCompat } = require('@eslint/eslintrc');
 const pluginSecurity = require('eslint-plugin-security');
 const globals = require('globals');
-const tseslint = require('typescript-eslint');
 const baseConfig = require('../../eslint.config.js');
 const nodePlugin = require('eslint-plugin-n');
-const js = require('@eslint/js');
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-});
+// const tseslint = require('typescript-eslint');
+// const js = require('@eslint/js');
+// const { FlatCompat } = require('@eslint/eslintrc');
+
+// const compat = new FlatCompat({
+//   baseDirectory: __dirname,
+//   recommendedConfig: js.configs.recommended,
+// });
 
 module.exports = [
   ...baseConfig,

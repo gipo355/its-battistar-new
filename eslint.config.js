@@ -1,21 +1,16 @@
 const globals = require('globals');
 const { FlatCompat } = require('@eslint/eslintrc');
 const nodePlugin = require('eslint-plugin-n');
-
 const nxEslintPlugin = require('@nx/eslint-plugin');
-
 const eslintPluginSimpleImportSort = require('eslint-plugin-simple-import-sort');
-// const eslintPluginImport = require('eslint-plugin-import');
-const eslint = require('@eslint/js');
-
 const tseslint = require('typescript-eslint');
 const eslintPluginUnicorn = require('eslint-plugin-unicorn');
 const jsoncParser = require('jsonc-eslint-parser');
-
 const tsParser = require('@typescript-eslint/parser');
+const eslint = require('@eslint/js');
 
 // const eslintrc = require('@eslint/eslintrc');
-
+// const eslintPluginImport = require('eslint-plugin-import');
 // import tseslint from 'typescript-eslint';
 
 const compat = new FlatCompat({
