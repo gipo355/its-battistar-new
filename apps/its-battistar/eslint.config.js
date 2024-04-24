@@ -28,6 +28,14 @@ module.exports = tseslint.config(
         ...globals.serviceworker,
       },
     },
+  },
+
+  {
+    rules: {
+      // BUG: for some reason, those rules are not working here while it works in express
+      '@typescript-eslint/no-unnecessary-condition': 'off',
+      '@typescript-eslint/prefer-nullish-coalescing': 'off',
+    },
   }
 
   // FIXME: old compatibility mode
