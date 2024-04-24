@@ -38,7 +38,7 @@ export function handleExit() {
 
     setTimeout(() => {
       logger.error('💥 Force close server');
-      // eslint-disable-next-line n/no-process-exit
+
       process.exit(1);
     }, 2000);
   });
@@ -60,10 +60,13 @@ if (e.NODE_ENV !== 'development') {
 main().catch((error: unknown) => {
   logger.error(`Unexpected error: ${JSON.stringify(error)}. Closing server...`);
   if (e.NODE_ENV === 'development') {
-    // eslint-disable-next-line n/no-process-exit
     process.exit(1);
   } else {
     logger.error('💥 Force close server');
     handleExit();
   }
 });
+
+const x = 3;
+
+console.log(4);

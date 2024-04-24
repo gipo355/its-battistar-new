@@ -1,20 +1,25 @@
-// const { FlatCompat } = require('@eslint/eslintrc');
+const { FlatCompat } = require('@eslint/eslintrc');
 const pluginSecurity = require('eslint-plugin-security');
 const globals = require('globals');
 const tseslint = require('typescript-eslint');
 const baseConfig = require('../../eslint.config.js');
 const nodePlugin = require('eslint-plugin-n');
-// const js = require('@eslint/js');
+const js = require('@eslint/js');
 
-// const compat = new FlatCompat({
-//   baseDirectory: __dirname,
-//   recommendedConfig: js.configs.recommended,
-// });
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+});
 
-module.exports = tseslint.config([
+module.exports = [
   ...baseConfig,
+
+  // https://www.reddit.com/r/learnjavascript/comments/xsiowg/i_need_some_help_configuring_my_eslint_correctly/
   {
-    // ignores: ['!**/*'],
+    // default is ignore all
+    ignores: ['!**/*'],
+  },
+  {
     languageOptions: {
       parserOptions: {
         project: ['tsconfig.*?.json'],
@@ -25,14 +30,11 @@ module.exports = tseslint.config([
     },
   },
 
-  nodePlugin.configs['flat/recommended-script'],
+  // nodePlugin.configs['flat/recommended-script'],
+  // nodePlugin.configs['flat/recommended-module'],
+  nodePlugin.configs['flat/recommended'],
 
   pluginSecurity.configs.recommended,
-  // ...compat
-  // .extends(
-  // 'plugin:n/recommended',
-  // 'plugin:security/recommended-legacy'
-  // ),
 
   {
     rules: {
@@ -57,4 +59,4 @@ module.exports = tseslint.config([
     files: ['**/*.js', '**/*.jsx'],
     rules: {},
   },
-]);
+];
