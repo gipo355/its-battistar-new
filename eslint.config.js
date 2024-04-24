@@ -23,6 +23,10 @@ const compat = new FlatCompat({
   recommendedConfig: eslint.configs.recommended,
 });
 
+// TODO: fix lint-staged
+// TODO: fix husky
+// TODO: fix nx lint
+
 // tseslint.config is an utility function provided by typescript-eslint
 // to provide type safety and intellisense to the configuration
 module.exports = [
