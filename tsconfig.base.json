@@ -1,19 +1,22 @@
 {
+  // tsconfig is as strict as possible to prevent bugs
   // https://www.totaltypescript.com/tsconfig-cheat-sheet
+  // https://dev.to/what1s1ove/the-strictest-typescript-config-mad
   "compileOnSave": false,
   "compilerOptions": {
+    "strict": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "forceConsistentCasingInFileNames": true,
+    // "noUncheckedIndexedAccess": true,
+    // "noPropertyAccessFromIndexSignature": true,
+    // "exactOptionalPropertyTypes": true,
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "noImplicitReturns": true,
-    "noImplicitOverride": true,
-    "forceConsistentCasingInFileNames": true,
-    "noUncheckedIndexedAccess": true,
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
