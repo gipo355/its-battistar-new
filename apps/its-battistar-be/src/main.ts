@@ -70,3 +70,5 @@ main().catch((error: unknown) => {
 const x = 3;
 
 console.log(4);
+
+console.log(4);

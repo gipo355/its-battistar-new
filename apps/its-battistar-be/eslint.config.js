@@ -48,6 +48,8 @@ module.exports = tseslint.config(
       'n/no-extraneous-import': 'off',
       'n/no-extraneous-require': 'off',
       'n/no-unpublished-require': 'off',
+      'unicorn/prefer-module': 'off',
+      'unicorn/prefer-top-level-await': 'off',
     },
   },
 

@@ -1,18 +1,25 @@
 const globals = require('globals');
 const baseConfig = require('../../eslint.config.js');
-const globals = require('globals');
 const tseslint = require('typescript-eslint');
 
-module.exports = tseslint.config([
+module.exports = tseslint.config(
   ...baseConfig,
+
   {
-    // ignores: ['!**/*'],
+    ignores: ['!**/*'],
+  },
+
+  {
     languageOptions: {
       parserOptions: {
         project: ['tsconfig.*?.json'],
         tsconfigRootDir: __dirname,
       },
-      globals: { ...globals.node, ...globals.es2021 },
+      globals: {
+        ...globals.node,
+        ...globals.es2021,
+        ...globals.browser,
+      },
     },
   },
   // {
@@ -27,5 +34,5 @@ module.exports = tseslint.config([
   {
     files: ['**/*.js', '**/*.jsx'],
     rules: {},
-  },
-]);
+  }
+);
