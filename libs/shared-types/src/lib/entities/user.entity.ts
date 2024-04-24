@@ -6,8 +6,12 @@ import { accountsSchema, TAccount } from './account.entity';
 
 export const userSchemaUserInput = Type.Object({
   name: Type.String(),
-  email: Type.Boolean(),
+  email: Type.String({
+    format: 'email',
+  }),
 });
+
+export type TUserInput = Static<typeof userSchemaUserInput>;
 
 export const userSchema = Type.Object({
   ...userSchemaUserInput.properties,

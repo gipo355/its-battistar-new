@@ -1,5 +1,6 @@
 const globals = require('globals');
 const { FlatCompat } = require('@eslint/eslintrc');
+const nodePlugin = require('eslint-plugin-n');
 const nxEslintPlugin = require('@nx/eslint-plugin');
 const eslintPluginSimpleImportSort = require('eslint-plugin-simple-import-sort');
 const eslintPluginImport = require('eslint-plugin-import');
@@ -11,12 +12,27 @@ const compat = new FlatCompat({
 });
 
 module.exports = [
-  { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.worker,
+        ...globals.es2021,
+        ...globals.jest,
+      },
+    },
+  },
   {
     plugins: {
       '@nx': nxEslintPlugin,
+
       'simple-import-sort': eslintPluginSimpleImportSort,
+
       import: eslintPluginImport,
+
+      // provide the rules at the root level, activate the recommended config in express only
+      n: nodePlugin,
     },
   },
   {
@@ -37,6 +53,7 @@ module.exports = [
       ],
     },
   },
+  // FIXME: compatility mode after nx migration
   ...compat
     .config({
       plugins: ['simple-import-sort', '@typescript-eslint'],

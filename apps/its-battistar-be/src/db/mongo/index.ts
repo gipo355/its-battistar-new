@@ -13,7 +13,8 @@ export const prepareMongo = async () => {
 
     logger.info(`⚡ Starting mongoose`);
 
-    mongoose.set('debug', true);
+    // show mongoose debug logs
+    mongoose.set('debug', false);
     // handle deprecation warning
     mongoose.set('strictQuery', false);
 

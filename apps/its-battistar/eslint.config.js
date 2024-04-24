@@ -14,7 +14,7 @@ module.exports = [
       parserOptions: {
         project: [
           'tsconfig.*?.json',
-          'apps/its-battistar/.storybook/tsconfig.json',
+          // '.storybook/tsconfig.json'
         ],
       },
     },

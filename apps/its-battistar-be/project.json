@@ -5,10 +5,10 @@
   "projectType": "application",
   "tags": [],
   "targets": {
-    "build-environment": {
+    "build-devenvironment": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d --no-recreate",
+        "command": "tsx ./scripts/setup-environment.ts",
         "cwd": "apps/its-battistar-be"
       }
     },
@@ -24,7 +24,7 @@
       "executor": "@nx/eslint:lint"
     },
     "serve": {
-      "dependsOn": ["build-environment"],
+      "dependsOn": ["build-devenvironment"],
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {

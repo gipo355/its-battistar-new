@@ -1,6 +1,7 @@
 const { FlatCompat } = require('@eslint/eslintrc');
+const pluginSecurity = require('eslint-plugin-security');
 const baseConfig = require('../../eslint.config.js');
-const globals = require('globals');
+const nodePlugin = require('eslint-plugin-n');
 const js = require('@eslint/js');
 
 const compat = new FlatCompat({
@@ -10,14 +11,16 @@ const compat = new FlatCompat({
 
 module.exports = [
   ...baseConfig,
-  ...compat.extends(
-    'plugin:n/recommended',
-    'plugin:security/recommended-legacy'
-  ),
+  nodePlugin.configs['flat/recommended-script'],
+  pluginSecurity.configs.recommended,
+  ...compat
+    .extends
+    // 'plugin:n/recommended',
+    // 'plugin:security/recommended-legacy'
+    (),
   {
     languageOptions: {
       parserOptions: { project: ['tsconfig.*?.json'] },
-      globals: { ...globals.node, ...globals.es2024 },
     },
   },
   {

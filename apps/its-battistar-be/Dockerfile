@@ -4,12 +4,36 @@
 # Tip: Modify "docker-build" options in project.json to change docker build args.
 #
 # Run the container with `docker run -p 3000:3000 -t its-battistar-be`.
-FROM docker.io/node:lts-alpine
+FROM docker.io/node:lts-alpine as builder
 
 LABEL org.opencontainers.image.source=https://github.com/gipo355/its-battistar
 
+# TODO: ENV vars for production usage if not using infisical
+
 ENV HOST=0.0.0.0
 ENV PORT=3000
+
+ENV NODE_ENV=production
+
+ENV REDIS_HOST=default
+ENV REDIS_PORT=6379
+ENV REDIS_PASSWORD=default
+ENV REDIS_USERNAME=default
+
+ENV MONGO_STRING=default
+
+ENV CSRF_SECRET=default
+ENV SESSION_SECRET=default
+ENV JWT_SECRET=default
+ENV COOKIE_SECRET=default
+
+ENV UV_THREADPOOL_SIZE=4
+ENV SENTRY_DSN=''
+ENV ENABLE_LOKI='false'
+ENV ENABLE_RATE_LIMITER='true'
+ENV RATE_LIMITER_POINTS=100
+ENV RATE_LIMITER_DURATION=3600
+ENV EXPRESS_TRUST_NUMBER_OF_PROXIES = 0
 
 WORKDIR /app
 
@@ -19,6 +43,17 @@ RUN addgroup --system its-battistar-be && \
 COPY dist/apps/its-battistar-be its-battistar-be
 RUN chown -R its-battistar-be:its-battistar-be .
 
+# install node-gyp for argon2
+RUN apk add --no-cache python3 make g++ curl
+RUN npm i -g node-gyp
+
+# install fisical cli
+RUN apk add --no-cache bash curl
+RUN curl -1sLf \
+  'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.alpine.sh' \
+  | bash
+RUN apk update && apk add infisical
+
 # You can remove this install step if you build with `--bundle` option.
 # The bundled output will include external dependencies.
 # RUN npm --prefix its-battistar-be --omit=dev -f install
@@ -26,6 +61,6 @@ RUN npm install -g pnpm
 
 RUN pnpm --prefix its-battistar-be install --prod
 
-EXPOSE 3000
+EXPOSE ${PORT}
 
 CMD [ "node", "its-battistar-be" ]

@@ -46,7 +46,7 @@ const optionalKeys: TOptionalEnvironment = {
   EXPRESS_TRUST_NUMBER_OF_PROXIES:
     process.env.EXPRESS_TRUST_NUMBER_OF_PROXIES ?? '0',
 
-  ENABLE_LOKI: process.env.ENABLE_LOKI ?? 'true',
+  ENABLE_LOKI: process.env.ENABLE_LOKI ?? 'false',
 } as const;
 
 // validate required environment variables
