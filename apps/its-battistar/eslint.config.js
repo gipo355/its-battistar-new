@@ -1,21 +1,26 @@
 const { FlatCompat } = require('@eslint/eslintrc');
 const baseConfig = require('../../eslint.config.js');
+const globals = require('globals');
 const js = require('@eslint/js');
+const tseslint = require('typescript-eslint');
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
   recommendedConfig: js.configs.recommended,
 });
 
-module.exports = [
+module.exports = tseslint.config([
   ...baseConfig,
   {
+    // ignores: ['!**/*'],
+    ignores: ['storybook-static'],
     languageOptions: {
       parserOptions: {
         project: [
           'tsconfig.*?.json',
           // '.storybook/tsconfig.json'
         ],
+        tsconfigRootDir: __dirname,
       },
     },
   },
@@ -55,5 +60,4 @@ module.exports = [
       files: ['**/*.html'],
       rules: {},
     })),
-  { ignores: ['storybook-static'] },
-];
+]);
