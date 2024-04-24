@@ -9,11 +9,14 @@ const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
 });
 
-module.exports = tseslint.config([
+module.exports = tseslint.config(
   ...baseConfig,
+
   {
-    // ignores: ['!**/*'],
-    ignores: ['storybook-static'],
+    ignores: ['!**/*', 'storybook-static'],
+  },
+
+  {
     languageOptions: {
       parserOptions: {
         project: [
@@ -22,8 +25,14 @@ module.exports = tseslint.config([
         ],
         tsconfigRootDir: __dirname,
       },
+      globals: {
+        ...globals.browser,
+        ...globals.serviceworker,
+      },
     },
   },
+
+  // FIXME: old compatibility mode
   ...compat
     .config({
       extends: [
@@ -59,5 +68,5 @@ module.exports = tseslint.config([
       ...config,
       files: ['**/*.html'],
       rules: {},
-    })),
-]);
+    }))
+);

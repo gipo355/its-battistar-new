@@ -3,7 +3,8 @@ const globals = require('globals');
 const baseConfig = require('../../eslint.config.js');
 const nodePlugin = require('eslint-plugin-n');
 
-// const tseslint = require('typescript-eslint');
+const tseslint = require('typescript-eslint');
+
 // const js = require('@eslint/js');
 // const { FlatCompat } = require('@eslint/eslintrc');
 
@@ -12,7 +13,7 @@ const nodePlugin = require('eslint-plugin-n');
 //   recommendedConfig: js.configs.recommended,
 // });
 
-module.exports = [
+module.exports = tseslint.config(
   ...baseConfig,
 
   // https://www.reddit.com/r/learnjavascript/comments/xsiowg/i_need_some_help_configuring_my_eslint_correctly/
@@ -20,6 +21,7 @@ module.exports = [
     // default is ignore all
     ignores: ['!**/*'],
   },
+
   {
     languageOptions: {
       parserOptions: {
@@ -27,7 +29,10 @@ module.exports = [
         tsconfigRootDir: __dirname,
       },
       // TODO: increase specificity between projects of globals available
-      globals: { ...globals.node, ...globals.es2021 },
+      globals: {
+        ...globals.node,
+        ...globals.worker,
+      },
     },
   },
 
@@ -59,5 +64,5 @@ module.exports = [
   {
     files: ['**/*.js', '**/*.jsx'],
     rules: {},
-  },
-];
+  }
+);

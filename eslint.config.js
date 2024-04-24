@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 const globals = require('globals');
 const { FlatCompat } = require('@eslint/eslintrc');
 const nodePlugin = require('eslint-plugin-n');
@@ -11,7 +12,6 @@ const eslint = require('@eslint/js');
 
 // const eslintrc = require('@eslint/eslintrc');
 // const eslintPluginImport = require('eslint-plugin-import');
-// import tseslint from 'typescript-eslint';
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
@@ -24,7 +24,7 @@ const compat = new FlatCompat({
 
 // tseslint.config is an utility function provided by typescript-eslint
 // to provide type safety and intellisense to the configuration
-module.exports = [
+module.exports = tseslint.config(
   {
     // must be on its own for glob pattern to work
     ignores: ['!**/*'],
@@ -126,30 +126,31 @@ module.exports = [
   // alternatively you can use the extend utility provided by typescript-eslint
 
   // typescript files
-  ...[
-    tseslint.configs.eslintRecommended, // disable eslint rules already covered by typescript-eslint
-    ...tseslint.configs.strictTypeChecked,
-    ...tseslint.configs.stylisticTypeChecked,
-  ].map((conf) => ({
-    ...conf,
-    files: ['**/*.ts', '**/*.tsx'],
-    rules: {
-      '@typescript-eslint/explicit-module-boundary-types': ['error'],
-    },
-  })),
-
-  // {
+  // ...[
+  //   tseslint.configs.eslintRecommended, // disable eslint rules already covered by typescript-eslint
+  //   ...tseslint.configs.strictTypeChecked,
+  //   ...tseslint.configs.stylisticTypeChecked,
+  // ].map((conf) => ({
+  //   ...conf,
   //   files: ['**/*.ts', '**/*.tsx'],
-  //   // extends is an utiliy function provided by typescript-eslint
-  //   // extends: [
-  //   //   tseslint.configs.eslintRecommended, // disable eslint rules already covered by typescript-eslint
-  //   // ...tseslint.configs.strictTypeChecked,
-  //   // ...tseslint.configs.stylisticTypeChecked,
-  //   // ],
   //   rules: {
   //     '@typescript-eslint/explicit-module-boundary-types': ['error'],
   //   },
-  // },
+  // })),
+
+  // alternative way as the one above
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    // extends is an utiliy function provided by typescript-eslint
+    extends: [
+      tseslint.configs.eslintRecommended, // disable eslint rules already covered by typescript-eslint
+      ...tseslint.configs.strictTypeChecked,
+      ...tseslint.configs.stylisticTypeChecked,
+    ],
+    rules: {
+      '@typescript-eslint/explicit-module-boundary-types': ['error'],
+    },
+  },
 
   // test files
   {
@@ -210,7 +211,7 @@ module.exports = [
     ...config,
     files: ['**/*.js', '**/*.jsx'],
     rules: {},
-  })),
+  }))
 
   // spec files
   // ...compat.config({ env: { jest: true } }).map((config) => ({
@@ -218,4 +219,4 @@ module.exports = [
   //   files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.spec.js', '**/*.spec.jsx'],
   //   rules: {},
   // })),
-];
+);
