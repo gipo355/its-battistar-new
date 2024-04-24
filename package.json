@@ -60,6 +60,7 @@
     "ioredis": "^5.4.1",
     "jose": "^5.2.4",
     "jsonwebtoken": "^9.0.2",
+    "ky": "^1.2.4",
     "lodash": "^4.17.21",
     "mongoose": "^8.3.2",
     "morgan": "^1.10.0",
