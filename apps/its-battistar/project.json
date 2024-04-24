@@ -69,7 +69,7 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "tsc --noEmit --p ./tsconfig.app.json && prettier -c ./src",
-        "cwd": "apps/its-battistar-be"
+        "cwd": "apps/its-battistar"
       }
     },
     "lint": {

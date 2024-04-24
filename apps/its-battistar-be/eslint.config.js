@@ -1,9 +1,9 @@
-const pluginSecurity = require('eslint-plugin-security');
-const globals = require('globals');
 const baseConfig = require('../../eslint.config.js');
-const nodePlugin = require('eslint-plugin-n');
-
+const globals = require('globals');
 const tseslint = require('typescript-eslint');
+
+const pluginSecurity = require('eslint-plugin-security');
+const nodePlugin = require('eslint-plugin-n');
 
 // const js = require('@eslint/js');
 // const { FlatCompat } = require('@eslint/eslintrc');
