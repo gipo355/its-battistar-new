@@ -1,7 +1,9 @@
 const globals = require('globals');
 const { FlatCompat } = require('@eslint/eslintrc');
 const nodePlugin = require('eslint-plugin-n');
+
 const nxEslintPlugin = require('@nx/eslint-plugin');
+
 const eslintPluginSimpleImportSort = require('eslint-plugin-simple-import-sort');
 // const eslintPluginImport = require('eslint-plugin-import');
 const eslint = require('@eslint/js');
@@ -14,7 +16,6 @@ const tsParser = require('@typescript-eslint/parser');
 
 // const eslintrc = require('@eslint/eslintrc');
 
-// import eslint from '@eslint/js';
 // import tseslint from 'typescript-eslint';
 
 const compat = new FlatCompat({
@@ -29,6 +30,7 @@ module.exports = [
     // must be on its own for glob pattern to work
     ignores: ['!**/*'],
   },
+
   {
     // root level config
     languageOptions: {
@@ -79,18 +81,6 @@ module.exports = [
 
       'sort-imports': 'off',
 
-      // BUG: esling-plugin-import doesn't support flat config
-      // 'import/order': 'off',
-      // 'import/first': 'error',
-      // 'import/newline-after-import': 'error',
-      // 'import/no-duplicates': 'error',
-      // 'import/no-extraneous-dependencies': 'off',
-      // 'import/export': 'warn',
-      // 'import/prefer-default-export': 'off',
-      // 'import/no-default-export': 'warn',
-      // 'import/namespace': 'off',
-      // 'import/no-unresolved': 'off',
-
       'unicorn/no-abusive-eslint-disable': 'off',
       'unicorn/no-null': 'off',
       'unicorn/no-array-for-each': 'warn',
@@ -113,6 +103,7 @@ module.exports = [
     },
   },
 
+  // all files
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     rules: {
@@ -134,87 +125,98 @@ module.exports = [
 
   // NOTE: this is how you map a config to a filetype
   // alternatively you can use the extend utility provided by typescript-eslint
+
+  // typescript files
   ...[
     tseslint.configs.eslintRecommended, // disable eslint rules already covered by typescript-eslint
     ...tseslint.configs.strictTypeChecked,
     ...tseslint.configs.stylisticTypeChecked,
   ].map((conf) => ({
     ...conf,
-    files: ['**/*.ts'],
-    rules: {},
-  })),
-
-  {
     files: ['**/*.ts', '**/*.tsx'],
-    // extends is an utiliy function provided by typescript-eslint
-    // extends: [
-    // ],
     rules: {
       '@typescript-eslint/explicit-module-boundary-types': ['error'],
     },
+  })),
+
+  // {
+  //   files: ['**/*.ts', '**/*.tsx'],
+  //   // extends is an utiliy function provided by typescript-eslint
+  //   // extends: [
+  //   //   tseslint.configs.eslintRecommended, // disable eslint rules already covered by typescript-eslint
+  //   // ...tseslint.configs.strictTypeChecked,
+  //   // ...tseslint.configs.stylisticTypeChecked,
+  //   // ],
+  //   rules: {
+  //     '@typescript-eslint/explicit-module-boundary-types': ['error'],
+  //   },
+  // },
+
+  // test files
+  {
+    files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.spec.js', '**/*.spec.jsx'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+    rules: {},
   },
 
   // FIXME: compatility mode after nx migration
-  //
-  // ...compat
-  //   .config({
-  //     plugins: [
-  //       // 'simple-import-sort', TODO:
-  //       // '@typescript-eslint'
-  //     ],
-  //     extends: [
-  //       'plugin:@nx/typescript', TODO:
-  //       // 'eslint:recommended',
-  //       'plugin:@typescript-eslint/eslint-recommended',
-  //       'plugin:@typescript-eslint/strict-type-checked',
-  //       'plugin:@typescript-eslint/stylistic-type-checked',
-  //       'plugin:unicorn/recommended',
-  //       'plugin:import/recommended', TODO:
-  //     ],
-  //   })
-  //   .map((config) => ({
-  //     ...config,
-  //     files: ['**/*.ts', '**/*.tsx'],
-  //     rules: {
-  //       'no-magic-numbers': 'error',
-  //       'sort-imports': 'off',
-  //       'simple-import-sort/imports': 'error',
-  //       'simple-import-sort/exports': 'error',
-  //       'unicorn/no-abusive-eslint-disable': 'off',
-  //       'import/no-unresolved': 'off',
-  //       'unicorn/no-null': 'off',
-  //       'unicorn/no-array-for-each': 'warn',
-  //       'unicorn/consistent-function-scoping': 'warn',
-  //       'unicorn/prefer-top-level-await': 'warn',
-  //       'unicorn/prevent-abbreviations': 'off',
-  //       'unicorn/prefer-module': 'warn',
-  //       complexity: ['error', 20],
-  //       'consistent-return': 'warn',
-  //       'no-useless-return': 'warn',
-  //       'prefer-const': 'warn',
-  //       eqeqeq: 'error',
-  //       'no-console': 'warn',
-  //       'import/no-extraneous-dependencies': 'off',
-  //       'import/first': 'error',
-  //       // 'import/newline-after-import': 'error', // BUG: new config
-  //       'import/no-duplicates': 'error',
-  //       'import/order': 'off',
-  //       'import/export': 'warn',
-  //       'import/prefer-default-export': 'off',
-  //       'import/no-default-export': 'warn',
-  //       'import/namespace': 'off',
-  //     },
-  //   })),
-  //
-  // ...compat.config({ extends: ['plugin:@nx/javascript'] }).map((config) => ({
-  //   ...config,
-  //   files: ['**/*.js', '**/*.jsx'],
-  //   rules: {},
-  // })),
-  //
+
+  // all files
+  ...compat
+    .config({
+      extends: [
+        'plugin:@nx/javascript',
+        'plugin:import/recommended', // TODO:
+      ],
+    })
+    .map((config) => ({
+      ...config,
+      // files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+      rules: {
+        'import/no-unresolved': 'off',
+        'import/no-extraneous-dependencies': 'off',
+        'import/first': 'error',
+        // 'import/newline-after-import': 'error', // BUG: new config
+        'import/no-duplicates': 'error',
+        'import/order': 'off',
+        'import/export': 'warn',
+        'import/prefer-default-export': 'off',
+        'import/no-default-export': 'warn',
+        'import/namespace': 'off',
+      },
+    })),
+
+  // typescript files
+  ...compat
+    .config({
+      //     plugins: [
+      //       // '@typescript-eslint'
+      //     ],
+      extends: [
+        'plugin:@nx/typescript', //TODO:
+      ],
+    })
+    .map((config) => ({
+      ...config,
+      files: ['**/*.ts', '**/*.tsx'],
+      rules: {},
+    })),
+
+  // javascript files
+  ...compat.config({ extends: ['plugin:@nx/javascript'] }).map((config) => ({
+    ...config,
+    files: ['**/*.js', '**/*.jsx'],
+    rules: {},
+  })),
+
+  // spec files
   // ...compat.config({ env: { jest: true } }).map((config) => ({
   //   ...config,
   //   files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.spec.js', '**/*.spec.jsx'],
   //   rules: {},
-  // }))
+  // })),
 ];
