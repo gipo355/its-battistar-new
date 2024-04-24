@@ -12,7 +12,9 @@ import { initFlowbite } from 'flowbite';
 import { HeaderComponent } from '../../components/header/header.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopBarComponent } from '../../components/top-bar/top-bar.component';
+import { UserStore } from '../../stores/user/user.store';
 import { DashboardService } from './dashboard.service';
+import { DashboardStore } from './dashboard.store';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,12 +33,15 @@ import { DashboardService } from './dashboard.service';
 export class DashboardComponent implements OnInit {
   http = inject(HttpClient);
 
+  dashboardStore = inject(DashboardStore);
+
+  userStore = inject(UserStore);
+
   dashboardService = inject(DashboardService);
 
-  menuItems = this.dashboardService.menuItems;
-
-  title = 'Dashboard';
   ngOnInit(): void {
     initFlowbite();
   }
+
+  title = 'Dashboard';
 }

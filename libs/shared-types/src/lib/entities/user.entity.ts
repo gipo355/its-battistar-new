@@ -9,14 +9,28 @@ export const userSchemaUserInput = Type.Object({
   email: Type.String({
     format: 'email',
   }),
+  avatar: Type.Optional(Type.String()),
 });
-
+/**
+ * @description
+ * this is a user type that can be used to create a new user.
+ * used for validation
+ */
 export type TUserInput = Static<typeof userSchemaUserInput>;
 
-export const userSchema = Type.Object({
+export const safeUserSchema = Type.Object({
   ...userSchemaUserInput.properties,
-
   id: Type.Optional(Type.String()),
+  verified: Type.Boolean(),
+});
+/**
+ * @description
+ * this is a safe user schema that can be used to send to the client
+ */
+export type TSafeUser = Static<typeof safeUserSchema>;
+
+export const userSchema = Type.Object({
+  ...safeUserSchema.properties,
 
   role: Type.String(),
 
@@ -34,18 +48,25 @@ export const userSchema = Type.Object({
     format: 'date-time',
   }),
 
-  verified: Type.Boolean(),
-
   accounts: Type.Array(accountsSchema),
 });
+/**
+ * @description
+ * this is a user schema that can be used to identify all the user properties
+ * provided to mongoose
+ */
+export type TUser = Static<typeof userSchema>;
 
+// HACK: at the moment this is a hack to be able to provide the type to mongoose
+// mongoose doesn't support typescript types (date)
 export enum ERole {
   SUPER = 'super',
   USER = 'user',
 }
-
-export type TUser = Static<typeof userSchema>;
-
+/**
+ * @description
+ * This is the user interface that can be used to enforce mongoose schema
+ */
 export interface IUser {
   id?: string;
 
@@ -67,6 +88,9 @@ export interface IUser {
 
   accounts: TAccount[];
 }
+
+// TODO: mongoose types
+// export type TMongooseUser = Models['User'];
 
 // FIXME: can't use this to stringify everything. Must find
 // a way to standardize the data

@@ -1,6 +1,6 @@
 <nav class="h-full">
   <ul class="flex h-full w-full flex-col flex-wrap items-center justify-start">
-    @for (menuItem of menuItems; track menuItem.title) {
+    @for (menuItem of menuItems(); track menuItem.title) {
       <li
         class="w-full p-2"
         [routerLinkActive]="'active'"
