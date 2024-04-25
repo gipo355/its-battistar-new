@@ -22,6 +22,7 @@ const initialState: TodosState = {
     {
       id: '1',
       title: 'Learn Angular',
+      description: 'Must learn angular for battistar',
       completed: false,
       dueDate: new Date('2025-12-31'),
       expired: false,
@@ -31,6 +32,7 @@ const initialState: TodosState = {
     {
       id: '2',
       title: 'Learn React',
+      description: 'Must learn angular for battistar',
       completed: true,
       dueDate: new Date('2021-12-31'),
       expired: true,
@@ -40,6 +42,7 @@ const initialState: TodosState = {
     {
       id: '3',
       title: 'Learn Angular',
+      description: 'Must learn angular for battistar',
       completed: false,
       dueDate: new Date('2021-12-31'),
       expired: true,
