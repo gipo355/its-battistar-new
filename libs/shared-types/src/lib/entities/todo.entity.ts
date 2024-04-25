@@ -12,11 +12,25 @@ import ajvInstance from '../../utils/ajv';
 //
 // same for user.entity.ts and account.entity.ts
 
+export enum TodoColor {
+  red = 'red',
+  blue = 'blue',
+  green = 'green',
+  yellow = 'yellow',
+  pink = 'pink',
+  default = 'default',
+}
+
 // Required different schema for input and strict schema
 // we need to validate against the input schema
 export const todoSchemaInput = Type.Object({
   title: Type.String(),
   completed: Type.Optional(Type.Boolean()),
+  color: Type.Optional(
+    Type.String({
+      enum: [...Object.keys(TodoColor)],
+    })
+  ),
   description: Type.Optional(Type.String()),
   dueDate: Type.Optional(
     Type.String({
@@ -49,6 +63,8 @@ export interface ITodo {
   id?: string;
 
   title: string;
+
+  color?: keyof typeof TodoColor;
 
   description: string;
 

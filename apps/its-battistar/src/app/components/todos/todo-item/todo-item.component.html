@@ -4,12 +4,11 @@
   <a
     class="flex flex-col items-center rounded-lg border border-gray-200 bg-white shadow hover:bg-gray-100 md:max-w-xl md:flex-row dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
   >
-    <img
-      class="h-96 w-full rounded-t-lg bg-green-300 object-cover md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-      src=""
-      alt=""
-    />
-    <div class="flex flex-col justify-between p-4 leading-normal">
+    <div
+      class="min-h-32 w-1/3 rounded-t-lg md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
+      [ngClass]="noteColorStyles()"
+    ></div>
+    <div class="flex w-full flex-col justify-between p-4 leading-normal">
       <h5
         class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
       >
@@ -18,6 +17,11 @@
       <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
         {{ todo()?.description }}
       </p>
+      @if (todo()?.expired) {
+        <p class="text-sm text-red-500 dark:text-red-400">Expired</p>
+      } @else {
+        <p class="text-sm text-green-500 dark:text-green-400">Active</p>
+      }
     </div>
   </a>
 }

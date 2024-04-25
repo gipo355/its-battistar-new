@@ -16,6 +16,7 @@ interface TodosState {
   todos: ITodo[];
   isLoading: boolean;
   selectedTodo: ITodo | null;
+  showCompleted: boolean;
 }
 
 const initialState: TodosState = {
@@ -29,6 +30,7 @@ const initialState: TodosState = {
       expired: false,
       createdAt: new Date(),
       updatedAt: new Date(),
+      color: 'yellow',
     },
     {
       id: '2',
@@ -39,6 +41,7 @@ const initialState: TodosState = {
       expired: true,
       createdAt: new Date(),
       updatedAt: new Date(),
+      color: 'pink',
     },
     {
       id: '3',
@@ -49,6 +52,7 @@ const initialState: TodosState = {
       expired: true,
       createdAt: new Date(),
       updatedAt: new Date(),
+      color: 'blue',
     },
     {
       id: '4',
@@ -95,6 +99,8 @@ const initialState: TodosState = {
   isLoading: false,
 
   selectedTodo: null,
+
+  showCompleted: false,
 };
 
 const TODOS_STATE = new InjectionToken<TodosState>('TodosState', {
@@ -112,6 +118,10 @@ export const TodosStore = signalStore(
       // 👇 Updating state using the `patchState` function.
       patchState(store, () => ({ selectedTodo: todo }));
     },
+    toggleCompleted(): void {
+      patchState(store, (state) => ({ showCompleted: !state.showCompleted }));
+    },
+
     // updateQuery(query: string): void {
     //   // 👇 Updating state using the `patchState` function.
     //   // patchState(store, (state) => ({ filter: { ...state.filter, query } }));
