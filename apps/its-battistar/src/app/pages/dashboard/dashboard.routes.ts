@@ -20,36 +20,10 @@ export const dashboardRoutes: Route[] = [
     children: [
       {
         path: '',
-        redirectTo: 'overview',
-        pathMatch: 'full',
-      },
-      {
-        path: 'overview',
-        loadComponent: () =>
-          import('../../components/overview/overview.component').then(
-            (m) => m.OverviewComponent
+        loadChildren: () =>
+          import('../../components/todos/todos.routes').then(
+            (routes) => routes.todosRoutes
           ),
-        // FIXME: why named outlet is not working?
-        // outlet: 'content',
-      },
-      {
-        path: 'todos',
-        loadComponent: () =>
-          import('../../components/todos/todos.component').then(
-            (m) => m.TodosComponent
-          ),
-        // FIXME: why named outlet is not working?
-        // outlet: 'content',
-
-        children: [
-          {
-            path: ':id',
-            loadComponent: () =>
-              import(
-                '../../components/todos/todo-modal/todo-modal.component'
-              ).then((m) => m.TodoModalComponent),
-          },
-        ],
       },
     ],
   },
