@@ -15,24 +15,8 @@ export const todosRoutes: Route[] = [
   // works with external component, but how would i inject stores and services?
   {
     path: '',
-    redirectTo: 'overview',
-    pathMatch: 'full',
-  },
-  {
-    path: 'overview',
     loadComponent: () =>
-      import('../../components/overview/overview.component').then(
-        (m) => m.OverviewComponent
-      ),
-    // FIXME: why named outlet is not working?
-    // outlet: 'content',
-  },
-  {
-    path: 'todos',
-    loadComponent: () =>
-      import('../../components/todos/todos.component').then(
-        (m) => m.TodosComponent
-      ),
+      import('./todos.component').then((m) => m.TodosComponent),
     // FIXME: why named outlet is not working?
     // outlet: 'content',
 
@@ -40,7 +24,7 @@ export const todosRoutes: Route[] = [
       {
         path: ':id',
         loadComponent: () =>
-          import('../../components/todos/todo-modal/todo-modal.component').then(
+          import('./todo-modal/todo-modal.component').then(
             (m) => m.TodoModalComponent
           ),
       },

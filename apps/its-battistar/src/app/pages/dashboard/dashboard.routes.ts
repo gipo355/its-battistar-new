@@ -20,6 +20,20 @@ export const dashboardRoutes: Route[] = [
     children: [
       {
         path: '',
+        redirectTo: 'overview',
+        pathMatch: 'full',
+      },
+      {
+        path: 'overview',
+        loadComponent: () =>
+          import('../../components/overview/overview.component').then(
+            (m) => m.OverviewComponent
+          ),
+        // FIXME: why named outlet is not working?
+        // outlet: 'content',
+      },
+      {
+        path: 'todos',
         loadChildren: () =>
           import('../../components/todos/todos.routes').then(
             (routes) => routes.todosRoutes
