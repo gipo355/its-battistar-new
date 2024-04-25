@@ -1,8 +1,8 @@
 <title>{{ title }}</title>
 
-<div class="flex min-h-screen flex-col">
+<div class="flex h-full min-h-screen w-full flex-col">
   <app-header [user]="userStore.user()"></app-header>
-  <div class="custom-grid flex-grow">
+  <div class="custom-grid h-full w-full flex-grow">
     <aside class="left bg-slate-800 py-7 text-slate-200">
       <app-sidebar [menuItems]="dashboardStore.menuItems()"></app-sidebar>
     </aside>
@@ -10,7 +10,7 @@
       <app-top-bar></app-top-bar>
     </header>
     <main
-      class="main container flex flex-col items-center justify-start bg-slate-300 p-4"
+      class="main container flex h-full w-full flex-col items-center justify-start overflow-y-scroll bg-slate-300 p-4"
     >
       <!-- FIXME named nested route -->
       <!-- <router-outlet name="content"> </router-outlet> -->

@@ -3,11 +3,12 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { initFlowbite } from 'flowbite';
 
 import { TodoFilterComponent } from './todo-filter/todo-filter.component';
+import { TodoItemComponent } from './todo-item/todo-item.component';
 
 @Component({
   selector: 'app-todos',
   standalone: true,
-  imports: [CommonModule, TodoFilterComponent],
+  imports: [CommonModule, TodoFilterComponent, TodoItemComponent],
   templateUrl: './todos.component.html',
   styleUrl: './todos.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

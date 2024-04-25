@@ -1,11 +1,24 @@
-<main class="content flex min-h-full min-w-full flex-grow items-center gap-10">
+<main
+  class="content grid min-h-full min-w-full grid-cols-1 justify-start gap-10"
+>
   <h1 class="grow text-center text-2xl font-bold">📝 Todos</h1>
 
   <div class="w-full flex-grow filter">
     <app-todo-filter></app-todo-filter>
   </div>
 
-  <div class="content-grid">
-    <div class="todos">todos</div>
+  <div class="content-grid grid grid-cols-3 gap-10">
+    <app-todo-item></app-todo-item>
+    <app-todo-item></app-todo-item>
+    <app-todo-item></app-todo-item>
+    <app-todo-item></app-todo-item>
+    <app-todo-item></app-todo-item>
+    <app-todo-item></app-todo-item>
+    <app-todo-item></app-todo-item>
+    <app-todo-item></app-todo-item>
+    <app-todo-item></app-todo-item>
+    <app-todo-item></app-todo-item>
+    <app-todo-item></app-todo-item>
+    <app-todo-item></app-todo-item>
   </div>
 </main>
