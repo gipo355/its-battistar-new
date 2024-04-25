@@ -50,7 +50,7 @@ const todoSchema = new mongoose.Schema<ITodo>(
 );
 
 todoSchema.virtual('expired').get(function getDurationWeeks() {
-  if (!(this.dueDate as Date | undefined)) return false;
+  if (!this.dueDate) return false;
   return this.dueDate < new Date();
 });
 
