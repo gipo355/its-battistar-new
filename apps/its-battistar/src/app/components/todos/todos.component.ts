@@ -47,6 +47,7 @@ export class TodosComponent implements OnInit {
     });
   }
 
+  // TODO: should be in the store as a prop
   displayedTodos = computed(() => {
     const todos = this.todoStore.todos();
 

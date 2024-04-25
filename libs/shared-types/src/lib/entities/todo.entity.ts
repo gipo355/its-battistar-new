@@ -22,8 +22,10 @@ export enum TodoColor {
 }
 
 export enum TodoSortBy {
-  title = 'Title',
-  dueDate = 'Due Date',
+  ['Newest'] = 'Newest',
+  ['Oldest'] = 'Oldest',
+  ['Title'] = 'Title',
+  ['Due Date'] = 'Due Date',
 }
 
 // Required different schema for input and strict schema
