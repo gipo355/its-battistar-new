@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   OnInit,
 } from '@angular/core';
@@ -45,4 +46,14 @@ export class TodosComponent implements OnInit {
       relativeTo: this.route,
     });
   }
+
+  displayedTodos = computed(() => {
+    const todos = this.todoStore.todos();
+
+    if (this.todoStore.showCompleted()) {
+      return todos;
+    }
+
+    return todos.filter((todo) => !todo.completed);
+  });
 }

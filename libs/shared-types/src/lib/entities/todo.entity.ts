@@ -21,6 +21,11 @@ export enum TodoColor {
   default = 'default',
 }
 
+export enum TodoSortBy {
+  title = 'Title',
+  dueDate = 'Due Date',
+}
+
 // Required different schema for input and strict schema
 // we need to validate against the input schema
 export const todoSchemaInput = Type.Object({

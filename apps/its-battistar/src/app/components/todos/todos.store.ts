@@ -25,7 +25,7 @@ const initialState: TodosState = {
       id: '1',
       title: 'Learn Angular',
       description: 'Must learn angular for battistar',
-      completed: false,
+      completed: true,
       dueDate: new Date('2025-12-31'),
       expired: false,
       createdAt: new Date(),
@@ -118,8 +118,11 @@ export const TodosStore = signalStore(
       // 👇 Updating state using the `patchState` function.
       patchState(store, () => ({ selectedTodo: todo }));
     },
-    toggleCompleted(): void {
-      patchState(store, (state) => ({ showCompleted: !state.showCompleted }));
+    setShowCompleted(shouldShow: boolean): void {
+      patchState(store, () => ({
+        // ...state,
+        showCompleted: shouldShow,
+      }));
     },
 
     // updateQuery(query: string): void {

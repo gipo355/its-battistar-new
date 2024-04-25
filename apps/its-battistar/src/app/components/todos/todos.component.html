@@ -11,14 +11,14 @@
 <main
   class="content relative grid min-h-full min-w-full grid-cols-1 justify-start gap-10"
 >
-  <h1 class="grow text-center text-2xl font-bold">📝 Todos</h1>
+  <h1 class="w-full text-center text-2xl font-bold">📝 Todos</h1>
 
   <div class="w-full flex-grow filter">
     <app-todo-filter></app-todo-filter>
   </div>
 
   <div class="content-grid grid grid-cols-3 gap-10 overflow-y-scroll px-1">
-    @for (todo of todoStore.todos(); track todo.id) {
+    @for (todo of displayedTodos(); track todo.id) {
       <!-- 1: navigate to the todo page:id -->
       <!-- 2: trigger the selected event to store the current todo in the store -->
       <app-todo-item
