@@ -1,7 +1,3 @@
-// .content {
-// display: grid;
-// align-items: start;
-
-// justify-content: start;
-// grid-auto-columns: 1fr;
-// }
+.content-grid {
+  max-height: calc(100vh - 350px);
+}
