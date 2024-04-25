@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   inject,
   OnInit,
 } from '@angular/core';
@@ -48,13 +47,15 @@ export class TodosComponent implements OnInit {
   }
 
   // TODO: should be in the store as a prop
-  displayedTodos = computed(() => {
-    const todos = this.todoStore.todos();
-
-    if (this.todoStore.showCompleted()) {
-      return todos;
-    }
-
-    return todos.filter((todo) => !todo.completed);
-  });
+  // TODO, update store methods to update filter props
+  // it will work with computed
+  // displayedTodos = computed(() => {
+  //   const todos = this.todoStore.todos();
+  //
+  //   if (this.todoStore.showCompleted()) {
+  //     return todos;
+  //   }
+  //
+  //   return todos.filter((todo) => !todo.completed);
+  // });
 }

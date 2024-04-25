@@ -38,24 +38,39 @@ export class TodoFilterComponent implements OnInit, OnDestroy {
       // eslint-disable-next-line no-magic-numbers
       .pipe(takeUntil(this.destroy$), debounceTime(300))
       .subscribe((value) => {
+        console.log('value', value);
+
         // handle show completed
         if (
           value.showCompleted !== undefined &&
           value.showCompleted !== null &&
           // avoid launching useless signals
-          value.showCompleted !== this.todoStore.showCompleted()
+          value.showCompleted !== this.todoStore.filter.showCompleted()
         ) {
-          this.todoStore.setShowCompleted(value.showCompleted);
+          this.todoStore.updateFilters({
+            showCompleted: value.showCompleted,
+          });
         }
 
         // handle sortBy
         if (
           value.sortBy !== undefined &&
           value.sortBy !== null &&
-          value.sortBy !== this.todoStore.currentSortBy()
+          value.sortBy !== this.todoStore.filter.currentSortBy()
         ) {
-          this.todoStore.updateSort(value.sortBy);
+          this.todoStore.updateFilters({
+            currentSortBy: value.sortBy,
+          });
         }
+
+        // handle query
+        if (value.filterBox !== undefined && value.filterBox !== null) {
+          this.todoStore.updateFilters({
+            query: value.filterBox,
+          });
+        }
+
+        console.log(this.todoStore.filter.showCompleted());
       });
   }
 
@@ -63,6 +78,7 @@ export class TodoFilterComponent implements OnInit, OnDestroy {
 
   filterForm = new FormGroup({
     showCompleted: new FormControl<boolean>(false), // checked/unchecked
+    // reset the original sort by hardcoding it, can improve this
     sortBy: new FormControl<keyof typeof TodoSortBy>('Newest'), // date/title
     filterBox: new FormControl<string>(''), // search
   });
@@ -70,7 +86,7 @@ export class TodoFilterComponent implements OnInit, OnDestroy {
   // TODO: is there a way to use signal here instead?
   // checked = signal<boolean>( this.getFormControl<boolean>('showCompleted').value as boolean);
 
-  getFormControl<T>(name: string): FormControl {
-    return this.filterForm.get(name) as FormControl<T>;
-  }
+  // getFormControl<T>(name: string): FormControl {
+  //   return this.filterForm.get(name) as FormControl<T>;
+  // }
 }
