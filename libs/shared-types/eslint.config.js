@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 const globals = require('globals');
 const baseConfig = require('../../eslint.config.js');
 const tseslint = require('typescript-eslint');

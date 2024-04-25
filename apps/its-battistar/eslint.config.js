@@ -1,14 +1,15 @@
+/* eslint-disable unicorn/prefer-module */
 const baseConfig = require('../../eslint.config.js');
 const globals = require('globals');
 const tseslint = require('typescript-eslint');
 
-// const { FlatCompat } = require('@eslint/eslintrc');
-// const js = require('@eslint/js');
+const { FlatCompat } = require('@eslint/eslintrc');
+const js = require('@eslint/js');
 
-// const compat = new FlatCompat({
-//   baseDirectory: __dirname,
-//   recommendedConfig: js.configs.recommended,
-// });
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+});
 
 module.exports = tseslint.config(
   ...baseConfig,
@@ -31,48 +32,53 @@ module.exports = tseslint.config(
   },
 
   {
-    rules: {
-      // BUG: for some reason, those rules are not working here while it works in express
-      '@typescript-eslint/no-unnecessary-condition': 'off',
-      '@typescript-eslint/prefer-nullish-coalescing': 'off',
-    },
-  }
+    rules: {},
+  },
 
   // FIXME: old compatibility mode
-  // ...compat
-  //   .config({
-  //     extends: [
-  //       'plugin:@nx/angular',
-  //       'plugin:@angular-eslint/template/process-inline-templates',
-  //     ],
-  //   })
-  //   .map((config) => ({
-  //     ...config,
-  //     files: ['**/*.ts'],
-  //     rules: {
-  //       '@angular-eslint/directive-selector': [
-  //         'error',
-  //         {
-  //           type: 'attribute',
-  //           prefix: 'app',
-  //           style: 'camelCase',
-  //         },
-  //       ],
-  //       '@angular-eslint/component-selector': [
-  //         'error',
-  //         {
-  //           type: 'element',
-  //           prefix: 'app',
-  //           style: 'kebab-case',
-  //         },
-  //       ],
-  //     },
-  //   })),
-  // ...compat
-  //   .config({ extends: ['plugin:@nx/angular-template'] })
-  //   .map((config) => ({
-  //     ...config,
-  //     files: ['**/*.html'],
-  //     rules: {},
-  //   }))
+  // do these even work?
+  ...compat
+    .config({
+      extends: [
+        'plugin:@nx/angular',
+        'plugin:@angular-eslint/recommended',
+        'plugin:@angular-eslint/template/process-inline-templates',
+        'plugin:angular/johnpapa',
+      ],
+      // why do i need to specify this in the overrides too?
+      parserOptions: {
+        // project: ['./tsconfig.*?.json'],
+        tsconfigRootDir: __dirname,
+        project: ['tsconfig.*?.json', '.storybook/tsconfig.json'],
+      },
+    })
+    .map((config) => ({
+      ...config,
+      files: ['**/*.ts'],
+      rules: {
+        '@angular-eslint/directive-selector': [
+          'error',
+          {
+            type: 'attribute',
+            prefix: 'app',
+            style: 'camelCase',
+          },
+        ],
+        '@angular-eslint/component-selector': [
+          'error',
+          {
+            type: 'element',
+            prefix: 'app',
+            style: 'kebab-case',
+          },
+        ],
+      },
+    })),
+  ...compat
+    .config({ extends: ['plugin:@nx/angular-template'] })
+    .map((config) => ({
+      ...config,
+      files: ['**/*.html'],
+      rules: {},
+    }))
 );

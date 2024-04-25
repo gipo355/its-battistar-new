@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 /* eslint-disable no-magic-numbers */
 const globals = require('globals');
 const { FlatCompat } = require('@eslint/eslintrc');
@@ -165,13 +166,17 @@ module.exports = tseslint.config(
   },
 
   // FIXME: compatility mode after nx migration
+  // do they override previous rules?
+  // do these even work??
 
   // all files
   ...compat
     .config({
+      plugins: ['sonarjs'],
       extends: [
         'plugin:@nx/javascript',
         'plugin:import/recommended', // TODO:
+        'plugin:sonarjs/recommended',
       ],
     })
     .map((config) => ({
@@ -205,14 +210,18 @@ module.exports = tseslint.config(
       ...config,
       files: ['**/*.ts', '**/*.tsx'],
       rules: {},
-    })),
+    }))
 
-  // javascript files
-  ...compat.config({ extends: ['plugin:@nx/javascript'] }).map((config) => ({
-    ...config,
-    files: ['**/*.js', '**/*.jsx'],
-    rules: {},
-  }))
+  // javascript files only
+  // ...compat
+  //   .config({
+  //     extends: [ ],
+  //   })
+  //   .map((config) => ({
+  //     ...config,
+  //     files: ['**/*.js', '**/*.jsx'],
+  //     rules: {},
+  //   }))
 
   // spec files
   // ...compat.config({ env: { jest: true } }).map((config) => ({
