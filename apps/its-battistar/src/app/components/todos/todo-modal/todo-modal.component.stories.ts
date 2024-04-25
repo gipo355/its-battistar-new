@@ -1,9 +1,11 @@
+import { provideRouter } from '@angular/router';
 import {
   applicationConfig,
   type Meta,
   type StoryObj,
 } from '@storybook/angular';
 
+import { todosRoutes } from '../todos.routes';
 import { TodoModalComponent } from './todo-modal.component';
 
 const meta: Meta<TodoModalComponent> = {
@@ -11,7 +13,7 @@ const meta: Meta<TodoModalComponent> = {
   component: TodoModalComponent,
   decorators: [
     applicationConfig({
-      providers: [],
+      providers: [provideRouter(todosRoutes)],
     }),
   ],
 };
