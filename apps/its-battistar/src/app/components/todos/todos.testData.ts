@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
 import { faker } from '@faker-js/faker';
-import { ITodo } from '@its-battistar/shared-types';
+import { ITodo, TodoColor } from '@its-battistar/shared-types';
 
 function generateTestTodos(n: number): ITodo[] {
   const todos: ITodo[] = [];
@@ -14,6 +14,7 @@ function generateTestTodos(n: number): ITodo[] {
       expired: faker.datatype.boolean(),
       createdAt: faker.date.recent(),
       updatedAt: faker.date.recent(),
+      color: faker.helpers.enumValue(TodoColor),
     };
 
     todos.push(newTodo);
