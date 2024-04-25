@@ -5,7 +5,7 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ITodo } from '@its-battistar/shared-types';
 import { initFlowbite } from 'flowbite';
 
@@ -26,12 +26,23 @@ export class TodosComponent implements OnInit {
 
   todoStore = inject(TodosStore);
 
+  router = inject(Router);
+
+  route = inject(ActivatedRoute);
+
   ngOnInit(): void {
     initFlowbite();
   }
 
-  onClickTodoItem(todo: ITodo): void {
-    this.todoStore.updateSelectedTodo(todo);
+  async onClickTodoItem(todo: ITodo): Promise<void> {
     console.log('Clicked todo item:', todo);
+
+    this.todoStore.updateSelectedTodo(todo);
+
+    console.log('Selected todo:', this.todoStore.selectedTodo());
+
+    await this.router.navigate(['.', todo.id], {
+      relativeTo: this.route,
+    });
   }
 }

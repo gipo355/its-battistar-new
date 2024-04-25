@@ -4,6 +4,8 @@
 
 import { Route } from '@angular/router';
 
+import { todoModalResolverServiceFN } from './todo-modal/OLD_todo-modal-resolver.service';
+
 // this is the schema for the routes:
 // / => welcome page
 //
@@ -27,6 +29,9 @@ export const todosRoutes: Route[] = [
           import('./todo-modal/todo-modal.component').then(
             (m) => m.TodoModalComponent
           ),
+        resolve: {
+          todo: todoModalResolverServiceFN,
+        },
       },
     ],
   },

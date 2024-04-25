@@ -2,8 +2,9 @@
 <title>{{ title }}</title>
 
 <!-- modal for edit -->
-<!-- options: load dynamically, always load and hide if not selectedTodo -->
-<!-- or use router lint for todos/:id or todos/edit/:id -->
+<!-- options: load dynamically, always load and hide if not selectedTodo, use router link for todos/:id or todos/edit/:id -->
+<!-- the best way would probably be always load and pass the todo to the modal from signal store (selectedTodo) so no url involved -->
+<!-- for testing purposes, we will use the sub router -->
 <router-outlet></router-outlet>
 
 <!-- main view -->
@@ -18,6 +19,8 @@
 
   <div class="content-grid grid grid-cols-3 gap-10">
     @for (todo of todoStore.todos(); track todo.id) {
+      <!-- 1: navigate to the todo page:id -->
+      <!-- 2: trigger the selected event to store the current todo in the store -->
       <app-todo-item
         [todo]="todo"
         (click)="onClickTodoItem(todo)"
