@@ -21,6 +21,7 @@ interface TodosState {
   // used to filter todos by query
   filter: {
     showCompleted: boolean;
+    showExpired: boolean;
     currentSortBy: keyof typeof TodoSortBy;
     query: string;
   };
@@ -110,6 +111,7 @@ const initialState: TodosState = {
 
   filter: {
     currentSortBy: 'Newest',
+    showExpired: true,
     showCompleted: false,
     query: '',
   },
@@ -148,6 +150,12 @@ export const TodosStore = signalStore(
       // if filter showcomp is true, return all
       if (!filter.showCompleted()) {
         filteredTodos = filteredTodos.filter((todo) => !todo.completed);
+      }
+
+      // remove expired if filter hides them
+      console.log('filter.showExpired()', filter.showExpired());
+      if (!filter.showExpired()) {
+        filteredTodos = filteredTodos.filter((todo) => !todo.expired);
       }
 
       // filter todos by query
@@ -209,6 +217,10 @@ export const TodosStore = signalStore(
 
         if (filters.showCompleted !== undefined) {
           filter.showCompleted = filters.showCompleted;
+        }
+
+        if (filters.showExpired !== undefined) {
+          filter.showExpired = filters.showExpired;
         }
 
         if (filters.currentSortBy) {

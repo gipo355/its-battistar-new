@@ -1,7 +1,7 @@
 <!-- FIXME: doesn't work -->
 <title>{{ title }}</title>
 
-<div class="flex h-full min-h-screen w-full flex-col">
+<div class="min-w-scren flex min-h-screen flex-col">
   <app-header [user]="userStore.user()"></app-header>
   <div class="custom-grid flex-grow">
     <aside class="left bg-slate-800 py-7 text-slate-200">
@@ -12,7 +12,9 @@
     >
       <app-top-bar></app-top-bar>
     </header>
-    <main class="main flex justify-center bg-slate-300 px-14 py-8">
+    <main
+      class="main flex h-full w-full justify-center bg-slate-300 px-14 py-8"
+    >
       <!-- FIXME named nested route -->
       <!-- <router-outlet name="content"> </router-outlet> -->
       <router-outlet> </router-outlet>

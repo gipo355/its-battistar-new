@@ -52,6 +52,19 @@ export class TodoFilterComponent implements OnInit, OnDestroy {
           });
         }
 
+        console.log(value.showExpired, this.todoStore.filter.showExpired());
+        if (
+          value.showExpired !== undefined &&
+          value.showExpired !== null &&
+          // avoid launching useless signals
+          value.showExpired !== this.todoStore.filter.showExpired()
+        ) {
+          console.log('if');
+          this.todoStore.updateFilters({
+            showExpired: value.showExpired,
+          });
+        }
+
         // handle sortBy
         if (
           value.sortBy !== undefined &&
@@ -69,18 +82,19 @@ export class TodoFilterComponent implements OnInit, OnDestroy {
             query: value.filterBox,
           });
         }
-
-        console.log(this.todoStore.filter.showCompleted());
       });
   }
 
   sortByOptions = Object.keys(TodoSortBy);
 
   filterForm = new FormGroup({
-    showCompleted: new FormControl<boolean>(false), // checked/unchecked
+    showCompleted: new FormControl<boolean>(
+      this.todoStore.filter.showCompleted()
+    ), // checked/unchecked
     // reset the original sort by hardcoding it, can improve this
     sortBy: new FormControl<keyof typeof TodoSortBy>('Newest'), // date/title
     filterBox: new FormControl<string>(''), // search
+    showExpired: new FormControl<boolean>(this.todoStore.filter.showExpired()), // checked/unchecked
   });
 
   // TODO: is there a way to use signal here instead?
