@@ -74,8 +74,13 @@ module.exports = tseslint.config(
         ],
       },
     })),
+
+  // FIXME: doesn't lint html files
   ...compat
-    .config({ extends: ['plugin:@nx/angular-template'] })
+    .config({
+      parser: '@angular-eslint/template-parser',
+      extends: ['plugin:@nx/angular-template'],
+    })
     .map((config) => ({
       ...config,
       files: ['**/*.html'],
