@@ -1,9 +1,14 @@
 .custom-grid {
   display: grid;
-  grid-template: auto 1fr / minmax(0, 1fr) minmax(300px, 5fr);
   grid-template-areas:
     'left header'
     'left main';
+
+  // grid-template: auto 1fr / minmax(0, 1fr) minmax(300px, 5fr);
+
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 5fr);
+  /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
+  grid-template-rows: auto 1fr;
 }
 
 .left {
