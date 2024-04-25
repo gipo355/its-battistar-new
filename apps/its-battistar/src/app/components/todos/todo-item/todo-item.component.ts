@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ITodo } from '@its-battistar/shared-types';
 
 @Component({
   selector: 'app-todo-item',
@@ -11,5 +12,5 @@ import { RouterModule } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoItemComponent {
-  title = 'Todo Item';
+  todo = input<ITodo | null>(null);
 }

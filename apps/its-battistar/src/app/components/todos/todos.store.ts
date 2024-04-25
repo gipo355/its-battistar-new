@@ -3,6 +3,7 @@
 import { computed, inject, InjectionToken } from '@angular/core';
 import { ITodo } from '@its-battistar/shared-types';
 import {
+  patchState,
   // patchState,
   signalStore,
   withComputed,
@@ -49,6 +50,46 @@ const initialState: TodosState = {
       createdAt: new Date(),
       updatedAt: new Date(),
     },
+    {
+      id: '4',
+      title: 'Learn Angular',
+      description: 'Must learn angular for battistar',
+      completed: false,
+      dueDate: new Date('2021-12-31'),
+      expired: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: '5',
+      title: 'Learn Angular',
+      description: 'Must learn angular for battistar',
+      completed: false,
+      dueDate: new Date('2021-12-31'),
+      expired: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: '6',
+      title: 'Learn Angular',
+      description: 'Must learn angular for battistar',
+      completed: false,
+      dueDate: new Date('2021-12-31'),
+      expired: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: '7',
+      title: 'Learn Angular',
+      description: 'Must learn angular for battistar',
+      completed: false,
+      dueDate: new Date('2021-12-31'),
+      expired: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   ],
 
   isLoading: false,
@@ -60,47 +101,48 @@ const TODOS_STATE = new InjectionToken<TodosState>('TodosState', {
   factory: () => initialState,
 });
 
-export const BooksStore = signalStore(
+export const TodosStore = signalStore(
   { providedIn: 'root' }, // 👈 Defining the store as a singleton. No need to provide it in the module.
   withState(() => inject(TODOS_STATE)),
   withComputed(({ todos }) => ({
     todosCount: computed(() => todos().length),
   })),
-  withMethods(() =>
-    // store
-    ({
-      // updateQuery(query: string): void {
-      //   // 👇 Updating state using the `patchState` function.
-      //   // patchState(store, (state) => ({ filter: { ...state.filter, query } }));
-      // },
-      // updateOrder(order: 'asc' | 'desc'): void {
-      //   // patchState(store, (state) => ({ filter: { ...state.filter, order } }));
-      // },
-      // side effects async
-      // async loadAll(): Promise<void> {
-      //   patchState(store, { isLoading: true });
-      //
-      //   const books = await booksService.getAll();
-      //   patchState(store, { books, isLoading: false });
-      // },
-      // reactive with rxjs
-      // 👇 Defining a method to load books by query.
-      // loadByQuery: rxMethod<string>(
-      //   pipe(
-      //     debounceTime(300),
-      //     distinctUntilChanged(),
-      //     tap(() => patchState(store, { isLoading: true })),
-      //     switchMap((query) =>
-      //       booksService.getByQuery(query).pipe(
-      //         tapResponse({
-      //           next: (books) => patchState(store, { books }),
-      //           error: console.error,
-      //           finalize: () => patchState(store, { isLoading: false }),
-      //         })
-      //       )
-      //     )
-      //   )
-      // ),
-    })
-  )
+  withMethods((store) => ({
+    updateSelectedTodo(todo: ITodo): void {
+      // 👇 Updating state using the `patchState` function.
+      patchState(store, () => ({ selectedTodo: todo }));
+    },
+    // updateQuery(query: string): void {
+    //   // 👇 Updating state using the `patchState` function.
+    //   // patchState(store, (state) => ({ filter: { ...state.filter, query } }));
+    // },
+    // updateOrder(order: 'asc' | 'desc'): void {
+    //   // patchState(store, (state) => ({ filter: { ...state.filter, order } }));
+    // },
+    // side effects async
+    // async loadAll(): Promise<void> {
+    //   patchState(store, { isLoading: true });
+    //
+    //   const books = await booksService.getAll();
+    //   patchState(store, { books, isLoading: false });
+    // },
+    // reactive with rxjs
+    // 👇 Defining a method to load books by query.
+    // loadByQuery: rxMethod<string>(
+    //   pipe(
+    //     debounceTime(300),
+    //     distinctUntilChanged(),
+    //     tap(() => patchState(store, { isLoading: true })),
+    //     switchMap((query) =>
+    //       booksService.getByQuery(query).pipe(
+    //         tapResponse({
+    //           next: (books) => patchState(store, { books }),
+    //           error: console.error,
+    //           finalize: () => patchState(store, { isLoading: false }),
+    //         })
+    //       )
+    //     )
+    //   )
+    // ),
+  }))
 );

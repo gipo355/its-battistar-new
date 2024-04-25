@@ -40,6 +40,16 @@ export const dashboardRoutes: Route[] = [
           ),
         // FIXME: why named outlet is not working?
         // outlet: 'content',
+
+        children: [
+          {
+            path: ':id',
+            loadComponent: () =>
+              import(
+                '../../components/todos/todo-modal/todo-modal.component'
+              ).then((m) => m.TodoModalComponent),
+          },
+        ],
       },
     ],
   },
