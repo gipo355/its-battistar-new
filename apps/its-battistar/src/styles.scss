@@ -20,7 +20,7 @@
 *::before,
 *::after {
   /* thanks redditindisguise */
-  // overflow: hidden;
+  overflow: hidden;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
@@ -31,8 +31,7 @@ html {
 }
 
 body {
-  background-color: var(--bg-color-light);
-
+  // background-color: var(--bg-color-light);
   // color: var(--text-color-dark);
   font-family: Roboto, sans-serif;
 }

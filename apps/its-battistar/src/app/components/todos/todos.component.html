@@ -9,24 +9,20 @@
 
 <!-- main view -->
 <main
-  class="relative grid min-h-full min-w-full grid-cols-1 justify-start gap-1"
+  class="relative flex min-h-full min-w-full flex-col items-center justify-start gap-1"
 >
-  <div class="flex items-center justify-center">
-    <h1 class="w-full text-center text-center align-middle text-2xl font-bold">
-      📝 Todos
-    </h1>
-  </div>
+  <h1 class="w-full text-center align-middle text-2xl font-bold">📝 Todos</h1>
 
-  <div class="w-full flex-grow filter">
-    <app-todo-filter></app-todo-filter>
-  </div>
+  <app-todo-filter
+    class="w-full basis-full justify-self-stretch py-4 filter"
+  ></app-todo-filter>
 
   <div
-    class="content-grid grid w-full grid-cols-3 gap-10 overflow-y-scroll px-1"
+    class="content-grid grid w-full grid-cols-3 flex-nowrap gap-10 px-8 py-4"
   >
+    <!-- 1: navigate to the todo page:id -->
+    <!-- 2: trigger the selected event to store the current todo in the store -->
     @for (todo of todoStore.filteredTodos(); track todo.id) {
-      <!-- 1: navigate to the todo page:id -->
-      <!-- 2: trigger the selected event to store the current todo in the store -->
       <app-todo-item
         [todo]="todo"
         (click)="onClickTodoItem(todo)"

@@ -11,6 +11,8 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
+
+import { todosTestData } from './todos.testData';
 // import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 interface TodosState {
@@ -28,82 +30,9 @@ interface TodosState {
   filteredTodos?: ITodo[];
 }
 
+// TODO: move to express backend init
 const initialState: TodosState = {
-  todos: [
-    {
-      id: '1',
-      title: 'Learn Angular',
-      description: 'Must learn angular for battistar',
-      completed: true,
-      dueDate: new Date('2025-12-4'),
-      expired: false,
-      createdAt: new Date('2021-01-01'),
-      updatedAt: new Date('2021-01-02'),
-      color: 'yellow',
-    },
-    {
-      id: '2',
-      title: 'Learn React',
-      description: 'Must learn angular for battistar',
-      completed: true,
-      dueDate: undefined,
-      expired: true,
-      createdAt: new Date('2021-01-03'),
-      updatedAt: new Date('2021-01-04'),
-      color: 'pink',
-    },
-    {
-      id: '3',
-      title: 'Learn Tailwind',
-      description: 'Must learn angular for battistar',
-      completed: false,
-      dueDate: new Date('2021-12-8'),
-      expired: true,
-      createdAt: new Date('2021-01-05'),
-      updatedAt: new Date('2021-01-06'),
-      color: 'blue',
-    },
-    {
-      id: '4',
-      title: 'Learn Svelte',
-      description: 'Must learn angular for battistar',
-      completed: false,
-      dueDate: new Date('2021-12-7'),
-      expired: true,
-      createdAt: new Date('2021-01-07'),
-      updatedAt: new Date('2021-01-08'),
-    },
-    {
-      id: '5',
-      title: 'Learn Go',
-      description: 'Must learn angular for battistar',
-      completed: false,
-      dueDate: new Date('2021-12-31'),
-      expired: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: '6',
-      title: 'Learn Vue',
-      description: 'Must learn angular for battistar',
-      completed: false,
-      dueDate: new Date('2021-12-31'),
-      expired: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: '7',
-      title: 'Learn Spring',
-      description: 'Must learn angular for battistar',
-      completed: false,
-      dueDate: new Date('2021-12-31'),
-      expired: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ],
+  todos: todosTestData,
 
   isLoading: false,
 
