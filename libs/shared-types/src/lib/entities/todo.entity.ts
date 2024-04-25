@@ -75,7 +75,7 @@ export interface ITodo {
 
   description: string;
 
-  dueDate: Date;
+  dueDate?: Date;
 
   completed: boolean;
 

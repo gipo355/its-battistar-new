@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 // Testing signals store with state in ngrx/signals
 
 import { computed, inject, InjectionToken } from '@angular/core';
@@ -44,7 +45,7 @@ const initialState: TodosState = {
       title: 'Learn React',
       description: 'Must learn angular for battistar',
       completed: true,
-      dueDate: new Date('2021-12-5'),
+      dueDate: undefined,
       expired: true,
       createdAt: new Date('2021-01-03'),
       updatedAt: new Date('2021-01-04'),
@@ -158,9 +159,13 @@ export const TodosStore = signalStore(
 
       // sort todos after filtering
       if (filter.currentSortBy() === 'Due Date') {
-        filteredTodos = filteredTodos.sort(
-          (a, b) => a.dueDate.getTime() - b.dueDate.getTime()
-        );
+        filteredTodos = filteredTodos.sort((a, b) => {
+          if (!a.dueDate || !b.dueDate) {
+            return 0;
+          }
+
+          return a.dueDate.getTime() - b.dueDate.getTime();
+        });
       }
 
       if (filter.currentSortBy() === 'Newest') {
