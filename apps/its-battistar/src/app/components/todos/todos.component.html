@@ -33,6 +33,7 @@
   <!-- button to open create new todo modal -->
   <button
     type="button"
+    [routerLink]="'new'"
     class="fixed bottom-20 right-20 me-2 inline-flex items-center rounded-lg bg-green-500 p-4 text-center text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-800"
   >
     <svg
@@ -49,6 +50,6 @@
         d="M12 4.5v15m7.5-7.5h-15"
       />
     </svg>
-    <span class="sr-only">Icon description</span>
+    <span class="sr-only">Create Todo</span>
   </button>
 </main>

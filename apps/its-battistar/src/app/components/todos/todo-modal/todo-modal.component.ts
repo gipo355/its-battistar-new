@@ -5,7 +5,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ITodo } from '@its-battistar/shared-types';
 
 import { TodosStore } from '../todos.store';
@@ -38,7 +38,7 @@ import { TodosStore } from '../todos.store';
 @Component({
   selector: 'app-todo-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './todo-modal.component.html',
   styleUrl: './todo-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,5 +53,6 @@ export class TodoModalComponent {
 
   // the todo can be populated if the user navigates to /todos/edit by clicking on a todo in the list
   // or null if it clicks the create button
+  // IMPORTANT: this component receives the todo as input from the resolver on navigation
   todo = input<ITodo | null>(null);
 }
