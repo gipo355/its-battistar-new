@@ -6,6 +6,7 @@
     "preinstall": "npx only-allow pnpm",
     "commit": "git-cz",
     "serve-all": "nx run-many -t serve its-battistar-be its-battistar",
+    "lint-ant-test": "nx run-many -t lint test",
     "serve-express": "nx run its-battistar-be:serve",
     "serve-angular": "nx run its-battistar:serve",
     "prepare": "husky && husky install",
