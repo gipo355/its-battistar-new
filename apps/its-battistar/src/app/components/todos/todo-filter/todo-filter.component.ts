@@ -7,10 +7,9 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { TodoSortBy } from '@its-battistar/shared-types';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 
-import { TodosStore } from '../todos.store';
+import { TodoSortByOptions, TodosStore } from '../todos.store';
 
 // TODO: extract todo store and make it dumb component
 
@@ -85,14 +84,14 @@ export class TodoFilterComponent implements OnInit, OnDestroy {
       });
   }
 
-  sortByOptions = Object.keys(TodoSortBy);
+  sortByOptions = Object.keys(TodoSortByOptions);
 
   filterForm = new FormGroup({
     showCompleted: new FormControl<boolean>(
       this.todoStore.filter.showCompleted()
     ), // checked/unchecked
     // reset the original sort by hardcoding it, can improve this
-    sortBy: new FormControl<keyof typeof TodoSortBy>('Newest'), // date/title
+    sortBy: new FormControl<keyof typeof TodoSortByOptions>('Newest'), // date/title
     filterBox: new FormControl<string>(''), // search
     showExpired: new FormControl<boolean>(this.todoStore.filter.showExpired()), // checked/unchecked
   });

@@ -12,21 +12,39 @@ import ajvInstance from '../../utils/ajv';
 //
 // same for user.entity.ts and account.entity.ts
 
-export enum TodoColor {
-  red = 'red',
-  blue = 'blue',
-  green = 'green',
-  yellow = 'yellow',
-  pink = 'pink',
-  default = 'default',
+export interface TodoColor {
+  red: 'red';
+  blue: 'blue';
+  green: 'green';
+  yellow: 'yellow';
+  pink: 'pink';
+  default: 'default';
 }
 
-export enum TodoSortBy {
-  ['Newest'] = 'Newest',
-  ['Oldest'] = 'Oldest',
-  ['Title'] = 'Title',
-  ['Due Date'] = 'Due Date',
+export interface TodoSortBy {
+  Newest: 'Newest';
+  Oldest: 'Oldest';
+  Title: 'Title';
+  DueDate: 'DueDate';
 }
+
+// BUG: can't import from shared-types into angular real values, only types
+const TodoColorOptions: TodoColor = {
+  red: 'red',
+  blue: 'blue',
+  green: 'green',
+  yellow: 'yellow',
+  pink: 'pink',
+  default: 'default',
+} as const;
+
+// BUG: can't import from shared-types into angular real values, only types
+// const TodoSortByOptions: TodoSortBy = {
+//   Newest: 'Newest',
+//   Oldest: 'Oldest',
+//   Title: 'Title',
+//   DueDate: 'Due Date',
+// };
 
 // Required different schema for input and strict schema
 // we need to validate against the input schema
@@ -35,7 +53,7 @@ export const todoSchemaInput = Type.Object({
   completed: Type.Optional(Type.Boolean()),
   color: Type.Optional(
     Type.String({
-      enum: [...Object.keys(TodoColor)],
+      enum: [...Object.keys(TodoColorOptions)],
     })
   ),
   description: Type.Optional(Type.String()),
@@ -71,7 +89,7 @@ export interface ITodo {
 
   title: string;
 
-  color?: keyof typeof TodoColor;
+  color?: keyof TodoColor;
 
   description: string;
 
