@@ -34,12 +34,10 @@ export const dashboardRoutes: Route[] = [
       },
       {
         path: 'todos',
-        loadComponent: () =>
-          import('../../components/todos/todos.component').then(
-            (m) => m.TodosComponent
+        loadChildren: () =>
+          import('../../components/todos/todos.routes').then(
+            (routes) => routes.todosRoutes
           ),
-        // FIXME: why named outlet is not working?
-        // outlet: 'content',
       },
     ],
   },

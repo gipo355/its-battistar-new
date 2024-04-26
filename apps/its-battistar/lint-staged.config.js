@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 module.exports = {
   '*.{css,scss,less,sass}': 'stylelint --fix --allow-empty-input ',
 

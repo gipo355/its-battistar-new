@@ -1,15 +1,18 @@
+<!-- FIXME: doesn't work -->
 <title>{{ title }}</title>
 
-<div class="flex min-h-screen flex-col">
-  <app-header></app-header>
+<div class="min-w-scren flex min-h-screen flex-col">
+  <app-header [user]="userStore.user()"></app-header>
   <div class="custom-grid flex-grow">
     <aside class="left bg-slate-800 py-7 text-slate-200">
-      <app-sidebar [menuItems]="menuItems"></app-sidebar>
+      <app-sidebar [menuItems]="dashboardStore.menuItems()"></app-sidebar>
     </aside>
-    <header class="header-bar bg-slate-500 text-slate-200">
+    <header
+      class="header-bar flex h-full w-full items-center justify-start bg-slate-500 p-4 text-slate-200"
+    >
       <app-top-bar></app-top-bar>
     </header>
-    <main class="main container bg-slate-300">
+    <main class="main bg-slate-300 px-14 py-8">
       <!-- FIXME named nested route -->
       <!-- <router-outlet name="content"> </router-outlet> -->
       <router-outlet> </router-outlet>

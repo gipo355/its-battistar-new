@@ -90,7 +90,7 @@ const buildTestEnvironment = async () => {
   };
 };
 
-const teardown = async () => {
+const teardown = async (): Promise<void> => {
   // if (lokiStarted) {
   await dockerCompose.down(dockerComposeItems.loki);
   // }
@@ -103,7 +103,10 @@ const teardown = async () => {
 /**
  * ## This is a shared setup hook from globalSetup
  */
-const setup = async () => {
+const setup = async (): Promise<{
+  commonStarted: boolean;
+  lokiStarted: boolean;
+}> => {
   try {
     const { commonStarted, lokiStarted } = await buildTestEnvironment();
     return {
@@ -112,6 +115,11 @@ const setup = async () => {
     };
   } catch (e) {
     await teardown();
+
+    return {
+      commonStarted: false,
+      lokiStarted: false,
+    };
   }
 };
 

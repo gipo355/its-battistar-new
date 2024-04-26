@@ -1,3 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable security/detect-object-injection */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable n/no-unpublished-import */
 /* eslint-disable no-magic-numbers */
 /* eslint-disable @nx/enforce-module-boundaries */
@@ -58,7 +64,7 @@ const populateData = async (dataset: (typeof dataSet)[number]) => {
   await dataset.model.insertMany(dataset.baseArray);
 };
 
-export async function seedDB() {
+export async function seedDB(): Promise<void> {
   try {
     console.log('Connected correctly to server');
 
@@ -73,7 +79,7 @@ export async function seedDB() {
 
     console.log('Database seeded! :)');
   } catch (err) {
-    mongoose.disconnect();
+    await mongoose.disconnect();
     // propagate the error up
     throw new Error(err);
   }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { TSchema, Type } from '@sinclair/typebox';
 import fastJsonStringify from 'fast-json-stringify';
 

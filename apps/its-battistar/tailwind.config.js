@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 const { createGlobPatternsForDependencies } = require('@nx/angular/tailwind');
 const { join } = require('path');
 

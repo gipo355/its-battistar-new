@@ -40,7 +40,7 @@ const todoSchema = new mongoose.Schema<ITodo>(
     toJSON: {
       virtuals: true,
       transform: function (_, ret) {
-        ret.id = ret._id;
+        ret.id = ret._id as string;
         delete ret._id;
         delete ret.__v;
       },

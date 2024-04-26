@@ -12,11 +12,51 @@ import ajvInstance from '../../utils/ajv';
 //
 // same for user.entity.ts and account.entity.ts
 
+export interface TodoColor {
+  red: 'red';
+  blue: 'blue';
+  green: 'green';
+  yellow: 'yellow';
+  pink: 'pink';
+  default: 'default';
+}
+
+export interface TodoSortBy {
+  Newest: 'Newest';
+  Oldest: 'Oldest';
+  Title: 'Title';
+  DueDate: 'DueDate';
+}
+
+// BUG: can't import from shared-types into angular real values, only types
+const TodoColorOptions: TodoColor = {
+  red: 'red',
+  blue: 'blue',
+  green: 'green',
+  yellow: 'yellow',
+  pink: 'pink',
+  default: 'default',
+} as const;
+
+// BUG: can't import from shared-types into angular real values, only types
+// const TodoSortByOptions: TodoSortBy = {
+//   Newest: 'Newest',
+//   Oldest: 'Oldest',
+//   Title: 'Title',
+//   DueDate: 'Due Date',
+// };
+
 // Required different schema for input and strict schema
 // we need to validate against the input schema
 export const todoSchemaInput = Type.Object({
   title: Type.String(),
   completed: Type.Optional(Type.Boolean()),
+  color: Type.Optional(
+    Type.String({
+      enum: [...Object.keys(TodoColorOptions)],
+    })
+  ),
+  description: Type.Optional(Type.String()),
   dueDate: Type.Optional(
     Type.String({
       format: 'date-time',
@@ -49,7 +89,11 @@ export interface ITodo {
 
   title: string;
 
-  dueDate: Date;
+  color?: keyof TodoColor;
+
+  description: string;
+
+  dueDate?: Date;
 
   completed: boolean;
 

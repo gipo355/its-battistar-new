@@ -1,3 +1,4 @@
+/* eslint-disable n/no-process-exit */
 /* eslint-disable no-magic-numbers */
 import 'tslib'; // required for compilation since we are using typescript with webpack
 import 'dotenv-defaults/config';
@@ -13,7 +14,7 @@ import { logger } from './utils/logger';
 
 let server: Server | null = null;
 
-export const main = async function () {
+export const main = async function (): Promise<void> {
   logger.info('🚀 Starting server...');
 
   const app = await buildApp();
@@ -29,16 +30,19 @@ export const main = async function () {
 
 // FIXME: handle memory leaks, process hangs on dev restart
 // possibly nx webpack issue
-export function handleExit() {
+export function handleExit(): void {
   server?.close(() => {
-    mongoose.connection.close().catch(logger.error);
+    mongoose.connection.close().catch((err: unknown) => {
+      logger.error(err);
+    });
 
-    redisConnection.quit().catch(logger.error);
-    logger.removeAllListeners();
+    redisConnection.quit().catch((err: unknown) => {
+      logger.error(err);
+    });
 
     setTimeout(() => {
       logger.error('💥 Force close server');
-      // eslint-disable-next-line n/no-process-exit
+
       process.exit(1);
     }, 2000);
   });
@@ -60,7 +64,6 @@ if (e.NODE_ENV !== 'development') {
 main().catch((error: unknown) => {
   logger.error(`Unexpected error: ${JSON.stringify(error)}. Closing server...`);
   if (e.NODE_ENV === 'development') {
-    // eslint-disable-next-line n/no-process-exit
     process.exit(1);
   } else {
     logger.error('💥 Force close server');

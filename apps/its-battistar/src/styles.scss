@@ -31,8 +31,7 @@ html {
 }
 
 body {
-  background-color: var(--bg-color-light);
-
+  // background-color: var(--bg-color-light);
   // color: var(--text-color-dark);
   font-family: Roboto, sans-serif;
 }
@@ -58,11 +57,11 @@ ul {
 }
 
 ::-webkit-scrollbar {
-  width: 15px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #333;
+  background: green;
 }
 
 ::-webkit-scrollbar-thumb {

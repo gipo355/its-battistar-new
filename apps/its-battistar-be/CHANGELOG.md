@@ -3,6 +3,33 @@
 This file was generated using
 [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [2.0.0](https://github.com/gipo355/its-battistar/compare/its-battistar-be-1.1.0...its-battistar-be-2.0.0) (2024-4-24)
+
+### ⚠ BREAKING CHANGES
+
+- **global:** Old eslint doesn't work anymore, changed all linter configs
+- **its-battistar-be:** remove /check endpoint
+
+### Features
+
+- **global:** :sparkles: move to eslint flat config
+  ([24bb155](https://github.com/gipo355/its-battistar/commit/24bb155ff0abb41ef87006f6f58b317a2a92e305))
+- **its-battistar-be:** :sparkles: add auth routes
+  ([382de64](https://github.com/gipo355/its-battistar/commit/382de64875573f80f35d650fea10bdfefd190678))
+- **its-battistar-be:** :sparkles: add http files for testing
+  ([4798542](https://github.com/gipo355/its-battistar/commit/4798542872e4dd118b3f3ad0a93a93d2d4750cd4))
+- **its-battistar-be:** :sparkles: add update todo, remove check
+  ([4becd61](https://github.com/gipo355/its-battistar/commit/4becd616817b5049c2495c09af516c0244a00491))
+- **its-battistar-be:** :sparkles: add users routes
+  ([e587a3a](https://github.com/gipo355/its-battistar/commit/e587a3a6456bb71722e7e096ef58f930b499bec4))
+- **its-battistar-be:** :sparkles: create auth routes, create auth base
+  middleware
+  ([782e5bc](https://github.com/gipo355/its-battistar/commit/782e5bc2bc7ad335620c0b4247511630ac9f3d04))
+- **its-battistar-be:** :sparkles: create docs for auth routes OPENAI
+  ([3defc54](https://github.com/gipo355/its-battistar/commit/3defc540a12f5a96e16c045ee55638e17a2746fd))
+- **its-battistar-be:** :sparkles: prepare google callback handler for notes
+  ([293f545](https://github.com/gipo355/its-battistar/commit/293f5458520413b76d0e0103fe0e636fce1e4e1c))
+
 ## 1.0.0 (2024-4-23)
 
 ### ⚠ BREAKING CHANGES

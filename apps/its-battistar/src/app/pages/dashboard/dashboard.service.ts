@@ -15,21 +15,4 @@ export class DashboardService {
   http = inject(HttpClient);
 
   // TODO: move to store with signals
-  menuItems: IMenuItem[] = [
-    {
-      title: 'Overview',
-      icon: '🛖',
-      link: 'overview',
-    },
-    {
-      title: 'Todos',
-      icon: '✅',
-      link: 'todos',
-    },
-    {
-      title: 'Settings',
-      icon: '⚙️',
-      link: 'settings',
-    },
-  ];
 }

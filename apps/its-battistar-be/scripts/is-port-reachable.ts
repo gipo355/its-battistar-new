@@ -12,7 +12,7 @@ export async function isPortReachable({
   port: number;
   host?: string;
   timeout?: number;
-}) {
+}): Promise<boolean> {
   if (typeof host !== 'string' || host.length === 0) {
     throw new TypeError('Specify a `host`');
   }
@@ -25,7 +25,7 @@ export async function isPortReachable({
 
     const onError = () => {
       socket.destroy();
-      reject();
+      reject(new Error('unreachable'));
     };
 
     socket.setTimeout(timeout);
