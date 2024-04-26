@@ -21,7 +21,7 @@
           "apps/its-battistar/src/assets"
         ],
         "styles": ["apps/its-battistar/src/styles.scss"],
-        "scripts": []
+        "scripts": ["node_modules/flowbite/dist/flowbite.min.js"]
       },
       "configurations": {
         "production": {

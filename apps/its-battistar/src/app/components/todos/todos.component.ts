@@ -22,17 +22,15 @@ import { TodosStore } from './todos.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodosComponent implements OnInit {
-  title = 'Todos';
+  ngOnInit(): void {
+    initFlowbite();
+  }
 
   todoStore = inject(TodosStore);
 
   router = inject(Router);
 
   route = inject(ActivatedRoute);
-
-  ngOnInit(): void {
-    initFlowbite();
-  }
 
   async onClickTodoItem(todo: ITodo): Promise<void> {
     console.log('Clicked todo item:', todo);

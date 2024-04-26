@@ -4,6 +4,7 @@ import {
   Component,
   inject,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { initFlowbite } from 'flowbite';
@@ -43,11 +44,13 @@ import { TodosStore } from '../todos.store';
   styleUrl: './todo-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TodoModalComponent implements OnDestroy, OnDestroy {
+export class TodoModalComponent implements OnDestroy, OnInit {
+  ngOnInit(): void {
+    initFlowbite();
+  }
+
   ngOnDestroy(): void {
     console.log('onDestroy TodoModalComponent');
-
-    initFlowbite();
 
     this.store.updateSelectedTodo(null);
   }

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-overview',
@@ -9,6 +10,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OverviewComponent {
+export class OverviewComponent implements OnInit {
+  ngOnInit(): void {
+    initFlowbite();
+  }
   title = 'Overview';
 }

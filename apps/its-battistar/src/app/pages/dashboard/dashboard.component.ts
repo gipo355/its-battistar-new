@@ -31,6 +31,9 @@ import { DashboardStore } from './dashboard.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit {
+  ngOnInit(): void {
+    initFlowbite();
+  }
   http = inject(HttpClient);
 
   dashboardStore = inject(DashboardStore);
@@ -38,10 +41,6 @@ export class DashboardComponent implements OnInit {
   userStore = inject(UserStore);
 
   dashboardService = inject(DashboardService);
-
-  ngOnInit(): void {
-    initFlowbite();
-  }
 
   title = 'Dashboard';
 }
