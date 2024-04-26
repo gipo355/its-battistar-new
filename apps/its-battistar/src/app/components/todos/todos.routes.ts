@@ -36,7 +36,7 @@ export const todosRoutes: Route[] = [
           import('./todo-modal/todo-modal.component').then(
             (m) => m.TodoModalComponent
           ),
-        // pass the todo to the component
+        // use the param to update the selected todo
         resolve: {
           todo: todoModalResolverServiceFN,
         },

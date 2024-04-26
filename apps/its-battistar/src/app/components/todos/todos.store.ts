@@ -148,7 +148,7 @@ export const TodosStore = signalStore(
   })),
 
   withMethods((store) => ({
-    updateSelectedTodo(todo: ITodo): void {
+    updateSelectedTodo(todo: ITodo | null): void {
       // 👇 Updating state using the `patchState` function.
       patchState(store, () => ({ selectedTodo: todo }));
     },

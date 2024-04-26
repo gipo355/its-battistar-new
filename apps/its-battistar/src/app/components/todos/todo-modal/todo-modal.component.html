@@ -1,4 +1,21 @@
-<form class="mx-auto">
+<!-- dark bg with simple click outside -->
+<div
+  class="absolute left-0 top-0 z-10 min-h-full min-w-full bg-slate-900 opacity-75"
+  routerLink=".."
+></div>
+
+<form
+  class="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 bg-slate-200 p-6"
+  formGroup="todoForm"
+>
+  <button
+    type="button"
+    routerLink=".."
+    (click)="onCancel()"
+    class="absolute right-1 top-1 w-full rounded-lg bg-red-700 px-2 py-1 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 sm:w-auto dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+  >
+    X
+  </button>
   <!-- title  -->
   <div class="mb-5">
     <label
@@ -8,9 +25,11 @@
     >
     <input
       type="text"
+      formControlName="title"
       id="title"
       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
       placeholder="Enter title"
+      value="{{ todo() && todo()?.id ? todo()?.title : '' }}"
       required
     />
   </div>
@@ -241,6 +260,8 @@
       <textarea
         id="editor"
         rows="8"
+        value="{{ todo() && todo()?.id ? todo()?.description : '' }}"
+        formControlName="description"
         class="block w-full border-0 bg-white px-0 text-sm text-gray-800 focus:ring-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
         placeholder="Write a description..."
         required
@@ -270,6 +291,9 @@
       id="date"
       name="date"
       datepicker
+      value="{{
+        todo() && todo()?.id ? (todo()?.dueDate | date: 'yyyy-MM-dd') : ''
+      }}"
       datepicker-autohide
       type="text"
       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
@@ -366,21 +390,31 @@
     </div>
   </div>
 
-  <!-- submit -->
-  <button
-    type="submit"
-    class="w-full rounded-lg bg-green-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 sm:w-auto dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-  >
-    {{ todo()?.id ? 'Update' : 'Create' }}
-  </button>
-
-  <!-- done/ undone button -->
-  @if (todo()?.id) {
+  <!-- submit: we don't want to update, we want to live save it -->
+  @if (!todo()) {
     <button
       type="submit"
       class="w-full rounded-lg bg-green-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 sm:w-auto dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
     >
-      {{ todo()?.completed ? 'Reopen' : 'Complete' }}
+      <!-- {{ todo() && todo()?.id ? 'Update' : 'Create' }} -->
+      Create
+    </button>
+  }
+  <!-- done/ undone button -->
+  @if (todo() && todo()?.id) {
+    <button
+      type="button"
+      (click)="onToggleCompleted()"
+      class="mx-2 w-full rounded-lg bg-green-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 sm:w-auto dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+    >
+      {{ todo() && todo()?.completed ? 'Reopen' : 'Complete' }}
+    </button>
+    <button
+      type="button"
+      (click)="onDeleteTodo()"
+      class="w-full rounded-lg bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 sm:w-auto dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+    >
+      Delete
     </button>
   }
 </form>
