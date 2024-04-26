@@ -18,6 +18,7 @@ interface TodosState {
   todos: ITodo[];
   isLoading: boolean;
   selectedTodo: ITodo | null;
+  isEditMode: boolean;
 
   // used to filter todos by query
   filter: {
@@ -52,6 +53,8 @@ const initialState: TodosState = {
   todos: todosTestData,
 
   isLoading: false,
+
+  isEditMode: false,
 
   selectedTodo: null,
 

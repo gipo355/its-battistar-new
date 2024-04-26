@@ -46,6 +46,9 @@ import { TodosStore } from '../todos.store';
 export class TodoModalComponent {
   route = inject(ActivatedRoute);
 
+  // we use the store only to update isEditMode() since it may be used in other components
+  // the component checks if it's in edit mode only by verifying if it has a todo.id available as input when created
+  // this way we have a clear separation of concerns and it can be used in multiple places
   store = inject(TodosStore);
 
   // the todo can be populated if the user navigates to /todos/edit by clicking on a todo in the list
