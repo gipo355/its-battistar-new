@@ -20,6 +20,7 @@ const mockTodo: ITodo = {
   updatedAt: new Date(),
   dueDate: new Date(new Date().setDate(new Date().getDate() + 1)),
 };
+
 const mockTodoExpired: ITodo = {
   id: '1',
   title: 'Mock Todo Expired',
