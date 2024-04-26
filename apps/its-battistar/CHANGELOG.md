@@ -3,6 +3,40 @@
 This file was generated using
 [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.3.0](https://github.com/gipo355/its-battistar/compare/its-battistar-0.2.0...its-battistar-0.3.0) (2024-4-26)
+
+### Features
+
+- **its-battistar:** :sparkles: add faker random color gen as test data
+  ([fbcda5d](https://github.com/gipo355/its-battistar/commit/fbcda5dcd3233edd6e7fe01ae57511aafd9b0069))
+- **its-battistar:** :sparkles: add infos on todo-item closes
+  [#39](https://github.com/gipo355/its-battistar/issues/39)
+  ([1c90d24](https://github.com/gipo355/its-battistar/commit/1c90d24f8bc1cfb7ff59e5cf18c7b7e93c330bc2))
+- **its-battistar:** :sparkles: add show expired
+  ([6eda1e6](https://github.com/gipo355/its-battistar/commit/6eda1e6636d1c8bea0d5785b3b722e2e2919062f))
+- **its-battistar:** :sparkles: init the modal for edit and create todo
+  ([e6ed50f](https://github.com/gipo355/its-battistar/commit/e6ed50f6b4e408796b22bce55be8d418a2a06bb4))
+- **its-battistar:** :sparkles: modify filter search button color
+  ([5b1a8fc](https://github.com/gipo355/its-battistar/commit/5b1a8fc09969b5d8c1b0a87ad80e154189e85c9f))
+- **its-battistar:** :sparkles: replace sidebar with flowbite
+  ([86326e5](https://github.com/gipo355/its-battistar/commit/86326e5e4fd9b79c039504637fb4452e87c601ef))
+
+### Bug Fixes
+
+- **its-battistar:** :bug: fix overflow not working in todo component grid
+  ([1b21d28](https://github.com/gipo355/its-battistar/commit/1b21d286f053334b07d61e25c6fe63937497e22f)),
+  closes [#37](https://github.com/gipo355/its-battistar/issues/37)
+  [#36](https://github.com/gipo355/its-battistar/issues/36)
+- **its-battistar:** :bug: fix todo component bad alignment, add test data
+  ([9590695](https://github.com/gipo355/its-battistar/commit/959069502c15125b5655ee45cfd243a061fe3c0e)),
+  closes [#38](https://github.com/gipo355/its-battistar/issues/38)
+  [#37](https://github.com/gipo355/its-battistar/issues/37)
+- **its-battistar:** :bug: fixes
+  [#42](https://github.com/gipo355/its-battistar/issues/42)
+  ([d034901](https://github.com/gipo355/its-battistar/commit/d03490158825d1427ce10e01ac4f4b8441103ed8))
+- **its-battistar:** :bug: sOLVED MAIN CONTENT STYLE MESS
+  ([567033c](https://github.com/gipo355/its-battistar/commit/567033c451d03914b6ffe631ef04aa8a07137c33))
+
 ## [0.2.0](https://github.com/gipo355/its-battistar/compare/its-battistar-0.1.0...its-battistar-0.2.0) (2024-4-25)
 
 ### Features

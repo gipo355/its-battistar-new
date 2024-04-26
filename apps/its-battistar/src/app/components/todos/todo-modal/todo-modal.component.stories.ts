@@ -23,3 +23,6 @@ type Story = StoryObj<TodoModalComponent>;
 export const Primary: Story = {
   args: {},
 };
+export const Edit: Story = {
+  args: {},
+};

@@ -19,7 +19,7 @@ import { ITodo, TodoColor } from '@its-battistar/shared-types';
 export class TodoItemComponent {
   todo = input<ITodo | null>(null);
 
-  colorSchema: Record<keyof typeof TodoColor, string> = {
+  colorSchema: Record<keyof TodoColor, string> = {
     default:
       'bg-lime-300 before:bg-lime-300 dark:before:bg-lime-500 bg-opacity-50',
     pink: 'bg-pink-500 before:bg-pink-500 dark:before:bg-pink-500 bg-opacity-50',
