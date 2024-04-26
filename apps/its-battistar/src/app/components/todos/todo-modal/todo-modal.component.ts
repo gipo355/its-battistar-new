@@ -3,10 +3,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  input,
+  OnDestroy,
+  OnInit,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ITodo } from '@its-battistar/shared-types';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { initFlowbite } from 'flowbite';
 
 import { TodosStore } from '../todos.store';
 
@@ -38,17 +39,54 @@ import { TodosStore } from '../todos.store';
 @Component({
   selector: 'app-todo-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './todo-modal.component.html',
   styleUrl: './todo-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TodoModalComponent {
+export class TodoModalComponent implements OnDestroy, OnInit {
+  ngOnInit(): void {
+    initFlowbite();
+  }
+
+  ngOnDestroy(): void {
+    console.log('onDestroy TodoModalComponent');
+
+    this.store.updateSelectedTodo(null);
+  }
   route = inject(ActivatedRoute);
 
+  // we use the store only to update isEditMode() since it may be used in other components
+  // the component checks if it's in edit mode only by verifying if it has a todo.id available as input when created
+  // this way we have a clear separation of concerns and it can be used in multiple places
   store = inject(TodosStore);
 
   // the todo can be populated if the user navigates to /todos/edit by clicking on a todo in the list
   // or null if it clicks the create button
-  todo = input<ITodo | null>(null);
+  // IMPORTANT: this component receives the todo as input from the resolver on navigation
+  // todo = input<ITodo | null>(null);
+
+  todo = this.store.selectedTodo;
+
+  // todo = this.route.snapshot.data['todo'] as Signal<ITodo> | null | undefined;
+
+  // modalForm = new FormGroup({
+  //   title = new FormControl(),
+  // });
+
+  onSubmit(): void {
+    console.warn('method not implemented');
+  }
+
+  onCancel(): void {
+    console.warn('method not implemented');
+  }
+
+  onDeleteTodo(): void {
+    console.warn('method not implemented');
+  }
+
+  onToggleCompleted(): void {
+    console.warn('method not implemented');
+  }
 }

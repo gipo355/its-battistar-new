@@ -4,7 +4,7 @@
 
 import { Route } from '@angular/router';
 
-import { todoModalResolverServiceFN } from './todo-modal/OLD_todo-modal-resolver.service';
+import { todoModalResolverServiceFN } from './todo-modal/todo-modal-resolver.service';
 
 // this is the schema for the routes:
 // / => welcome page
@@ -24,11 +24,19 @@ export const todosRoutes: Route[] = [
 
     children: [
       {
+        path: 'new',
+        loadComponent: () =>
+          import('./todo-modal/todo-modal.component').then(
+            (m) => m.TodoModalComponent
+          ),
+      },
+      {
         path: ':id',
         loadComponent: () =>
           import('./todo-modal/todo-modal.component').then(
             (m) => m.TodoModalComponent
           ),
+        // use the param to update the selected todo
         resolve: {
           todo: todoModalResolverServiceFN,
         },

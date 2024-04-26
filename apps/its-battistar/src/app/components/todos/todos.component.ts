@@ -22,7 +22,9 @@ import { TodosStore } from './todos.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodosComponent implements OnInit {
-  title = 'Todos';
+  ngOnInit(): void {
+    initFlowbite();
+  }
 
   todoStore = inject(TodosStore);
 
@@ -30,32 +32,12 @@ export class TodosComponent implements OnInit {
 
   route = inject(ActivatedRoute);
 
-  ngOnInit(): void {
-    initFlowbite();
-  }
-
   async onClickTodoItem(todo: ITodo): Promise<void> {
     console.log('Clicked todo item:', todo);
 
-    this.todoStore.updateSelectedTodo(todo);
-
-    console.log('Selected todo:', this.todoStore.selectedTodo());
-
+    // resolver takes care of updating the selected todo using the id
     await this.router.navigate(['.', todo.id], {
       relativeTo: this.route,
     });
   }
-
-  // TODO: should be in the store as a prop
-  // TODO, update store methods to update filter props
-  // it will work with computed
-  // displayedTodos = computed(() => {
-  //   const todos = this.todoStore.todos();
-  //
-  //   if (this.todoStore.showCompleted()) {
-  //     return todos;
-  //   }
-  //
-  //   return todos.filter((todo) => !todo.completed);
-  // });
 }

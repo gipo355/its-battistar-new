@@ -18,6 +18,7 @@ interface TodosState {
   todos: ITodo[];
   isLoading: boolean;
   selectedTodo: ITodo | null;
+  isEditMode: boolean;
 
   // used to filter todos by query
   filter: {
@@ -52,6 +53,8 @@ const initialState: TodosState = {
   todos: todosTestData,
 
   isLoading: false,
+
+  isEditMode: false,
 
   selectedTodo: null,
 
@@ -145,7 +148,7 @@ export const TodosStore = signalStore(
   })),
 
   withMethods((store) => ({
-    updateSelectedTodo(todo: ITodo): void {
+    updateSelectedTodo(todo: ITodo | null): void {
       // 👇 Updating state using the `patchState` function.
       patchState(store, () => ({ selectedTodo: todo }));
     },
