@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ITodo } from '@its-battistar/shared-types';
 
 import { TodosStore } from '../todos.store';
 
@@ -42,5 +48,7 @@ export class TodoModalComponent {
 
   store = inject(TodosStore);
 
-  todo = this.store.selectedTodo;
+  // the todo can be populated if the user navigates to /todos/edit by clicking on a todo in the list
+  // or null if it clicks the create button
+  todo = input<ITodo | null>(null);
 }
