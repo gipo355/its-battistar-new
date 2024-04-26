@@ -1,1 +1,1 @@
-nx run-many --affected -t lint test build
+nx affected -t lint test build
