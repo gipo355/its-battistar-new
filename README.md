@@ -4,6 +4,7 @@
 ![Pages](https://github.com/gipo355/its-battistar/actions/workflows/pages.yml/badge.svg?branch=main)
 ![Release](https://github.com/gipo355/its-battistar/actions/workflows/release.yml/badge.svg?branch=main)
 ![Semgrep](https://github.com/gipo355/its-battistar/actions/workflows/semgrep.yml/badge.svg?branch=dev)
+[![CodeQL](https://github.com/gipo355/its-battistar/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/gipo355/its-battistar/actions/workflows/github-code-scanning/codeql)
 
 ## Requirements
 
