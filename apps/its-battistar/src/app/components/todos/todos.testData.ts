@@ -2,6 +2,7 @@
 import { faker } from '@faker-js/faker';
 import { ITodo, TodoColor } from '@its-battistar/shared-types';
 
+// FIXME: faker doesn't work in browser, requires node api
 function generateTestTodos(n: number): ITodo[] {
   const todos: ITodo[] = [];
   for (let i = 0; i < n; i++) {
