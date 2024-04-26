@@ -2,10 +2,9 @@
 // Testing signals store with state in ngrx/signals
 
 import { computed, inject, InjectionToken } from '@angular/core';
-import { ITodo, TodoSortBy } from '@its-battistar/shared-types';
+import { ITodo, TodoColor, TodoSortBy } from '@its-battistar/shared-types';
 import {
   patchState,
-  // patchState,
   signalStore,
   withComputed,
   withMethods,
@@ -24,11 +23,29 @@ interface TodosState {
   filter: {
     showCompleted: boolean;
     showExpired: boolean;
-    currentSortBy: keyof typeof TodoSortBy;
+    currentSortBy: keyof TodoSortBy;
     query: string;
   };
   filteredTodos?: ITodo[];
 }
+
+// HACK: can't import from shared-types into angular real values, only types
+// redeclare them here using the interface so we get global type checking
+export const TodoSortByOptions: TodoSortBy = {
+  Newest: 'Newest',
+  Oldest: 'Oldest',
+  Title: 'Title',
+  DueDate: 'DueDate',
+} as const;
+
+export const TodoColorOptions: TodoColor = {
+  red: 'red',
+  blue: 'blue',
+  green: 'green',
+  yellow: 'yellow',
+  pink: 'pink',
+  default: 'default',
+} as const;
 
 // TODO: move to express backend init
 const initialState: TodosState = {
@@ -95,7 +112,7 @@ export const TodosStore = signalStore(
       }
 
       // sort todos after filtering
-      if (filter.currentSortBy() === 'Due Date') {
+      if (filter.currentSortBy() === 'DueDate') {
         filteredTodos = filteredTodos.sort((a, b) => {
           if (!a.dueDate || !b.dueDate) {
             return 0;
