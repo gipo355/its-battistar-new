@@ -7,5 +7,5 @@ globalThis.ngJest = {
   },
 };
 
-// eslint-disable-next-line import/first
+ 
 import 'jest-preset-angular/setup-jest';

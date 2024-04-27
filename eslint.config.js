@@ -185,7 +185,7 @@ module.exports = tseslint.config(
       rules: {
         'import/no-unresolved': 'off',
         'import/no-extraneous-dependencies': 'off',
-        'import/first': 'error',
+        // 'import/first': 'error',
         // 'import/newline-after-import': 'error', // BUG: new config
         'import/no-duplicates': 'error',
         'import/order': 'off',

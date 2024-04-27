@@ -17,14 +17,14 @@ ENV PORT=3000
 
 WORKDIR /app
 
-RUN addgroup --system its-battistar && \
-  adduser --system -G its-battistar its-battistar
+RUN addgroup --system its-battistar-angular && \
+  adduser --system -G its-battistar-angular its-battistar-angular
 
-COPY dist/apps/its-battistar its-battistar
-RUN chown -R its-battistar:its-battistar .
+COPY dist/apps/its-battistar-angular its-battistar-angular
+RUN chown -R its-battistar-angular:its-battistar-angular .
 
 # You can remove this install step if you build with `--bundle` option.
 # The bundled output will include external dependencies.
-RUN npm --prefix its-battistar --omit=dev -f install
+RUN npm --prefix its-battistar-angular --omit=dev -f install
 
 CMD [ "node", "its-battistar" ]

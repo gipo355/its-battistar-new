@@ -1,9 +1,9 @@
-/* eslint-disable */
+ 
 export default {
-  displayName: 'its-battistar',
+  displayName: 'its-battistar-angular',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/apps/its-battistar',
+  coverageDirectory: '../../coverage/apps/its-battistar-angular',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
