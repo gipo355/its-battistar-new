@@ -98,10 +98,20 @@ export class TodoModalComponent implements OnDestroy, OnInit {
     ),
   });
 
+  /**
+   * @description
+   * this method is called when the form is submitted
+   * it should update the todo in the store and the database
+   */
   onSubmit(): void {
     console.warn('method not implemented');
   }
 
+  /**
+   * @description
+   * this method is called when the user exits
+   * used for cleanup
+   */
   onCancel(): void {
     console.warn('method not implemented');
   }
