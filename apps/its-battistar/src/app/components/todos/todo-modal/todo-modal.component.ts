@@ -52,9 +52,9 @@ export class TodoModalComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
-    console.log('onDestroy TodoModalComponent');
-
+    // clear the selected todo when the component is destroyed as we are no longer editing it
     this.store.updateSelectedTodo(null);
+    this.store.updateIsEditMode(false);
   }
   route = inject(ActivatedRoute);
 

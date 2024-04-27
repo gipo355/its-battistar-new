@@ -164,6 +164,11 @@ export const TodosStore = signalStore(
       patchState(store, () => ({ selectedTodo: todo }));
     },
 
+    updateIsEditMode(isEdit: boolean): void {
+      // 👇 Updating state using the `patchState` function.
+      patchState(store, () => ({ isEditMode: isEdit }));
+    },
+
     updateFilters(filters: Partial<TodosState['filter']>): void {
       patchState(store, (state) => {
         // create a copy of the current filter
