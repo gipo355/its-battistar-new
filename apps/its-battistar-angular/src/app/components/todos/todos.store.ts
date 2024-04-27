@@ -160,6 +160,23 @@ export const TodosStore = signalStore(
   })),
 
   withMethods((store) => ({
+    // TODO: will have to add validators and http calls to CRUD
+    createTodo(todo: ITodo): void {
+      patchState(store, (state) => ({ todos: [...state.todos, todo] }));
+    },
+
+    deleteTodoById(id: string): void {
+      patchState(store, (state) => ({
+        todos: state.todos.filter((todo) => todo.id !== id),
+      }));
+    },
+
+    updateTodoById(id: string, todo: ITodo): void {
+      patchState(store, (state) => ({
+        todos: state.todos.map((t) => (t.id === id ? todo : t)),
+      }));
+    },
+
     updateSelectedTodo(todo: ITodo | null): void {
       // 👇 Updating state using the `patchState` function.
       patchState(store, () => ({ selectedTodo: todo }));
