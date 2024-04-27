@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component, effect, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { getState } from '@ngrx/signals';
+import * as Sentry from '@sentry/angular-ivy';
 import { initFlowbite } from 'flowbite';
 
 import { TodosStore } from './components/todos/todos.store';
@@ -15,6 +16,7 @@ import { TodosStore } from './components/todos/todos.store';
 })
 export class AppComponent implements OnInit {
   todoStore = inject(TodosStore);
+  trace = inject(Sentry.TraceService);
 
   ngOnInit(): void {
     initFlowbite();

@@ -14,12 +14,15 @@ export const todoModalResolverServiceFN: ResolveFn<
 
   const param = route.params['id'] as string | undefined;
 
+  console.log('resolver', param);
+
   // guards
   if (!param) {
     await router.navigate(['/todos']);
+    return;
   }
 
-  const todo = todosStore.todos().find((todo) => todo.id === param);
+  const todo = todosStore.todos().get(param);
 
   if (!todo?.id) {
     await router.navigate(['/todos']);
@@ -27,8 +30,7 @@ export const todoModalResolverServiceFN: ResolveFn<
   }
 
   // update state
-  todosStore.updateSelectedTodo(todo);
-  todosStore.updateIsEditMode(true);
+  todosStore.setOrRemoveCurrentSelectedTodo(todo);
   return;
 
   // old return, was providing a signal

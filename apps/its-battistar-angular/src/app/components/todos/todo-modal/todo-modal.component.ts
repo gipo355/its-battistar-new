@@ -6,12 +6,19 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ITodo, ITodoColorOptions } from '@its-battistar/shared-types';
 import { initFlowbite } from 'flowbite';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 
 import { TodosStore } from '../todos.store';
+import { TodoModalService } from './todo-modal.service';
 
 /**
  * @description
@@ -41,27 +48,58 @@ import { TodosStore } from '../todos.store';
 @Component({
   selector: 'app-todo-modal',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './todo-modal.component.html',
   styleUrl: './todo-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoModalComponent implements OnDestroy, OnInit {
-  ngOnInit(): void {
-    initFlowbite();
-  }
+  s = inject(TodoModalService);
 
-  ngOnDestroy(): void {
-    // clear the selected todo when the component is destroyed as we are no longer editing it
-    this.store.updateSelectedTodo(null);
-    this.store.updateIsEditMode(false);
-  }
   route = inject(ActivatedRoute);
+
+  router = inject(Router);
 
   // we use the store only to update isEditMode() since it may be used in other components
   // the component checks if it's in edit mode only by verifying if it has a todo.id available as input when created
   // this way we have a clear separation of concerns and it can be used in multiple places
   store = inject(TodosStore);
+
+  private destroy$ = new Subject<void>();
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    // clear the selected todo when the component is destroyed as we are no longer editing it
+    this.store.setOrRemoveCurrentSelectedTodo(null);
+  }
+
+  ngOnInit(): void {
+    initFlowbite();
+
+    this.modalForm.valueChanges
+      .pipe(takeUntil(this.destroy$), debounceTime(this.s.inputDebounceTime))
+      .subscribe((value) => {
+        const currentTodo = this.store.currentSelectedTodo();
+
+        const newTodo: Partial<ITodo> = {
+          ...(value.title && { title: value.title }),
+          ...(value.description && { description: value.description }),
+          ...(value.color && { color: value.color }),
+          ...(value.date && { dueDate: new Date(value.date) }),
+        };
+
+        // handle existing todo
+        if (currentTodo?.id) {
+          this.store.updateCurrentSelectedTodoValues(newTodo);
+          return;
+        }
+
+        // TODO: handle new todo
+        if (newTodo.title) {
+          this.store.updateCurrentNewTodoValues(newTodo);
+        }
+      });
+  }
 
   // the todo can be populated if the user navigates to /todos/edit by clicking on a todo in the list or null if it clicks the create button
   // NOTE: we could refactor this component to receive the todo as input from the resolver on navigation instead of using the store
@@ -71,20 +109,24 @@ export class TodoModalComponent implements OnDestroy, OnInit {
   // todo = this.route.snapshot.data['todo'] as Signal<ITodo> | null | undefined;
 
   // The resolver uses the id param to populate the selectedTodo in the store
-  todo = this.store.selectedTodo;
+  todo = this.store.currentSelectedTodo;
 
   // utility with typecasting for safety used to initialize the form
   getTodo(): ITodo | null {
     return this.todo();
   }
 
+  // define the colors since we need to use them in a loop to display them
   colors = Object.keys(this.store.todoColorOptions());
 
   // TODO: add validators
-  // TODO: change hardcoded init values in html to use the form values
   modalForm = new FormGroup({
-    title: new FormControl<string>(this.getTodo()?.title ?? ''),
-    description: new FormControl<string>(this.getTodo()?.description ?? ''),
+    title: new FormControl<string>(this.getTodo()?.title ?? '', [
+      Validators.required.bind(this),
+    ]),
+    description: new FormControl<string>(this.getTodo()?.description ?? '', [
+      Validators.required.bind(this),
+    ]),
 
     // TODO: color and dueDate inputs
     date: new FormControl<string>(
@@ -103,8 +145,25 @@ export class TodoModalComponent implements OnDestroy, OnInit {
    * this method is called when the form is submitted
    * it should update the todo in the store and the database
    */
-  onSubmit(): void {
-    console.warn('method not implemented');
+  async onSubmit(): Promise<void> {
+    /** sync current automatically creates the todo in db if it's a new todo */
+
+    // TODO: Temporary solution before http call here?
+    const newTodo: ITodo = {
+      id: 'aslkdfjlaskfasl',
+      title: this.store.currentNewTodo()?.title ?? '',
+      description: this.store.currentNewTodo()?.description ?? '',
+      color: this.store.currentNewTodo()?.color ?? 'green',
+      dueDate: this.store.currentNewTodo()?.dueDate ?? undefined,
+      expired: false,
+      completed: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    this.store.createTodo(newTodo);
+
+    await this.onExit();
   }
 
   /**
@@ -112,15 +171,44 @@ export class TodoModalComponent implements OnDestroy, OnInit {
    * this method is called when the user exits
    * used for cleanup
    */
-  onCancel(): void {
-    console.warn('method not implemented');
+  async onExit(): Promise<void> {
+    // TODO: sync must handle receiving both new and updated todos?
+
+    this.store.syncCurrentWithTodos();
+
+    this.store.removeCurrentSelectedTodo();
+    this.store.removeCurrentNewTodo();
+
+    await this.router.navigate(['..'], {
+      relativeTo: this.route,
+    });
   }
 
-  onDeleteTodo(): void {
-    console.warn('method not implemented');
+  // NOTE: navigation is in routerLink in the template
+  async onDelete(): Promise<void> {
+    const selectedTodo = this.store.currentSelectedTodo();
+
+    if (!selectedTodo?.id) {
+      return;
+    }
+
+    this.store.deleteTodoById(selectedTodo.id);
+
+    this.store.removeCurrentSelectedTodo();
+    await this.onExit();
   }
 
-  onToggleCompleted(): void {
-    console.warn('method not implemented');
+  async onToggleCompleted(): Promise<void> {
+    const selectedTodo = this.store.currentSelectedTodo();
+
+    if (!selectedTodo?.id) {
+      return;
+    }
+
+    this.store.updateCurrentSelectedTodoValues({
+      completed: !selectedTodo.completed,
+    });
+
+    await this.onExit();
   }
 }
