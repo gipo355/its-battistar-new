@@ -53,7 +53,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       # build and deploy
       - name: Build project
-        run: nx run its-battistar:build --prod
+        run: nx run its-battistar-angular:build --prod
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         # If you're changing the branch from main,
@@ -62,4 +62,4 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/apps/its-battistar/browser
+          publish_dir: ./dist/apps/its-battistar-angular/browser

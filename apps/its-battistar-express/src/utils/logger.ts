@@ -34,7 +34,7 @@ if (e.ENABLE_LOKI === 'true') {
       target: 'pino-loki',
       options: {
         host: 'http://localhost:3100', // Change if Loki hostname is different
-        labels: { application: 'its-battistar-be' },
+        labels: { application: 'its-battistar-express' },
       },
     }),
   });

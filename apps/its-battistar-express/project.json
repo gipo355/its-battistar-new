@@ -49,7 +49,7 @@
     },
     "docker-build": {
       "dependsOn": ["build"],
-      "command": "docker build -f apps/its-battistar-express/Dockerfile . -t its-battistar-be"
+      "command": "docker build -f apps/its-battistar-express/Dockerfile . -t its-battistar-express"
     },
     "version": {
       "executor": "@jscutlery/semver:version",

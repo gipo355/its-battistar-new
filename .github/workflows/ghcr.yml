@@ -60,7 +60,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       # build and deploy
       - name: Build project
-        run: nx run its-battistar-be:build
+        run: nx run its-battistar-express:build
         # prepare tags
       - name: Docker meta
         id: meta
@@ -93,11 +93,11 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./apps/its-battistar-be/Dockerfile
+          file: ./apps/its-battistar-express/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          # tags: ghcr.io/${{ github.repository_owner }}/its-battistar-be:latest
+          # tags: ghcr.io/${{ github.repository_owner }}/its-battistar-express:latest
           tags:
             ${{ steps.meta.outputs.tags }}, ghcr.io/${{ github.repository_owner
-            }}/its-battistar-be:latest
+            }}/its-battistar-express:latest
           labels: ${{ steps.meta.outputs.labels }}
