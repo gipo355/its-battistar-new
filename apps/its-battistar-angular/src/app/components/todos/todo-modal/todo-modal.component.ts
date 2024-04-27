@@ -10,8 +10,10 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ITodo, ITodoColorOptions } from '@its-battistar/shared-types';
 import { initFlowbite } from 'flowbite';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 
 import { TodosStore } from '../todos.store';
+import { TodoModalService } from './todo-modal.service';
 
 /**
  * @description
@@ -47,20 +49,33 @@ import { TodosStore } from '../todos.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoModalComponent implements OnDestroy, OnInit {
-  ngOnInit(): void {
-    initFlowbite();
-  }
+  s = inject(TodoModalService);
 
-  ngOnDestroy(): void {
-    // clear the selected todo when the component is destroyed as we are no longer editing it
-    this.store.setOrRemoveCurrentSelectedTodo(null);
-  }
   route = inject(ActivatedRoute);
 
   // we use the store only to update isEditMode() since it may be used in other components
   // the component checks if it's in edit mode only by verifying if it has a todo.id available as input when created
   // this way we have a clear separation of concerns and it can be used in multiple places
   store = inject(TodosStore);
+
+  private destroy$ = new Subject<void>();
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    // clear the selected todo when the component is destroyed as we are no longer editing it
+    this.store.setOrRemoveCurrentSelectedTodo(null);
+  }
+
+  ngOnInit(): void {
+    initFlowbite();
+
+    // BUG: doesn't work, need 2 way data binding for reactive forms
+    this.modalForm.valueChanges
+      .pipe(takeUntil(this.destroy$), debounceTime(this.s.inputDebounceTime))
+      .subscribe((value) => {
+        console.log('form value changed', value);
+      });
+  }
 
   // the todo can be populated if the user navigates to /todos/edit by clicking on a todo in the list or null if it clicks the create button
   // NOTE: we could refactor this component to receive the todo as input from the resolver on navigation instead of using the store
@@ -77,10 +92,10 @@ export class TodoModalComponent implements OnDestroy, OnInit {
     return this.todo();
   }
 
+  // define the colors since we need to use them in a loop to display them
   colors = Object.keys(this.store.todoColorOptions());
 
   // TODO: add validators
-  // TODO: change hardcoded init values in html to use the form values
   modalForm = new FormGroup({
     title: new FormControl<string>(this.getTodo()?.title ?? ''),
     description: new FormControl<string>(this.getTodo()?.description ?? ''),
