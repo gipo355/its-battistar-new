@@ -277,6 +277,7 @@ export const TodosStore = signalStore(
     //   const books = await booksService.getAll();
     //   patchState(store, { books, isLoading: false });
     // },
+
     // reactive with rxjs
     // 👇 Defining a method to load books by query.
     // loadByQuery: rxMethod<string>(

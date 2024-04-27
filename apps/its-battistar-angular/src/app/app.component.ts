@@ -1,7 +1,10 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { getState } from '@ngrx/signals';
 import { initFlowbite } from 'flowbite';
+
+import { TodosStore } from './components/todos/todos.store';
 
 @Component({
   standalone: true,
@@ -11,8 +14,20 @@ import { initFlowbite } from 'flowbite';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
+  todoStore = inject(TodosStore);
+
   ngOnInit(): void {
     initFlowbite();
+  }
+
+  constructor() {
+    // TODO: remove this at the end, log state
+    console.log('App component initialized');
+
+    effect(() => {
+      const state = getState(this.todoStore);
+      console.log('state changed', state);
+    });
   }
 
   title = 'its-battistar';
