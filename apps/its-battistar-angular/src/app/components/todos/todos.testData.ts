@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/en';
 import { ITodo } from '@its-battistar/shared-types';
 
 // must provide an enum to faker

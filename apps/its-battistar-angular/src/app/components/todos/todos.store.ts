@@ -46,6 +46,7 @@ interface TodosState {
 
 // TODO: move to express backend init
 const initialState: TodosState = {
+  // FAKER lib is huge, will fail the build
   todos: todosTestData,
 
   isLoading: false,
