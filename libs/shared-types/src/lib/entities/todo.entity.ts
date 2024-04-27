@@ -12,7 +12,9 @@ import ajvInstance from '../../utils/ajv';
 //
 // same for user.entity.ts and account.entity.ts
 
-export interface TodoColor {
+// test comment for nx dep-graph affected
+
+export interface ITodoColorOptions {
   red: 'red';
   blue: 'blue';
   green: 'green';
@@ -21,7 +23,7 @@ export interface TodoColor {
   default: 'default';
 }
 
-export interface TodoSortBy {
+export interface ITodoSortByOptions {
   Newest: 'Newest';
   Oldest: 'Oldest';
   Title: 'Title';
@@ -29,7 +31,7 @@ export interface TodoSortBy {
 }
 
 // BUG: can't import from shared-types into angular real values, only types
-const TodoColorOptions: TodoColor = {
+const TodoColorOptions: ITodoColorOptions = {
   red: 'red',
   blue: 'blue',
   green: 'green',
@@ -89,7 +91,7 @@ export interface ITodo {
 
   title: string;
 
-  color?: keyof TodoColor;
+  color?: keyof ITodoColorOptions;
 
   description: string;
 

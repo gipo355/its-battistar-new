@@ -1,0 +1,8 @@
+{
+  "name": "@its-battistar/its-battistar-express",
+  "version": "2.0.0",
+  "dependencies": {
+    "pino-pretty": "^11.0.0",
+    "pino-loki": "^2.2.1"
+  }
+}

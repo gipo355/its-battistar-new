@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-    paths: ['apps/its-battistar-be/**']
+    paths: ['apps/its-battistar-express/**']
   # workflow_run:
   #   # This workflow is triggered when a workflow run is completed successfully
   #   # Use the name of the workflow
@@ -46,7 +46,7 @@ jobs:
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -60,7 +60,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       # build and deploy
       - name: Build project
-        run: nx run its-battistar-be:build
+        run: nx run its-battistar-express:build
         # prepare tags
       - name: Docker meta
         id: meta
@@ -68,7 +68,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ghcr.io/gipo355/its-battistar-be
+            ghcr.io/gipo355/its-battistar-express
           # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule
@@ -93,11 +93,11 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./apps/its-battistar-be/Dockerfile
+          file: ./apps/its-battistar-express/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          # tags: ghcr.io/${{ github.repository_owner }}/its-battistar-be:latest
+          # tags: ghcr.io/${{ github.repository_owner }}/its-battistar-express:latest
           tags:
             ${{ steps.meta.outputs.tags }}, ghcr.io/${{ github.repository_owner
-            }}/its-battistar-be:latest
+            }}/its-battistar-express:latest
           labels: ${{ steps.meta.outputs.labels }}

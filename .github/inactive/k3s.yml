@@ -5,7 +5,7 @@ on:
     branches:
       - main
     # run if we update the deployment files
-    paths: ['apps/its-battistar-be/deploy/**']
+    paths: ['apps/its-battistar-express/deploy/**']
   workflow_run:
     # This workflow is triggered when a workflow run is completed successfully
     # Use the name of the workflow

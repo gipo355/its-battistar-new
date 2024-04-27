@@ -1,0 +1,53 @@
+<!-- modal for edit -->
+<!-- options: load dynamically, always load and hide if not selectedTodo, use router link for todos/:id or todos/edit/:id -->
+<!-- the best way would probably be always load and pass the todo to the modal from signal store (selectedTodo) so no url involved -->
+<!-- for testing purpoces, we will use the sub router -->
+
+<!-- main view -->
+<main
+  class="relative flex min-h-full min-w-full flex-col items-center justify-start gap-1"
+>
+  <h1 class="w-full text-center align-middle text-2xl font-bold">📝 Todos</h1>
+
+  <app-todo-filter
+    class="w-full basis-full justify-self-stretch py-4 filter"
+  ></app-todo-filter>
+
+  <div
+    class="content-grid grid w-full grid-cols-3 flex-nowrap gap-10 overflow-y-scroll px-8 py-4"
+  >
+    <!-- 1: navigate to the todo page:id -->
+    <!-- 2: trigger the selected event to store the current todo in the store -->
+    @for (todo of todoStore.filteredTodos(); track todo.id) {
+      <app-todo-item
+        [todo]="todo"
+        (click)="onClickTodoItem(todo)"
+      ></app-todo-item>
+    }
+  </div>
+
+  <!-- button to open create new todo modal -->
+  <button
+    type="button"
+    [routerLink]="'new'"
+    class="fixed bottom-20 right-20 me-2 inline-flex items-center rounded-lg bg-green-500 p-4 text-center text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-800"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="h-6 w-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M12 4.5v15m7.5-7.5h-15"
+      />
+    </svg>
+    <span class="sr-only">Create Todo</span>
+  </button>
+
+  <router-outlet></router-outlet>
+</main>

@@ -1,0 +1,139 @@
+{
+  "name": "its-battistar-angular",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/its-battistar-angular/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/its-battistar-angular",
+        "index": "apps/its-battistar-angular/src/index.html",
+        "browser": "apps/its-battistar-angular/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/its-battistar-angular/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/its-battistar-angular/src/favicon.ico",
+          "apps/its-battistar-angular/src/assets"
+        ],
+        "styles": ["apps/its-battistar-angular/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "4mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "its-battistar-angular:build:production"
+        },
+        "development": {
+          "buildTarget": "its-battistar-angular:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "its-battistar-angular:build"
+      }
+    },
+    "pre-lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p ./tsconfig.editor.json && prettier -c ./src",
+        "cwd": "apps/its-battistar-angular"
+      }
+    },
+    "lint": {
+      "dependsOn": ["pre-lint"],
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/its-battistar-angular/jest.config.ts"
+      }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/its-battistar-angular/Dockerfile . -t its-battistar"
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventionalcommits"
+      }
+    },
+    "storybook": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "apps/its-battistar-angular/.storybook",
+        "browserTarget": "its-battistar-angular:build",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/its-battistar",
+        "configDir": "apps/its-battistar-angular/.storybook",
+        "browserTarget": "its-battistar-angular:build",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "its-battistar-angular:build-storybook",
+        "staticFilePath": "dist/storybook/its-battistar",
+        "spa": true
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "its-battistar-angular:build-storybook:ci"
+        }
+      }
+    }
+  }
+}

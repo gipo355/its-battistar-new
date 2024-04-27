@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-    paths: ['apps/its-battistar/**']
+    paths: ['apps/its-battistar-angular/**']
   workflow_dispatch:
     inputs:
       logLevel:
@@ -39,7 +39,7 @@ jobs:
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -53,7 +53,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       # build and deploy
       - name: Build project
-        run: nx run its-battistar:build --prod
+        run: nx run its-battistar-angular:build --prod
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         # If you're changing the branch from main,
@@ -62,4 +62,4 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/apps/its-battistar/browser
+          publish_dir: ./dist/apps/its-battistar-angular/browser
