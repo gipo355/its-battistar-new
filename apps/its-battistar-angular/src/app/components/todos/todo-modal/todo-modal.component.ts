@@ -135,6 +135,7 @@ export class TodoModalComponent implements OnDestroy, OnInit {
    * it should update the todo in the store and the database
    */
   onSubmit(): void {
+    // BUG: submit event doesn't work for type submit button
     console.warn('method not implemented');
   }
 

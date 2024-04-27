@@ -104,4 +104,8 @@ export class TodoFilterComponent implements OnInit, OnDestroy {
     filterBox: new FormControl<string>(''), // search
     showExpired: new FormControl<boolean>(this.todoStore.filter.showExpired()), // checked/unchecked
   });
+
+  onClearFilter(): void {
+    this.filterForm.get('filterBox')?.setValue('');
+  }
 }
