@@ -6,7 +6,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ITodo, ITodoColorOptions } from '@its-battistar/shared-types';
 import { initFlowbite } from 'flowbite';
@@ -43,7 +43,7 @@ import { TodoModalService } from './todo-modal.service';
 @Component({
   selector: 'app-todo-modal',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './todo-modal.component.html',
   styleUrl: './todo-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
