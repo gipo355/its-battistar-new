@@ -63,22 +63,19 @@ export class TodoModalComponent implements OnDestroy, OnInit {
   // this way we have a clear separation of concerns and it can be used in multiple places
   store = inject(TodosStore);
 
-  // the todo can be populated if the user navigates to /todos/edit by clicking on a todo in the list
-  // or null if it clicks the create button
-  // IMPORTANT: this component receives the todo as input from the resolver on navigation
+  // the todo can be populated if the user navigates to /todos/edit by clicking on a todo in the list or null if it clicks the create button
+  // NOTE: we could refactor this component to receive the todo as input from the resolver on navigation instead of using the store
+
+  // we could use the resolver to populate the todo, passing a Todo or directly a signal
   // todo = input<ITodo | null>(null);
-
-  todo = this.store.selectedTodo;
-
   // todo = this.route.snapshot.data['todo'] as Signal<ITodo> | null | undefined;
+
+  // The resolver uses the id param to populate the selectedTodo in the store
+  todo = this.store.selectedTodo;
 
   // utility with typecasting for safety used to initialize the form
   getTodo(): ITodo | null {
-    if (this.todo() === null) {
-      return null;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this.todo()!;
+    return this.todo();
   }
 
   modalForm = new FormGroup({

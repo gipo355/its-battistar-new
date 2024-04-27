@@ -2,6 +2,7 @@
 import { faker } from '@faker-js/faker';
 import { ITodo } from '@its-battistar/shared-types';
 
+// must provide an enum to faker
 enum TodoColorOptions {
   red = 'red',
   blue = 'blue',
@@ -11,7 +12,6 @@ enum TodoColorOptions {
   default = 'default',
 }
 
-// BUG: faker doesn't work in browser, requires node api
 function generateTestTodos(n: number): ITodo[] {
   const todos: ITodo[] = [];
   for (let i = 0; i < n; i++) {
@@ -31,6 +31,7 @@ function generateTestTodos(n: number): ITodo[] {
   }
   return todos;
 }
+export const todosTestData: ITodo[] = generateTestTodos(100);
 
 // try with manual data
 // export const todosTestData: ITodo[] = [
@@ -55,5 +56,3 @@ function generateTestTodos(n: number): ITodo[] {
 //     dueDate: new Date(new Date().setDate(new Date().getDate() + 1)),
 //   },
 // ];
-
-export const todosTestData: ITodo[] = generateTestTodos(100);

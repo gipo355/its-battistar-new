@@ -24,7 +24,9 @@ interface TodosState {
   selectedTodo: ITodo | null;
   isEditMode: boolean;
 
-  // used to filter todos by query
+  /**
+   * used to filter todos by query
+   */
   filter: {
     showCompleted: boolean;
     showExpired: boolean;
@@ -33,27 +35,14 @@ interface TodosState {
   };
   filteredTodos?: ITodo[];
 
+  /**
+   * Options used to display menus in the UI
+   * and provide intellisens
+   */
+  // FIXME: make them arrays?
   todoSortByOptions: ITodoSortByOptions;
   todoColorOptions: ITodoColorOptions;
 }
-
-// HACK: can't import from shared-types into angular real values, only types
-// redeclare them here using the interface so we get global type checking
-// FIXME: refactor those to use an array? an union? we need keys type safety as we use object.keys
-export const todoSortByOptions: ITodoSortByOptions = {
-  Newest: 'Newest',
-  Oldest: 'Oldest',
-  Title: 'Title',
-  DueDate: 'DueDate',
-} as const;
-export const todoColorOptions: ITodoColorOptions = {
-  red: 'red',
-  blue: 'blue',
-  green: 'green',
-  yellow: 'yellow',
-  pink: 'pink',
-  default: 'default',
-} as const;
 
 // TODO: move to express backend init
 const initialState: TodosState = {
@@ -74,8 +63,20 @@ const initialState: TodosState = {
 
   filteredTodos: [],
 
-  todoSortByOptions,
-  todoColorOptions,
+  todoSortByOptions: {
+    Newest: 'Newest',
+    Oldest: 'Oldest',
+    Title: 'Title',
+    DueDate: 'DueDate',
+  },
+  todoColorOptions: {
+    red: 'red',
+    blue: 'blue',
+    green: 'green',
+    yellow: 'yellow',
+    pink: 'pink',
+    default: 'default',
+  },
 };
 
 const TODOS_STATE = new InjectionToken<TodosState>('TodosState', {
