@@ -50,6 +50,9 @@ importers:
       '@popperjs/core':
         specifier: ^2.11.8
         version: 2.11.8
+      '@sentry/angular-ivy':
+        specifier: ^7.112.2
+        version: 7.112.2(@angular/common@17.3.5)(@angular/core@17.3.5)(@angular/router@17.3.5)(rxjs@7.8.1)
       '@sentry/node':
         specifier: ^7.112.0
         version: 7.112.2
@@ -6023,11 +6026,64 @@ packages:
     transitivePeerDependencies:
       - chokidar
 
+  /@sentry-internal/feedback@7.112.2:
+    resolution: {integrity: sha512-z+XP8BwB8B3pa+i8xqbrPsbtDWUFUS6wo+FJbmOYUqOusJJbVFDAhBoEdKoo5ZjOcsAZG7XR6cA9zrhJynIWBA==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@sentry/core': 7.112.2
+      '@sentry/types': 7.112.2
+      '@sentry/utils': 7.112.2
+    dev: false
+
+  /@sentry-internal/replay-canvas@7.112.2:
+    resolution: {integrity: sha512-BCCCxrZ1wJvN6La5gg1JJbKitAhJI5MATCnhtklsZbUcHkHB9iZoj19J65+P56gwssvHz5xh63AjNiITaetIRg==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@sentry/core': 7.112.2
+      '@sentry/replay': 7.112.2
+      '@sentry/types': 7.112.2
+      '@sentry/utils': 7.112.2
+    dev: false
+
   /@sentry-internal/tracing@7.112.2:
     resolution: {integrity: sha512-fT1Y46J4lfXZkgFkb03YMNeIEs2xS6jdKMoukMFQfRfVvL9fSWEbTgZpHPd/YTT8r2i082XzjtAoQNgklm/0Hw==}
     engines: {node: '>=8'}
     dependencies:
       '@sentry/core': 7.112.2
+      '@sentry/types': 7.112.2
+      '@sentry/utils': 7.112.2
+    dev: false
+
+  /@sentry/angular-ivy@7.112.2(@angular/common@17.3.5)(@angular/core@17.3.5)(@angular/router@17.3.5)(rxjs@7.8.1):
+    resolution: {integrity: sha512-hKocxfIRoBaetUMJ7tm7x/JhTwSrqGw1H+OqAGaizpcGIa9bMTv3YjAzms47csrroFO+ns/0Yqreei+iKEUzNg==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      '@angular/common': '>= 12.x <= 17.x'
+      '@angular/core': '>= 12.x <= 17.x'
+      '@angular/router': '>= 12.x <= 17.x'
+      rxjs: ^6.5.5 || ^7.x
+    dependencies:
+      '@angular/common': 17.3.5(@angular/core@17.3.5)(rxjs@7.8.1)
+      '@angular/core': 17.3.5(rxjs@7.8.1)(zone.js@0.14.4)
+      '@angular/router': 17.3.5(@angular/common@17.3.5)(@angular/core@17.3.5)(@angular/platform-browser@17.3.5)(rxjs@7.8.1)
+      '@sentry/browser': 7.112.2
+      '@sentry/core': 7.112.2
+      '@sentry/types': 7.112.2
+      '@sentry/utils': 7.112.2
+      rxjs: 7.8.1
+      tslib: 2.6.2
+    dev: false
+
+  /@sentry/browser@7.112.2:
+    resolution: {integrity: sha512-wULwavCch84+d0bueAdFm6CDm1u0TfOjN91VgY+sj/vxUV2vesvDgI8zRZfmbZEor3MYA90zerkZT3ehZQKbYw==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry-internal/feedback': 7.112.2
+      '@sentry-internal/replay-canvas': 7.112.2
+      '@sentry-internal/tracing': 7.112.2
+      '@sentry/core': 7.112.2
+      '@sentry/integrations': 7.112.2
+      '@sentry/replay': 7.112.2
       '@sentry/types': 7.112.2
       '@sentry/utils': 7.112.2
     dev: false
@@ -6057,6 +6113,16 @@ packages:
       '@sentry-internal/tracing': 7.112.2
       '@sentry/core': 7.112.2
       '@sentry/integrations': 7.112.2
+      '@sentry/types': 7.112.2
+      '@sentry/utils': 7.112.2
+    dev: false
+
+  /@sentry/replay@7.112.2:
+    resolution: {integrity: sha512-7Ns/8D54WPsht1nlVj93Inf6rXyve2AZoibYN0YfcM2w3lI4NO51gPPHJU0lFEfMwzwK4ZBJWzOeW9098a+uEg==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@sentry-internal/tracing': 7.112.2
+      '@sentry/core': 7.112.2
       '@sentry/types': 7.112.2
       '@sentry/utils': 7.112.2
     dev: false
