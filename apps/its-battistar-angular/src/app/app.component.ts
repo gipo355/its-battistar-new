@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
 
   constructor() {
     // TODO: remove this at the end, log state
-    console.log('App component initialized');
+    console.log('App component init');
 
     effect(() => {
       const state = getState(this.todoStore);
