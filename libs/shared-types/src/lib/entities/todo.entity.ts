@@ -12,6 +12,8 @@ import ajvInstance from '../../utils/ajv';
 //
 // same for user.entity.ts and account.entity.ts
 
+// test comment for nx dep-graph affected
+
 export interface ITodoColorOptions {
   red: 'red';
   blue: 'blue';
