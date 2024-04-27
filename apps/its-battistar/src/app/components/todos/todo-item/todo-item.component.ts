@@ -6,7 +6,7 @@ import {
   input,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ITodo, TodoColor } from '@its-battistar/shared-types';
+import { ITodo, ITodoColorOptions } from '@its-battistar/shared-types';
 
 @Component({
   selector: 'app-todo-item',
@@ -19,7 +19,7 @@ import { ITodo, TodoColor } from '@its-battistar/shared-types';
 export class TodoItemComponent {
   todo = input<ITodo | null>(null);
 
-  colorSchema: Record<keyof TodoColor, string> = {
+  colorSchema: Record<keyof ITodoColorOptions, string> = {
     default:
       'bg-lime-300 before:bg-lime-300 dark:before:bg-lime-500 bg-opacity-50',
     pink: 'bg-pink-500 before:bg-pink-500 dark:before:bg-pink-500 bg-opacity-50',

@@ -7,9 +7,10 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ITodoSortByOptions } from '@its-battistar/shared-types';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 
-import { TodoSortByOptions, TodosStore } from '../todos.store';
+import { TodosStore } from '../todos.store';
 
 // TODO: extract todo store and make it dumb component
 
@@ -31,14 +32,16 @@ export class TodoFilterComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  /**
+   * @description
+   * this ngOnInit will handle the form changes and update the store
+   */
   ngOnInit(): void {
     // Using an observable, they are still good for events
     this.filterForm.valueChanges
       // eslint-disable-next-line no-magic-numbers
       .pipe(takeUntil(this.destroy$), debounceTime(300))
       .subscribe((value) => {
-        console.log('value', value);
-
         // handle show completed
         if (
           value.showCompleted !== undefined &&
@@ -51,14 +54,12 @@ export class TodoFilterComponent implements OnInit, OnDestroy {
           });
         }
 
-        console.log(value.showExpired, this.todoStore.filter.showExpired());
         if (
           value.showExpired !== undefined &&
           value.showExpired !== null &&
           // avoid launching useless signals
           value.showExpired !== this.todoStore.filter.showExpired()
         ) {
-          console.log('if');
           this.todoStore.updateFilters({
             showExpired: value.showExpired,
           });
@@ -84,22 +85,23 @@ export class TodoFilterComponent implements OnInit, OnDestroy {
       });
   }
 
-  sortByOptions = Object.keys(TodoSortByOptions);
+  /**
+   * provide the options for the sortBy select from the store
+   */
+  sortByOptions = Object.keys(this.todoStore.todoSortByOptions());
 
+  /**
+   * @description
+   * this is the form that will be used to filter the todos
+   * it will be initialized with the current values from the store
+   */
   filterForm = new FormGroup({
     showCompleted: new FormControl<boolean>(
       this.todoStore.filter.showCompleted()
     ), // checked/unchecked
     // reset the original sort by hardcoding it, can improve this
-    sortBy: new FormControl<keyof typeof TodoSortByOptions>('Newest'), // date/title
+    sortBy: new FormControl<keyof ITodoSortByOptions>('Newest'), // date/title
     filterBox: new FormControl<string>(''), // search
     showExpired: new FormControl<boolean>(this.todoStore.filter.showExpired()), // checked/unchecked
   });
-
-  // TODO: is there a way to use signal here instead?
-  // checked = signal<boolean>( this.getFormControl<boolean>('showCompleted').value as boolean);
-
-  // getFormControl<T>(name: string): FormControl {
-  //   return this.filterForm.get(name) as FormControl<T>;
-  // }
 }

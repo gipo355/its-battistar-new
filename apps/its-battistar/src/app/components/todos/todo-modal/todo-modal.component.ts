@@ -6,7 +6,9 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ITodo, ITodoColorOptions } from '@its-battistar/shared-types';
 import { initFlowbite } from 'flowbite';
 
 import { TodosStore } from '../todos.store';
@@ -70,9 +72,28 @@ export class TodoModalComponent implements OnDestroy, OnInit {
 
   // todo = this.route.snapshot.data['todo'] as Signal<ITodo> | null | undefined;
 
-  // modalForm = new FormGroup({
-  //   title = new FormControl(),
-  // });
+  // utility with typecasting for safety used to initialize the form
+  getTodo(): ITodo | null {
+    if (this.todo() === null) {
+      return null;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this.todo()!;
+  }
+
+  modalForm = new FormGroup({
+    title: new FormControl<string>(this.getTodo()?.title ?? ''),
+    description: new FormControl<string>(this.getTodo()?.description ?? ''),
+    date: new FormControl<string>(
+      // eslint-disable-next-line no-magic-numbers
+      this.getTodo()?.dueDate?.toISOString().split('T')[0] ??
+        // eslint-disable-next-line no-magic-numbers
+        new Date().toISOString().split('T')[0]
+    ),
+    color: new FormControl<keyof ITodoColorOptions>(
+      this.getTodo()?.color ?? 'green'
+    ),
+  });
 
   onSubmit(): void {
     console.warn('method not implemented');

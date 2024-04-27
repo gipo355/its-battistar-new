@@ -8,6 +8,9 @@
   class="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 bg-slate-200 p-6"
   formGroup="todoForm"
 >
+  <h1 class="mb-4 text-2xl text-green-500">
+    {{ todo() && todo()?.id ? 'Update' : 'Create a new' }} todo
+  </h1>
   <button
     type="button"
     routerLink=".."
@@ -276,6 +279,7 @@
     >Due Date:
     <input
       type="date"
+      formControlName="date"
       name="date"
       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
       id="date"
@@ -285,94 +289,25 @@
     />
   </label>
 
-  <!-- color picker -->
-  <div class="mb-4 flex flex-wrap">
-    <div class="me-4 flex items-center">
-      <input
-        id="red-radio"
-        type="radio"
-        value=""
-        name="colored-radio"
-        class="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-red-600"
-      />
-      <label
-        for="red-radio"
-        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Red</label
-      >
-    </div>
-    <div class="me-4 flex items-center">
-      <input
-        id="green-radio"
-        type="radio"
-        value=""
-        name="colored-radio"
-        class="h-4 w-4 border-gray-300 bg-gray-100 text-green-600 focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-green-600"
-      />
-      <label
-        for="green-radio"
-        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Green</label
-      >
-    </div>
-    <div class="me-4 flex items-center">
-      <input
-        checked
-        id="purple-radio"
-        type="radio"
-        value=""
-        name="colored-radio"
-        class="h-4 w-4 border-gray-300 bg-gray-100 text-purple-600 focus:ring-2 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-purple-600"
-      />
-      <label
-        for="purple-radio"
-        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Purple</label
-      >
-    </div>
-    <div class="me-4 flex items-center">
-      <input
-        id="teal-radio"
-        type="radio"
-        value=""
-        name="colored-radio"
-        class="h-4 w-4 border-gray-300 bg-gray-100 text-teal-600 focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-teal-600"
-      />
-      <label
-        for="teal-radio"
-        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Teal</label
-      >
-    </div>
-    <div class="me-4 flex items-center">
-      <input
-        id="yellow-radio"
-        type="radio"
-        value=""
-        name="colored-radio"
-        class="h-4 w-4 border-gray-300 bg-gray-100 text-yellow-400 focus:ring-2 focus:ring-yellow-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-yellow-600"
-      />
-      <label
-        for="yellow-radio"
-        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Yellow</label
-      >
-    </div>
-    <div class="me-4 flex items-center">
-      <input
-        id="orange-radio"
-        type="radio"
-        value=""
-        name="colored-radio"
-        class="h-4 w-4 border-gray-300 bg-gray-100 text-orange-500 focus:ring-2 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-orange-600"
-      />
-      <label
-        for="orange-radio"
-        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Orange</label
-      >
-    </div>
-  </div>
+  <!-- color picker select -->
+
+  <label
+    for="colors"
+    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+    >Select a color</label
+  >
+  <select
+    id="colors"
+    name="colors"
+    formControlName="color"
+    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+  >
+    <option selected>Choose a color</option>
+    <option value="US">United States</option>
+    <option value="CA">Canada</option>
+    <option value="FR">France</option>
+    <option value="DE">Germany</option>
+  </select>
 
   <!-- submit: we don't want to update, we want to live save it -->
   @if (!todo()) {

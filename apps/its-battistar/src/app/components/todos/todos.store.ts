@@ -2,7 +2,11 @@
 // Testing signals store with state in ngrx/signals
 
 import { computed, inject, InjectionToken } from '@angular/core';
-import { ITodo, TodoColor, TodoSortBy } from '@its-battistar/shared-types';
+import {
+  ITodo,
+  ITodoColorOptions,
+  ITodoSortByOptions,
+} from '@its-battistar/shared-types';
 import {
   patchState,
   signalStore,
@@ -24,22 +28,25 @@ interface TodosState {
   filter: {
     showCompleted: boolean;
     showExpired: boolean;
-    currentSortBy: keyof TodoSortBy;
+    currentSortBy: keyof ITodoSortByOptions;
     query: string;
   };
   filteredTodos?: ITodo[];
+
+  todoSortByOptions: ITodoSortByOptions;
+  todoColorOptions: ITodoColorOptions;
 }
 
 // HACK: can't import from shared-types into angular real values, only types
 // redeclare them here using the interface so we get global type checking
-export const TodoSortByOptions: TodoSortBy = {
+// FIXME: refactor those to use an array? an union? we need keys type safety as we use object.keys
+export const todoSortByOptions: ITodoSortByOptions = {
   Newest: 'Newest',
   Oldest: 'Oldest',
   Title: 'Title',
   DueDate: 'DueDate',
 } as const;
-
-export const TodoColorOptions: TodoColor = {
+export const todoColorOptions: ITodoColorOptions = {
   red: 'red',
   blue: 'blue',
   green: 'green',
@@ -66,6 +73,9 @@ const initialState: TodosState = {
   },
 
   filteredTodos: [],
+
+  todoSortByOptions,
+  todoColorOptions,
 };
 
 const TODOS_STATE = new InjectionToken<TodosState>('TodosState', {
