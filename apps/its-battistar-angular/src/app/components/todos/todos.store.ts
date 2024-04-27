@@ -186,6 +186,12 @@ export const TodosStore = signalStore(
       });
     },
 
+    removeCurrentSelectedTodo(): void {
+      patchState(store, () => {
+        return { currentSelectedTodo: null };
+      });
+    },
+
     /**
      * this method is the reason i converted the todos to a map.
      * with a map, we can update the todo directly by id with O(1) complexity
@@ -202,13 +208,14 @@ export const TodosStore = signalStore(
      * and we keep the state in sync with the user input
      *
      */
-    updateTodoById(id: string, todo: ITodo): void {
-      patchState(store, (state) => {
-        const todos = new Map(state.todos);
-        todos.set(id, todo);
-        return { todos };
-      });
-    },
+    // commented in favor of syncCurrentWithTodos
+    // updateTodoById(id: string, todo: ITodo): void {
+    //   patchState(store, (state) => {
+    //     const todos = new Map(state.todos);
+    //     todos.set(id, todo);
+    //     return { todos };
+    //   });
+    // },
 
     setOrRemoveCurrentSelectedTodo(todo: ITodo | null): void {
       patchState(store, () => {
@@ -230,16 +237,10 @@ export const TodosStore = signalStore(
         const todos = new Map(store.todos());
         const currentSelectedTodo = store.currentSelectedTodo();
 
-        console.log('signal store syncCurrentWithTodos');
-
         // TODO: handle creating a new todo, http
         if (!currentSelectedTodo?.id) {
-          console.log('creating new todo');
           return { todos };
         }
-
-        console.log('updating existing todo');
-        console.log('currentSelectedTodo', currentSelectedTodo);
         // handle updating an existing todo
 
         todos.set(currentSelectedTodo.id, currentSelectedTodo);

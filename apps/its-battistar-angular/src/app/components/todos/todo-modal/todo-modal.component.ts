@@ -7,7 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ITodo, ITodoColorOptions } from '@its-battistar/shared-types';
 import { initFlowbite } from 'flowbite';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
@@ -52,6 +52,8 @@ export class TodoModalComponent implements OnDestroy, OnInit {
   s = inject(TodoModalService);
 
   route = inject(ActivatedRoute);
+
+  router = inject(Router);
 
   // we use the store only to update isEditMode() since it may be used in other components
   // the component checks if it's in edit mode only by verifying if it has a todo.id available as input when created
@@ -141,17 +143,42 @@ export class TodoModalComponent implements OnDestroy, OnInit {
    * this method is called when the user exits
    * used for cleanup
    */
-  onCancel(): void {
-    console.warn('cancel method not implemented');
-
+  async onExit(): Promise<void> {
+    // sync must handle receiving both new and updated todos
     this.store.syncCurrentWithTodos();
+
+    this.store.removeCurrentSelectedTodo();
+
+    await this.router.navigate(['..'], {
+      relativeTo: this.route,
+    });
   }
 
-  onDeleteTodo(): void {
-    console.warn('delete method not implemented');
+  // NOTE: navigation is in routerLink in the template
+  async onDelete(): Promise<void> {
+    const selectedTodo = this.store.currentSelectedTodo();
+
+    if (!selectedTodo?.id) {
+      return;
+    }
+
+    this.store.deleteTodoById(selectedTodo.id);
+
+    this.store.removeCurrentSelectedTodo();
+    await this.onExit();
   }
 
-  onToggleCompleted(): void {
-    console.warn('toggle method not implemented');
+  async onToggleCompleted(): Promise<void> {
+    const selectedTodo = this.store.currentSelectedTodo();
+
+    if (!selectedTodo?.id) {
+      return;
+    }
+
+    this.store.updateCurrentSelectedTodoValues({
+      completed: !selectedTodo.completed,
+    });
+
+    await this.onExit();
   }
 }

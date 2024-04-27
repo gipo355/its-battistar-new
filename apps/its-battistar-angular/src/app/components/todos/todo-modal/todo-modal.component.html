@@ -1,8 +1,7 @@
 <!-- dark bg with simple click outside -->
 <div
   class="absolute left-0 top-0 z-10 min-h-full min-w-full bg-slate-900 opacity-75"
-  routerLink=".."
-  (click)="onCancel()"
+  (click)="onExit()"
 ></div>
 
 <form
@@ -14,8 +13,7 @@
   </h1>
   <button
     type="button"
-    routerLink=".."
-    (click)="onCancel()"
+    (click)="onExit()"
     class="absolute right-1 top-1 w-full rounded-lg bg-red-700 px-2 py-1 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 sm:w-auto dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
   >
     X
@@ -332,7 +330,7 @@
     </button>
     <button
       type="button"
-      (click)="onDeleteTodo()"
+      (click)="onDelete()"
       class="w-full rounded-lg bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 sm:w-auto dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
     >
       Delete
