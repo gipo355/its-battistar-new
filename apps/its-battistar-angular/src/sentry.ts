@@ -1,7 +1,10 @@
 import * as Sentry from '@sentry/angular-ivy';
 
-import { environment } from './environments/environment.dev';
+import { environment } from './environments/environment.default';
 
+// TODO: should move to open source self hosted sentry for both frontend and backend.
+// Data should stay in the EU.
+// And to conform to GDPR, we should disable the replay feature.
 export function initSentry(): void {
   Sentry.init({
     dsn: environment.sentryDsn,
@@ -13,6 +16,8 @@ export function initSentry(): void {
       // Registers the Replay integration,
       // which automatically captures Session Replays
       Sentry.replayIntegration(),
+      // Add browser profiling integration to the list of integrations
+      // Sentry.browserProfilingIntegration(),
     ],
 
     // Set tracesSampleRate to 1.0 to capture 100%
