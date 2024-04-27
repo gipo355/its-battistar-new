@@ -5,9 +5,9 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "commit": "git-cz",
-    "serve-all": "nx run-many -t serve its-battistar-be its-battistar-angular",
+    "serve-all": "nx run-many -t serve its-battistar-express its-battistar-angular",
     "lint-test-build": "nx run-many -t lint test build",
-    "serve-express": "nx run its-battistar-be:serve",
+    "serve-express": "nx run its-battistar-express:serve",
     "serve-angular": "nx run its-battistar-angular:serve",
     "prepare": "husky && husky install",
     "storybook": "nx run its-battistar:storybook",

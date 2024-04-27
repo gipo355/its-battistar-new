@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-    paths: ['apps/its-battistar-be/**']
+    paths: ['apps/its-battistar-express/**']
   # workflow_run:
   #   # This workflow is triggered when a workflow run is completed successfully
   #   # Use the name of the workflow
@@ -68,7 +68,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ghcr.io/gipo355/its-battistar-be
+            ghcr.io/gipo355/its-battistar-express
           # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule

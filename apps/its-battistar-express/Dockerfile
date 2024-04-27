@@ -37,11 +37,11 @@ ENV EXPRESS_TRUST_NUMBER_OF_PROXIES = 0
 
 WORKDIR /app
 
-RUN addgroup --system its-battistar-be && \
-  adduser --system -G its-battistar-be its-battistar-be
+RUN addgroup --system its-battistar-express && \
+  adduser --system -G its-battistar-express its-battistar-express
 
-COPY dist/apps/its-battistar-be its-battistar-be
-RUN chown -R its-battistar-be:its-battistar-be .
+COPY dist/apps/its-battistar-express its-battistar-express
+RUN chown -R its-battistar-express:its-battistar-express .
 
 # install node-gyp for argon2
 RUN apk add --no-cache python3 make g++ curl

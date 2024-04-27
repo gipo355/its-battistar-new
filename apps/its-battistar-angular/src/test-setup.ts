@@ -7,5 +7,4 @@ globalThis.ngJest = {
   },
 };
 
- 
 import 'jest-preset-angular/setup-jest';
