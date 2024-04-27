@@ -218,23 +218,50 @@ export const TodosStore = signalStore(
       });
     },
 
-    updateCurrentSelectedTodoValues(todo: ITodo): void {
+    /**
+     * syncTodos is used to keep the todos in sync with the currentSelectedTodo
+     * will happen when user exits, submits or cancels the modal, to allow live updates without
+     * needing to click save
+     *
+     * Having the ID is important as we need to know if it's a new todo or an existing one to update
+     */
+    syncCurrentWithTodos(): void {
       patchState(store, () => {
         const todos = new Map(store.todos());
+        const currentSelectedTodo = store.currentSelectedTodo();
 
-        /** keep store in sync if not null, we update the selected todo on input change
-         * to provide live update
-         */
-        if (!todo.id) {
-          throw new Error('Todo must have an id');
+        console.log('signal store syncCurrentWithTodos');
+
+        // TODO: handle creating a new todo, http
+        if (!currentSelectedTodo?.id) {
+          console.log('creating new todo');
+          return { todos };
         }
 
-        todos.set(todo.id, todo);
+        console.log('updating existing todo');
+        console.log('currentSelectedTodo', currentSelectedTodo);
+        // handle updating an existing todo
+
+        todos.set(currentSelectedTodo.id, currentSelectedTodo);
+        return {
+          todos,
+        };
+      });
+    },
+
+    updateCurrentSelectedTodoValues(todo: Partial<ITodo>): void {
+      patchState(store, () => {
+        const currentSelectedTodo = store.currentSelectedTodo();
+
+        if (!currentSelectedTodo) {
+          throw new Error('No todo selected to update');
+        }
 
         return {
-          currentSelectedTodo: todo,
-          // ...(todo.id && { todos }),
-          todos,
+          currentSelectedTodo: {
+            ...currentSelectedTodo,
+            ...todo,
+          },
         };
       });
     },

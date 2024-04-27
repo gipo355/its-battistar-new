@@ -69,11 +69,26 @@ export class TodoModalComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     initFlowbite();
 
-    // BUG: doesn't work, need 2 way data binding for reactive forms
+    // TODO: another possible way is to store the changes in currentSelectedTodo and update the store on submit or cancel
+    // this way we POST only once
     this.modalForm.valueChanges
       .pipe(takeUntil(this.destroy$), debounceTime(this.s.inputDebounceTime))
       .subscribe((value) => {
-        console.log('form value changed', value);
+        const currentTodo = this.store.currentSelectedTodo();
+
+        // handle existing todo
+        if (currentTodo?.id) {
+          this.store.updateCurrentSelectedTodoValues({
+            ...(value.title && { title: value.title }),
+            ...(value.description && { description: value.description }),
+            ...(value.color && { color: value.color }),
+            ...(value.date && { dueDate: new Date(value.date) }),
+          });
+
+          return;
+        }
+
+        // TODO: handle new todo
       });
   }
 
@@ -127,14 +142,16 @@ export class TodoModalComponent implements OnDestroy, OnInit {
    * used for cleanup
    */
   onCancel(): void {
-    console.warn('method not implemented');
+    console.warn('cancel method not implemented');
+
+    this.store.syncCurrentWithTodos();
   }
 
   onDeleteTodo(): void {
-    console.warn('method not implemented');
+    console.warn('delete method not implemented');
   }
 
   onToggleCompleted(): void {
-    console.warn('method not implemented');
+    console.warn('toggle method not implemented');
   }
 }
