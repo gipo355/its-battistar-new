@@ -78,9 +78,15 @@ export class TodoModalComponent implements OnDestroy, OnInit {
     return this.todo();
   }
 
+  colors = Object.keys(this.store.todoColorOptions());
+
+  // TODO: add validators
+  // TODO: change hardcoded init values in html to use the form values
   modalForm = new FormGroup({
     title: new FormControl<string>(this.getTodo()?.title ?? ''),
     description: new FormControl<string>(this.getTodo()?.description ?? ''),
+
+    // TODO: color and dueDate inputs
     date: new FormControl<string>(
       // eslint-disable-next-line no-magic-numbers
       this.getTodo()?.dueDate?.toISOString().split('T')[0] ??
