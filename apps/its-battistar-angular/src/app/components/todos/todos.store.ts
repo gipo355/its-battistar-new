@@ -23,7 +23,14 @@ interface TodosState {
   todos: Map<string, ITodo>;
 
   isLoading: boolean;
+  /**
+   * used to keep track of the todo being edited in the modal
+   */
   currentSelectedTodo: ITodo | null;
+  /**
+   * used to keep track of the todo being created in the modal
+   */
+  currentNewTodo: Partial<ITodo> | null;
 
   /**
    * used to filter todos by query
@@ -53,6 +60,8 @@ const initialState: TodosState = {
   isLoading: false,
 
   currentSelectedTodo: null,
+
+  currentNewTodo: null,
 
   filter: {
     currentSortBy: 'Newest',
@@ -169,11 +178,24 @@ export const TodosStore = signalStore(
       patchState(store, (state) => {
         const todos = new Map(state.todos);
 
-        if (!todo.id) {
-          throw new Error('Todo must have an id');
+        // TODO: HTTP call to create the todo, effect? async method?
+        // item should be created on the backend and returned with an id,
+        // save on exit like in the update method
+
+        if (!todo.title) {
+          throw new Error('Todo must have a title');
         }
 
-        todos.set(todo.id, todo);
+        const newTodo: ITodo = {
+          ...todo,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+
+        // TODO: fix this when we have a backend
+        newTodo.id = Date.now().toString();
+
+        todos.set(newTodo.id, newTodo);
         return { todos };
       });
     },
@@ -264,6 +286,22 @@ export const TodosStore = signalStore(
             ...todo,
           },
         };
+      });
+    },
+
+    updateCurrentNewTodoValues(todo: Partial<ITodo>): void {
+      patchState(store, () => {
+        return {
+          currentNewTodo: {
+            ...todo,
+          },
+        };
+      });
+    },
+
+    removeCurrentNewTodo(): void {
+      patchState(store, () => {
+        return { currentNewTodo: null };
       });
     },
 

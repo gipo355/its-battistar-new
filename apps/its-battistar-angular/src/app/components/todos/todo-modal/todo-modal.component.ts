@@ -6,7 +6,12 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ITodo, ITodoColorOptions } from '@its-battistar/shared-types';
 import { initFlowbite } from 'flowbite';
@@ -71,26 +76,28 @@ export class TodoModalComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     initFlowbite();
 
-    // TODO: another possible way is to store the changes in currentSelectedTodo and update the store on submit or cancel
-    // this way we POST only once
     this.modalForm.valueChanges
       .pipe(takeUntil(this.destroy$), debounceTime(this.s.inputDebounceTime))
       .subscribe((value) => {
         const currentTodo = this.store.currentSelectedTodo();
 
+        const newTodo: Partial<ITodo> = {
+          ...(value.title && { title: value.title }),
+          ...(value.description && { description: value.description }),
+          ...(value.color && { color: value.color }),
+          ...(value.date && { dueDate: new Date(value.date) }),
+        };
+
         // handle existing todo
         if (currentTodo?.id) {
-          this.store.updateCurrentSelectedTodoValues({
-            ...(value.title && { title: value.title }),
-            ...(value.description && { description: value.description }),
-            ...(value.color && { color: value.color }),
-            ...(value.date && { dueDate: new Date(value.date) }),
-          });
-
+          this.store.updateCurrentSelectedTodoValues(newTodo);
           return;
         }
 
         // TODO: handle new todo
+        if (newTodo.title) {
+          this.store.updateCurrentNewTodoValues(newTodo);
+        }
       });
   }
 
@@ -114,8 +121,12 @@ export class TodoModalComponent implements OnDestroy, OnInit {
 
   // TODO: add validators
   modalForm = new FormGroup({
-    title: new FormControl<string>(this.getTodo()?.title ?? ''),
-    description: new FormControl<string>(this.getTodo()?.description ?? ''),
+    title: new FormControl<string>(this.getTodo()?.title ?? '', [
+      Validators.required.bind(this),
+    ]),
+    description: new FormControl<string>(this.getTodo()?.description ?? '', [
+      Validators.required.bind(this),
+    ]),
 
     // TODO: color and dueDate inputs
     date: new FormControl<string>(
@@ -134,9 +145,25 @@ export class TodoModalComponent implements OnDestroy, OnInit {
    * this method is called when the form is submitted
    * it should update the todo in the store and the database
    */
-  onSubmit(): void {
-    // BUG: submit event doesn't work for type submit button
-    console.warn('method not implemented');
+  async onSubmit(): Promise<void> {
+    /** sync current automatically creates the todo in db if it's a new todo */
+
+    // TODO: Temporary solution before http call here?
+    const newTodo: ITodo = {
+      id: 'aslkdfjlaskfasl',
+      title: this.store.currentNewTodo()?.title ?? '',
+      description: this.store.currentNewTodo()?.description ?? '',
+      color: this.store.currentNewTodo()?.color ?? 'green',
+      dueDate: this.store.currentNewTodo()?.dueDate ?? undefined,
+      expired: false,
+      completed: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    this.store.createTodo(newTodo);
+
+    await this.onExit();
   }
 
   /**
@@ -145,10 +172,12 @@ export class TodoModalComponent implements OnDestroy, OnInit {
    * used for cleanup
    */
   async onExit(): Promise<void> {
-    // sync must handle receiving both new and updated todos
+    // TODO: sync must handle receiving both new and updated todos?
+
     this.store.syncCurrentWithTodos();
 
     this.store.removeCurrentSelectedTodo();
+    this.store.removeCurrentNewTodo();
 
     await this.router.navigate(['..'], {
       relativeTo: this.route,

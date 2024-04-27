@@ -86,7 +86,7 @@ export class TodoFilterComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * provide the options for the sortBy select from the store
+   * provide the options for the sortBy select menu from the store
    */
   sortByOptions = Object.keys(this.todoStore.todoSortByOptions());
 
