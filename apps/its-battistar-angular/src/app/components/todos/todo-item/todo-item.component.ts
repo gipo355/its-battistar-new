@@ -21,7 +21,7 @@ export class TodoItemComponent {
 
   colorSchema: Record<keyof ITodoColorOptions, string> = {
     default:
-      'bg-lime-300 before:bg-lime-300 dark:before:bg-lime-500 bg-opacity-50',
+      'bg-slate-300 before:bg-slate-300 dark:before:bg-slate-500 bg-opacity-50',
     pink: 'bg-pink-500 before:bg-pink-500 dark:before:bg-pink-500 bg-opacity-50',
     green:
       'bg-green-300 before:bg-green-300 dark:before:bg-green-500 bg-opacity-50',

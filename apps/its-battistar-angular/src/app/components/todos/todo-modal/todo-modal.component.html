@@ -5,7 +5,7 @@
 ></div>
 
 <form
-  class="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 bg-slate-200 p-6"
+  class="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-slate-200 p-6 shadow-lg dark:bg-gray-800 dark:shadow-lg"
   formGroup="todoForm"
 >
   <h1 class="mb-4 text-2xl text-green-500">
@@ -32,7 +32,7 @@
       id="title"
       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
       placeholder="Enter title"
-      value="{{ todo() && todo()?.id ? todo()?.title : '' }}"
+      [value]="modalForm.get('title')?.value"
       required
     />
   </div>
@@ -259,7 +259,7 @@
     </div>
 
     <div class="rounded-b-lg bg-white px-4 py-2 dark:bg-gray-800">
-      <label for="editor" class="sr-only">Publish post</label>
+      <label for="editor">Description</label>
       <textarea
         id="editor"
         rows="8"
@@ -283,9 +283,7 @@
       name="date"
       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
       id="date"
-      value="{{
-        todo() && todo()?.id ? (todo()?.dueDate | date: 'yyyy-MM-dd') : ''
-      }}"
+      [value]="modalForm.get('date')?.value"
     />
   </label>
 
@@ -305,7 +303,7 @@
     @for (color of colors; track color) {
       <option
         value="{{ color }}"
-        [selected]="todo() && todo()?.id ? todo()?.color === color : false"
+        [selected]="modalForm.get('color')?.value === color"
       >
         {{ color | titlecase }}
       </option>
