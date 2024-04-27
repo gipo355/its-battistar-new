@@ -27,8 +27,7 @@ export const todoModalResolverServiceFN: ResolveFn<
   }
 
   // update state
-  todosStore.updateSelectedTodo(todo);
-  todosStore.updateIsEditMode(true);
+  todosStore.updateCurrentSelectedTodo(todo);
   return;
 
   // old return, was providing a signal

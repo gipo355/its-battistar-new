@@ -19,10 +19,10 @@ import { todosTestData } from './todos.testData';
 // import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 interface TodosState {
+  // TODO: possibly use a map instead of an array for faster state updates
   todos: ITodo[];
   isLoading: boolean;
-  selectedTodo: ITodo | null;
-  isEditMode: boolean;
+  currentSelectedTodo: ITodo | null;
 
   /**
    * used to filter todos by query
@@ -51,9 +51,7 @@ const initialState: TodosState = {
 
   isLoading: false,
 
-  isEditMode: false,
-
-  selectedTodo: null,
+  currentSelectedTodo: null,
 
   filter: {
     currentSortBy: 'Newest',
@@ -177,14 +175,9 @@ export const TodosStore = signalStore(
       }));
     },
 
-    updateSelectedTodo(todo: ITodo | null): void {
+    updateCurrentSelectedTodo(todo: ITodo | null): void {
       // 👇 Updating state using the `patchState` function.
-      patchState(store, () => ({ selectedTodo: todo }));
-    },
-
-    updateIsEditMode(isEdit: boolean): void {
-      // 👇 Updating state using the `patchState` function.
-      patchState(store, () => ({ isEditMode: isEdit }));
+      patchState(store, () => ({ currentSelectedTodo: todo }));
     },
 
     updateFilters(filters: Partial<TodosState['filter']>): void {

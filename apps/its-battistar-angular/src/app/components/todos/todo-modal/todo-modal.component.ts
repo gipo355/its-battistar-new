@@ -53,8 +53,7 @@ export class TodoModalComponent implements OnDestroy, OnInit {
 
   ngOnDestroy(): void {
     // clear the selected todo when the component is destroyed as we are no longer editing it
-    this.store.updateSelectedTodo(null);
-    this.store.updateIsEditMode(false);
+    this.store.updateCurrentSelectedTodo(null);
   }
   route = inject(ActivatedRoute);
 
@@ -71,7 +70,7 @@ export class TodoModalComponent implements OnDestroy, OnInit {
   // todo = this.route.snapshot.data['todo'] as Signal<ITodo> | null | undefined;
 
   // The resolver uses the id param to populate the selectedTodo in the store
-  todo = this.store.selectedTodo;
+  todo = this.store.currentSelectedTodo;
 
   // utility with typecasting for safety used to initialize the form
   getTodo(): ITodo | null {
