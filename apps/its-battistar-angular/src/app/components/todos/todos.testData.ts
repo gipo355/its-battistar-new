@@ -32,7 +32,14 @@ function generateTestTodos(n: number): ITodo[] {
   }
   return todos;
 }
-export const todosTestData: ITodo[] = generateTestTodos(100);
+const todosTestData: ITodo[] = generateTestTodos(100);
+
+export const todosTestDataMap = new Map<string, ITodo>(
+  todosTestData.filter((todo) => todo.id).map((todo) => [todo.id, todo]) as [
+    string,
+    ITodo,
+  ][]
+);
 
 // try with manual data
 // export const todosTestData: ITodo[] = [

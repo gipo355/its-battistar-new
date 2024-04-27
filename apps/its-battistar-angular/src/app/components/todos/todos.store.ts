@@ -15,12 +15,13 @@ import {
   withState,
 } from '@ngrx/signals';
 
-import { todosTestData } from './todos.testData';
+import { todosTestDataMap } from './todos.testData';
 // import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 interface TodosState {
   // TODO: possibly use a map instead of an array for faster state updates
-  todos: ITodo[];
+  todos: Map<string, ITodo>;
+
   isLoading: boolean;
   currentSelectedTodo: ITodo | null;
 
@@ -47,7 +48,7 @@ interface TodosState {
 // TODO: move to express backend init
 const initialState: TodosState = {
   // FAKER lib is huge, will fail the build
-  todos: todosTestData,
+  todos: todosTestDataMap,
 
   isLoading: false,
 
@@ -88,7 +89,7 @@ export const TodosStore = signalStore(
   withState(() => inject(TODOS_STATE)),
 
   withComputed(({ todos }) => ({
-    todosCount: computed(() => todos().length),
+    todosCount: computed(() => todos().size),
   })),
 
   /**
@@ -97,13 +98,15 @@ export const TodosStore = signalStore(
    * This allows setting up a reactive store that updates the UI whenever the state changes.
    * It keeps the logic in one place, making it easier to maintain and test.
    * It also maintains a global sync of the actions performed
+   *
+   * Check the updateFilters method below which triggers this computed method
    */
   withComputed(({ todos, filter }) => ({
     filteredTodos: computed(() => {
       // starts with setting all todos to the root state,
       // this way we always have a clean slate to work with and prevent out of syng
       // IMPORTANT: prevent mutating the state directly
-      let filteredTodos = [...todos()];
+      let filteredTodos = [...todos()].map(([, todo]) => todo);
 
       // remove completed todos if the filter is set to hide them
       // if filter showcomp is true, return all
@@ -126,30 +129,32 @@ export const TodosStore = signalStore(
 
       // sort todos after filtering
       if (filter.currentSortBy() === 'DueDate') {
-        filteredTodos = filteredTodos.sort((a, b) => {
-          if (!a.dueDate || !b.dueDate) {
+        filteredTodos = filteredTodos.sort((todoPrev, todoNext) => {
+          if (!todoPrev.dueDate || !todoNext.dueDate) {
             return 0;
           }
 
-          return a.dueDate.getTime() - b.dueDate.getTime();
+          return todoPrev.dueDate.getTime() - todoNext.dueDate.getTime();
         });
       }
 
       if (filter.currentSortBy() === 'Newest') {
         filteredTodos = filteredTodos.sort(
-          (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+          (todoPrev, todoNext) =>
+            todoNext.createdAt.getTime() - todoPrev.createdAt.getTime()
         );
       }
 
       if (filter.currentSortBy() === 'Oldest') {
         filteredTodos = filteredTodos.sort(
-          (a, b) => a.createdAt.getTime() - b.createdAt.getTime()
+          (todoPrev, todoNext) =>
+            todoPrev.createdAt.getTime() - todoNext.createdAt.getTime()
         );
       }
 
       if (filter.currentSortBy() === 'Title') {
-        filteredTodos = filteredTodos.sort((a, b) =>
-          a.title.localeCompare(b.title)
+        filteredTodos = filteredTodos.sort((todoPrev, todoNext) =>
+          todoPrev.title.localeCompare(todoNext.title)
         );
       }
 
@@ -159,20 +164,34 @@ export const TodosStore = signalStore(
 
   withMethods((store) => ({
     // TODO: will have to add validators and http calls to CRUD
+    // IMP: the id will be generated on the backend, will have to change this
     createTodo(todo: ITodo): void {
-      patchState(store, (state) => ({ todos: [...state.todos, todo] }));
+      patchState(store, (state) => {
+        const todos = new Map(state.todos);
+
+        if (!todo.id) {
+          throw new Error('Todo must have an id');
+        }
+
+        todos.set(todo.id, todo);
+        return { todos };
+      });
     },
 
     deleteTodoById(id: string): void {
-      patchState(store, (state) => ({
-        todos: state.todos.filter((todo) => todo.id !== id),
-      }));
+      patchState(store, (state) => {
+        const todos = new Map(state.todos);
+        todos.delete(id);
+        return { todos };
+      });
     },
 
     updateTodoById(id: string, todo: ITodo): void {
-      patchState(store, (state) => ({
-        todos: state.todos.map((t) => (t.id === id ? todo : t)),
-      }));
+      patchState(store, (state) => {
+        const todos = new Map(state.todos);
+        todos.set(id, todo);
+        return { todos };
+      });
     },
 
     updateCurrentSelectedTodo(todo: ITodo | null): void {
@@ -180,6 +199,11 @@ export const TodosStore = signalStore(
       patchState(store, () => ({ currentSelectedTodo: todo }));
     },
 
+    /**
+     * Updates the filter state.
+     * This will trigger the computed method that filters the todos.
+     * Every time the filter state changes, the computed method will rerun and update the filtered todos.
+     */
     updateFilters(filters: Partial<TodosState['filter']>): void {
       patchState(store, (state) => {
         // create a copy of the current filter
