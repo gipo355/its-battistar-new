@@ -30,7 +30,7 @@ export const todoModalResolverServiceFN: ResolveFn<
   }
 
   // update state
-  todosStore.updateCurrentSelectedTodo(todo);
+  todosStore.setOrRemoveCurrentSelectedTodo(todo);
   return;
 
   // old return, was providing a signal

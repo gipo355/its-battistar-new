@@ -186,6 +186,22 @@ export const TodosStore = signalStore(
       });
     },
 
+    /**
+     * this method is the reason i converted the todos to a map.
+     * with a map, we can update the todo directly by id with O(1) complexity
+     * allowing us to live update the todo in the store on user input change
+     *
+     * the flow is as follows:
+     * 1. user changes the todo in the modal
+     * 2. the currentSelectedTodo is updated in the store with the new values
+     * 3. on currentSelectedTodo change, we make a PATCH request and if successful, state is updated with the changed todo
+     *
+     * IMP: handle offline cases and errors
+     *
+     * this way we avoid creating a new todo for every input change polluting memory
+     * and we keep the state in sync with the user input
+     *
+     */
     updateTodoById(id: string, todo: ITodo): void {
       patchState(store, (state) => {
         const todos = new Map(state.todos);
@@ -194,9 +210,33 @@ export const TodosStore = signalStore(
       });
     },
 
-    updateCurrentSelectedTodo(todo: ITodo | null): void {
-      // 👇 Updating state using the `patchState` function.
-      patchState(store, () => ({ currentSelectedTodo: todo }));
+    setOrRemoveCurrentSelectedTodo(todo: ITodo | null): void {
+      patchState(store, () => {
+        return {
+          currentSelectedTodo: todo,
+        };
+      });
+    },
+
+    updateCurrentSelectedTodoValues(todo: ITodo): void {
+      patchState(store, () => {
+        const todos = new Map(store.todos());
+
+        /** keep store in sync if not null, we update the selected todo on input change
+         * to provide live update
+         */
+        if (!todo.id) {
+          throw new Error('Todo must have an id');
+        }
+
+        todos.set(todo.id, todo);
+
+        return {
+          currentSelectedTodo: todo,
+          // ...(todo.id && { todos }),
+          todos,
+        };
+      });
     },
 
     /**
