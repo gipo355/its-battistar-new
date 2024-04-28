@@ -71,4 +71,4 @@ jobs:
         #   run: nx affected -t lint test build
       # no affected, test all for main branch
       - name: Lint
-        run: nx -t lint test build
+        run: nx run-many -t lint test build
