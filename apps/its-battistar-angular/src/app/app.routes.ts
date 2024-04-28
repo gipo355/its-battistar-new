@@ -31,18 +31,18 @@ export const appRoutes: Route[] = [
       ),
   },
 
-  // BUG: guard, redirect to error, doesn't work
   {
-    path: '**',
+    path: ':error',
     // pass this component to the error data to show with a resolver?
+    // ideally the url name should match the error type (page-not-found, server-error, etc)
     pathMatch: 'full',
     loadChildren: () =>
       import('@its-battistar/error-page').then((m) => m.errorPageRoutes),
   },
 
-  // {
-  //   path: '**',
-  //   pathMatch: 'full',
-  //   redirectTo: 'error',
-  // },
+  {
+    path: '**',
+    pathMatch: 'full',
+    redirectTo: 'error',
+  },
 ];
