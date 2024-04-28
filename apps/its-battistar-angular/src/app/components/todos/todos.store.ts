@@ -124,7 +124,6 @@ export const TodosStore = signalStore(
       }
 
       // remove expired if filter hides them
-      console.log('filter.showExpired()', filter.showExpired());
       if (!filter.showExpired()) {
         filteredTodos = filteredTodos.filter((todo) => !todo.expired);
       }
@@ -184,12 +183,18 @@ export const TodosStore = signalStore(
       try {
         patchState(store, { isLoading: true });
 
-        const request = await todoService.getTodos$();
+        // FIXME: change here to dynamically set the query params
+        // may be load on every showCompleted switch?
+        // can add more query params when changing filters and more
+        const request = await todoService.getTodos$({
+          showCompleted: true,
+        });
 
         if (!request.ok) {
           throw new Error(`Error loading todos: ${request.message ?? ''}`);
         }
 
+        // BUG: not receiving completed todos because it expects query param showCompleted
         const todos = request.data;
 
         if (!todos) {
@@ -261,18 +266,22 @@ export const TodosStore = signalStore(
       });
     },
 
-    deleteTodo(): void {
-      patchState(store, (state) => {
-        const todos = new Map(state.todos);
-        const todoToDelete = state.currentSelectedTodo;
-        if (!todoToDelete?.id) {
-          throw new Error('No todo selected to delete');
-        }
+    async deleteTodo(): Promise<void> {
+      const todoToDelete = store.currentSelectedTodo();
+      if (!todoToDelete?.id) {
+        throw new Error('No todo selected to delete');
+      }
 
-        // TODO: http call to delete the todo
+      const response = await todoService.deleteTodo$(todoToDelete.id);
+      if (!response.ok) {
+        throw new Error(`Error deleting todo: ${response.message ?? ''}`);
+      }
 
-        todos.delete(todoToDelete.id);
+      const todos = new Map(store.todos());
 
+      todos.delete(todoToDelete.id);
+
+      patchState(store, () => {
         return {
           todos,
           // reset to prevent conflicts
@@ -285,6 +294,7 @@ export const TodosStore = signalStore(
     async updateTodo(): Promise<void> {
       try {
         const currentSelectedTodo = store.currentSelectedTodo();
+
         if (!currentSelectedTodo?.id) {
           throw new Error('No todo selected to update');
         }
@@ -356,6 +366,8 @@ export const TodosStore = signalStore(
      */
     syncCurrentWithTodos(): void {
       patchState(store, (state) => {
+        // at this point, we have the currentSelectedTodo and currentNewTodo
+        // from the database and we can sync them
         const todos = new Map(store.todos());
 
         const currentSelectedTodo = state.currentSelectedTodo;

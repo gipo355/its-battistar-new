@@ -172,6 +172,7 @@ export class TodoModalComponent implements OnDestroy, OnInit {
   async onSubmit(): Promise<void> {
     // creates the todo in db, sets currentNewTodo to todo with ID
     // the sync on exit will update the store with the new todo
+    // FIXME: allow those methods to take an id as argument to be reusable?
     this.store.createTodo();
 
     // flow:
@@ -192,7 +193,8 @@ export class TodoModalComponent implements OnDestroy, OnInit {
    */
   async onExit(): Promise<void> {
     // if we are editing, update the todo in the db and sync it to the currentSelectedTodo
-    if (this.store.currentSelectedTodo()?.id) this.store.updateTodo();
+    // FIXME: allow those methods to take an id as argument to be reusable?
+    if (this.store.currentSelectedTodo()?.id) await this.store.updateTodo();
 
     // sync will check if we have currentNewTodo or currentSelectedTodo
     // will update the store to sync it with respective todo which is the return of
@@ -211,11 +213,13 @@ export class TodoModalComponent implements OnDestroy, OnInit {
   async onDelete(): Promise<void> {
     // deletes todo from db and store, removes current selected todo
     // uses currentSelectedTodo to delete the todo
-    this.store.deleteTodo();
+    // FIXME: allow those methods to take an id as argument to be reusable?
+    await this.store.deleteTodo();
 
     await this.onExit();
   }
 
+  // BUG: doesn't update the db
   async onToggleCompleted(): Promise<void> {
     const selectedTodo = this.store.currentSelectedTodo();
 

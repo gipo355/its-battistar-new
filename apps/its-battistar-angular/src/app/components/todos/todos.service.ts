@@ -12,24 +12,29 @@ import { environment } from '../../../environments/environment';
 export class TodosService {
   http = inject(HttpClient);
 
-  async getTodos$(): Promise<CustomResponse<ITodo[]>> {
-    console.log('Getting todos');
+  async getTodos$({
+    showCompleted = true,
+  }: {
+    showCompleted?: boolean;
+  }): Promise<CustomResponse<ITodo[]>> {
     const request$ = this.http
       .get<CustomResponse<ITodo[]>>(`${environment.apiUrl}/api/todos`, {
         withCredentials: true,
+        params: {
+          showCompleted: showCompleted.toString(),
+        },
       })
       .pipe(timeout(3000), retry(2), take(1));
 
     return await lastValueFrom<CustomResponse<ITodo[]>>(request$);
   }
 
-  async updateTodo$(todo: ITodo): Promise<CustomResponse<ITodo[]>> {
-    console.log('Updating todo');
+  async updateTodo$(todo: ITodo): Promise<CustomResponse<ITodo>> {
     if (!todo.id) {
       throw new Error('Todo id is required');
     }
     const request$ = this.http
-      .patch<CustomResponse<ITodo[]>>(
+      .patch<CustomResponse<ITodo>>(
         `${environment.apiUrl}/api/todos/${todo.id}`,
         todo,
         {
@@ -38,6 +43,19 @@ export class TodosService {
       )
       .pipe(timeout(3000), retry(2), take(1));
 
-    return await lastValueFrom<CustomResponse<ITodo[]>>(request$);
+    return await lastValueFrom<CustomResponse<ITodo>>(request$);
+  }
+
+  async deleteTodo$(id: string): Promise<CustomResponse<null>> {
+    if (!id) {
+      throw new Error('Todo id is required');
+    }
+    const request$ = this.http
+      .delete<CustomResponse<null>>(`${environment.apiUrl}/api/todos/${id}`, {
+        withCredentials: true,
+      })
+      .pipe(timeout(3000), retry(2), take(1));
+
+    return await lastValueFrom<CustomResponse<null>>(request$);
   }
 }

@@ -48,8 +48,6 @@ export class TodosComponent implements OnInit {
   }
 
   async onClickTodoItem(todo: ITodo): Promise<void> {
-    console.log('Clicked todo item:', todo);
-
     // resolver takes care of updating the selected todo using the id
     await this.router.navigate(['.', todo.id], {
       relativeTo: this.route,

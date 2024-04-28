@@ -86,8 +86,9 @@ export const getOneTodo = catchAsync(async (req, res) => {
 });
 
 export const patchOneTodo = catchAsync(async (req, res) => {
+  console.log(req.body);
   const { id } = req.params as { id: string };
-  const { title, completed, dueDate } = req.body as Partial<ITodo>;
+  const { title, completed, dueDate, description } = req.body as Partial<ITodo>;
 
   const todo = await TodoModel.findById(id);
 
@@ -103,15 +104,16 @@ export const patchOneTodo = catchAsync(async (req, res) => {
   title && (todo.title = title);
   completed && (todo.completed = completed);
   dueDate && (todo.dueDate = dueDate);
+  description && (todo.description = description);
 
-  await todo.save();
+  const newTodo = await todo.save();
 
   res.status(StatusCodes.OK).json(
     new CustomResponse<ITodo>({
       ok: true,
       statusCode: StatusCodes.OK,
       message: 'Todo updated successfully',
-      data: todo,
+      data: newTodo,
     })
   );
 });
