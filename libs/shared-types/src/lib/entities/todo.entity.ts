@@ -31,7 +31,7 @@ export interface ITodoSortByOptions {
 }
 
 // BUG: can't import from shared-types into angular real values, only types
-const TodoColorOptions: ITodoColorOptions = {
+export const TodoColorOptions: ITodoColorOptions = {
   red: 'red',
   blue: 'blue',
   green: 'green',
