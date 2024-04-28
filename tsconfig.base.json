@@ -19,6 +19,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@its-battistar/error-page": ["libs/error-page/src/index.ts"],
       "@its-battistar/shared-types": ["libs/shared-types/src/index.ts"]
     }
   },
