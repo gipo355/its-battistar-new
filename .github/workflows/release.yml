@@ -18,9 +18,9 @@ jobs:
   pre-release:
     name: Pre Release
     runs-on: ubuntu-22.04
-    permissions:
-      contents: 'read'
-      actions: 'write'
+    permissions: 'write-all'
+    # contents: 'read'
+    # actions: 'write'
     steps:
       # ...
       # checkout
