@@ -1,5 +1,8 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
+import { todosRoutes } from '../todos.routes';
 import { TodoFilterComponent } from './todo-filter.component';
 
 describe('TodoFilterComponent', () => {
@@ -9,6 +12,7 @@ describe('TodoFilterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TodoFilterComponent],
+      providers: [provideRouter(todosRoutes), provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TodoFilterComponent);

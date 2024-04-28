@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
@@ -11,7 +12,7 @@ describe('TodoModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TodoModalComponent],
-      providers: [provideRouter(todosRoutes)],
+      providers: [provideRouter(todosRoutes), provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TodoModalComponent);
