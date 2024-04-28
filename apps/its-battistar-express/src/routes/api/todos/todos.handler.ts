@@ -1,13 +1,15 @@
 import {
   CustomResponse,
   ITodo,
-  validateTodo,
+  ITodoColorOptions,
 } from '@its-battistar/shared-types';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError } from '../../../utils/app-error';
 import { catchAsync } from '../../../utils/catch-async';
 import { TodoModel } from './todos.model';
+
+// FIXME:  validation, add input sanitization
 
 export const getAllTodos = catchAsync(async (req, res) => {
   const { showCompleted } = req.query as { showCompleted: string | undefined };
@@ -31,7 +33,13 @@ export const getAllTodos = catchAsync(async (req, res) => {
 
 // TODO: validation for all inputs, stringify for responses
 export const createTodo = catchAsync(async (req, res) => {
-  const { title, dueDate } = req.body as { title: string; dueDate: string };
+  console.log('createTodo', req.body);
+  const { title, dueDate, description, color } = req.body as {
+    title: string;
+    dueDate: string;
+    description: string;
+    color: keyof ITodoColorOptions;
+  };
 
   // let date: string | Date | undefined;
 
@@ -40,12 +48,15 @@ export const createTodo = catchAsync(async (req, res) => {
   // }
 
   // FIXME: this validation doesn't work
-  if (!validateTodo({ title, dueDate })) {
-    throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
-  }
+  // if (!validateTodo({ title, dueDate })) {
+  //   throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
+  // }
 
   const newTodo = await TodoModel.create({
     title,
+    dueDate: new Date(dueDate),
+    description,
+    color,
     // (dueDate && ...{dueDate}),
   });
 

@@ -46,6 +46,17 @@ export class TodosService {
     return await lastValueFrom<CustomResponse<ITodo>>(request$);
   }
 
+  async createTodo$(todo: ITodo): Promise<CustomResponse<ITodo>> {
+    console.log('createTodo$', todo);
+    const request$ = this.http
+      .post<CustomResponse<ITodo>>(`${environment.apiUrl}/api/todos`, todo, {
+        withCredentials: true,
+      })
+      .pipe(timeout(3000), retry(2), take(1));
+
+    return await lastValueFrom<CustomResponse<ITodo>>(request$);
+  }
+
   async deleteTodo$(id: string): Promise<CustomResponse<null>> {
     if (!id) {
       throw new Error('Todo id is required');

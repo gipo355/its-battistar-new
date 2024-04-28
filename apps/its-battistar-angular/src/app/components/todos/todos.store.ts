@@ -174,6 +174,8 @@ export const TodosStore = signalStore(
    * can inject services
    */
   withMethods((store, todoService = inject(TodosService)) => ({
+    // TODO: expired must be set based on due date, won't refresh automatically
+
     /**
      * async side effects
      *
@@ -223,17 +225,17 @@ export const TodosStore = signalStore(
         });
       } catch (error) {
         // TODO: handle errors
-        console.error('Error loading todos', error);
         patchState(store, { isLoading: false });
+        throw new Error('Error loading todos');
       }
     },
 
     // TODO: will have to add validators and http calls to CRUD
-    // IMP: the id will be generated on the backend, will have to change this
-    createTodo(): void {
-      patchState(store, (state) => {
-        const currentNewTodo = state.currentNewTodo;
+    async createTodo(): Promise<void> {
+      try {
+        const currentNewTodo = store.currentNewTodo();
 
+        // handle edge error cases
         if (!currentNewTodo) {
           throw new Error('No new todo to create');
         }
@@ -241,54 +243,65 @@ export const TodosStore = signalStore(
         // todo is a partial todo, with that info we call db to create the todo
         // then create a new todo here and set it in the store as currentNewTodo
 
-        // TODO: http call to create the todo
-        const newTodo: ITodo = {
-          ...currentNewTodo,
-          title: currentNewTodo.title,
-          description: currentNewTodo.description,
-          id: new Date().getTime().toString(),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          completed: false,
-          expired: false,
-        };
-
-        // handle possible errors
-        if (!newTodo.id) {
-          throw new Error('Todo must have an ID');
+        const response = await todoService.createTodo$(currentNewTodo);
+        if (!response.ok) {
+          throw new Error(`Error creating todo: ${response.message ?? ''}`);
         }
 
-        // we modify only the current new todo
-        // the method syncCurrentWithTodos will handle syncing todos with the current new todo
-        return {
-          currentNewTodo: newTodo,
-        };
-      });
+        const newTodo = response.data;
+
+        // BUG: not setting due date
+        // not getting back dueDate from the server
+        console.log('newTodo', newTodo);
+
+        // handle possible errors
+        if (!newTodo?.id) {
+          throw new Error('Error creating todo');
+        }
+
+        newTodo.dueDate && (newTodo.dueDate = new Date(newTodo.dueDate));
+        newTodo.createdAt = new Date(newTodo.createdAt);
+        newTodo.updatedAt = new Date(newTodo.updatedAt);
+
+        patchState(store, () => {
+          // we modify only the current new todo
+          // the method syncCurrentWithTodos will handle syncing todos with the current new todo
+          return {
+            currentNewTodo: newTodo,
+          };
+        });
+      } catch (error) {
+        throw new Error('Error creating todo');
+      }
     },
 
     async deleteTodo(): Promise<void> {
-      const todoToDelete = store.currentSelectedTodo();
-      if (!todoToDelete?.id) {
-        throw new Error('No todo selected to delete');
+      try {
+        const todoToDelete = store.currentSelectedTodo();
+        if (!todoToDelete?.id) {
+          throw new Error('No todo selected to delete');
+        }
+
+        const response = await todoService.deleteTodo$(todoToDelete.id);
+        if (!response.ok) {
+          throw new Error(`Error deleting todo: ${response.message ?? ''}`);
+        }
+
+        const todos = new Map(store.todos());
+
+        todos.delete(todoToDelete.id);
+
+        patchState(store, () => {
+          return {
+            todos,
+            // reset to prevent conflicts
+            currentSelectedTodo: null,
+            currentNewTodo: null,
+          };
+        });
+      } catch (error) {
+        throw new Error('Error deleting todo');
       }
-
-      const response = await todoService.deleteTodo$(todoToDelete.id);
-      if (!response.ok) {
-        throw new Error(`Error deleting todo: ${response.message ?? ''}`);
-      }
-
-      const todos = new Map(store.todos());
-
-      todos.delete(todoToDelete.id);
-
-      patchState(store, () => {
-        return {
-          todos,
-          // reset to prevent conflicts
-          currentSelectedTodo: null,
-          currentNewTodo: null,
-        };
-      });
     },
 
     async updateTodo(): Promise<void> {

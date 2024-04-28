@@ -173,7 +173,7 @@ export class TodoModalComponent implements OnDestroy, OnInit {
     // creates the todo in db, sets currentNewTodo to todo with ID
     // the sync on exit will update the store with the new todo
     // FIXME: allow those methods to take an id as argument to be reusable?
-    this.store.createTodo();
+    await this.store.createTodo();
 
     // flow:
     // the todo service has the http calls methods
