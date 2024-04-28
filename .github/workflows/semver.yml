@@ -72,4 +72,6 @@ jobs:
           echo "HEAD: ${{ env.NX_HEAD }}"
       # Bump semver packages
       - name: release affected packages
-        run: pnpx nx affected -t version --noVerify
+        run: |
+          pnpx nx affected -t version --noVerify
+          git push

@@ -84,6 +84,8 @@ export const todoSchema = Type.Object({
 
 export type TTodo = Static<typeof todoSchema>;
 
+export const hello = 'hello';
+
 // MONGOOSE requires a date type which ajv does not support
 // so we use this interface to pass to mongoose
 export interface ITodo {
