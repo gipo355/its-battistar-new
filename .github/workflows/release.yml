@@ -1,3 +1,7 @@
+# https://nx.dev/ci/recipes/set-up/monorepo-ci-github-actions
+# https://medium.com/ngconf/running-nx-affected-commands-in-github-actions-e126b808506c
+# we want to release the packages that have been affected by the changes
+# compare head to head-1
 name: pre-release
 on:
   push:
@@ -14,6 +18,9 @@ jobs:
   pre-release:
     name: Pre Release
     runs-on: ubuntu-22.04
+    permissions:
+      contents: 'read'
+      actions: 'read'
     steps:
       # ...
       # checkout
@@ -47,9 +54,16 @@ jobs:
         run: pnpm add -g nx
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      # sets the base and head SHAs required for the nx affected commands in CI
+      - name:
+          Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v4
+      - run: |
+          echo "BASE: ${{ env.NX_BASE }}"
+          echo "HEAD: ${{ env.NX_HEAD }}"
       # Release packages
-      - name: release packages
-        run: nx affected -t version --base=origin/main --head=HEAD
+      - name: release affected packages
+        run: nx affected -t version
       - name: Create github release
         uses: 'marvinpinto/action-automatic-releases@latest'
         with:
@@ -58,4 +72,6 @@ jobs:
           prerelease: true
           title: 'Development Build'
           files: |
-            **/*CHANGELOG.md
+            apps/its-battistar-angular/CHANGELOG.md
+            apps/its-battistar-express/CHANGELOG.md
+            CHANGELOG.md

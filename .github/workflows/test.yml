@@ -1,4 +1,4 @@
-name: Lint and Test
+name: Lint Test Build
 on:
   pull_request:
     branches:
@@ -48,9 +48,12 @@ jobs:
         run: pnpm add -g nx
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      # Test
+      # Lint
       - name: Lint
-        run: nx affected -t lint
+        run: nx -t lint
       # Test
       - name: Test
-        run: nx affected -t test
+        run: nx -t test
+      # Build
+      - name: Build
+        run: nx -t build
