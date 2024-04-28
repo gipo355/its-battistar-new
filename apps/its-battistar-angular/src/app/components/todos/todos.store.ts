@@ -16,7 +16,6 @@ import {
 } from '@ngrx/signals';
 
 import { TodosService } from './todos.service';
-import { todosTestDataMap } from './todos.testData';
 // import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 interface TodosState {
@@ -56,7 +55,7 @@ interface TodosState {
 // TODO: move to express backend init
 const initialState: TodosState = {
   // FAKER lib is huge, will fail the build
-  todos: todosTestDataMap,
+  todos: new Map<string, ITodo>(),
 
   isLoading: false,
 
@@ -185,13 +184,34 @@ export const TodosStore = signalStore(
         const request = await todoService.getTodos$();
         console.log('request', request);
 
-        patchState(store, ({ todos }) => {
+        const todos = request.data;
+
+        if (!todos) {
+          throw new Error('No todos found');
+        }
+
+        const todosMap = new Map<string, ITodo>(
+          todos
+            .filter((todo) => todo.id)
+            .map((todo) => {
+              if (todo.dueDate) {
+                todo.dueDate = new Date(todo.dueDate);
+              }
+              todo.createdAt = new Date(todo.createdAt);
+              todo.updatedAt = new Date(todo.updatedAt);
+
+              return [todo.id, todo];
+            }) as [string, ITodo][]
+        );
+
+        patchState(store, () => {
           return {
-            todos,
+            todos: todosMap,
             isLoading: false,
           };
         });
       } catch (error) {
+        // TODO: handle errors
         console.error('Error loading todos', error);
         patchState(store, { isLoading: false });
       }

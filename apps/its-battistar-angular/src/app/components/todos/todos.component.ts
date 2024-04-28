@@ -41,6 +41,9 @@ export class TodosComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     initFlowbite();
 
+    /**
+     * Load todos from the server and store them in the store when the component is initialized.
+     */
     await this.todoStore.loadTodos();
   }
 
