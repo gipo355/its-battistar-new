@@ -31,9 +31,18 @@ export const appRoutes: Route[] = [
       ),
   },
 
-  // TODO: guard, redirect to home
+  // BUG: guard, redirect to error, doesn't work
   {
-    path: '*',
-    redirectTo: '',
+    path: '**',
+    // pass this component to the error data to show with a resolver?
+    pathMatch: 'full',
+    loadChildren: () =>
+      import('@its-battistar/error-page').then((m) => m.errorPageRoutes),
   },
+
+  // {
+  //   path: '**',
+  //   pathMatch: 'full',
+  //   redirectTo: 'error',
+  // },
 ];
