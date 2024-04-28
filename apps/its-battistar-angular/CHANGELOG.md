@@ -11,6 +11,29 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 * **its-battistar-angular:** :sparkles: assign values to form values in modal html ([481aa03](https://github.com/gipo355/its-battistar/commit/481aa03505779c402b313524a3a3c4dd2fcf0ca0))
 * **its-battistar-angular:** :sparkles: clear filter button on filter box ([5a67655](https://github.com/gipo355/its-battistar/commit/5a6765568e9e672577096a6a87710b9b14e934da))
 * **its-battistar-angular:** :sparkles: convert todo array to map for better performance ([66ca98c](https://github.com/gipo355/its-battistar/commit/66ca98cc498c7d77611a5ae3c47ec4b16385af4c))
+* **its-battistar-angular:** :sparkles: converted and cleaned up the modal flow to prepare for http ([8b2af4e](https://github.com/gipo355/its-battistar/commit/8b2af4ecbf53d8aa5adf8391b4826f2cab1300e8))
+* **its-battistar-angular:** :sparkles: delete, toggle completed work in modal ([1f08c05](https://github.com/gipo355/its-battistar/commit/1f08c05a03fc411f2b01336a33ac689c40e420e7))
+* **its-battistar-angular:** :sparkles: implement live update store logic ([ef8d7fe](https://github.com/gipo355/its-battistar/commit/ef8d7fe270a027989492fc7db0b30d045f084192))
+* **its-battistar-angular:** :sparkles: init creating crud methods for todo store ([609e104](https://github.com/gipo355/its-battistar/commit/609e104897c9a64094c4a7d931369b9c0327cc13))
+* **its-battistar-angular:** :sparkles: live update on modal input change ([9898f34](https://github.com/gipo355/its-battistar/commit/9898f346351dbabcf9ec09cf36e7487ee7ad7e80))
+* **its-battistar-angular:** :sparkles: log state on change for dev, prepare state changes modal ([aabe405](https://github.com/gipo355/its-battistar/commit/aabe405f25b49fedc801766602eff567b94027c5))
+* **its-battistar-angular:** :sparkles: modal changes, temporary creation before DB, closes [#53](https://github.com/gipo355/its-battistar/issues/53) ([8b25419](https://github.com/gipo355/its-battistar/commit/8b25419d9a7a1130e089986c63859624085a86cd))
+* **its-battistar-angular:** :sparkles: modal, init crud on state from modal input ([a76587a](https://github.com/gipo355/its-battistar/commit/a76587a79b2530697b6bd4c8503a5eac47a1b42d))
+
+
+### Bug Fixes
+
+* **its-battistar-angular:** :bug: modal form, added form module and fixed formgroup typo in html ([d0a83f3](https://github.com/gipo355/its-battistar/commit/d0a83f34162449416326aeac422f952e3827c1b3))
+
+## 0.1.0 (2024-04-28)
+
+
+### Features
+
+* **its-battistar-angular:** :sparkles: add sentry RUM to angular ([724bb76](https://github.com/gipo355/its-battistar/commit/724bb765856a77919c3d95938df0197fd3820bed))
+* **its-battistar-angular:** :sparkles: assign values to form values in modal html ([481aa03](https://github.com/gipo355/its-battistar/commit/481aa03505779c402b313524a3a3c4dd2fcf0ca0))
+* **its-battistar-angular:** :sparkles: clear filter button on filter box ([5a67655](https://github.com/gipo355/its-battistar/commit/5a6765568e9e672577096a6a87710b9b14e934da))
+* **its-battistar-angular:** :sparkles: convert todo array to map for better performance ([66ca98c](https://github.com/gipo355/its-battistar/commit/66ca98cc498c7d77611a5ae3c47ec4b16385af4c))
 * **its-battistar-angular:** :sparkles: delete, toggle completed work in modal ([1f08c05](https://github.com/gipo355/its-battistar/commit/1f08c05a03fc411f2b01336a33ac689c40e420e7))
 * **its-battistar-angular:** :sparkles: implement live update store logic ([ef8d7fe](https://github.com/gipo355/its-battistar/commit/ef8d7fe270a027989492fc7db0b30d045f084192))
 * **its-battistar-angular:** :sparkles: init creating crud methods for todo store ([609e104](https://github.com/gipo355/its-battistar/commit/609e104897c9a64094c4a7d931369b9c0327cc13))
