@@ -66,20 +66,21 @@ jobs:
           echo "BASE: ${{ env.NX_BASE }}"
           echo "HEAD: ${{ env.NX_HEAD }}"
         # This line is needed for nx affected to work when CI is running on a PR
-      - name: Set up main branch for affected commands in PR
-        run: git branch --track dev origin/dev
-        if: ${{ github.event_name == 'pull_request' }}
+        # - name: Set up main branch for affected commands in PR
+        #   run: git branch --track dev origin/dev
+        # if: ${{ github.event_name == 'pull_request' }}
       - name: lint test build
         run: nx affected -t lint test build
-      # Bump semver packages
-      - name: Setup Git
-        # required to commit the changes
-        run: |
-          git config --global user.name "gipo355"
-          git config --global user.email "91525512+gipo355@users.noreply.github.com"
-        # TODO: is this the best (logically) place to put this? on every push to dev
-        # we update the version of the affected packages
-      - name: release affected packages
-        run: |
-          pnpx nx affected -t version --noVerify
-          git push --no-verify
+    # Bump semver packages
+    # FIXME: broken, always the same release, why?
+    # - name: Setup Git
+    #   # required to commit the changes
+    #   run: |
+    #     git config --global user.name "gipo355"
+    #     git config --global user.email "91525512+gipo355@users.noreply.github.com"
+    #   # TODO: is this the best (logically) place to put this? on every push to dev
+    #   # we update the version of the affected packages
+    # - name: release affected packages
+    #   run: |
+    #     pnpx nx affected -t version --noVerify
+    #     git push --no-verify
