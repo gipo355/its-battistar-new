@@ -24,6 +24,7 @@ export const todoModalResolverServiceFN: ResolveFn<
 
   const todo = todosStore.todos().get(param);
 
+  // TODO: possibly error message
   if (!todo?.id) {
     await router.navigate(['/todos']);
     return;

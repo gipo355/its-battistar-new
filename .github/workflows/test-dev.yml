@@ -77,6 +77,8 @@ jobs:
         run: |
           git config --global user.name "gipo355"
           git config --global user.email "91525512+gipo355@users.noreply.github.com"
+        # TODO: is this the best (logically) place to put this? on every push to dev
+        # we update the version of the affected packages
       - name: release affected packages
         run: |
           pnpx nx affected -t version --noVerify

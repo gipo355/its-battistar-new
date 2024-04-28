@@ -30,7 +30,7 @@ interface TodosState {
   /**
    * used to keep track of the todo being created in the modal
    */
-  currentNewTodo: Partial<ITodo> | null;
+  currentNewTodo: ITodo | null;
 
   /**
    * used to filter todos by query
@@ -174,37 +174,79 @@ export const TodosStore = signalStore(
   withMethods((store) => ({
     // TODO: will have to add validators and http calls to CRUD
     // IMP: the id will be generated on the backend, will have to change this
-    createTodo(todo: ITodo): void {
+    createTodo(): void {
       patchState(store, (state) => {
-        const todos = new Map(state.todos);
+        const currentNewTodo = state.currentNewTodo;
 
-        // TODO: HTTP call to create the todo, effect? async method?
-        // item should be created on the backend and returned with an id,
-        // save on exit like in the update method
-
-        if (!todo.title) {
-          throw new Error('Todo must have a title');
+        if (!currentNewTodo) {
+          throw new Error('No new todo to create');
         }
 
+        // todo is a partial todo, with that info we call db to create the todo
+        // then create a new todo here and set it in the store as currentNewTodo
+
+        // TODO: http call to create the todo
         const newTodo: ITodo = {
-          ...todo,
+          ...currentNewTodo,
+          title: currentNewTodo.title,
+          description: currentNewTodo.description,
+          id: new Date().getTime().toString(),
           createdAt: new Date(),
           updatedAt: new Date(),
+          completed: false,
+          expired: false,
         };
 
-        // TODO: fix this when we have a backend
-        newTodo.id = Date.now().toString();
+        // handle possible errors
+        if (!newTodo.id) {
+          throw new Error('Todo must have an ID');
+        }
 
-        todos.set(newTodo.id, newTodo);
-        return { todos };
+        // we modify only the current new todo
+        // the method syncCurrentWithTodos will handle syncing todos with the current new todo
+        return {
+          currentNewTodo: newTodo,
+        };
       });
     },
 
-    deleteTodoById(id: string): void {
+    deleteTodo(): void {
       patchState(store, (state) => {
         const todos = new Map(state.todos);
-        todos.delete(id);
-        return { todos };
+        const todoToDelete = state.currentSelectedTodo;
+        if (!todoToDelete?.id) {
+          throw new Error('No todo selected to delete');
+        }
+
+        // TODO: http call to delete the todo
+
+        todos.delete(todoToDelete.id);
+
+        return {
+          todos,
+          // reset to prevent conflicts
+          currentSelectedTodo: null,
+          currentNewTodo: null,
+        };
+      });
+    },
+
+    updateTodo(): void {
+      patchState(store, (state) => {
+        const currentSelectedTodo = state.currentSelectedTodo;
+        if (!currentSelectedTodo?.id) {
+          throw new Error('No todo selected to update');
+        }
+
+        // TODO: http call to update the todo
+        const newTodo: ITodo = {
+          ...currentSelectedTodo,
+          updatedAt: new Date(),
+        };
+
+        return {
+          currentSelectedTodo: newTodo,
+        };
       });
     },
 
@@ -255,17 +297,22 @@ export const TodosStore = signalStore(
      * Having the ID is important as we need to know if it's a new todo or an existing one to update
      */
     syncCurrentWithTodos(): void {
-      patchState(store, () => {
+      patchState(store, (state) => {
         const todos = new Map(store.todos());
-        const currentSelectedTodo = store.currentSelectedTodo();
 
-        // TODO: handle creating a new todo, http
-        if (!currentSelectedTodo?.id) {
-          return { todos };
-        }
+        const currentSelectedTodo = state.currentSelectedTodo;
+
+        const currentNewTodo = state.currentNewTodo;
+
         // handle updating an existing todo
+        if (currentSelectedTodo?.id) {
+          todos.set(currentSelectedTodo.id, currentSelectedTodo);
+        }
+        // handle creating a new todo
+        if (currentNewTodo?.id) {
+          todos.set(currentNewTodo.id, currentNewTodo);
+        }
 
-        todos.set(currentSelectedTodo.id, currentSelectedTodo);
         return {
           todos,
         };
@@ -276,7 +323,8 @@ export const TodosStore = signalStore(
       patchState(store, () => {
         const currentSelectedTodo = store.currentSelectedTodo();
 
-        if (!currentSelectedTodo) {
+        // handle possible edge cases
+        if (!currentSelectedTodo?.id) {
           throw new Error('No todo selected to update');
         }
 
@@ -290,10 +338,29 @@ export const TodosStore = signalStore(
     },
 
     updateCurrentNewTodoValues(todo: Partial<ITodo>): void {
-      patchState(store, () => {
+      // eslint-disable-next-line complexity
+      patchState(store, (state) => {
+        const currentTodo = state.currentNewTodo;
+
+        // if there are values to update, we update the current new todo
+        // keep in mind incoming values and state values may be partial
+        // we must make sure the item stored has all the properties set
+        // to avoid type errors
+        // FIXME: reduce complexity (20), fix type hack
+        const newTodo: ITodo = {
+          title: todo.title ?? currentTodo?.title ?? '',
+          description: todo.description ?? currentTodo?.description ?? '',
+          color: todo.color ?? currentTodo?.color ?? 'default',
+          dueDate: todo.dueDate ?? currentTodo?.dueDate ?? new Date(),
+          expired: todo.expired ?? currentTodo?.expired ?? false,
+          completed: todo.completed ?? currentTodo?.completed ?? false,
+          createdAt: todo.createdAt ?? currentTodo?.createdAt ?? new Date(),
+          updatedAt: new Date(),
+        };
+
         return {
           currentNewTodo: {
-            ...todo,
+            ...newTodo,
           },
         };
       });

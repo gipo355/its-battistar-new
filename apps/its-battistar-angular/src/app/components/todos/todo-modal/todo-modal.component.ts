@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -43,7 +44,20 @@ import { TodoModalService } from './todo-modal.service';
  * to receive the data.
  * the problem is that it adds unneeded complexity and we only have 1 selected todo at a time
  *
- * if we'd need multiple modals to edit different todos open at the same time, we'd need to refactor this
+ * if we'd need multiple modals to edit different todos open
+ * at the same time, we'd need to refactor this
+ *
+ *   the todo can be populated if the user navigates to /todos/edit by clicking
+ *   on a todo in the list or null if it clicks the create button
+ *
+ *   NOTE: we could refactor this component to receive the todo as input
+ *   from the resolver on navigation instead of using the store
+ *
+ *  would be a good exercise to transform this into a dumb component
+ *
+ *   we could use the resolver to populate the todo, passing a Todo or directly a signal
+ *   todo = input<ITodo | null>(null);
+ *   todo = this.route.snapshot.data['todo'] as Signal<ITodo> | null | undefined;
  */
 @Component({
   selector: 'app-todo-modal',
@@ -79,8 +93,7 @@ export class TodoModalComponent implements OnDestroy, OnInit {
     this.modalForm.valueChanges
       .pipe(takeUntil(this.destroy$), debounceTime(this.s.inputDebounceTime))
       .subscribe((value) => {
-        const currentTodo = this.store.currentSelectedTodo();
-
+        // create a new todo with only the values that are not empty
         const newTodo: Partial<ITodo> = {
           ...(value.title && { title: value.title }),
           ...(value.description && { description: value.description }),
@@ -88,25 +101,30 @@ export class TodoModalComponent implements OnDestroy, OnInit {
           ...(value.date && { dueDate: new Date(value.date) }),
         };
 
-        // handle existing todo
-        if (currentTodo?.id) {
+        /**
+         * For both new and existing todos, we keep as a source of truth
+         * the corresponding item in the store.
+         * We perform updates on the item and later sync it with the store and db
+         * when the user exits the modal and is done editing.
+         *
+         * Relevant:
+         * The two functions below udpate the ref item in the store
+         * The onExit() and onSubmit() functions sync the item with the store and db
+         */
+
+        // handle updating existing todo with id
+        if (this.store.currentSelectedTodo()?.id) {
           this.store.updateCurrentSelectedTodoValues(newTodo);
           return;
         }
 
-        // TODO: handle new todo
+        //  handle creating new todo without id
         if (newTodo.title) {
           this.store.updateCurrentNewTodoValues(newTodo);
+          return;
         }
       });
   }
-
-  // the todo can be populated if the user navigates to /todos/edit by clicking on a todo in the list or null if it clicks the create button
-  // NOTE: we could refactor this component to receive the todo as input from the resolver on navigation instead of using the store
-
-  // we could use the resolver to populate the todo, passing a Todo or directly a signal
-  // todo = input<ITodo | null>(null);
-  // todo = this.route.snapshot.data['todo'] as Signal<ITodo> | null | undefined;
 
   // The resolver uses the id param to populate the selectedTodo in the store
   todo = this.store.currentSelectedTodo;
@@ -119,24 +137,30 @@ export class TodoModalComponent implements OnDestroy, OnInit {
   // define the colors since we need to use them in a loop to display them
   colors = Object.keys(this.store.todoColorOptions());
 
-  // TODO: add validators
   modalForm = new FormGroup({
     title: new FormControl<string>(this.getTodo()?.title ?? '', [
       Validators.required.bind(this),
+      Validators.minLength.bind(this, 3),
+      Validators.maxLength.bind(this, 50),
+      Validators.pattern.bind(this, /^[a-zA-Z0-9\s]*$/),
     ]),
     description: new FormControl<string>(this.getTodo()?.description ?? '', [
       Validators.required.bind(this),
+      Validators.maxLength.bind(this, 500),
+      Validators.pattern.bind(this, /^[a-zA-Z0-9\s]*$/),
     ]),
 
-    // TODO: color and dueDate inputs
     date: new FormControl<string>(
-      // eslint-disable-next-line no-magic-numbers
       this.getTodo()?.dueDate?.toISOString().split('T')[0] ??
-        // eslint-disable-next-line no-magic-numbers
-        new Date().toISOString().split('T')[0]
+        new Date().toISOString().split('T')[0],
+      [
+        Validators.required.bind(this),
+        Validators.pattern.bind(this, /^\d{4}-\d{2}-\d{2}$/),
+      ]
     ),
     color: new FormControl<keyof ITodoColorOptions>(
-      this.getTodo()?.color ?? 'green'
+      this.getTodo()?.color ?? 'green',
+      [Validators.required.bind(this)]
     ),
   });
 
@@ -146,22 +170,16 @@ export class TodoModalComponent implements OnDestroy, OnInit {
    * it should update the todo in the store and the database
    */
   async onSubmit(): Promise<void> {
-    /** sync current automatically creates the todo in db if it's a new todo */
+    // creates the todo in db, sets currentNewTodo to todo with ID
+    // the sync on exit will update the store with the new todo
+    this.store.createTodo();
 
-    // TODO: Temporary solution before http call here?
-    const newTodo: ITodo = {
-      id: 'aslkdfjlaskfasl',
-      title: this.store.currentNewTodo()?.title ?? '',
-      description: this.store.currentNewTodo()?.description ?? '',
-      color: this.store.currentNewTodo()?.color ?? 'green',
-      dueDate: this.store.currentNewTodo()?.dueDate ?? undefined,
-      expired: false,
-      completed: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    this.store.createTodo(newTodo);
+    // flow:
+    // the todo service has the http calls methods
+    // will inject in the store to perform
+    // patch, post, delete, get
+    // with async methods
+    // on submit -> create todo -> db -> store current new -> on exit sync
 
     await this.onExit();
   }
@@ -169,13 +187,19 @@ export class TodoModalComponent implements OnDestroy, OnInit {
   /**
    * @description
    * this method is called when the user exits
-   * used for cleanup
+   * used for cleanup and syncing the todos list with the respective
+   * selected or new todo, which at this point is the server response generated todo
    */
   async onExit(): Promise<void> {
-    // TODO: sync must handle receiving both new and updated todos?
+    // if we are editing, update the todo in the db and sync it to the currentSelectedTodo
+    if (this.store.currentSelectedTodo()?.id) this.store.updateTodo();
 
+    // sync will check if we have currentNewTodo or currentSelectedTodo
+    // will update the store to sync it with respective todo which is the return of
+    // the server call at this point
     this.store.syncCurrentWithTodos();
 
+    // reset the state to avoid conflicts
     this.store.removeCurrentSelectedTodo();
     this.store.removeCurrentNewTodo();
 
@@ -184,17 +208,11 @@ export class TodoModalComponent implements OnDestroy, OnInit {
     });
   }
 
-  // NOTE: navigation is in routerLink in the template
   async onDelete(): Promise<void> {
-    const selectedTodo = this.store.currentSelectedTodo();
+    // deletes todo from db and store, removes current selected todo
+    // uses currentSelectedTodo to delete the todo
+    this.store.deleteTodo();
 
-    if (!selectedTodo?.id) {
-      return;
-    }
-
-    this.store.deleteTodoById(selectedTodo.id);
-
-    this.store.removeCurrentSelectedTodo();
     await this.onExit();
   }
 
