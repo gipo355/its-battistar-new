@@ -72,6 +72,11 @@ jobs:
       - name: lint test build
         run: nx affected -t lint test build
       # Bump semver packages
+      - name: Setup Git
+        # required to commit the changes
+        run: |
+          git config --global user.name "gipo355"
+          git config --global user.email "91525512+gipo355@users.noreply.github.com"
       - name: release affected packages
         run: |
           pnpx nx affected -t version --noVerify

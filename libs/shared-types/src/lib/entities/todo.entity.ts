@@ -82,6 +82,8 @@ export const todoSchema = Type.Object({
   }),
 });
 
+export const hello = 'hello';
+
 export type TTodo = Static<typeof todoSchema>;
 
 // MONGOOSE requires a date type which ajv does not support
