@@ -1,7 +1,8 @@
 # Changelog
 
-This file was generated using
-[@jscutlery/semver](https://github.com/jscutlery/semver).
+This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
+
+## 0.0.1 (2024-04-28)
 
 ## [2.0.0](https://github.com/gipo355/its-battistar/compare/its-battistar-be-1.1.0...its-battistar-be-2.0.0) (2024-4-24)
 
