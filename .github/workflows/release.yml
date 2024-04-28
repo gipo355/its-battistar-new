@@ -22,6 +22,10 @@ jobs:
     # contents: 'read'
     # actions: 'write'
     steps:
+      - name: Setup Git
+        run: |
+          git config --global user.name "gipo355"
+          git config --global user.email "91525512+gipo355@users.noreply.github.com"
       # ...
       # checkout
       - name: Checkout
