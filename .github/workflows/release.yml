@@ -55,18 +55,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       # sets the base and head SHAs required for the nx affected commands in CI
-      - name:
-          Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v4
-      - run: |
-          echo "BASE: ${{ env.NX_BASE }}"
-          echo "HEAD: ${{ env.NX_HEAD }}"
+      # - name:
+      #     Derive appropriate SHAs for base and head for `nx affected` commands
+      #   uses: nrwl/nx-set-shas@v4
+      # - run: |
+      #     echo "BASE: ${{ env.NX_BASE }}"
+      #     echo "HEAD: ${{ env.NX_HEAD }}"
       # This line is needed for nx affected to work when CI is running on a PR
       # - run: git branch --track main origin/main
       # Release packages
-      - name: release affected packages
-        # run: nx affected -t version -- --base=$NX_BASE --head=$NX_HEAD
-        run: nx affected -t version
+      # - name: release affected packages
+      #   run: nx affected -t version
+      # run: nx affected -t version -- --base=$NX_BASE --head=$NX_HEAD
       - name: Create github release
         uses: 'marvinpinto/action-automatic-releases@latest'
         with:

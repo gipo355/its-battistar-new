@@ -1,8 +1,10 @@
 name: Lint Test Build
 on:
-  pull_request:
+  push:
     branches:
       - main
+      - dev
+  pull_request:
   workflow_dispatch:
     inputs:
       logLevel:
@@ -48,12 +50,25 @@ jobs:
         run: pnpm add -g nx
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      # Lint
-      - name: Lint
-        run: nx -t lint
-      # Test
-      - name: Test
-        run: nx -t test
-      # Build
-      - name: Build
-        run: nx -t build
+      # testing nx affected
+      - name:
+          Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v4
+      - run: |
+          echo "BASE: ${{ env.NX_BASE }}"
+          echo "HEAD: ${{ env.NX_HEAD }}"
+      # This line is needed for nx affected to work when CI is running on a PR
+      - run: git branch --track main origin/main
+        if: ${{ github.event_name == 'pull_request' }}
+      - name: test
+        run: nx affected -t lint test build
+    # NO AFFECTED
+    # # Lint
+    # - name: Lint
+    #   run: nx -t lint
+    # # Test
+    # - name: Test
+    #   run: nx -t test
+    # # Build
+    # - name: Build
+    #   run: nx -t build
