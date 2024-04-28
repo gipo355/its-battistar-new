@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  OnInit,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { initFlowbite } from 'flowbite';
 
 import { IMenuItem } from '../../pages/dashboard/dashboard.service';
 
@@ -12,7 +18,10 @@ import { IMenuItem } from '../../pages/dashboard/dashboard.service';
   styleUrl: './sidebar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
+  ngOnInit(): void {
+    initFlowbite();
+  }
   title = 'Sidebar';
 
   // TODO: move to signal input
