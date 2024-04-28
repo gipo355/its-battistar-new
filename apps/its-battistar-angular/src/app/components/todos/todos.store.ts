@@ -32,6 +32,8 @@ interface TodosState {
    */
   currentNewTodo: ITodo | null;
 
+  errors: string[] | null;
+
   /**
    * used to filter todos by query
    */
@@ -62,6 +64,8 @@ const initialState: TodosState = {
   currentSelectedTodo: null,
 
   currentNewTodo: null,
+
+  errors: null,
 
   filter: {
     currentSortBy: 'Newest',
@@ -329,6 +333,22 @@ export const TodosStore = signalStore(
       } catch (error) {
         throw new Error('Error updating todo');
       }
+    },
+
+    setErrors(errors: string[]): void {
+      patchState(store, () => {
+        return {
+          errors,
+        };
+      });
+    },
+
+    removeErrors(): void {
+      patchState(store, () => {
+        return {
+          errors: null,
+        };
+      });
     },
 
     removeCurrentSelectedTodo(): void {
