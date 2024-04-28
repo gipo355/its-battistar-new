@@ -4,8 +4,6 @@ import fastJsonStringify from 'fast-json-stringify';
 import ajvInstance from '../../utils/ajv';
 import { accountsSchema, TAccount } from './account.entity';
 
-export const hello = 'hello';
-
 export const userSchemaUserInput = Type.Object({
   name: Type.String(),
   email: Type.String({
