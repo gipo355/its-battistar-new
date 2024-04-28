@@ -21,7 +21,7 @@
 ```bash
 $ git clone https://github.com/gipo355/its-battistar & cd its-battistar
 $ pnpm install
-$ cp apps/its-battistar-be/.env.example apps/its-battistar-be/.env
+$ cp apps/its-battistar-express/.env.example apps/its-battistar-express/.env
 # edit the .env with your own values for production
 $ pnpm run serve-all # serve express + angular
 
