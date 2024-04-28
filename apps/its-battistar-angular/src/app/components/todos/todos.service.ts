@@ -4,7 +4,7 @@ import { inject, Injectable } from '@angular/core';
 import { CustomResponse, ITodo } from '@its-battistar/shared-types';
 import { lastValueFrom, retry, take, timeout } from 'rxjs';
 
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ export class TodosService {
   async getTodos$(): Promise<CustomResponse<ITodo[]>> {
     console.log('Getting todos');
     const request$ = this.http
-      .get<CustomResponse<ITodo[]>>(`${environment.apiUrl}/todos`, {
+      .get<CustomResponse<ITodo[]>>(`${environment.apiUrl}/api/todos`, {
         withCredentials: true,
       })
       .pipe(timeout(3000), retry(2), take(1));

@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/angular-ivy';
 
-import { environment } from './environments/environment.default';
+import { environment } from './environments/environment';
 
 // TODO: should move to open source self hosted sentry for both frontend and backend.
 // Data should stay in the EU.

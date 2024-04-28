@@ -2,6 +2,6 @@ import { IEnvironment } from './environment.entity';
 
 export const environment: IEnvironment = {
   sentryDsn: '',
-  production: false,
-  apiUrl: 'http://localhost:3000/api',
+  production: true,
+  apiUrl: 'https://its-battistar-be-latest.onrender.com',
 };
