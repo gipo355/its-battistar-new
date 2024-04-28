@@ -65,7 +65,8 @@ jobs:
       - run: git branch --track main origin/main
       # Release packages
       - name: release affected packages
-        run: nx affected -t version -- --base=$NX_BASE --head=$NX_HEAD
+        # run: nx affected -t version -- --base=$NX_BASE --head=$NX_HEAD
+        run: nx affected -t version
       - name: Create github release
         uses: 'marvinpinto/action-automatic-releases@latest'
         with:
