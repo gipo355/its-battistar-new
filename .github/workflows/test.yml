@@ -58,10 +58,11 @@ jobs:
           echo "BASE: ${{ env.NX_BASE }}"
           echo "HEAD: ${{ env.NX_HEAD }}"
       # This line is needed for nx affected to work when CI is running on a PR
-      - run: git branch --track main origin/main
+      - name: Set up main branch for affected commands in PR
+        run: git branch --track main origin/main
         if: ${{ github.event_name == 'pull_request' }}
       - name: test
-        run: nx affected -t lint test build
+        run: nx affected -t lint test build -- --base=$BASE --head=$HEAD
     # NO AFFECTED
     # # Lint
     # - name: Lint
