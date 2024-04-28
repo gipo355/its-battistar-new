@@ -21,6 +21,9 @@ jobs:
       # checkout
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # fetch all history so that nx affected can compare with older commits
+          fetch-depth: 0
       # setup node
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -61,9 +64,9 @@ jobs:
         # This line is needed for nx affected to work when CI is running on a PR
         # - name: Set up main branch for affected commands in PR
         #   run: git branch --track main origin/main
-        if: ${{ github.event_name == 'pull_request' }}
+        # if: ${{ github.event_name == 'pull_request' }}
       - name: test
-        run: nx affected -t lint test build
+        run: nx affected -t lint test build --
     # NO AFFECTED
     # # Lint
     # - name: Lint
