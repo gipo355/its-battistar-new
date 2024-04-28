@@ -4,6 +4,8 @@ on:
     branches:
       - dev
   pull_request:
+    branches:
+      - dev
   workflow_dispatch:
     inputs:
       logLevel:
@@ -57,17 +59,18 @@ jobs:
           Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
         with:
+          # must compare to dev branch
           main-branch-name: 'dev'
       - run: |
           echo "BASE: ${{ env.NX_BASE }}"
           echo "HEAD: ${{ env.NX_HEAD }}"
         # This line is needed for nx affected to work when CI is running on a PR
-        # - name: Set up main branch for affected commands in PR
-        #   run: git branch --track main origin/main
-        # if: ${{ github.event_name == 'pull_request' }}
+      - name: Set up main branch for affected commands in PR
+        run: git branch --track dev origin/dev
+        if: ${{ github.event_name == 'pull_request' }}
       - name: test
-        run: nx affected -t lint test build --
-    # NO AFFECTED
+        run: nx affected -t lint test build
+    # NO AFFECTED , test all
     # # Lint
     # - name: Lint
     #   run: nx -t lint
