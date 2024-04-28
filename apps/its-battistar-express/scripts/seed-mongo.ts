@@ -25,6 +25,16 @@ import { UserModel } from '../src/routes/api/users/users.model';
 //   return Math.floor(Math.random() * (max - min + 1) + min);
 // }
 
+// must provide an enum to faker
+enum TodoColorOptions {
+  red = 'red',
+  blue = 'blue',
+  green = 'green',
+  yellow = 'yellow',
+  pink = 'pink',
+  default = 'default',
+}
+
 const dataSet: {
   model: any;
   faker: any;
@@ -44,7 +54,10 @@ const dataSet: {
     model: TodoModel,
     faker: {
       title: () => faker.lorem.sentence(2),
+      description: () => faker.lorem.sentence(10),
       dueDate: () => faker.date.future().toString(),
+      completed: () => faker.datatype.boolean(),
+      color: () => faker.helpers.enumValue(TodoColorOptions),
     },
     batchSize: 100,
     baseArray: [] as TTodoInput[],

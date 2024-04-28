@@ -10,11 +10,12 @@ import { seedDB } from './seed-mongo';
 
 async function setupEnvironment() {
   try {
-    const started = await setup();
-    if (!started.commonStarted) {
-      console.warn('❌ Did not start the common services, skipping seeding');
-      return;
-    }
+    // const started = await setup();
+    await setup();
+    // if (!started.commonStarted) {
+    //   console.warn('❌ Did not start the common services, skipping seeding');
+    //   return;
+    // }
 
     await prepareMongo();
 

@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import { ITodo } from '@its-battistar/shared-types';
+import { ITodo, TodoColorOptions } from '@its-battistar/shared-types';
 import mongoose from 'mongoose';
 import isAscii from 'validator/lib/isAscii';
 
@@ -20,8 +20,31 @@ const todoSchema = new mongoose.Schema<ITodo>(
         message: 'A todo title must only contain ASCII characters',
       },
     },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [
+        200,
+        'A todo description must have less or equal then 200 characters',
+      ],
+      validate: {
+        validator: function validator(value: string) {
+          return isAscii(value);
+        },
+        message: 'A todo description must only contain ASCII characters',
+      },
+    },
     dueDate: {
       type: Date,
+    },
+
+    color: {
+      type: String,
+      enum: {
+        values: Object.keys(TodoColorOptions),
+        message: `Color is either: ${Object.keys(TodoColorOptions).join(', ')}`,
+      },
+      default: 'default',
     },
     completed: {
       type: Boolean,
