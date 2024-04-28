@@ -3,7 +3,15 @@ import { e } from './environments';
 
 export const API_VERSION = 'v1';
 
-export const corsOptions = {};
+export const corsOptions = {
+  origin: e.CORS_ORIGINS,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  maxAge: 86400,
+};
 
 export const helmetOptions = {};
 

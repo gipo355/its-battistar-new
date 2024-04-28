@@ -15,6 +15,7 @@ import {
   withState,
 } from '@ngrx/signals';
 
+import { TodosService } from './todos.service';
 import { todosTestDataMap } from './todos.testData';
 // import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
@@ -171,7 +172,31 @@ export const TodosStore = signalStore(
     }),
   })),
 
-  withMethods((store) => ({
+  withMethods((store, todoService = inject(TodosService)) => ({
+    /**
+     * async side effects
+     *
+     * Load todos from the backend and set them in the store.
+     */
+    async loadTodos(): Promise<void> {
+      try {
+        patchState(store, { isLoading: true });
+
+        const request = await todoService.getTodos$();
+        console.log('request', request);
+
+        patchState(store, ({ todos }) => {
+          return {
+            todos,
+            isLoading: false,
+          };
+        });
+      } catch (error) {
+        console.error('Error loading todos', error);
+        patchState(store, { isLoading: false });
+      }
+    },
+
     // TODO: will have to add validators and http calls to CRUD
     // IMP: the id will be generated on the backend, will have to change this
     createTodo(): void {

@@ -27,6 +27,8 @@ const requiredKeys: Partial<TRequiredEnvironment> = {
 
   PORT: process.env.PORT ?? '3000',
 
+  CORS_ORIGINS: process.env.CORS_ORIGINS,
+
   // TODO: CHANGE STRICT REQUIREMENT IN PRODUCTION
   CSRF_SECRET: process.env.CSRF_SECRET,
   JWT_SECRET: process.env.JWT_SECRET,

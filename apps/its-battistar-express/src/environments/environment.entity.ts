@@ -18,6 +18,8 @@ export const requiredEnvironmentSchema = Type.Object({
 
   PORT: Type.String({}),
 
+  CORS_ORIGINS: Type.String(),
+
   CSRF_SECRET: Type.String(),
   JWT_SECRET: Type.String(),
   COOKIE_SECRET: Type.String(),
