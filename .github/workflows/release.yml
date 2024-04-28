@@ -1,18 +1,57 @@
-name: 'pre-release'
+name: pre-release
 on:
   push:
     branches:
-      - 'main'
+      - main
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'
 jobs:
   pre-release:
-    name: 'Pre Release'
-    runs-on: 'ubuntu-latest'
+    name: Pre Release
+    runs-on: ubuntu-22.04
     steps:
       # ...
-      - name: 'Build & test'
+      # checkout
+      - name: Checkout
+        uses: actions/checkout@v4
+      # setup node
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.5.0
+      # setup pnpm
+      - uses: pnpm/action-setup@v3
+        name: Install pnpm
+        with:
+          version: 8.14.0
+          run_install: false
+      # get cache
+      - name: Get pnpm store directory
+        shell: bash
         run: |
-          echo "done!"
-      - uses: 'marvinpinto/action-automatic-releases@latest'
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      # install dependencies
+      - name: Install NX Cli
+        run: pnpm add -g nx
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      # Release packages
+      - name: release packages
+        run: nx affected -t version --base=origin/main --head=HEAD
+      - name: Create github release
+        uses: 'marvinpinto/action-automatic-releases@latest'
         with:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
           automatic_release_tag: 'latest'
