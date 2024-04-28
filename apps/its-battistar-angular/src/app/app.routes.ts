@@ -32,6 +32,18 @@ export const appRoutes: Route[] = [
   },
 
   {
+    path: 'login',
+    loadComponent: () =>
+      import('./pages/login/login.component').then((m) => m.LoginComponent),
+  },
+
+  {
+    path: 'signup',
+    loadComponent: () =>
+      import('./pages/login/login.component').then((m) => m.LoginComponent),
+  },
+
+  {
     path: ':error',
     // pass this component to the error data to show with a resolver?
     // ideally the url name should match the error type (page-not-found, server-error, etc)

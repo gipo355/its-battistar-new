@@ -1,21 +1,10 @@
-// Testing signals store with state in ngrx/signals
-
 import { inject, InjectionToken } from '@angular/core';
 import { TSafeUser } from '@its-battistar/shared-types';
-import {
-  // patchState,
-  signalStore,
-  // withComputed,
-  // withMethods,
-  withState,
-} from '@ngrx/signals';
-// import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { signalStore, withState } from '@ngrx/signals';
 
 // FIXME: fix type mess from shared lybrary
 interface UserState {
   user: TSafeUser | null;
-  // isLoading: boolean;
-  // selectedMenuItem: MenuItem | null;
 }
 
 const initialState: UserState = {
@@ -28,13 +17,13 @@ const initialState: UserState = {
   },
 };
 
-const TODOS_STATE = new InjectionToken<UserState>('TodosState', {
+const USER_STATE = new InjectionToken<UserState>('TodosState', {
   factory: () => initialState,
 });
 
 export const UserStore = signalStore(
   { providedIn: 'root' }, // 👈 Defining the store as a singleton. No need to provide it in the module.
-  withState(() => inject(TODOS_STATE))
+  withState(() => inject(USER_STATE))
   // withComputed(({ menuItems }) => ({
   //   todosCount: computed(() => todos().length),
   // })),
