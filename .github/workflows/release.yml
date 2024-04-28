@@ -58,4 +58,4 @@ jobs:
           prerelease: true
           title: 'Development Build'
           files: |
-            *CHANGELOG.md
+            **/*CHANGELOG.md
