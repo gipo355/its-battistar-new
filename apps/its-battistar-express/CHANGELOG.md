@@ -1,6 +1,21 @@
 # Changelog
 
-This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
+This file was generated using
+[@jscutlery/semver](https://github.com/jscutlery/semver).
+
+## 0.1.0 (2024-4-28)
+
+### Features
+
+- **its-battistar-angular:** :sparkles: add create
+  ([7ddacef](https://github.com/gipo355/its-battistar/commit/7ddacef34f04c1988f5c5749fb3bd693c19df361))
+- **its-battistar-angular:** :sparkles: make the first http call, add CORS to
+  express
+  ([ec804b1](https://github.com/gipo355/its-battistar/commit/ec804b169529a6510145a61f20e3a73fd50e20a7))
+- **its-battistar-angular:** :sparkles: toggle completion with backend works
+  ([919f96e](https://github.com/gipo355/its-battistar/commit/919f96e3e1ff317b263e77311e4d97d662643f86))
+- **its-battistar-angular:** :sparkles: update and load from be works
+  ([e5d4a06](https://github.com/gipo355/its-battistar/commit/e5d4a0629ee5e73fc2cbb85c149e8ac61c73b8f8))
 
 ## 0.0.1 (2024-04-28)
 
