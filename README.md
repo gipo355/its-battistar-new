@@ -30,7 +30,20 @@ $ pnpm run serve-angular # serve angular only
 $ pnpm run serve-express # serve express only
 ```
 
-used:
+## config files
+
+config files are located at:
+
+express:
+
+- `apps/its-battistar-express/.env`
+- `apps/its-battistar-express/src/app.config.ts`
+
+angular:
+
+- `apps/its-battistar-angular/src/environments/environment.ts` for angular
+
+## used tools
 
 - [git-cz](https://cz-git.qbb.sh/guide/)
 - [semver](https://github.com/jscutlery/semver#jscutlerysemver)
