@@ -27,7 +27,7 @@ Content-Type: application/json
 
 ---
 # update a todo
-POST http://localhost:3000/api/todos/:id
+PATCH http://localhost:3000/api/todos/:id
 Content-Type: application/json
 
 {

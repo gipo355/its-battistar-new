@@ -5,7 +5,7 @@ export const API_VERSION = 'v1';
 
 export const corsOptions = {
   origin: e.CORS_ORIGINS,
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  methods: 'GET,PATCH,POST,DELETE',
   preflightContinue: false,
   optionsSuccessStatus: 204,
   allowedHeaders: ['Content-Type', 'Authorization'],

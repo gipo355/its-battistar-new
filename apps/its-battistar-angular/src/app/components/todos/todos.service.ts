@@ -22,4 +22,22 @@ export class TodosService {
 
     return await lastValueFrom<CustomResponse<ITodo[]>>(request$);
   }
+
+  async updateTodo$(todo: ITodo): Promise<CustomResponse<ITodo[]>> {
+    console.log('Updating todo');
+    if (!todo.id) {
+      throw new Error('Todo id is required');
+    }
+    const request$ = this.http
+      .patch<CustomResponse<ITodo[]>>(
+        `${environment.apiUrl}/api/todos/${todo.id}`,
+        todo,
+        {
+          withCredentials: true,
+        }
+      )
+      .pipe(timeout(3000), retry(2), take(1));
+
+    return await lastValueFrom<CustomResponse<ITodo[]>>(request$);
+  }
 }

@@ -171,6 +171,9 @@ export const TodosStore = signalStore(
     }),
   })),
 
+  /**
+   * can inject services
+   */
   withMethods((store, todoService = inject(TodosService)) => ({
     /**
      * async side effects
@@ -182,7 +185,10 @@ export const TodosStore = signalStore(
         patchState(store, { isLoading: true });
 
         const request = await todoService.getTodos$();
-        console.log('request', request);
+
+        if (!request.ok) {
+          throw new Error(`Error loading todos: ${request.message ?? ''}`);
+        }
 
         const todos = request.data;
 
@@ -276,23 +282,30 @@ export const TodosStore = signalStore(
       });
     },
 
-    updateTodo(): void {
-      patchState(store, (state) => {
-        const currentSelectedTodo = state.currentSelectedTodo;
+    async updateTodo(): Promise<void> {
+      try {
+        const currentSelectedTodo = store.currentSelectedTodo();
         if (!currentSelectedTodo?.id) {
           throw new Error('No todo selected to update');
         }
 
-        // TODO: http call to update the todo
         const newTodo: ITodo = {
           ...currentSelectedTodo,
-          updatedAt: new Date(),
         };
 
-        return {
-          currentSelectedTodo: newTodo,
-        };
-      });
+        const response = await todoService.updateTodo$(newTodo);
+        if (!response.ok) {
+          throw new Error(`Error updating todo: ${response.message ?? ''}`);
+        }
+
+        patchState(store, () => {
+          return {
+            currentSelectedTodo: newTodo,
+          };
+        });
+      } catch (error) {
+        throw new Error('Error updating todo');
+      }
     },
 
     removeCurrentSelectedTodo(): void {
