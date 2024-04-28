@@ -1,5 +1,6 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-![Tests](https://github.com/gipo355/its-battistar/actions/workflows/test.yml/badge.svg?branch=dev)
+![Tests](https://github.com/gipo355/its-battistar/actions/workflows/test-main.yml/badge.svg?branch=main)
+![Tests](https://github.com/gipo355/its-battistar/actions/workflows/test-dev.yml/badge.svg?branch=dev)
 ![Docker](https://github.com/gipo355/its-battistar/actions/workflows/ghcr.yml/badge.svg?branch=main)
 ![Pages](https://github.com/gipo355/its-battistar/actions/workflows/pages.yml/badge.svg?branch=main)
 ![Release](https://github.com/gipo355/its-battistar/actions/workflows/release.yml/badge.svg?branch=main)

@@ -1,4 +1,4 @@
-name: Lint Test Build
+name: 'Lint Test Build Dev'
 on:
   push:
     branches:
@@ -70,13 +70,3 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
       - name: test
         run: nx affected -t lint test build
-    # NO AFFECTED , test all
-    # # Lint
-    # - name: Lint
-    #   run: nx -t lint
-    # # Test
-    # - name: Test
-    #   run: nx -t test
-    # # Build
-    # - name: Build
-    #   run: nx -t build
