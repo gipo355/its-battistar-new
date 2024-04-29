@@ -1,9 +1,10 @@
 import { Static, Type } from '@sinclair/typebox';
+import type mongoose from 'mongoose';
 
 export const accountsSchema = Type.Object({
   id: Type.Optional(Type.String()),
 
-  UserId: Type.String(),
+  User: Type.String(),
 
   active: Type.Boolean(),
 
@@ -40,18 +41,26 @@ export const accountsSchema = Type.Object({
 
 export type TAccount = Static<typeof accountsSchema>;
 
+export enum EStrategy {
+  LOCAL = 'local',
+  GOOGLE = 'google',
+}
+
+/**
+ * needed for mongoose as it requires Date type
+ */
 export interface IAccount {
   id?: string;
-  UserId: string;
+  user: string | mongoose.Schema.Types.ObjectId;
   active: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-  strategy: 'local' | 'google' | 'facebook' | 'twitter' | 'github';
-  providerId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date;
+  strategy: keyof typeof EStrategy;
+  providerId?: string;
   password?: string;
   passwordConfirm?: string;
   passwordResetToken?: string;
   passwordResetExpires?: string;
-  passwordChangedAt?: string;
+  passwordChangedAt?: Date;
 }

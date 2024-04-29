@@ -1,9 +1,28 @@
-import { IUser } from '@its-battistar/shared-types';
+import { ERole, IUser } from '@its-battistar/shared-types';
 import mongoose from 'mongoose';
 // import isAscii from 'validator/lib/isAscii';
 
 const userSchema = new mongoose.Schema<IUser>(
   {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      // validate: [isAscii, 'Only ASCII characters are allowed'],
+    },
+    role: {
+      type: String,
+      required: true,
+      default: ERole.USER,
+      enum: Object.keys(ERole),
+    },
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -12,6 +31,23 @@ const userSchema = new mongoose.Schema<IUser>(
       type: Date,
       default: Date.now(),
     },
+    deletedAt: {
+      type: Date,
+    },
+    active: {
+      type: Boolean,
+      default: true,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    accounts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Account',
+      },
+    ],
   },
   {
     toJSON: {
@@ -32,6 +68,21 @@ userSchema.pre<IUser>('save', function setUpdatedAt(next) {
   next();
 });
 
-const UserModel = mongoose.model('User', userSchema);
+/**
+ * filter out inactive users
+ */
+userSchema.pre(/^find/, function prequery(next) {
+  // this points to the current query
 
-export { UserModel };
+  // can also select: false directly in the model properties to prevent showing it
+  // void this.select('-password -passwordConfirm'); // this will prevent finding it to comparePassword
+
+  // find only docs with active = true
+  if (this instanceof mongoose.Query) {
+    void this.find({ active: { $ne: false } });
+  }
+
+  next();
+});
+
+export const UserModel = mongoose.model('User', userSchema);

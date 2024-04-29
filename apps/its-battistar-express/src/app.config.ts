@@ -26,3 +26,6 @@ export const rateLimiterOptions = {
   execEvenly: false, // Do not delay actions evenly
   // blockDuration: 0, // Do not block if consumed more than points
 };
+
+export const RANDOM_BYTES_VALUE = 32;
+export const RESET_TOKEN_EXPIRY_MINS = 10;

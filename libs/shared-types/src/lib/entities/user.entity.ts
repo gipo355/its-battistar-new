@@ -50,6 +50,7 @@ export const userSchema = Type.Object({
 
   accounts: Type.Array(accountsSchema),
 });
+
 /**
  * @description
  * this is a user schema that can be used to identify all the user properties
@@ -60,9 +61,10 @@ export type TUser = Static<typeof userSchema>;
 // HACK: at the moment this is a hack to be able to provide the type to mongoose
 // mongoose doesn't support typescript types (date)
 export enum ERole {
-  SUPER = 'super',
-  USER = 'user',
+  SUPER = 'SUPER',
+  USER = 'USER',
 }
+
 /**
  * @description
  * This is the user interface that can be used to enforce mongoose schema
