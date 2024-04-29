@@ -146,6 +146,9 @@ importers:
       morgan:
         specifier: ^1.10.0
         version: 1.10.0
+      paseto:
+        specifier: ^3.1.4
+        version: 3.1.4
       passport:
         specifier: ^0.7.0
         version: 0.7.0
@@ -188,6 +191,9 @@ importers:
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
       validator:
         specifier: ^13.11.0
         version: 13.11.0
@@ -15494,6 +15500,11 @@ packages:
       no-case: 3.0.4
       tslib: 2.6.2
     dev: true
+
+  /paseto@3.1.4:
+    resolution: {integrity: sha512-BifaKKu+MS9b/vTgFMC6Q8uLUMqw8VtYgl4qODJWb6Jqt+dTKn8XH9EftJZx+6wxF4ELBbKdH33DZa4inMYVcg==}
+    engines: {node: '>=16.0.0'}
+    dev: false
 
   /passport-jwt@4.0.1:
     resolution: {integrity: sha512-UCKMDYhNuGOBE9/9Ycuoyh7vP6jpeTp/+sfMJl7nLff/t6dps+iaeE0hhNkKN8/HZHcJ7lCdOyDxHdDoxoSvdQ==}

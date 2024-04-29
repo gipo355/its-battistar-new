@@ -1,10 +1,7 @@
 import { EStrategy, IAccount } from '@its-battistar/shared-types';
 import mongoose from 'mongoose';
 
-import {
-  RANDOM_BYTES_VALUE,
-  RESET_TOKEN_EXPIRY_MINS,
-} from '../../../app.config';
+import { APP_CONFIG as c } from '../../../app.config';
 import {
   easyEncrypt,
   generateRandomBytes,
@@ -202,7 +199,9 @@ accountSchema.methods.createPasswordResetToken =
     /**
      * ## generate random bytes to send to user
      */
-    const generatedRandomToken = await generateRandomBytes(RANDOM_BYTES_VALUE);
+    const generatedRandomToken = await generateRandomBytes(
+      c.RANDOM_BYTES_VALUE
+    );
 
     /**
      * ## encrypt token to save in db - we will confront the encrypted token in the db with the unencrypted one in the url ( by encrypting it )
@@ -213,7 +212,7 @@ accountSchema.methods.createPasswordResetToken =
 
     this.passwordResetExpiry = new Date(
       // eslint-disable-next-line no-magic-numbers
-      Date.now() + 1000 * 60 * RESET_TOKEN_EXPIRY_MINS
+      Date.now() + 1000 * 60 * c.RESET_TOKEN_EXPIRY_MINS
     );
 
     // NOTE: we need to save the document to save the token

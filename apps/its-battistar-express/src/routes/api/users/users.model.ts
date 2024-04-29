@@ -1,12 +1,12 @@
 import { ERole, IUser } from '@its-battistar/shared-types';
 import mongoose from 'mongoose';
+import isEmail from 'validator/lib/isEmail';
 // import isAscii from 'validator/lib/isAscii';
 
 const userSchema = new mongoose.Schema<IUser>(
   {
     name: {
       type: String,
-      required: true,
       trim: true,
     },
     email: {
@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema<IUser>(
       unique: true,
       trim: true,
       lowercase: true,
-      // validate: [isAscii, 'Only ASCII characters are allowed'],
+      validate: [isEmail, 'Must be a valid email address'],
     },
     role: {
       type: String,

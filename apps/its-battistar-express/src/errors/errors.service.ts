@@ -76,8 +76,6 @@ export const sendErrorDevelopment = (
   response
     .status(newError.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR)
     .json(
-      // NOTE: eslint has problems resolving types with path aliases
-
       new CustomResponse<DevelopmentResponseData>({
         ok: false,
         statusCode: newError.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
@@ -91,6 +89,7 @@ export const sendErrorDevelopment = (
         },
       })
     );
+  return;
 };
 
 export const sendErrorProduction = (

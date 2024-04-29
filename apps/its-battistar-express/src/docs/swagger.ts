@@ -1,9 +1,9 @@
 import swaggerJSDocument = require('swagger-jsdoc');
 
-import { API_VERSION } from '../app.config';
+import { APP_CONFIG as c } from '../app.config';
 import path = require('path');
 
-const appVersion = API_VERSION;
+const appVersion = c.API_VERSION;
 
 const options: swaggerJSDocument.Options = {
   definition: {

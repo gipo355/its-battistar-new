@@ -1,6 +1,11 @@
 import { Static, Type } from '@sinclair/typebox';
 import type mongoose from 'mongoose';
 
+export enum EStrategy {
+  LOCAL = 'LOCAL',
+  GOOGLE = 'GOOGLE',
+}
+
 export const accountsSchema = Type.Object({
   id: Type.Optional(Type.String()),
 
@@ -20,13 +25,7 @@ export const accountsSchema = Type.Object({
     format: 'date-time',
   }),
 
-  strategy: Type.Union([
-    Type.Literal('local'),
-    Type.Literal('google'),
-    Type.Literal('facebook'),
-    Type.Literal('twitter'),
-    Type.Literal('github'),
-  ]),
+  strategy: Type.Union(Object.keys(EStrategy).map((k) => Type.Literal(k))),
 
   providerId: Type.String(),
 
@@ -40,11 +39,6 @@ export const accountsSchema = Type.Object({
 // NOTE: session, refreshToken, accessToken, etc. are redis specific
 
 export type TAccount = Static<typeof accountsSchema>;
-
-export enum EStrategy {
-  LOCAL = 'local',
-  GOOGLE = 'google',
-}
 
 /**
  * needed for mongoose as it requires Date type

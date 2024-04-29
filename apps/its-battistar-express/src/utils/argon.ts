@@ -2,6 +2,8 @@ import { hash, verify } from '@node-rs/argon2';
 
 import { e } from '../environments';
 
+// TODO: workerpool?
+
 export const enum Algorithm {
   Argon2d,
   Argon2i,

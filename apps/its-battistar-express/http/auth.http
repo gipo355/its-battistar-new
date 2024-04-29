@@ -1,6 +1,12 @@
 # TODO: must implement
 ---
-GET http://localhost:3000/auth/login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@gipo.dev",
+  "name": "gipo",
+}
 
 ---
 GET http://localhost:3000/auth/signup
