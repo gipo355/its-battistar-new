@@ -78,6 +78,7 @@
     "react-dom": "^18.2.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.1",
+    "simple-oauth2": "^5.0.0",
     "tslib": "^2.6.2",
     "validator": "^13.11.0",
     "workerpool": "^9.1.1",
