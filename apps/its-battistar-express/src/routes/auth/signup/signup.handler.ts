@@ -3,6 +3,7 @@ import { Handler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { APP_CONFIG as c } from '../../../app.config';
+import { sessionRedisConnection } from '../../../db/redis';
 import { AppError, catchAsync, createJWT } from '../../../utils';
 import { AccountModel } from '../../api/users/accounts.model';
 import { UserModel } from '../../api/users/users.model';
@@ -100,7 +101,29 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
   res.cookie('accessToken', accessToken, c.JWT_ACCESS_COOKIE_OPTIONS);
   res.cookie('refreshToken', refreshToken, c.JWT_REFRESH_COOKIE_OPTIONS);
 
-  res.status(StatusCodes.OK).json(
+  // TODO: move to util fn
+  /**
+   * set up the whitelist for the refresh token, add it as a key to the redis store
+   * this will allow us to revoke the refresh token and check quickly if it is valid during refresh
+   * we need to store the id of the user to be able to revoke all the refresh tokens associated with the user in case
+   * a an invalid refresh token is used
+   */
+  await sessionRedisConnection.set(
+    refreshToken,
+    user._id.toString(),
+    'EX',
+    c.JWT_REFRESH_TOKEN_OPTIONS.expMilliseconds
+  );
+  /**
+   * add it to a list of refresh tokens for the user to be able to revoke it
+   * where the key is the user id and the values are the refresh tokens issued and valid
+   */
+  await sessionRedisConnection.sadd(user._id.toString(), refreshToken);
+
+  // we only return the id
+  // TODO: if we want to return the use object, make a stringify function
+  // to prevent leaks
+  res.status(StatusCodes.CREATED).json(
     new CustomResponse<{
       accessToken: string;
       refreshToken: string;

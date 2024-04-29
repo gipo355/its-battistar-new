@@ -4,7 +4,7 @@ import { CookieOptions } from 'express';
 import { HelmetOptions } from 'helmet';
 import { IRateLimiterRedisOptions } from 'rate-limiter-flexible';
 
-import { redisConnection } from './db/redis';
+import { rateLimitRedisConnection } from './db/redis';
 import { e } from './environments';
 
 export const APP_CONFIG = {
@@ -24,7 +24,7 @@ export const APP_CONFIG = {
 
   // rate limiting
   rateLimiterOptions: {
-    storeClient: redisConnection,
+    storeClient: rateLimitRedisConnection,
     points: +e.RATE_LIMITER_POINTS, // Number of points
     duration: +e.RATE_LIMITER_DURATION, // Per second(s)
     keyPrefix: 'rateLimiter',
@@ -60,8 +60,10 @@ export const APP_CONFIG = {
   },
   JWT_ACCESS_TOKEN_OPTIONS: {
     expirationTime: '2m',
+    expMilliseconds: 1000 * 60 * 2,
   },
   JWT_REFRESH_TOKEN_OPTIONS: {
     expirationTime: '7d',
+    expMilliseconds: 1000 * 60 * 60 * 24 * 7,
   },
 };

@@ -2,6 +2,7 @@
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
+# must add password
 {
   "email": "test@gipo.dev",
 }
@@ -10,6 +11,7 @@ Content-Type: application/json
 POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
+# must add password, passwordConfirm
 {
   "email": "test@gipo.dev",
 }

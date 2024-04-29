@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 import { appRouter } from './app.router';
 import { appMiddleware } from './app.service';
 import { prepareMongo } from './db/mongo';
-import { redisConnection } from './db/redis';
+import { rateLimitRedisConnection } from './db/redis';
 import { e } from './environments';
 import { finalErrorHandler } from './errors/errors.handler';
 import { preErrorsRouter } from './errors/pre-errors.router';
@@ -32,7 +32,7 @@ export const buildApp = async function (): Promise<Express> {
 
   app.get('/healthz', (_, response) => {
     const mongostate = mongoose.connection.readyState;
-    const redisstate = redisConnection.status;
+    const redisstate = rateLimitRedisConnection.status;
 
     response.status(StatusCodes.OK).json(
       new CustomResponse<{

@@ -8,7 +8,7 @@ import type { Server } from 'node:http';
 import mongoose from 'mongoose';
 
 import { buildApp } from './app';
-import { redisConnection } from './db/redis';
+import { rateLimitRedisConnection, sessionRedisConnection } from './db/redis';
 import { e } from './environments';
 import { logger } from './utils/logger';
 
@@ -36,7 +36,11 @@ export function handleExit(): void {
       logger.error(err);
     });
 
-    redisConnection.quit().catch((err: unknown) => {
+    rateLimitRedisConnection.quit().catch((err: unknown) => {
+      logger.error(err);
+    });
+
+    sessionRedisConnection.quit().catch((err: unknown) => {
       logger.error(err);
     });
 

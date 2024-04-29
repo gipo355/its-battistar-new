@@ -10,4 +10,6 @@ const connection = {
   maxRetriesPerRequest: null,
 };
 
-export const redisConnection = new IORedis(connection);
+export const rateLimitRedisConnection = new IORedis(connection);
+
+export const sessionRedisConnection = new IORedis(connection);

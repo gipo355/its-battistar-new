@@ -21,7 +21,7 @@ services:
     container_name: mongo-battistar-redis-express
     network_mode: host
     ports:
-      - 127.0.0.1:8081:8081
+      - 127.0.0.1:9001:8081
     depends_on:
       - mongo
     environment:
