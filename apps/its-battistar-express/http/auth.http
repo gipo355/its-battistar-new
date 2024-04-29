@@ -1,15 +1,18 @@
-# TODO: must implement
 ---
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
   "email": "test@gipo.dev",
-  "name": "gipo",
 }
 
 ---
-GET http://localhost:3000/auth/signup
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test@gipo.dev",
+}
 
 ---
 GET http://localhost:3000/auth/refresh

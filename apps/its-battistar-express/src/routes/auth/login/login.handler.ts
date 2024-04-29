@@ -3,60 +3,82 @@ import { Handler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError, catchAsync, createJWT } from '../../../utils';
+import { AccountModel } from '../../api/users/accounts.model';
 import { UserModel } from '../../api/users/users.model';
 
 export const loginHandler: Handler = catchAsync(async (req, res) => {
-  const { email, password, passwordConfirm } = req.body as {
+  const { email, password } = req.body as {
     email: string | undefined;
     password: string | undefined;
-    passwordConfirm: string | undefined;
   };
 
-  // validate email and password in mongoose schema or ajv
-  if (!email || !password || !passwordConfirm) {
+  // TODO: validate email and password in mongoose schema or ajv
+  if (!email || !password) {
     throw new AppError(
       'Email and password are required',
       StatusCodes.BAD_REQUEST
     );
   }
 
-  /**
-   * do an upsert
-   */
-  const user = await UserModel.findOneAndUpdate(
-    { email },
-    {
-      $setOnInsert: {
-        email,
-        accounts: [
-          {
-            strategy: 'LOCAL',
-            password,
-            passwordConfirm,
-          },
-        ],
+  const user = await UserModel.findOne({
+    email,
+    accounts: {
+      $elemMatch: {
+        strategy: 'LOCAL',
       },
     },
-    {
-      upsert: true,
-      new: true,
-    }
-  );
+  });
 
-  const jwtPayload = await createJWT({
-    user: user._id.toString(),
+  console.log('user', user);
+
+  // VULNERABILITY: timing attack
+  if (!user) {
+    throw new AppError('Invalid email or password', StatusCodes.UNAUTHORIZED);
+  }
+
+  // compare hashed password with user's password
+  const userAccount = await AccountModel.findOne({
+    user: user._id,
     strategy: 'LOCAL',
+  });
+
+  if (!userAccount) {
+    throw new AppError('Invalid email or password', StatusCodes.UNAUTHORIZED);
+  }
+
+  const isValid = await userAccount.comparePassword(password);
+
+  if (!isValid) {
+    throw new AppError('Invalid email or password', StatusCodes.UNAUTHORIZED);
+  }
+
+  const accessToken = await createJWT({
+    data: {
+      user: user._id.toString(),
+      strategy: 'LOCAL',
+    },
+    type: 'access',
+  });
+
+  const refreshToken = await createJWT({
+    data: {
+      user: user._id.toString(),
+      strategy: 'LOCAL',
+    },
+    type: 'refresh',
   });
 
   res.status(StatusCodes.OK).json(
     new CustomResponse<{
-      jwt: string;
+      accessToken: string;
+      refreshToken: string;
     }>({
       ok: true,
       statusCode: StatusCodes.OK,
       message: 'Logged in successfully',
       data: {
-        jwt: jwtPayload,
+        accessToken,
+        refreshToken,
       },
     })
   );

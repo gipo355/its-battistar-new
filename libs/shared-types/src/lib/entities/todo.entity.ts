@@ -103,6 +103,8 @@ export interface ITodo {
 
   expired: boolean;
 
+  user?: string;
+
   createdAt: Date;
 
   updatedAt: Date;

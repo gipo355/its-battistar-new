@@ -1,5 +1,5 @@
 import { EStrategy, IAccount } from '@its-battistar/shared-types';
-import mongoose from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
 import { APP_CONFIG as c } from '../../../app.config';
 import {
@@ -8,9 +8,22 @@ import {
   hashPassword,
   verifyPassword,
 } from '../../../utils';
-// import isAscii from 'validator/lib/isAscii';
 
-const accountSchema = new mongoose.Schema<IAccount>(
+interface IAccountMethods {
+  comparePassword: (candidatePassword: string) => Promise<boolean>;
+  hasPasswordChangedSinceTokenIssuance: (iat: number) => boolean;
+  createPasswordResetToken: () => Promise<string>;
+  clearPasswordResetToken: () => void;
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+type TAccountModel = Model<IAccount, {}, IAccountMethods>;
+
+const accountSchema = new mongoose.Schema<
+  IAccount,
+  TAccountModel,
+  IAccountMethods
+>(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -165,7 +178,11 @@ accountSchema.methods.comparePassword = async function comparePassword(
   try {
     // this.password is not available if we use select: false
 
-    const userPasswordHash = this.password as string;
+    const userPasswordHash = this.password;
+
+    if (!userPasswordHash) {
+      return false;
+    }
 
     const isValid = await verifyPassword(candidatePassword, userPasswordHash);
 
@@ -181,12 +198,12 @@ accountSchema.methods.comparePassword = async function comparePassword(
 accountSchema.methods.hasPasswordChangedSinceTokenIssuance = function (
   iat: number
 ) {
-  if (this.passwordLastModified) {
+  if (this.passwordChangedAt) {
     // eslint-disable-next-line no-magic-numbers
     const tokenIssuedTime = new Date(iat * 1000); // IAT is in seconds
 
     // if token issued time is smaller or equal than last modification time, it's been issued earlier than last pw modification
-    return tokenIssuedTime <= this.passwordLastModified;
+    return tokenIssuedTime <= this.passwordChangedAt;
   }
 
   return false; // set default for new users
@@ -210,7 +227,7 @@ accountSchema.methods.createPasswordResetToken =
 
     this.passwordResetToken = encryptedToken;
 
-    this.passwordResetExpiry = new Date(
+    this.passwordResetExpires = new Date(
       // eslint-disable-next-line no-magic-numbers
       Date.now() + 1000 * 60 * c.RESET_TOKEN_EXPIRY_MINS
     );
@@ -224,9 +241,12 @@ accountSchema.methods.createPasswordResetToken =
 accountSchema.methods.clearPasswordResetToken =
   function clearPasswordResetToken() {
     this.passwordResetToken = undefined;
-    this.passwordResetExpiry = undefined;
+    this.passwordResetExpires = undefined;
 
     // IMP: we need validateBeforeSave because otherwise it asks to insert all required fields
   };
 
-export const AccountModel = mongoose.model('Account', accountSchema);
+export const AccountModel = mongoose.model<IAccount, TAccountModel>(
+  'Account',
+  accountSchema
+);

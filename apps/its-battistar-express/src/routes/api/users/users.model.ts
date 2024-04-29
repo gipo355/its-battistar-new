@@ -48,6 +48,12 @@ const userSchema = new mongoose.Schema<IUser>(
         ref: 'Account',
       },
     ],
+    todos: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Todo',
+      },
+    ],
   },
   {
     toJSON: {

@@ -1,8 +1,9 @@
 import { Static, TSchema, TString, Type } from '@sinclair/typebox';
 import fastJsonStringify from 'fast-json-stringify';
+import type mongoose from 'mongoose';
 
 import ajvInstance from '../../utils/ajv';
-import { accountsSchema, TAccount } from './account.entity';
+import { accountsSchema } from './account.entity';
 
 export const userSchemaUserInput = Type.Object({
   name: Type.String(),
@@ -86,9 +87,11 @@ export interface IUser {
 
   active: boolean;
 
+  todos: string[] | mongoose.Schema.Types.ObjectId[];
+
   verified: boolean;
 
-  accounts: TAccount[];
+  accounts: string[] | mongoose.Schema.Types.ObjectId[];
 }
 
 // TODO: mongoose types

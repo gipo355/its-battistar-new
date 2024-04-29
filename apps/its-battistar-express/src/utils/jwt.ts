@@ -4,6 +4,7 @@ import { EStrategy } from '@its-battistar/shared-types';
 import { StatusCodes } from 'http-status-codes';
 import * as jose from 'jose';
 
+import { APP_CONFIG as c } from '../app.config';
 import { e } from '../environments';
 import { AppError } from './app-error';
 import { logger } from './logger';
@@ -12,13 +13,6 @@ interface JWTClaims extends jose.JWTPayload {
   user: string;
   strategy: keyof typeof EStrategy;
 }
-
-// TODO: move this in config
-export const JWTOptions = {
-  expirationTime: '2h',
-  issuer: 'urn:example:issuer',
-  audience: 'urn:example:audience',
-};
 
 const key = jose.base64url.decode(
   createHash('sha256').update(e.JWT_SECRET).digest('base64')
@@ -31,16 +25,33 @@ if (key.length !== 32) {
   throw new Error('JWT_SECRET must be 256 bits (32 bytes)');
 }
 
-export const createJWT = async (data: JWTClaims): Promise<string> =>
-  await new jose.EncryptJWT(data)
+export const createJWT = async ({
+  data,
+  type,
+}: {
+  data: JWTClaims;
+  type: 'access' | 'refresh';
+}): Promise<string> => {
+  if (type === 'access') {
+    return await new jose.EncryptJWT(data)
+      .setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' })
+      .setAudience(c.JWT_TOKEN_OPTIONS.audience)
+      .setIssuer(c.JWT_TOKEN_OPTIONS.issuer)
+      .setIssuedAt()
+      .setJti(randomUUID())
+      .setExpirationTime(c.JWT_ACCESS_TOKEN_OPTIONS.expirationTime)
+      .encrypt(key);
+  }
+
+  return await new jose.EncryptJWT(data)
     .setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' })
-    .setAudience(JWTOptions.audience)
-    .setIssuer(JWTOptions.issuer)
+    .setAudience(c.JWT_TOKEN_OPTIONS.audience)
+    .setIssuer(c.JWT_TOKEN_OPTIONS.issuer)
     .setIssuedAt()
     .setJti(randomUUID())
-    .setExpirationTime(JWTOptions.expirationTime)
+    .setExpirationTime(c.JWT_REFRESH_TOKEN_OPTIONS.expirationTime)
     .encrypt(key);
-
+};
 /**
  * VULNERABILITY: must whitelist the algorithm used for decryption
  */
@@ -49,8 +60,8 @@ export const verifyJWT = async (
 ): Promise<jose.JWTDecryptResult> => {
   try {
     const { payload, protectedHeader } = await jose.jwtDecrypt(token, key, {
-      issuer: JWTOptions.issuer,
-      audience: JWTOptions.audience,
+      issuer: c.JWT_TOKEN_OPTIONS.issuer,
+      audience: c.JWT_TOKEN_OPTIONS.audience,
     });
 
     if (protectedHeader.alg !== 'dir') throw new Error('invalid jwt');

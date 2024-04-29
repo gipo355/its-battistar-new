@@ -51,4 +51,17 @@ export const APP_CONFIG = {
     expires: new Date(Date.now() + 1000 * 60 * 2), // 2 minutes
     sameSite: 'strict',
   } satisfies CookieOptions,
+
+  // TODO: move this in config
+  JWT_TOKEN_OPTIONS: {
+    expirationTime: '2h',
+    issuer: 'urn:example:issuer',
+    audience: 'urn:example:audience',
+  },
+  JWT_ACCESS_TOKEN_OPTIONS: {
+    expirationTime: '2m',
+  },
+  JWT_REFRESH_TOKEN_OPTIONS: {
+    expirationTime: '7d',
+  },
 };

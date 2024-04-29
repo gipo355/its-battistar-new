@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { APP_CONFIG as c } from '../../../app.config';
 import { AppError, catchAsync, createJWT } from '../../../utils';
+import { AccountModel } from '../../api/users/accounts.model';
 import { UserModel } from '../../api/users/users.model';
 
 export const signupHandler: Handler = catchAsync(async (req, res) => {
@@ -13,53 +14,105 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
     passwordConfirm: string | undefined;
   };
 
-  // validate email and password in mongoose schema or ajv
+  // TODO: validate email and password in mongoose schema or ajv
   if (!email || !password || !passwordConfirm) {
     throw new AppError(
-      'Email and password are required',
+      'Email, password and password confirmations are required',
       StatusCodes.BAD_REQUEST
     );
   }
 
   /**
-   * do an upsert if a local account does not exist
+   * objectives:
+   * if there is a user with a local account, throw an error
+   * if there is no user at all, create a new user with a local account
+   * if there is a user but no local account, create a local account for the user
    */
-  const user = await UserModel.findOneAndUpdate(
-    { email },
-    {
-      $setOnInsert: {
-        email,
-        accounts: [
-          {
-            strategy: 'LOCAL',
-            password,
-            passwordConfirm,
-          },
-        ],
-      },
-    },
-    {
-      upsert: true,
-      new: true,
-    }
-  );
-
-  const jwtPayload = await createJWT({
-    user: user._id.toString(),
-    strategy: 'LOCAL',
+  const foundUser = await UserModel.findOne({ email }).populate({
+    path: 'accounts',
+    select: 'strategy',
   });
 
-  res.cookie('jwt', jwtPayload, c.JWT_ACCESS_COOKIE_OPTIONS);
+  console.log('foundUser', foundUser);
+
+  if (!foundUser) {
+    const newUser = await UserModel.create({
+      email,
+    });
+    // TODO: what if we create a user but fail to create an account? mongoose does not support transactions without replica sets
+    await AccountModel.create({
+      user: newUser._id,
+      strategy: 'LOCAL',
+      password,
+      passwordConfirm,
+    });
+  } else {
+    const userAccounts = await AccountModel.find({
+      user: foundUser._id,
+    });
+    if (
+      userAccounts.some(
+        (account) => account.strategy === 'LOCAL' && account.password
+      )
+    ) {
+      // VULNERABILITY: brute force attack, leaking user existence
+      throw new AppError('User already exists', StatusCodes.CONFLICT);
+    }
+
+    await AccountModel.create([
+      {
+        user: foundUser.id as string,
+        strategy: 'LOCAL',
+        password,
+        passwordConfirm,
+      },
+    ]);
+
+    await foundUser.save();
+  }
+
+  const user = await UserModel.findOne({
+    email,
+  }).select('+accounts.password +accounts.passwordConfirm');
+
+  if (!user) {
+    throw new AppError(
+      'There was a problem creating the user',
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+
+  const accessToken = await createJWT({
+    data: {
+      user: user._id.toString(),
+      strategy: 'LOCAL',
+    },
+    type: 'access',
+  });
+  const refreshToken = await createJWT({
+    data: {
+      user: user._id.toString(),
+      strategy: 'LOCAL',
+    },
+    type: 'refresh',
+  });
+
+  res.cookie('accessToken', accessToken, c.JWT_ACCESS_COOKIE_OPTIONS);
+  res.cookie('refreshToken', refreshToken, c.JWT_REFRESH_COOKIE_OPTIONS);
 
   res.status(StatusCodes.OK).json(
     new CustomResponse<{
-      jwt: string;
+      accessToken: string;
+      refreshToken: string;
+      userId: string;
     }>({
       ok: true,
       statusCode: StatusCodes.CREATED,
       message: 'Registered successfully',
       data: {
-        jwt: jwtPayload,
+        accessToken,
+        refreshToken,
+        userId: user._id.toString(),
       },
     })
   );

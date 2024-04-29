@@ -55,6 +55,6 @@ export interface IAccount {
   password?: string;
   passwordConfirm?: string;
   passwordResetToken?: string;
-  passwordResetExpires?: string;
+  passwordResetExpires?: Date;
   passwordChangedAt?: Date;
 }
