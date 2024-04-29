@@ -29,6 +29,8 @@ const requiredKeys: Partial<TRequiredEnvironment> = {
 
   CORS_ORIGINS: process.env.CORS_ORIGINS,
 
+  ARGON2_SECRET: process.env.ARGON2_SECRET,
+
   // TODO: CHANGE STRICT REQUIREMENT IN PRODUCTION
   CSRF_SECRET: process.env.CSRF_SECRET,
   JWT_SECRET: process.env.JWT_SECRET,
