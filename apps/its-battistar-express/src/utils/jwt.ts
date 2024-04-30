@@ -9,7 +9,7 @@ import { e } from '../environments';
 import { AppError } from './app-error';
 import { logger } from './logger';
 
-interface JWTClaims extends jose.JWTPayload {
+interface CustomJWTClaims extends jose.JWTPayload {
   user: string;
   strategy: keyof typeof EStrategy;
 }
@@ -29,7 +29,7 @@ export const createJWT = async ({
   data,
   type,
 }: {
-  data: JWTClaims;
+  data: CustomJWTClaims;
   type: 'access' | 'refresh';
 }): Promise<string> => {
   if (type === 'access') {
@@ -57,12 +57,16 @@ export const createJWT = async ({
  */
 export const verifyJWT = async (
   token: string
-): Promise<jose.JWTDecryptResult> => {
+): Promise<jose.JWTDecryptResult<CustomJWTClaims>> => {
   try {
-    const { payload, protectedHeader } = await jose.jwtDecrypt(token, key, {
-      issuer: c.JWT_TOKEN_OPTIONS.issuer,
-      audience: c.JWT_TOKEN_OPTIONS.audience,
-    });
+    const { payload, protectedHeader } = await jose.jwtDecrypt<CustomJWTClaims>(
+      token,
+      key,
+      {
+        issuer: c.JWT_TOKEN_OPTIONS.issuer,
+        audience: c.JWT_TOKEN_OPTIONS.audience,
+      }
+    );
 
     if (protectedHeader.alg !== 'dir') throw new Error('invalid jwt');
 
