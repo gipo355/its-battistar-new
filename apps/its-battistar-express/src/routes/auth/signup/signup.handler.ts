@@ -31,7 +31,6 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
    */
   const foundUser = await UserModel.findOne({ email }).populate({
     path: 'accounts',
-    select: 'strategy',
   });
 
   console.log('foundUser', foundUser);
@@ -114,6 +113,7 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
     'EX',
     c.JWT_REFRESH_TOKEN_OPTIONS.expMilliseconds
   );
+
   /**
    * add it to a list of refresh tokens for the user to be able to revoke it
    * where the key is the user id and the values are the refresh tokens issued and valid

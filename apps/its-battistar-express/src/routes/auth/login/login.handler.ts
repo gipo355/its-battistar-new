@@ -24,11 +24,11 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
 
   const user = await UserModel.findOne({
     email,
-    accounts: {
-      $elemMatch: {
-        strategy: 'LOCAL',
-      },
-    },
+    // accounts: {
+    //   $elemMatch: {
+    //     strategy: 'LOCAL',
+    //   },
+    // },
   });
 
   console.log('user', user);
@@ -43,6 +43,8 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
     user: user._id,
     strategy: 'LOCAL',
   });
+
+  console.log('userAccount', userAccount);
 
   if (!userAccount) {
     throw new AppError('Invalid email or password', StatusCodes.UNAUTHORIZED);

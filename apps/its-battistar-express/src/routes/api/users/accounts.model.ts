@@ -180,11 +180,17 @@ accountSchema.methods.comparePassword = async function comparePassword(
 
     const userPasswordHash = this.password;
 
+    console.log('userPasswordHash', userPasswordHash);
+    console.log('candidatePassword', candidatePassword);
+
     if (!userPasswordHash) {
       return false;
     }
 
-    const isValid = await verifyPassword(candidatePassword, userPasswordHash);
+    const isValid = await verifyPassword({
+      candidatePassword,
+      hash: userPasswordHash,
+    });
 
     return isValid;
   } catch (error) {

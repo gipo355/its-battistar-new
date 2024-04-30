@@ -60,10 +60,13 @@ export const hashPassword = async (password: string): Promise<string> => {
   return hashed;
 };
 
-export const verifyPassword = async (
-  password: string,
-  hash: string
-): Promise<boolean> => {
-  const isValid = await verify(password, hash, argonOptions);
+export const verifyPassword = async ({
+  candidatePassword,
+  hash,
+}: {
+  candidatePassword: string;
+  hash: string;
+}): Promise<boolean> => {
+  const isValid = await verify(hash, candidatePassword, argonOptions);
   return isValid;
 };

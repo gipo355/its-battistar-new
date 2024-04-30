@@ -5,6 +5,7 @@ Content-Type: application/json
 # must add password
 {
   "email": "test@gipo.dev",
+  "password": "12345678"
 }
 
 ---
@@ -14,6 +15,8 @@ Content-Type: application/json
 # must add password, passwordConfirm
 {
   "email": "test@gipo.dev",
+  "password": "12345678",
+  "passwordConfirm": "12345678"
 }
 
 ---
