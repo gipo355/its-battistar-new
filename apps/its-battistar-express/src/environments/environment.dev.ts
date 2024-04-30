@@ -29,6 +29,9 @@ const requiredKeys: Partial<TRequiredEnvironment> = {
 
   CORS_ORIGINS: process.env.CORS_ORIGINS,
 
+  GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+
   ARGON2_SECRET: process.env.ARGON2_SECRET,
 
   // TODO: CHANGE STRICT REQUIREMENT IN PRODUCTION

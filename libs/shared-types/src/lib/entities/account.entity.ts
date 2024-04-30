@@ -4,6 +4,7 @@ import type mongoose from 'mongoose';
 export enum EStrategy {
   LOCAL = 'LOCAL',
   GOOGLE = 'GOOGLE',
+  GITHUB = 'GITHUB',
 }
 
 export const accountsSchema = Type.Object({

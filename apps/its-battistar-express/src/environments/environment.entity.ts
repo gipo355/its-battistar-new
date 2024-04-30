@@ -18,6 +18,10 @@ export const requiredEnvironmentSchema = Type.Object({
 
   PORT: Type.String({}),
 
+  GITHUB_CLIENT_ID: Type.String({}),
+
+  GITHUB_CLIENT_SECRET: Type.String({}),
+
   CORS_ORIGINS: Type.String(),
 
   ARGON2_SECRET: Type.String(),

@@ -191,6 +191,9 @@ importers:
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
+      undici:
+        specifier: ^6.15.0
+        version: 6.15.0
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
@@ -354,6 +357,9 @@ importers:
       '@types/passport-local':
         specifier: ^1.0.38
         version: 1.0.38
+      '@types/simple-oauth2':
+        specifier: ^5.0.7
+        version: 5.0.7
       '@types/supertest':
         specifier: ^6.0.2
         version: 6.0.2
@@ -7785,6 +7791,10 @@ packages:
       '@types/http-errors': 2.0.4
       '@types/node': 20.12.7
       '@types/send': 0.17.4
+
+  /@types/simple-oauth2@5.0.7:
+    resolution: {integrity: sha512-8JbWVJbiTSBQP/7eiyGKyXWAqp3dKQZpaA+pdW16FCi32ujkzRMG8JfjoAzdWt6W8U591ZNdHcPtP2D7ILTKuA==}
+    dev: true
 
   /@types/sockjs@0.3.36:
     resolution: {integrity: sha512-MK9V6NzAS1+Ud7JV9lJLFqW85VbC9dq3LmwZCuBe4wBDgKC0Kj/jd8Xl+nSviU+Qc3+m7umHHyHg//2KSa0a0Q==}
@@ -18637,6 +18647,11 @@ packages:
   /undici@6.11.1:
     resolution: {integrity: sha512-KyhzaLJnV1qa3BSHdj4AZ2ndqI0QWPxYzaIOio0WzcEJB9gvuysprJSLtpvc2D9mhR9jPDUk7xlJlZbH2KR5iw==}
     engines: {node: '>=18.0'}
+
+  /undici@6.15.0:
+    resolution: {integrity: sha512-VviMt2tlMg1BvQ0FKXxrz1eJuyrcISrL2sPfBf7ZskX/FCEc/7LeThQaoygsMJpNqrATWQIsRVx+1Dpe4jaYuQ==}
+    engines: {node: '>=18.17'}
+    dev: false
 
   /unicode-canonical-property-names-ecmascript@2.0.0:
     resolution: {integrity: sha512-yY5PpDlfVIU5+y/BSCxAJRBIS1Zc2dDG3Ujq+sR0U+JjUevW2JhocOF+soROYDSaAezOzOKuyyixhD6mBknSmQ==}
