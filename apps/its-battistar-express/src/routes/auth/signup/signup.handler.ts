@@ -109,14 +109,18 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
     refreshToken,
     user._id.toString(),
     'EX',
-    c.JWT_REFRESH_TOKEN_OPTIONS.expMilliseconds
+    c.JWT_REFRESH_TOKEN_OPTIONS.expSeconds
   );
 
   /**
    * add it to a list of refresh tokens for the user to be able to revoke it
    * where the key is the user id and the values are the refresh tokens issued and valid
    */
-  await sessionRedisConnection.sadd(user._id.toString(), refreshToken);
+  const key = `${c.REDIS_USER_SESSION_PREFIX}${user._id.toString()}`;
+  await sessionRedisConnection.sadd(key, refreshToken);
+  // reset the expiration time for the user sessions
+  // we must have both the token key and user key with token value for token to be valid
+  await sessionRedisConnection.expire(key, c.REDIS_USER_SESSION_MAX_EX);
 
   // we only return the id
   // TODO: if we want to return the use object, make a stringify function

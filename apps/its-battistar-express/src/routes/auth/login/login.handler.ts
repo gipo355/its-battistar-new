@@ -68,6 +68,9 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
     type: 'refresh',
   });
 
+  res.cookie('accessToken', accessToken, c.JWT_ACCESS_COOKIE_OPTIONS);
+  res.cookie('refreshToken', refreshToken, c.JWT_REFRESH_COOKIE_OPTIONS);
+
   // TODO: move to util fn
   /**
    * set up the whitelist for the refresh token, add it as a key to the redis store
@@ -78,14 +81,19 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
   await sessionRedisConnection.set(
     refreshToken,
     user._id.toString(),
-    'EX', // FIXME, fix EX, its set to 19years now
-    c.JWT_REFRESH_TOKEN_OPTIONS.expMilliseconds
+    'EX',
+    c.JWT_REFRESH_TOKEN_OPTIONS.expSeconds
   );
   /**
    * add it to a list of refresh tokens for the user to be able to revoke it
    * where the key is the user id and the values are the refresh tokens issued and valid
+   * thus consisting of all the "sessions" the user has active
    */
-  await sessionRedisConnection.sadd(user._id.toString(), refreshToken);
+  const key = `${c.REDIS_USER_SESSION_PREFIX}${user._id.toString()}`;
+  await sessionRedisConnection.sadd(key, refreshToken);
+  // reset the expiration time for the user sessions
+  // we must have both the token key and user key with token value for token to be valid
+  await sessionRedisConnection.expire(key, c.REDIS_USER_SESSION_MAX_EX);
 
   res.status(StatusCodes.OK).json(
     new CustomResponse<{

@@ -58,12 +58,17 @@ export const APP_CONFIG = {
     issuer: 'urn:example:issuer',
     audience: 'urn:example:audience',
   },
+
   JWT_ACCESS_TOKEN_OPTIONS: {
     expirationTime: '2m',
-    expMilliseconds: 1000 * 60 * 2,
+    expSeconds: 1000 * 60 * 2,
   },
+
   JWT_REFRESH_TOKEN_OPTIONS: {
     expirationTime: '7d',
-    expMilliseconds: 1000 * 60 * 60 * 24 * 7,
+    expSeconds: 60 * 60 * 24 * 7,
   },
+
+  REDIS_USER_SESSION_PREFIX: 'userSession_',
+  REDIS_USER_SESSION_MAX_EX: 60 * 60 * 24 * 365, // 1 year
 };
