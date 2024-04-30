@@ -78,9 +78,14 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
    * we need to store the id of the user to be able to revoke all the refresh tokens associated with the user in case
    * a an invalid refresh token is used
    */
+  const data = {
+    user: user._id.toString(),
+    ip: req.ip,
+    userAgent: req.get('User-Agent'),
+  };
   await sessionRedisConnection.set(
     refreshToken,
-    user._id.toString(),
+    JSON.stringify(data),
     'EX',
     c.JWT_REFRESH_TOKEN_OPTIONS.expSeconds
   );

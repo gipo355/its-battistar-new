@@ -4,11 +4,13 @@ import { StatusCodes } from 'http-status-codes';
 
 import { APP_CONFIG as c } from '../../../app.config';
 import { sessionRedisConnection } from '../../../db/redis';
-import { AppError, catchAsync, verifyJWT } from '../../../utils';
+import { AppError, catchAsync, createJWT, verifyJWT } from '../../../utils';
+import { UserModel } from '../../api/users/users.model';
 
 // import { AppError } from '../../utils/app-error';
 // import { catchAsync } from '../../utils/catch-async';
 
+// TODO: make factory func for this to split the logic
 export const refreshHandler: Handler = catchAsync(async (req, res) => {
   /**
    * steps:
@@ -49,24 +51,61 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
 
   // verify the token
   const { payload } = await verifyJWT(token);
-  console.log(payload); // { user: 'id'}
 
+  /**
+   * here we could check if same user agent and ip is used for the session
+   */
+  // saving individual token as key is used to save info about the session
+  // like IP, user agent, etc.
   // check if the token is whitelisted
-  const item = await sessionRedisConnection.get(token);
-  console.log(item); // user id
+  // const item = await sessionRedisConnection.get(token);
 
+  // get all the tokens for the user
   const key = `${c.REDIS_USER_SESSION_PREFIX}${payload.user}`;
   const item2 = await sessionRedisConnection.smembers(key); // [token1, token2, ...]
-  console.log(item2); // token
 
   // invalidate all sessions for the user if the token is not found
-  if (!item) {
-    await sessionRedisConnection.del(payload.user);
+  if (!item2.includes(token)) {
+    await sessionRedisConnection.del(key);
+    throw new AppError('Invalid token', StatusCodes.UNAUTHORIZED);
   }
 
+  // TODO: refactor to abstract logics, make an exist method in the service
+  // check if user exists
+  const user = await UserModel.findById(payload.user);
+  if (!user) {
+    await sessionRedisConnection.del(key);
+    throw new AppError('User not found', StatusCodes.NOT_FOUND);
+  }
+
+  // rotate the refresh, create new access
+  const newAccessToken = await createJWT({
+    data: {
+      user: user._id.toString(),
+      strategy: 'LOCAL',
+    },
+    type: 'access',
+  });
+
+  const newRefreshToken = await createJWT({
+    data: {
+      user: user._id.toString(),
+      strategy: 'LOCAL',
+    },
+    type: 'refresh',
+  });
+
+  await sessionRedisConnection.del(token);
+  await sessionRedisConnection.srem(key, token);
+  await sessionRedisConnection.sadd(key, newRefreshToken);
+
   const data = {
-    token: '1234567890',
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken,
   };
+
+  res.cookie('accessToken', newAccessToken, c.JWT_ACCESS_COOKIE_OPTIONS);
+  res.cookie('refreshToken', refreshToken, c.JWT_REFRESH_COOKIE_OPTIONS);
 
   res.status(StatusCodes.OK).json(
     new CustomResponse<typeof data>({

@@ -16,6 +16,7 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
   };
 
   // TODO: validate email and password in mongoose schema or ajv
+  // TODO: validate only client side password Confirm
   if (!email || !password || !passwordConfirm) {
     throw new AppError(
       'Email, password and password confirmations are required',
@@ -33,6 +34,7 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
     path: 'accounts',
   });
 
+  // should be using a transaction here
   if (!foundUser) {
     const newUser = await UserModel.create({
       email,
@@ -66,12 +68,15 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
       },
     ]);
 
+    // TODO: check if needed
     await foundUser.save();
   }
 
+  // TODO: check if to keep same model for account
+  // multiple emails
   const user = await UserModel.findOne({
     email,
-  }).select('+accounts.password +accounts.passwordConfirm');
+  });
 
   if (!user) {
     throw new AppError(
@@ -79,7 +84,10 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
       StatusCodes.INTERNAL_SERVER_ERROR
     );
   }
+  // TODO: check discriminator mongoose to separate accounts
 
+  // TODO: should either use cookies or headers, possibly refactor this into
+  // a factory to use in different places to differentiate
   const accessToken = await createJWT({
     data: {
       user: user._id.toString(),
@@ -105,9 +113,16 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
    * we need to store the id of the user to be able to revoke all the refresh tokens associated with the user in case
    * a an invalid refresh token is used
    */
+  // saving individual token as key is used to save info about the session
+  // like IP, user agent, etc
+  const data = {
+    user: user._id.toString(),
+    ip: req.ip,
+    userAgent: req.get('User-Agent'),
+  };
   await sessionRedisConnection.set(
     refreshToken,
-    user._id.toString(),
+    JSON.stringify(data),
     'EX',
     c.JWT_REFRESH_TOKEN_OPTIONS.expSeconds
   );
