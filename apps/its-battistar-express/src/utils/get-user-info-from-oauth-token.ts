@@ -5,6 +5,8 @@ import { Client } from 'undici';
 
 import { AppError } from './app-error';
 
+// TODO: refactor, too much code
+
 const GithubUserSchema = Type.Object({
   email: Type.String(),
   primary: Type.Boolean(),
@@ -36,7 +38,7 @@ const clientGoogle = new Client(clientAddresses.GOOGLE);
 
 // FIXME: reduce complexity and add google case ( check fastify )
 
-export const getOauth2UserInfoFromAccessToken = async (
+export const getUserInfoFromOauthToken = async (
   token: string,
   strategy: keyof typeof EStrategy
 ): Promise<ReturnedUser | null> => {
@@ -44,6 +46,9 @@ export const getOauth2UserInfoFromAccessToken = async (
 
   const client = provider === 'GITHUB' ? clientGithub : clientGoogle;
 
+  /**
+   * this part of the code will fetch the emails
+   */
   const response = await client.request({
     method: 'GET',
     path:
@@ -63,15 +68,22 @@ export const getOauth2UserInfoFromAccessToken = async (
     throw new AppError('Authenticate again 1', StatusCodes.UNAUTHORIZED);
   }
 
-  const payload: string | undefined = '';
+  let payload = '';
+
   response.body.setEncoding('utf8');
+
   for await (const chunk of response.body) {
-    if (typeof chunk === 'string') payload.concat(chunk);
+    if (typeof chunk === 'string') payload += chunk;
   }
 
-  if (!payload) {
+  // eslint-disable-next-line no-magic-numbers
+  if (payload.length === 0) {
     throw new AppError('Authenticate again 2', StatusCodes.UNAUTHORIZED);
   }
+
+  /**
+   * this part of the code will fetch the user info
+   */
 
   /**
    * ## GITHUB CASE
@@ -82,6 +94,7 @@ export const getOauth2UserInfoFromAccessToken = async (
       firstName: '',
       providerUid: '',
     };
+
     /**
      * ## Get user email from payload
      */
@@ -93,6 +106,7 @@ export const getOauth2UserInfoFromAccessToken = async (
       throw new AppError('Authenticate again 3', StatusCodes.UNAUTHORIZED);
     }
 
+    // only one email is primary
     for (const ele of parsedPayload) {
       if (ele.primary) githubUser.email = ele.email;
     }
@@ -119,7 +133,7 @@ export const getOauth2UserInfoFromAccessToken = async (
     }
 
     let payload2 = '';
-    response.body.setEncoding('utf8');
+    response2.body.setEncoding('utf8');
     for await (const chunk of response2.body) {
       if (typeof chunk === 'string') {
         payload2 += chunk;

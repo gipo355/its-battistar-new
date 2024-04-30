@@ -73,7 +73,7 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
   }
 
   // TODO: check if to keep same model for account
-  // multiple emails
+  // multiple emails can be associated with the same account
   const user = await UserModel.findOne({
     email,
   });

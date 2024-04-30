@@ -28,7 +28,11 @@ export const accountsSchema = Type.Object({
 
   strategy: Type.Union(Object.keys(EStrategy).map((k) => Type.Literal(k))),
 
+  // TODO: use those here for multiple emails per user?
+  email: Type.Optional(Type.String()),
   providerId: Type.String(),
+  accessToken: Type.Optional(Type.String()),
+  refreshToken: Type.Optional(Type.String()),
 
   password: Type.Optional(Type.String()),
   passwordConfirm: Type.Optional(Type.String()),
@@ -53,6 +57,12 @@ export interface IAccount {
   deletedAt?: Date;
   strategy: keyof typeof EStrategy;
   providerId?: string;
+
+  // TODO: use those?
+  email: string;
+  accessToken?: string;
+  refreshToken?: string;
+
   password?: string;
   passwordConfirm?: string;
   passwordResetToken?: string;
