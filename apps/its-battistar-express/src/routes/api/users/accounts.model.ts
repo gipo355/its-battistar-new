@@ -180,9 +180,6 @@ accountSchema.methods.comparePassword = async function comparePassword(
 
     const userPasswordHash = this.password;
 
-    console.log('userPasswordHash', userPasswordHash);
-    console.log('candidatePassword', candidatePassword);
-
     if (!userPasswordHash) {
       return false;
     }

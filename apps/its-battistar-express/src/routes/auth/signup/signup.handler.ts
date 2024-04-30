@@ -33,8 +33,6 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
     path: 'accounts',
   });
 
-  console.log('foundUser', foundUser);
-
   if (!foundUser) {
     const newUser = await UserModel.create({
       email,
