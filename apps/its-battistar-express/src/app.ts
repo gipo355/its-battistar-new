@@ -12,6 +12,7 @@ import { rateLimitRedisConnection } from './db/redis';
 import { e } from './environments';
 import { finalErrorHandler } from './errors/errors.handler';
 import { preErrorsRouter } from './errors/pre-errors.router';
+import { protectRoute } from './routes/auth/auth.service';
 import { logger } from './utils/logger';
 
 export const buildApp = async function (): Promise<Express> {
@@ -30,7 +31,7 @@ export const buildApp = async function (): Promise<Express> {
 
   app.use(appRouter);
 
-  app.get('/healthz', (_, response) => {
+  app.get('/healthz', protectRoute(), (_, response) => {
     const mongostate = mongoose.connection.readyState;
     const redisstate = rateLimitRedisConnection.status;
 

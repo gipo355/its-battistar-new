@@ -78,6 +78,7 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
     email,
   });
 
+  // TODO: this must go in use service
   if (!user) {
     throw new AppError(
       'There was a problem creating the user',

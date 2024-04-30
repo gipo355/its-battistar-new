@@ -26,11 +26,11 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
    */
 
   const { refreshToken } = req.cookies as { refreshToken: string | undefined };
-  const { Authorization } = req.headers as {
-    Authorization: string | undefined;
+  const { authorization } = req.headers as {
+    authorization: string | undefined;
   };
 
-  if (!refreshToken && !Authorization) {
+  if (!refreshToken && !authorization) {
     throw new AppError('No refresh token found', StatusCodes.UNAUTHORIZED);
   }
 
@@ -39,8 +39,8 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
   // get the token
   if (refreshToken) {
     token = refreshToken;
-  } else if (Authorization) {
-    const [type, value] = Authorization.split(' ');
+  } else if (authorization) {
+    const [type, value] = authorization.split(' ');
 
     if (type !== 'Bearer') {
       throw new AppError('Invalid token type', StatusCodes.UNAUTHORIZED);
