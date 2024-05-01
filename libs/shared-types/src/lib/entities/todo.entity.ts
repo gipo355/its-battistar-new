@@ -1,5 +1,6 @@
 import { Static, Type } from '@sinclair/typebox';
 import fastJsonStringify from 'fast-json-stringify';
+import type mongoose from 'mongoose';
 
 import ajvInstance from '../../utils/ajv';
 
@@ -67,33 +68,55 @@ export const todoSchemaInput = Type.Object({
 });
 export type TTodoInput = Static<typeof todoSchemaInput>;
 
+/**
+ * @description
+ * this is a todo schema that can be used to identify all the todo properties
+ * used for validation and serialization
+ */
 export const todoSchema = Type.Object({
+  id: Type.Optional(Type.String()),
   title: Type.String(),
-  completed: Type.Boolean(),
-  dueDate: Type.String({
-    format: 'date-time',
+  color: Type.String({
+    enum: [...Object.keys(TodoColorOptions)],
   }),
+  description: Type.String(),
+  dueDate: Type.Optional(
+    Type.String({
+      format: 'date-time',
+    })
+  ),
+  completed: Type.Boolean(),
   expired: Type.Boolean(),
+
+  user: Type.String(),
+
+  image: Type.Optional(Type.String()),
+
   createdAt: Type.String({
     format: 'date-time',
   }),
   updatedAt: Type.String({
     format: 'date-time',
   }),
+  deletedAt: Type.Optional(
+    Type.String({
+      format: 'date-time',
+    })
+  ),
 });
-
-export const hello = 'hello';
-
 export type TTodo = Static<typeof todoSchema>;
 
-// MONGOOSE requires a date type which ajv does not support
-// so we use this interface to pass to mongoose
+/**
+ * MONGOOSE INTERFACE
+ * requires a date type which ajv does not support
+ * so we use this interface to pass to mongoose
+ */
 export interface ITodo {
   id?: string;
 
   title: string;
 
-  color?: keyof ITodoColorOptions;
+  color: keyof ITodoColorOptions;
 
   description: string;
 
@@ -103,37 +126,45 @@ export interface ITodo {
 
   expired: boolean;
 
-  user?: string;
+  user: string | mongoose.Schema.Types.ObjectId;
+
+  image?: string;
 
   createdAt: Date;
 
   updatedAt: Date;
+
+  deletedAt?: Date;
 }
 
-// Tried with a class, to be able to instantiate a new Todo
-// export class Todo {
-//   id?: string;
-//
-//   title: string;
-//
-//   dueDate: string;
-//
-//   completed = false;
-//
-//   createdAt = new Date().toISOString();
-//
-//   updatedAt = new Date().toISOString();
-//
-//   constructor({ title, dueDate }: { title: string; dueDate: string }) {
-//     this.title = title;
-//     this.dueDate = dueDate;
-//   }
-//
-//   get expired(): boolean {
-//     return Date.now() > new Date(this.dueDate).getTime();
-//   }
-// }
+/**
+ * @description
+ * Class to create a new Todo object, only includes props that are required for creation
+ * either in the backend or frontend
+ */
+export class Todo {
+  title: string;
+  color?: keyof ITodoColorOptions;
+  description: string;
+  dueDate?: Date;
+  image?: string;
 
+  constructor(
+    title = '',
+    color: keyof ITodoColorOptions = 'default',
+    description = '',
+    dueDate?: Date,
+    image?: string
+  ) {
+    this.title = title;
+    this.color = color;
+    this.description = description;
+    this.dueDate = dueDate;
+    this.image = image;
+  }
+}
+
+// Utility functions
 export const stringifyTodo = fastJsonStringify(todoSchema);
 
 export const validateTodo = ajvInstance.compile(todoSchemaInput);
