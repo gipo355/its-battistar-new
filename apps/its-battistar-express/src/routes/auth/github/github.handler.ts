@@ -12,8 +12,8 @@ import {
   createJWT,
   getUserInfoFromOauthToken,
 } from '../../../utils';
-import { AccountModel } from '../../api/users/accounts.model';
 import { UserModel } from '../../api/users/users.model';
+import { createUserAndAccount } from '../../api/users/users.service';
 import { githubAuthorizationUri, oauthGithubClient } from './github.service';
 
 export const githubHandler: Handler = (_, res) => {
@@ -55,56 +55,17 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
       throw new AppError('No user found', StatusCodes.NOT_FOUND);
     }
 
-    // TODO: save user in db
-    // TODO: refactor, many things are similar with signup handler
-
-    let createdUserId = '';
-
-    // get the account with strategy GITHUB and same email
-    const foundUser = await UserModel.findOne({ email: githubUser.email });
-    if (!foundUser) {
-      const u = await UserModel.create({
-        email: githubUser.email,
-      });
-      await AccountModel.create({
-        email: githubUser.email,
-        strategy: 'GITHUB',
-        providerUid: githubUser.providerUid,
-      });
-      createdUserId = u._id.toString();
-    } else {
-      const userAccount = await AccountModel.findOne({
-        user: foundUser._id,
-        strategy: 'GITHUB',
-      });
-      if (!userAccount) {
-        await AccountModel.create({
-          // email: user.email, // TODO: move emails to user
-          strategy: 'GITHUB',
-          providerUid: githubUser.providerUid,
-          token: githubAccessToken.token.access_token,
-        });
-        // create new user
-        // create new account
-        createdUserId = foundUser._id.toString();
-      }
-    }
-
-    // create tokens, update redis
-    // TODO: must refactor, equal to signup handler
-    // TODO: check if to keep same model for account
-    // multiple emails can be associated with the same account
-    const realUser = await UserModel.findOne({
-      _id: createdUserId,
+    const { user, account, error } = await createUserAndAccount({
+      email: githubUser.email,
+      providerUid: githubUser.providerUid,
+      accessToken: githubAccessToken.token.access_token,
+      strategy: 'GITHUB',
     });
 
-    // TODO: this must go in use service
-    if (!realUser) {
-      throw new AppError(
-        'There was a problem creating the user',
-        StatusCodes.INTERNAL_SERVER_ERROR
-      );
+    if (error) {
+      throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
     }
+
     // TODO: check discriminator mongoose to separate accounts
 
     // TODO: should either use cookies or headers, possibly refactor this into

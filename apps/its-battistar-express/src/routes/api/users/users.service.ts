@@ -49,13 +49,11 @@ type ICreateUserAndAccount =
 
 export const createUserAndAccount = async (
   a: ICreateUserAndAccount
-): Promise<
-  | {
-      user: HydratedDocument<IUser>;
-      account: HydratedDocument<IAccount>;
-    }
-  | Error
-> => {
+): Promise<{
+  user: HydratedDocument<IUser> | null;
+  account: HydratedDocument<IAccount> | null;
+  error: Error | null;
+}> => {
   // TODO: must to transaction.
   // must be able to rollback if one fails
 
@@ -80,7 +78,11 @@ export const createUserAndAccount = async (
       accounts.length &&
       accounts.some((account) => account.strategy === a.strategy)
     ) {
-      return new Error('Account already exists');
+      return {
+        user: null,
+        account: null,
+        error: new Error('Account already exists'),
+      };
     }
 
     // if account exists with different strategies, add account to user
@@ -110,12 +112,16 @@ export const createUserAndAccount = async (
         })
       );
 
-      return { user, account };
+      return { user, account, error: null };
     }
 
     // if user exists and wanted signup strategy is local, throw error (for now)
     if (accounts.length && a.strategy === EStrategy.LOCAL) {
-      return new Error('Account already exists');
+      return {
+        user: null,
+        account: null,
+        error: new Error('Account already exists'),
+      };
     }
 
     // if user does not exist, create user and account
@@ -140,7 +146,7 @@ export const createUserAndAccount = async (
         );
         await account.save();
 
-        return { user, account };
+        return { user, account, error: null };
       }
 
       // handle social strategy
@@ -157,11 +163,15 @@ export const createUserAndAccount = async (
       );
       await account.save();
 
-      return { user, account };
+      return { user, account, error: null };
     }
 
     // fallback
-    return new Error('Error creating user and account');
+    return {
+      user: null,
+      account: null,
+      error: new Error('Error creating user and account'),
+    };
   } catch (error) {
     throw new Error('Error creating user and account');
   }
