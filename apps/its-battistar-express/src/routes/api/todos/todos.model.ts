@@ -2,6 +2,7 @@
 import { ITodo, TodoColorOptions } from '@its-battistar/shared-types';
 import mongoose from 'mongoose';
 import isAscii from 'validator/lib/isAscii';
+import isURL from 'validator/lib/isURL';
 
 const todoSchema = new mongoose.Schema<ITodo>(
   {
@@ -51,6 +52,12 @@ const todoSchema = new mongoose.Schema<ITodo>(
 
     image: {
       type: String,
+      validate: {
+        validator: function validator(value: string) {
+          return isURL(value);
+        },
+        message: 'A todo image must be a valid URL',
+      },
     },
 
     completed: {
