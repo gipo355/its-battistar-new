@@ -163,15 +163,23 @@ export class SocialAccount extends Account {
   providerId: string;
   providerAccessToken: string;
 
-  constructor(
-    strategy: keyof typeof ESocialStrategy,
-    providerId: string,
-    providerAccessToken: string,
-    user: string | mongoose.Schema.Types.ObjectId,
-    email: string,
-    primary: boolean,
-    verified: boolean
-  ) {
+  constructor({
+    strategy,
+    providerId,
+    providerAccessToken,
+    user,
+    email,
+    primary,
+    verified,
+  }: {
+    strategy: keyof typeof ESocialStrategy;
+    providerId: string;
+    providerAccessToken: string;
+    user: string | mongoose.Schema.Types.ObjectId;
+    email: string;
+    primary: boolean;
+    verified: boolean;
+  }) {
     super(user, email, primary, verified);
     this.strategy = strategy;
     this.providerId = providerId;
@@ -186,12 +194,17 @@ export class LocalAccount extends Account {
   strategy = ELocalStrategy.LOCAL;
   password?: string;
 
-  constructor(
-    user: string | mongoose.Schema.Types.ObjectId,
-    email: string,
-    primary: boolean,
-    password: string
-  ) {
+  constructor({
+    user,
+    email,
+    primary,
+    password,
+  }: {
+    user: string | mongoose.Schema.Types.ObjectId;
+    email: string;
+    primary: boolean;
+    password: string;
+  }) {
     super(user, email, primary);
     this.password = password;
   }

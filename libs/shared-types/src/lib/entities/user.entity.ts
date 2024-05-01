@@ -93,6 +93,8 @@ export interface IUserInput {
   username: string;
 
   avatar?: string;
+
+  role: keyof typeof ERole;
 }
 
 // interface used for typing output
@@ -102,8 +104,6 @@ export interface IUserSafe extends IUserInput {
   createdAt: Date; // created by mongoose
 
   updatedAt: Date; // created by mongoose
-
-  role: keyof typeof ERole;
 
   // needed to type interface when populating client side
   todos?: string[] | mongoose.Schema.Types.ObjectId[] | ITodo; // created by mongoose
@@ -127,7 +127,7 @@ export class User {
   avatar?: string;
   role: keyof typeof ERole;
 
-  constructor(user: IUserSafe) {
+  constructor(user: IUserInput) {
     this.username = user.username;
     this.avatar = user.avatar;
     this.role = user.role;

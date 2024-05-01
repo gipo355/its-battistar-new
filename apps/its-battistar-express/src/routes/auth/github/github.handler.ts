@@ -56,9 +56,10 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
     }
 
     // TODO: save user in db
-    // TODO: refactor, many thins are similar with signup handler
+    // TODO: refactor, many things are similar with signup handler
 
     let createdUserId = '';
+
     // get the account with strategy GITHUB and same email
     const foundUser = await UserModel.findOne({ email: githubUser.email });
     if (!foundUser) {
