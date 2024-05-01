@@ -18,10 +18,6 @@ export const requiredEnvironmentSchema = Type.Object({
 
   PORT: Type.String({}),
 
-  GITHUB_CLIENT_ID: Type.String({}),
-
-  GITHUB_CLIENT_SECRET: Type.String({}),
-
   CORS_ORIGINS: Type.String(),
 
   ARGON2_SECRET: Type.String(),
@@ -44,6 +40,10 @@ export const optionalEnvironmentSchema = Type.Object({
   EXPRESS_TRUST_NUMBER_OF_PROXIES: Type.String(),
 
   ENABLE_LOKI: Type.String(),
+
+  GITHUB_CLIENT_ID: Type.String({}),
+
+  GITHUB_CLIENT_SECRET: Type.String({}),
 });
 
 export type TRequiredEnvironment = Static<typeof requiredEnvironmentSchema>;
