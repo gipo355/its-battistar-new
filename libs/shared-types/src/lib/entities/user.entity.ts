@@ -82,7 +82,7 @@ export interface IUser {
 
   createdAt: Date; // created by mongoose
   updatedAt: Date; // created by mongoose
-  deletedAt: Date;
+  deletedAt?: Date;
 
   todos: string[] | mongoose.Schema.Types.ObjectId[]; // created by mongoose
 

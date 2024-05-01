@@ -1,17 +1,32 @@
 import { ERole, IUser } from '@its-battistar/shared-types';
 import mongoose, { HydratedDocument } from 'mongoose';
-// import isAscii from 'validator/lib/isAscii';
+import isAscii from 'validator/lib/isAscii';
+import isURL from 'validator/lib/isURL';
 
 const userSchema = new mongoose.Schema<IUser>(
   {
     username: {
       type: String,
       required: [true, 'A user must have a username'],
+      validate: {
+        validator: function validator(value: string) {
+          // eslint-disable-next-line no-magic-numbers
+          return value.length > 2 && isAscii(value);
+        },
+        message:
+          'A user username must have more than 2 characters and only contain ASCII characters',
+      },
       trim: true,
     },
 
     avatar: {
       type: String,
+      validate: {
+        validator: function validator(value: string) {
+          return isURL(value);
+        },
+        message: 'A user avatar must be a valid URL',
+      },
     },
 
     role: {
