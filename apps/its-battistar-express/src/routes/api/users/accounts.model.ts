@@ -1,5 +1,6 @@
 import { EStrategy, IAccount } from '@its-battistar/shared-types';
 import mongoose, { Model } from 'mongoose';
+import isEmail from 'validator/lib/isEmail';
 
 import { APP_CONFIG as c } from '../../../app.config';
 import {
@@ -29,6 +30,32 @@ const accountSchema = new mongoose.Schema<
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    /**
+     * Difficult: how to handle multiple emails per user?
+     * a user can have multiple emails, but only one can be primary
+     * a user can have multiple accounts with same email (different providers)
+     * but there can't be multiple users with same email
+     *
+     *
+     *
+     * the first email should be primary by default
+     */
+    email: {
+      type: String,
+      required: true,
+      // unique: true,
+      trim: true,
+      lowercase: true,
+      validate: [isEmail, 'Must be a valid email address'],
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    primary: {
+      type: Boolean,
+      default: false,
+    },
     active: {
       type: Boolean,
       default: true,
@@ -44,6 +71,8 @@ const accountSchema = new mongoose.Schema<
     deletedAt: {
       type: Date,
     },
+
+    // social
     strategy: {
       type: String,
       enum: Object.keys(EStrategy),
@@ -52,6 +81,11 @@ const accountSchema = new mongoose.Schema<
     providerId: {
       type: String,
     },
+    providerAccessToken: {
+      type: String,
+    },
+
+    // local
     password: {
       type: String,
     },
