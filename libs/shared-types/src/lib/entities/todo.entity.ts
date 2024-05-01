@@ -4,17 +4,6 @@ import type mongoose from 'mongoose';
 
 import ajvInstance from '../../utils/ajv';
 
-// TODO: fix this type mess, must be able to:
-// 1- define mongoose schema
-// 2- validate user input with ajv
-// 3- stringify the object to be sent to the client with fast-json-stringify
-// 4- be used in the backend and frontend to type the object
-// 5- instantiate a new object with the class
-//
-// same for user.entity.ts and account.entity.ts
-
-// test comment for nx dep-graph affected
-
 export interface ITodoColorOptions {
   red: 'red';
   blue: 'blue';
@@ -31,7 +20,6 @@ export interface ITodoSortByOptions {
   DueDate: 'DueDate';
 }
 
-// BUG: can't import from shared-types into angular real values, only types
 export const TodoColorOptions: ITodoColorOptions = {
   red: 'red',
   blue: 'blue',
@@ -41,16 +29,12 @@ export const TodoColorOptions: ITodoColorOptions = {
   default: 'default',
 } as const;
 
-// BUG: can't import from shared-types into angular real values, only types
-// const TodoSortByOptions: TodoSortBy = {
-//   Newest: 'Newest',
-//   Oldest: 'Oldest',
-//   Title: 'Title',
-//   DueDate: 'Due Date',
-// };
+// BUG: importing an enum into angular from here breaks the build
 
-// Required different schema for input and strict schema
-// we need to validate against the input schema
+/**
+ * @description
+ * this schema is used to validate and serialize the input for creating a new todo
+ */
 export const todoSchemaInput = Type.Object({
   title: Type.String(),
   completed: Type.Optional(Type.Boolean()),
@@ -59,6 +43,7 @@ export const todoSchemaInput = Type.Object({
       enum: [...Object.keys(TodoColorOptions)],
     })
   ),
+  image: Type.Optional(Type.String()),
   description: Type.Optional(Type.String()),
   dueDate: Type.Optional(
     Type.String({
@@ -85,12 +70,9 @@ export const todoSchema = Type.Object({
       format: 'date-time',
     })
   ),
+  image: Type.Optional(Type.String()),
   completed: Type.Boolean(),
   expired: Type.Boolean(),
-
-  user: Type.String(),
-
-  image: Type.Optional(Type.String()),
 
   createdAt: Type.String({
     format: 'date-time',
@@ -98,11 +80,7 @@ export const todoSchema = Type.Object({
   updatedAt: Type.String({
     format: 'date-time',
   }),
-  deletedAt: Type.Optional(
-    Type.String({
-      format: 'date-time',
-    })
-  ),
+  user: Type.String(),
 });
 export type TTodo = Static<typeof todoSchema>;
 
@@ -122,19 +100,17 @@ export interface ITodo {
 
   dueDate?: Date;
 
+  image?: string;
+
   completed: boolean;
 
   expired: boolean;
-
-  user: string | mongoose.Schema.Types.ObjectId;
-
-  image?: string;
 
   createdAt: Date;
 
   updatedAt: Date;
 
-  deletedAt?: Date;
+  user: string | mongoose.Schema.Types.ObjectId;
 }
 
 /**
@@ -144,7 +120,7 @@ export interface ITodo {
  */
 export class Todo {
   title: string;
-  color?: keyof ITodoColorOptions;
+  color: keyof ITodoColorOptions;
   description: string;
   dueDate?: Date;
   image?: string;

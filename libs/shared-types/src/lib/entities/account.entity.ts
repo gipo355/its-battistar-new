@@ -94,7 +94,7 @@ export interface IAccount {
  */
 
 // base class for all accounts
-export class Account {
+class Account {
   user?: string | mongoose.Schema.Types.ObjectId;
   email?: string;
   primary?: boolean;

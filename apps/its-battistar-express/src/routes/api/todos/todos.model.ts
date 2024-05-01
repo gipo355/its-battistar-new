@@ -20,23 +20,6 @@ const todoSchema = new mongoose.Schema<ITodo>(
         message: 'A todo title must only contain ASCII characters',
       },
     },
-    description: {
-      type: String,
-      trim: true,
-      maxlength: [
-        200,
-        'A todo description must have less or equal then 200 characters',
-      ],
-      validate: {
-        validator: function validator(value: string) {
-          return isAscii(value);
-        },
-        message: 'A todo description must only contain ASCII characters',
-      },
-    },
-    dueDate: {
-      type: Date,
-    },
 
     color: {
       type: String,
@@ -46,18 +29,45 @@ const todoSchema = new mongoose.Schema<ITodo>(
       },
       default: 'default',
     },
+
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [
+        300,
+        'A todo description must have less or equal then 200 characters',
+      ],
+      validate: {
+        validator: function validator(value: string) {
+          return isAscii(value);
+        },
+        message: 'A todo description must only contain ASCII characters',
+      },
+    },
+
+    dueDate: {
+      type: Date,
+    },
+
+    image: {
+      type: String,
+    },
+
     completed: {
       type: Boolean,
       default: false,
     },
+
     createdAt: {
       type: Date,
       default: Date.now(),
     },
+
     updatedAt: {
       type: Date,
       default: Date.now(),
     },
+
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
