@@ -151,8 +151,15 @@ module.exports = tseslint.config(
     ],
     rules: {
       '@typescript-eslint/explicit-module-boundary-types': ['error'],
+      // '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/consistent-type-exports': 'error',
+      '@typescript-eslint/promise-function-async': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/prefer-for-of': 'error',
+      // '@typescript-eslint/no-shadow': 'error',
+      // '@typescript-eslint/naming-convention': 'error',
+      'max-params': ['error', 4],
+      'no-nested-ternary': 'error',
     },
   },
 
