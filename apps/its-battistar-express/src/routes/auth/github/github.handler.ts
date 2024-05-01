@@ -71,8 +71,6 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
 
     // TODO: check discriminator mongoose to separate accounts
 
-    // TODO: should either use cookies or headers, possibly refactor this into
-    // a factory to use in different places to differentiate
     const { refreshToken } = await generateTokens({
       setCookiesOn: res,
       payload: {
@@ -85,15 +83,6 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
       throw new AppError('No refresh token', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 
-    // TODO: move to util fn
-    /**
-     * set up the whitelist for the refresh token, add it as a key to the redis store
-     * this will allow us to revoke the refresh token and check quickly if it is valid during refresh
-     * we need to store the id of the user to be able to revoke all the refresh tokens associated with the user in case
-     * a an invalid refresh token is used
-     */
-    // saving individual token as key is used to save info about the session
-    // like IP, user agent, etc
     await rotateRefreshToken({
       redisConnection: sessionRedisConnection,
       newToken: refreshToken,

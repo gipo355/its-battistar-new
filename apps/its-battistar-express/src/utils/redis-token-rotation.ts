@@ -28,6 +28,12 @@ interface IRotateRefreshToken {
    */
   prefix?: string;
 }
+/**
+ * set up the whitelist for the refresh token, add it as a key to the redis store
+ * this will allow us to revoke the refresh token and check quickly if it is valid during refresh
+ * we need to store the id of the user to be able to revoke all the refresh tokens associated with the user in case
+ * a an invalid refresh token is used
+ */
 export const rotateRefreshToken = async (
   o: IRotateRefreshToken
 ): Promise<void> => {
