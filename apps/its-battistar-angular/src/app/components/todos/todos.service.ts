@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { CustomResponse, ITodo, Todo } from '@its-battistar/shared-types';
+import type { CustomResponse, ITodo, Todo } from '@its-battistar/shared-types';
 import { lastValueFrom, retry, take, timeout } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
