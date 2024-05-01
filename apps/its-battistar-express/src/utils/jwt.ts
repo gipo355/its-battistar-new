@@ -34,7 +34,7 @@ export const createJWT = async ({
   type: 'access' | 'refresh';
 }): Promise<string> => {
   if (type === 'access') {
-    return await new jose.EncryptJWT(data)
+    return new jose.EncryptJWT(data)
       .setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' })
       .setAudience(c.JWT_TOKEN_OPTIONS.audience)
       .setIssuer(c.JWT_TOKEN_OPTIONS.issuer)
@@ -44,7 +44,7 @@ export const createJWT = async ({
       .encrypt(key);
   }
 
-  return await new jose.EncryptJWT(data)
+  return new jose.EncryptJWT(data)
     .setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' })
     .setAudience(c.JWT_TOKEN_OPTIONS.audience)
     .setIssuer(c.JWT_TOKEN_OPTIONS.issuer)

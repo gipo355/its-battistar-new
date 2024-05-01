@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable n/no-unpublished-import */
 /* eslint-disable no-magic-numbers */
 /* eslint-disable @nx/enforce-module-boundaries */

@@ -25,8 +25,8 @@ export const APP_CONFIG = {
   // rate limiting
   rateLimiterOptions: {
     storeClient: rateLimitRedisConnection,
-    points: +e.RATE_LIMITER_POINTS, // Number of points
-    duration: +e.RATE_LIMITER_DURATION, // Per second(s)
+    points: Number(e.RATE_LIMITER_POINTS), // Number of points
+    duration: Number(e.RATE_LIMITER_DURATION), // Per second(s)
     keyPrefix: 'rateLimiter',
 
     // Custom

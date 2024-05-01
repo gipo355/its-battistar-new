@@ -23,7 +23,7 @@ const key = createSecretKey(
 export const createJWT = async (
   payload: Record<string, unknown>
 ): Promise<string> =>
-  await V3.encrypt(payload, key, {
+  V3.encrypt(payload, key, {
     audience: 'urn:example:audience',
     expiresIn: '2h',
     iat: true,
@@ -34,7 +34,7 @@ export const createJWT = async (
 export const verifyJWT = async (
   token: string
 ): Promise<Record<string, unknown>> =>
-  await V3.decrypt(token, key, {
+  V3.decrypt(token, key, {
     audience: 'urn:example:audience',
     issuer: 'urn:example:issuer',
     maxTokenAge: '2h',

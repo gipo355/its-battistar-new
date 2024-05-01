@@ -23,7 +23,7 @@ export const buildApp = async function (): Promise<Express> {
   // prevents fingerprint
   app.disable('x-powered-by');
   // allow caddy/nginx to handle proxy headers
-  app.set('trust proxy', +e.EXPRESS_TRUST_NUMBER_OF_PROXIES);
+  app.set('trust proxy', Number(e.EXPRESS_TRUST_NUMBER_OF_PROXIES));
 
   await prepareMongo();
 
