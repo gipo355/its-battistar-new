@@ -7,43 +7,80 @@ import ajvInstance from '../../utils/ajv';
 export enum ELocalStrategy {
   LOCAL = 'LOCAL',
 }
+
 export enum ESocialStrategy {
   GOOGLE = 'GOOGLE',
   GITHUB = 'GITHUB',
 }
+
 export const EStrategy = {
   ...ELocalStrategy,
   ...ESocialStrategy,
 };
 
-// json schema, used for validation and serialization
-export const accountsSchema = Type.Object({
+/**
+ * IMP: the schemas must reflect the mongoose schema
+ * there must be a single source of truth
+ * can't use typbebox schemas for mongoose as it requires Date type and ObjectID
+ * which are not used for validation and serialization
+ */
+
+/**
+ * @description
+ * this is an account schema that can be used to create a new account.
+ * used for validation and serialization for local strategy
+ */
+export const accountSchemaInput = Type.Object({
+  email: Type.String({
+    format: 'email',
+  }),
+  password: Type.Optional(Type.String()),
+});
+export type TLocalAccountInput = Static<typeof accountSchemaInput>;
+
+/**
+ * @description
+ * this is an account schema that can be used to display info to the client
+ * and doesn't include sensitive data
+ */
+export const accountSchemaSafe = Type.Object({
   id: Type.Optional(Type.String()),
-  user: Type.String(),
-  active: Type.Boolean(),
+
+  email: Type.String({
+    format: 'email',
+  }),
+
+  primary: Type.Boolean(),
+
+  verified: Type.Boolean(),
+
+  strategy: Type.String({
+    enum: Object.keys(EStrategy),
+  }),
+
   createdAt: Type.String({
     format: 'date-time',
   }),
+
   updatedAt: Type.String({
     format: 'date-time',
   }),
+});
+export type TAccountSafe = Static<typeof accountSchemaSafe>;
+
+/**
+ * this is an account schema that can be used to identify all the account properties
+ */
+export const accountSchema = Type.Object({
+  ...accountSchemaSafe.properties,
+  user: Type.String(),
+  active: Type.Boolean(),
   deletedAt: Type.Optional(
     Type.String({
       format: 'date-time',
     })
   ),
 
-  email: Type.String({
-    format: 'email',
-  }),
-  primary: Type.Boolean(),
-  verified: Type.Boolean(),
-
-  // social
-  // strategy: Type.Union(Object.keys(EStrategy).map((k) => Type.Literal(k))),
-  strategy: Type.String({
-    enum: Object.keys(EStrategy),
-  }),
   providerId: Type.Optional(Type.String()),
   providerAccessToken: Type.Optional(Type.String()),
 
@@ -53,29 +90,37 @@ export const accountsSchema = Type.Object({
   passwordResetExpires: Type.Optional(Type.String({ format: 'date-time' })),
   passwordChangedAt: Type.Optional(Type.String({ format: 'date-time' })),
 });
-
-export type TAccount = Static<typeof accountsSchema>;
+export type TAccount = Static<typeof accountSchema>;
 
 /**
- * MONGOOSE INTERFACE
+ * MONGOOSE AND JS INTERFACES with javascript specific types
  * needed for mongoose as it requires Date type
  * while ajv and fast-json-stringify handle only json natives
  * also, typebox doesn't have object id type
  */
-export interface IAccount {
-  id?: string; // created by mongoose
-  user: string | mongoose.Schema.Types.ObjectId;
-  active: boolean;
-  createdAt: Date | string; // created by mongoose
-  updatedAt: Date | string; // created by mongoose
-  deletedAt?: Date | string;
 
+/**
+ * safe to display interface
+ */
+export interface IAccountSafe {
+  id?: string; // created by mongoose
   email: string;
   primary: boolean;
   verified: boolean;
+  strategy: keyof typeof EStrategy;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+}
+
+/**
+ * full account interface
+ */
+export interface IAccount extends IAccountSafe {
+  user: string | mongoose.Schema.Types.ObjectId;
+  active: boolean;
+  deletedAt?: Date | string;
 
   // social
-  strategy: keyof typeof EStrategy;
   providerId?: string;
   providerAccessToken?: string;
 
@@ -88,12 +133,12 @@ export interface IAccount {
 
 /**
  * @description
- * This is a class used to create new accounts objects
+ * The classes below are used to create new accounts objects
  * making sure we have a single source of truth for the schema
  * only input fields are included
  */
 
-// base class for all accounts
+// base class for all accounts with props shared
 class Account {
   user?: string | mongoose.Schema.Types.ObjectId;
   email?: string;
@@ -155,6 +200,10 @@ export class LocalAccount extends Account {
   }
 }
 
-export const stringifyAccount = fastJsonStringify(accountsSchema);
+/**
+ * Validation and serialization functions for the schemas provided
+ */
 
-export const validateAccount = ajvInstance.compile(accountsSchema);
+export const stringifyAccount = fastJsonStringify(accountSchema);
+
+export const validateAccount = ajvInstance.compile(accountSchema);
