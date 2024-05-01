@@ -81,6 +81,10 @@ export const verifyJWT = async (
   }
 };
 
+/**
+ * generateTokens is a utility function that generates JWT tokens
+ * and can set them as cookies on the response object.
+ */
 export const generateTokens = async ({
   generateAccessToken = true,
   generateRefreshToken = true,

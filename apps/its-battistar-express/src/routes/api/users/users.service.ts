@@ -9,8 +9,8 @@ import {
 } from '@its-battistar/shared-types';
 import { HydratedDocument } from 'mongoose';
 
-import { AccountModel } from './accounts.model';
-import { UserModel } from './users.model';
+import { AccountDocument, AccountModel } from './accounts.model';
+import { UserDocument, UserModel } from './users.model';
 
 // TODO: use typescript conditionals to return the right types
 export const getAccountAndUserOrThrow = async ({
@@ -20,8 +20,8 @@ export const getAccountAndUserOrThrow = async ({
   email: string;
   strategy: keyof typeof EStrategy;
 }): Promise<{
-  user: HydratedDocument<IUser> | null;
-  account: HydratedDocument<IAccount> | null;
+  user: UserDocument | null;
+  account: AccountDocument | null;
   error: Error | null;
 }> => {
   const account = await AccountModel.findOne({

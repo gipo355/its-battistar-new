@@ -102,4 +102,4 @@ userSchema.pre(/^find/, function prequery(next) {
 
 export const UserModel = mongoose.model('User', userSchema);
 
-export type TMongoUserDocument = HydratedDocument<IUser>;
+export type UserDocument = InstanceType<typeof UserModel>;

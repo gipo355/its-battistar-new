@@ -280,3 +280,4 @@ export const AccountModel = mongoose.model<IAccount, TAccountModel>(
   'Account',
   accountSchema
 );
+export type AccountDocument = InstanceType<typeof AccountModel>;

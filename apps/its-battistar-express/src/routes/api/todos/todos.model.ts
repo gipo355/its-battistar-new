@@ -103,6 +103,6 @@ todoSchema.pre<ITodo>('save', function setUpdatedAt(next) {
   next();
 });
 
-const TodoModel = mongoose.model('Todo', todoSchema);
+export const TodoModel = mongoose.model('Todo', todoSchema);
 
-export { TodoModel };
+export type TodoDocument = InstanceType<typeof TodoModel>;
