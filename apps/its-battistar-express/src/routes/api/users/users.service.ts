@@ -143,9 +143,15 @@ export const createUserAndAccount = async (
         // eslint-disable-next-line no-magic-numbers
         _id: accounts[0].user,
       });
+
       if (!user) {
-        return new Error('Error getting user');
+        return {
+          user: null,
+          account: null,
+          error: new Error('User not found'),
+        };
       }
+
       const account = new AccountModel(
         new SocialAccount({
           user: user._id.toString(),
