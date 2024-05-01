@@ -20,7 +20,7 @@ export const oauthGithubClient = new AuthorizationCode({
 
 // Authorization uri definition
 export const githubAuthorizationUri = oauthGithubClient.authorizeURL({
-  redirect_uri: 'http://localhost:3000/auth/github/callback',
-  scope: ['user:email'],
-  state: '3(#0/!~',
+  redirect_uri: e.GITHUB_CALLBACK_URL,
+  scope: [e.GITHUB_SCOPE],
+  state: e.GITHUB_STATE,
 });

@@ -81,21 +81,29 @@ export const verifyJWT = async (
   }
 };
 
-interface IGenerateTokens {
-  generateAccessToken?: boolean;
-  generateRefreshToken?: boolean;
-  setCookiesOn?: Response | null;
-  payload: CustomJWTClaims;
-}
 export const generateTokens = async ({
   generateAccessToken = true,
   generateRefreshToken = true,
   setCookiesOn = null,
   payload,
-}: IGenerateTokens): Promise<{
+}: {
+  generateAccessToken?: boolean;
+  generateRefreshToken?: boolean;
+  setCookiesOn?: Response | null;
+  payload: CustomJWTClaims;
+}): Promise<{
   accessToken: string | undefined;
   refreshToken: string | undefined;
 }> => {
+  // TODO: handle edge cases where all are false
+  // use ts conditional? force at least one to be true
+  // TODO: workerpool?
+  if (!generateAccessToken && !generateRefreshToken && !setCookiesOn) {
+    throw new Error(
+      'At least one of generateAccessToken, generateRefreshToken, or setCookiesOn must be true'
+    );
+  }
+
   let accessToken: string | undefined;
   if (generateAccessToken) {
     accessToken = await createJWT({

@@ -52,6 +52,10 @@ const optionalKeys: TOptionalEnvironment = {
 
   GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID ?? '',
   GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET ?? '',
+  GITHUB_CALLBACK_URL: process.env.GITHUB_CALLBACK_URL ?? '',
+  GITHUB_SCOPE: process.env.GITHUB_SCOPE ?? 'user:email',
+  GITHUB_STATE: process.env.GITHUB_STATE ?? '3(#0/!~',
+  GITHUB_FINAL_REDIRECT: process.env.GITHUB_FINAL_REDIRECT ?? '/',
 
   ENABLE_LOKI: process.env.ENABLE_LOKI ?? 'false',
 } as const;

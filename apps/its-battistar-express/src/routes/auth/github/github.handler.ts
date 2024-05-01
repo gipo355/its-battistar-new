@@ -3,17 +3,16 @@ import { Handler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { AuthorizationTokenConfig } from 'simple-oauth2';
 
-import { APP_CONFIG as c } from '../../../app.config';
 import { sessionRedisConnection } from '../../../db/redis';
+import { e } from '../../../environments';
 // TODO: refactor, too much code duplication
 import {
   AppError,
   catchAsync,
-  createJWT,
   generateTokens,
   getUserInfoFromOauthToken,
+  rotateRefreshToken,
 } from '../../../utils';
-import { UserModel } from '../../api/users/users.model';
 import { createUserAndAccount } from '../../api/users/users.service';
 import { githubAuthorizationUri, oauthGithubClient } from './github.service';
 
@@ -82,6 +81,10 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
       },
     });
 
+    if (!refreshToken) {
+      throw new AppError('No refresh token', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+
     // TODO: move to util fn
     /**
      * set up the whitelist for the refresh token, add it as a key to the redis store
@@ -91,35 +94,20 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
      */
     // saving individual token as key is used to save info about the session
     // like IP, user agent, etc
-    const data = {
-      user: realUser._id.toString(),
-      ip: req.ip,
-      userAgent: req.get('User-Agent'),
-    };
-    await sessionRedisConnection.set(
-      refreshToken,
-      JSON.stringify(data),
-      'EX',
-      c.JWT_REFRESH_TOKEN_OPTIONS.expSeconds
-    );
+    await rotateRefreshToken({
+      redisConnection: sessionRedisConnection,
+      newToken: refreshToken,
+      user: user._id.toString(),
+      payload: {
+        user: user._id.toString(),
+        ip: req.ip,
+        userAgent: req.get('User-Agent'),
+      },
+    });
 
-    /**
-     * add it to a list of refresh tokens for the user to be able to revoke it
-     * where the key is the user id and the values are the refresh tokens issued and valid
-     */
-    const key = `${c.REDIS_USER_SESSION_PREFIX}${realUser._id.toString()}`;
-    await sessionRedisConnection.sadd(key, refreshToken);
-    // reset the expiration time for the user sessions
-    // we must have both the token key and user key with token value for token to be valid
-    await sessionRedisConnection.expire(key, c.REDIS_USER_SESSION_MAX_EX);
-
-    // return res.status(StatusCodes.OK).json(githubAccessToken.token);
-    // TODO: redirect to dashboard
-    res.redirect('http://localhost:4200/#/dashboard');
+    // TODO: redirect to dashboard, must be in config
+    res.redirect(e.GITHUB_FINAL_REDIRECT);
   } catch (error) {
-    if (error instanceof Error) {
-      // throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
-    }
-    throw new AppError('Access Token Error', StatusCodes.INTERNAL_SERVER_ERROR);
+    throw new Error('Access Token Error');
   }
 });

@@ -42,8 +42,11 @@ export const optionalEnvironmentSchema = Type.Object({
   ENABLE_LOKI: Type.String(),
 
   GITHUB_CLIENT_ID: Type.String({}),
-
   GITHUB_CLIENT_SECRET: Type.String({}),
+  GITHUB_CALLBACK_URL: Type.String({}),
+  GITHUB_SCOPE: Type.String(),
+  GITHUB_STATE: Type.String(),
+  GITHUB_FINAL_REDIRECT: Type.String(),
 });
 
 export type TRequiredEnvironment = Static<typeof requiredEnvironmentSchema>;

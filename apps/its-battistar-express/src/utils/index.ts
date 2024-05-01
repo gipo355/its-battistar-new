@@ -6,4 +6,5 @@ export * from './get-user-info-from-oauth-token';
 export * from './jwt';
 export * from './logger';
 export * from './random-bytes';
+export * from './redis-token-rotation';
 export * from './timer';
