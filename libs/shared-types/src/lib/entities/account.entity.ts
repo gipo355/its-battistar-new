@@ -1,8 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
-import fastJsonStringify from 'fast-json-stringify';
 import type mongoose from 'mongoose';
-
-import ajvInstance from '../../utils/ajv';
 
 export enum ELocalStrategy {
   LOCAL = 'LOCAL',
@@ -199,11 +196,3 @@ export class LocalAccount extends Account {
     this.password = password;
   }
 }
-
-/**
- * Validation and serialization functions for the schemas provided
- */
-
-export const stringifyAccount = fastJsonStringify(accountSchema);
-
-export const validateAccount = ajvInstance.compile(accountSchema);

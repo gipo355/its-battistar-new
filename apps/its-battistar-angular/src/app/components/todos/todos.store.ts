@@ -6,7 +6,6 @@ import {
   ITodo,
   ITodoColorOptions,
   ITodoSortByOptions,
-  // BUG: again, importing from here breaks the build
   Todo,
 } from '@its-battistar/shared-types';
 import {
@@ -217,7 +216,6 @@ export const TodosStore = signalStore(
           throw new Error(`Error loading todos: ${request.message ?? ''}`);
         }
 
-        // BUG: not receiving completed todos because it expects query param showCompleted
         const todos = request.data;
 
         if (!todos) {

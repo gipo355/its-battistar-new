@@ -1,8 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
-import fastJsonStringify from 'fast-json-stringify';
 import type mongoose from 'mongoose';
-
-import ajvInstance from '../../utils/ajv';
 
 // BUG: importing an enum into angular from here breaks the build
 
@@ -155,8 +152,3 @@ export class Todo implements ITodoInput {
     this.image = image;
   }
 }
-
-// Utility functions
-export const stringifyTodo = fastJsonStringify(todoSchema);
-
-export const validateTodo = ajvInstance.compile(todoSchemaInput);

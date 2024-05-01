@@ -4,10 +4,8 @@ import {
   // TString,
   Type,
 } from '@sinclair/typebox';
-import fastJsonStringify from 'fast-json-stringify';
 import type mongoose from 'mongoose';
 
-import ajvInstance from '../../utils/ajv';
 import { IAccountSafe } from './account.entity';
 import { ITodo } from './todo.entity';
 
@@ -135,11 +133,6 @@ export class User {
     this.role = user.role;
   }
 }
-
-// TODO: fix validation for different use cases and data types
-export const stringifyUser = fastJsonStringify(userSchema);
-
-export const validateUser = ajvInstance.compile(userSchemaInput);
 
 // NOTE: solve conflict with mongoose data type?
 // [https://github.com/sinclairzx81/typebox/issues/2]

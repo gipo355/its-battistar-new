@@ -224,7 +224,6 @@ export class TodoModalComponent implements OnDestroy, OnInit {
     await this.onExit();
   }
 
-  // BUG: doesn't update the db
   async onToggleCompleted(): Promise<void> {
     const selectedTodo = this.store.currentSelectedTodo();
 
