@@ -1,5 +1,5 @@
 import { ERole, IUser } from '@its-battistar/shared-types';
-import mongoose, { HydratedDocument } from 'mongoose';
+import mongoose from 'mongoose';
 import isAscii from 'validator/lib/isAscii';
 import isURL from 'validator/lib/isURL';
 
