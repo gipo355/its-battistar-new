@@ -17,7 +17,7 @@ export const todosRoutes: Route[] = [
   // works with external component, but how would i inject stores and services?
   {
     path: '',
-    loadComponent: () =>
+    loadComponent: async () =>
       import('./todos.component').then((m) => m.TodosComponent),
     // FIXME: why named outlet is not working?
     // outlet: 'content',
@@ -25,14 +25,14 @@ export const todosRoutes: Route[] = [
     children: [
       {
         path: 'new',
-        loadComponent: () =>
+        loadComponent: async () =>
           import('./todo-modal/todo-modal.component').then(
             (m) => m.TodoModalComponent
           ),
       },
       {
         path: ':id',
-        loadComponent: () =>
+        loadComponent: async () =>
           import('./todo-modal/todo-modal.component').then(
             (m) => m.TodoModalComponent
           ),

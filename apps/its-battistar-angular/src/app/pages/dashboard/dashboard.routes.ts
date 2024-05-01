@@ -15,7 +15,7 @@ export const dashboardRoutes: Route[] = [
   // works with external component, but how would i inject stores and services?
   {
     path: '',
-    loadComponent: () =>
+    loadComponent: async () =>
       import('./dashboard.component').then((m) => m.DashboardComponent),
     children: [
       {
@@ -25,7 +25,7 @@ export const dashboardRoutes: Route[] = [
       },
       {
         path: 'overview',
-        loadComponent: () =>
+        loadComponent: async () =>
           import('../../components/overview/overview.component').then(
             (m) => m.OverviewComponent
           ),
@@ -34,7 +34,7 @@ export const dashboardRoutes: Route[] = [
       },
       {
         path: 'todos',
-        loadChildren: () =>
+        loadChildren: async () =>
           import('../../components/todos/todos.routes').then(
             (routes) => routes.todosRoutes
           ),
