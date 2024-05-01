@@ -151,7 +151,6 @@ module.exports = tseslint.config(
     ],
     rules: {
       '@typescript-eslint/explicit-module-boundary-types': ['error'],
-      '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/consistent-type-exports': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
     },
