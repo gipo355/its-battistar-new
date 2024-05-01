@@ -77,6 +77,32 @@ module.exports = tseslint.config(
       'consistent-return': 'off', // force explicit return, prevents bugs
       'no-useless-return': 'off',
 
+      // ! ASYNCH RULES, FROM https://maximorlov.com/linting-rules-for-asynchronous-code-in-javascript/
+      // check also parallelism in loops at https://maximorlov.com/parallel-tasks-with-pure-javascript/
+      'no-async-promise-executor': 'warn', // This rule disallows passing an async function to the new Promise constructor.
+      'no-await-in-loop': 'warn', // This rule disallows using await inside loops.
+      'no-promise-executor-return': 'warn', // This rule disallows returning a value inside a Promise constructor.
+      'require-atomic-updates': 'warn', // This rule disallows assignments in combination with await, which can lead to race conditions.
+      'max-nested-callbacks': ['warn', 3], // This rule enforces a maximum nesting depth for callbacks. In other words, this rule prevents callback hell
+      'no-return-await': 'warn', // This rule disallows unnecessary return await.
+      'prefer-promise-reject-errors': 'warn', // This rule enforces using an Error object when rejecting a Promise.
+
+      'no-implicit-coercion': 'warn', // This rule disallows shorthand type conversions for boolean, numbers and strings.
+
+      'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+
+      // side effects and mutations (immutable and pure plugins)
+      'no-var': 2,
+      'no-void': [1, { allowAsStatement: true }],
+      'no-undef': 'warn',
+      'no-unused-vars': 2, // already have typescript rule - fixed by typescript-eslint/eslint-recommended
+      'no-restricted-syntax': [
+        'error',
+        'ForInStatement',
+        'LabeledStatement',
+        'WithStatement',
+      ],
+
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
 
