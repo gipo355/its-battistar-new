@@ -14,6 +14,7 @@ import { faker } from '@faker-js/faker';
 import mongoose from 'mongoose';
 
 import {
+  ETodoColorOptions,
   TTodoInput,
   TUserInput,
 } from '../../../libs/shared-types/src/lib/index';
@@ -26,14 +27,6 @@ import { UserModel } from '../src/routes/api/users/users.model';
 // }
 
 // must provide an enum to faker
-enum TodoColorOptions {
-  red = 'red',
-  blue = 'blue',
-  green = 'green',
-  yellow = 'yellow',
-  pink = 'pink',
-  default = 'default',
-}
 
 const dataSet: {
   model: any;
@@ -45,7 +38,7 @@ const dataSet: {
     model: UserModel,
     faker: {
       email: () => faker.internet.email(),
-      name: () => faker.internet.userName(),
+      username: () => faker.internet.userName(),
     },
     batchSize: 100,
     baseArray: [] as TUserInput[],
@@ -57,7 +50,7 @@ const dataSet: {
       description: () => faker.lorem.sentence(10),
       dueDate: () => faker.date.future().toString(),
       completed: () => faker.datatype.boolean(),
-      color: () => faker.helpers.enumValue(TodoColorOptions),
+      color: () => faker.helpers.enumValue(ETodoColorOptions),
     },
     batchSize: 100,
     baseArray: [] as TTodoInput[],

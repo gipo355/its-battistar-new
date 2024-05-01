@@ -1,7 +1,7 @@
 import {
   CustomResponse,
+  ETodoColorOptions,
   ITodo,
-  ITodoColorOptions,
 } from '@its-battistar/shared-types';
 import { StatusCodes } from 'http-status-codes';
 
@@ -38,7 +38,7 @@ export const createTodo = catchAsync(async (req, res) => {
     title: string;
     dueDate: string;
     description: string;
-    color: keyof ITodoColorOptions;
+    color: keyof typeof ETodoColorOptions;
   };
 
   // let date: string | Date | undefined;

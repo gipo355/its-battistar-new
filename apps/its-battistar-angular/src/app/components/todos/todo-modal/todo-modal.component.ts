@@ -14,7 +14,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { ITodo, ITodoColorOptions, Todo } from '@its-battistar/shared-types';
+import { ETodoColorOptions, ITodo, Todo } from '@its-battistar/shared-types';
 import { initFlowbite } from 'flowbite';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 
@@ -163,7 +163,7 @@ export class TodoModalComponent implements OnDestroy, OnInit {
       ]
     ),
 
-    color: new FormControl<keyof ITodoColorOptions>(
+    color: new FormControl<keyof typeof ETodoColorOptions>(
       this.getTodo()?.color ?? 'green',
       [Validators.required.bind(this)]
     ),

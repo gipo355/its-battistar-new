@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import { ITodo, TodoColorOptions } from '@its-battistar/shared-types';
+import { ETodoColorOptions, ITodo } from '@its-battistar/shared-types';
 import mongoose from 'mongoose';
 import isAscii from 'validator/lib/isAscii';
 import isURL from 'validator/lib/isURL';
@@ -25,8 +25,8 @@ const todoSchema = new mongoose.Schema<ITodo>(
     color: {
       type: String,
       enum: {
-        values: Object.keys(TodoColorOptions),
-        message: `Color is either: ${Object.keys(TodoColorOptions).join(', ')}`,
+        values: Object.keys(ETodoColorOptions),
+        message: `Color is either: ${Object.keys(ETodoColorOptions).join(', ')}`,
       },
       default: 'default',
     },

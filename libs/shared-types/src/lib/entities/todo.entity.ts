@@ -2,31 +2,20 @@ import { Static, Type } from '@sinclair/typebox';
 import type mongoose from 'mongoose';
 
 // BUG: importing an enum into angular from here breaks the build
-
-export interface ITodoColorOptions {
-  red: 'red';
-  blue: 'blue';
-  green: 'green';
-  yellow: 'yellow';
-  pink: 'pink';
-  default: 'default';
+export enum ETodoSortByOptions {
+  Newest = 'Newest',
+  Oldest = 'Oldest',
+  Title = 'Title',
+  DueDate = 'DueDate',
 }
-
-export interface ITodoSortByOptions {
-  Newest: 'Newest';
-  Oldest: 'Oldest';
-  Title: 'Title';
-  DueDate: 'DueDate';
+export enum ETodoColorOptions {
+  red = 'red',
+  blue = 'blue',
+  green = 'green',
+  yellow = 'yellow',
+  pink = 'pink',
+  default = 'default',
 }
-
-export const TodoColorOptions: ITodoColorOptions = {
-  red: 'red',
-  blue: 'blue',
-  green: 'green',
-  yellow: 'yellow',
-  pink: 'pink',
-  default: 'default',
-} as const;
 
 /**
  * @description
@@ -41,7 +30,7 @@ export const todoSchemaInput = Type.Object({
 
   color: Type.Optional(
     Type.String({
-      enum: [...Object.keys(TodoColorOptions)],
+      enum: [...Object.keys(ETodoColorOptions)],
     })
   ),
 
@@ -97,7 +86,7 @@ export type TTodo = Static<typeof todoSchema>;
 export interface ITodoInput {
   title: string;
   description: string;
-  color: keyof ITodoColorOptions;
+  color: keyof typeof ETodoColorOptions;
   dueDate?: Date;
   image?: string;
 }
@@ -126,7 +115,7 @@ export class Todo implements ITodoInput {
 
   description: string;
 
-  color: keyof ITodoColorOptions;
+  color: keyof typeof ETodoColorOptions;
 
   dueDate?: Date;
 
@@ -140,7 +129,7 @@ export class Todo implements ITodoInput {
     image,
   }: {
     title: string;
-    color: keyof ITodoColorOptions;
+    color: keyof typeof ETodoColorOptions;
     description: string;
     dueDate?: Date;
     image: string;

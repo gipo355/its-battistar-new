@@ -3,9 +3,9 @@
 
 import { computed, inject, InjectionToken } from '@angular/core';
 import {
+  ETodoColorOptions,
+  ETodoSortByOptions,
   ITodo,
-  ITodoColorOptions,
-  ITodoSortByOptions,
   Todo,
 } from '@its-battistar/shared-types';
 import {
@@ -44,7 +44,7 @@ interface TodosState {
    * this todo is the result of the http call to sync the todos
    * used to inject the final todo in the store after exiting the modal
    */
-  currentTodoForSync: ITodo | null;
+  // currentTodoForSync: ITodo | null;
 
   errors: string[] | null;
 
@@ -54,7 +54,7 @@ interface TodosState {
   filter: {
     showCompleted: boolean;
     showExpired: boolean;
-    currentSortBy: keyof ITodoSortByOptions;
+    currentSortBy: keyof typeof ETodoSortByOptions;
     query: string;
   };
   filteredTodos?: ITodo[];
@@ -64,8 +64,8 @@ interface TodosState {
    * and provide intellisens
    */
   // FIXME: make them arrays?
-  todoSortByOptions: ITodoSortByOptions;
-  todoColorOptions: ITodoColorOptions;
+  todoSortByOptions: typeof ETodoSortByOptions;
+  todoColorOptions: typeof ETodoColorOptions;
 }
 
 // TODO: move to express backend init
@@ -79,7 +79,7 @@ const initialState: TodosState = {
 
   currentNewTodo: null,
 
-  currentTodoForSync: null,
+  // currentTodoForSync: null,
 
   errors: null,
 
@@ -92,20 +92,9 @@ const initialState: TodosState = {
 
   filteredTodos: [],
 
-  todoSortByOptions: {
-    Newest: 'Newest',
-    Oldest: 'Oldest',
-    Title: 'Title',
-    DueDate: 'DueDate',
-  },
-  todoColorOptions: {
-    red: 'red',
-    blue: 'blue',
-    green: 'green',
-    yellow: 'yellow',
-    pink: 'pink',
-    default: 'default',
-  },
+  todoSortByOptions: ETodoSortByOptions,
+
+  todoColorOptions: ETodoColorOptions,
 };
 
 const TODOS_STATE = new InjectionToken<TodosState>('TodosState', {
@@ -215,7 +204,6 @@ export const TodosStore = signalStore(
         if (!request.ok) {
           throw new Error(`Error loading todos: ${request.message ?? ''}`);
         }
-
         const todos = request.data;
 
         if (!todos) {
