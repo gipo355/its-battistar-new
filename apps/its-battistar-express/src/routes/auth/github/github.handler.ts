@@ -55,7 +55,7 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
       throw new AppError('No user found', StatusCodes.NOT_FOUND);
     }
 
-    const { user, account, error } = await createUserAndAccount({
+    const { user, error } = await createUserAndAccount({
       email: githubUser.email,
       providerUid: githubUser.providerUid,
       accessToken: githubAccessToken.token.access_token,

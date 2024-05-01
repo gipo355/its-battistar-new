@@ -12,26 +12,48 @@ import { HydratedDocument } from 'mongoose';
 import { AccountModel } from './accounts.model';
 import { UserModel } from './users.model';
 
-// TODO: complete this to reduce duplication in handlers
-
-export const userExistsOrThrow = async ({
-  data: { email, _id },
-  error,
+// TODO: use typescript conditionals to return the right types
+export const getAccountAndUserOrThrow = async ({
+  email,
+  strategy,
 }: {
-  data: {
-    email?: string;
-    _id?: string;
-  };
-  error: Error;
-}): Promise<HydratedDocument<IUser>> => {
-  const user = await UserModel.findOne({
-    $or: [{ email }, { _id }],
+  email: string;
+  strategy: keyof typeof EStrategy;
+}): Promise<{
+  user: HydratedDocument<IUser> | null;
+  account: HydratedDocument<IAccount> | null;
+  error: Error | null;
+}> => {
+  const account = await AccountModel.findOne({
+    email,
+    strategy,
   });
-  if (!user) {
-    throw error;
+
+  if (!account) {
+    return {
+      user: null,
+      account: null,
+      error: new Error('Account not found'),
+    };
   }
 
-  return user;
+  const user = await UserModel.findOne({
+    _id: account.user,
+  });
+
+  if (!user) {
+    return {
+      user: null,
+      account: null,
+      error: new Error('User not found'),
+    };
+  }
+
+  return {
+    user,
+    account,
+    error: null,
+  };
 };
 
 type ICreateUserAndAccount =

@@ -4,9 +4,14 @@ import { StatusCodes } from 'http-status-codes';
 
 import { APP_CONFIG as c } from '../../../app.config';
 import { sessionRedisConnection } from '../../../db/redis';
-import { AppError, catchAsync, createJWT } from '../../../utils';
-import { AccountModel } from '../../api/users/accounts.model';
-import { UserModel } from '../../api/users/users.model';
+import {
+  AppError,
+  catchAsync,
+  createJWT,
+  generateTokens,
+  rotateRefreshToken,
+} from '../../../utils';
+import { getAccountAndUserOrThrow } from '../../api/users/users.service';
 
 export const loginHandler: Handler = catchAsync(async (req, res) => {
   const { email, password } = req.body as {
@@ -22,83 +27,43 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
     );
   }
 
-  const user = await UserModel.findOne({
+  const { user, account, error } = await getAccountAndUserOrThrow({
     email,
-    // accounts: {
-    //   $elemMatch: {
-    //     strategy: 'LOCAL',
-    //   },
-    // },
-  });
-
-  // VULNERABILITY: timing attack
-  if (!user) {
-    throw new AppError('Invalid email or password', StatusCodes.UNAUTHORIZED);
-  }
-
-  // compare hashed password with user's password
-  const userAccount = await AccountModel.findOne({
-    user: user._id,
     strategy: 'LOCAL',
   });
-
-  if (!userAccount) {
-    throw new AppError('Invalid email or password', StatusCodes.UNAUTHORIZED);
+  if (error ?? (!user || !account)) {
+    throw new AppError('Wrong credentials', StatusCodes.BAD_REQUEST);
   }
 
-  const isValid = await userAccount.comparePassword(password);
-
+  const isValid = await account.comparePassword(password);
   if (!isValid) {
     throw new AppError('Invalid email or password', StatusCodes.UNAUTHORIZED);
   }
 
-  const accessToken = await createJWT({
-    data: {
+  const { accessToken, refreshToken } = await generateTokens({
+    setCookiesOn: res,
+    payload: {
       user: user._id.toString(),
       strategy: 'LOCAL',
     },
-    type: 'access',
   });
+  if (!accessToken || !refreshToken) {
+    throw new AppError(
+      'Could not generate tokens',
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
 
-  const refreshToken = await createJWT({
-    data: {
-      user: user._id.toString(),
-      strategy: 'LOCAL',
-    },
-    type: 'refresh',
-  });
-
-  res.cookie('accessToken', accessToken, c.JWT_ACCESS_COOKIE_OPTIONS);
-  res.cookie('refreshToken', refreshToken, c.JWT_REFRESH_COOKIE_OPTIONS);
-
-  // TODO: move to util fn
-  /**
-   * set up the whitelist for the refresh token, add it as a key to the redis store
-   * this will allow us to revoke the refresh token and check quickly if it is valid during refresh
-   * we need to store the id of the user to be able to revoke all the refresh tokens associated with the user in case
-   * a an invalid refresh token is used
-   */
-  const data = {
+  await rotateRefreshToken({
+    redisConnection: sessionRedisConnection,
+    newToken: refreshToken,
     user: user._id.toString(),
-    ip: req.ip,
-    userAgent: req.get('User-Agent'),
-  };
-  await sessionRedisConnection.set(
-    refreshToken,
-    JSON.stringify(data),
-    'EX',
-    c.JWT_REFRESH_TOKEN_OPTIONS.expSeconds
-  );
-  /**
-   * add it to a list of refresh tokens for the user to be able to revoke it
-   * where the key is the user id and the values are the refresh tokens issued and valid
-   * thus consisting of all the "sessions" the user has active
-   */
-  const key = `${c.REDIS_USER_SESSION_PREFIX}${user._id.toString()}`;
-  await sessionRedisConnection.sadd(key, refreshToken);
-  // reset the expiration time for the user sessions
-  // we must have both the token key and user key with token value for token to be valid
-  await sessionRedisConnection.expire(key, c.REDIS_USER_SESSION_MAX_EX);
+    payload: {
+      user: user._id.toString(),
+      ip: req.ip,
+      userAgent: req.get('User-Agent'),
+    },
+  });
 
   res.status(StatusCodes.OK).json(
     new CustomResponse<{
