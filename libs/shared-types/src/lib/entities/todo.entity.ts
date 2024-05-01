@@ -1,4 +1,5 @@
-import { Static, Type } from '@sinclair/typebox';
+import type { Static } from '@sinclair/typebox';
+import { Type } from '@sinclair/typebox';
 import type mongoose from 'mongoose';
 
 // BUG: importing an enum into angular from here breaks the build

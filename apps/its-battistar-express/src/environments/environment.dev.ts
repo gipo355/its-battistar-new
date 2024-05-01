@@ -1,6 +1,6 @@
 import 'dotenv-defaults/config';
 
-import {
+import type {
   TOptionalEnvironment,
   TRequiredEnvironment,
 } from './environment.entity';

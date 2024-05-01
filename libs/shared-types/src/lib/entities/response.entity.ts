@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { TSchema, Type } from '@sinclair/typebox';
+import type { TSchema } from '@sinclair/typebox';
+import { Type } from '@sinclair/typebox';
 
 export const customResponseSchemaFactory = <T extends TSchema>(T: T) =>
   Type.Object(

@@ -2,7 +2,7 @@
 // https://stackoverflow.com/questions/41857876/angular-2-submodule-routing-and-nested-router-outlet
 // https://medium.com/@oranaki9910/how-to-create-a-dynamic-layout-using-a-named-router-outlet-in-angular-8f211afe4ea2
 
-import { Route } from '@angular/router';
+import type { Route } from '@angular/router';
 
 // this is the schema for the routes:
 // / => welcome page

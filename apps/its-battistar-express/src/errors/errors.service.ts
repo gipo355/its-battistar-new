@@ -3,7 +3,7 @@ import { CustomResponse } from '@its-battistar/shared-types';
 //   CustomResponse,
 // stringifyCustomResponseFactory,
 // } from '@its-battistar/shared-types';
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError } from '../utils/app-error';

@@ -1,5 +1,5 @@
 import { inject, InjectionToken } from '@angular/core';
-import { IUserSafe } from '@its-battistar/shared-types';
+import type { IUserSafe } from '@its-battistar/shared-types';
 import { signalStore, withState } from '@ngrx/signals';
 
 // interface UserWithAccounts extends IUserSafe {

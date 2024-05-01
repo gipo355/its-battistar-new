@@ -1,7 +1,7 @@
 // import { CustomResponse } from '@its-battistar/shared-types';
-import { Handler } from 'express';
+import type { Handler } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { AuthorizationTokenConfig } from 'simple-oauth2';
+import type { AuthorizationTokenConfig } from 'simple-oauth2';
 
 import { sessionRedisConnection } from '../../../db/redis';
 import { e } from '../../../environments';

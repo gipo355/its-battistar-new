@@ -1,5 +1,5 @@
 import { CustomResponse } from '@its-battistar/shared-types';
-import { Handler } from 'express';
+import type { Handler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { APP_CONFIG as c } from '../../../app.config';

@@ -1,4 +1,4 @@
-import { EStrategy } from '@its-battistar/shared-types';
+import type { EStrategy } from '@its-battistar/shared-types';
 import { type Static, Type } from '@sinclair/typebox';
 import { StatusCodes } from 'http-status-codes';
 import { Client } from 'undici';

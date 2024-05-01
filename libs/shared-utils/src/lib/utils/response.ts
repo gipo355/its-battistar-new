@@ -1,5 +1,5 @@
 import { customResponseSchemaFactory } from '@its-battistar/shared-types';
-import { TSchema } from '@sinclair/typebox';
+import type { TSchema } from '@sinclair/typebox';
 import fastJsonStringify from 'fast-json-stringify';
 
 /**

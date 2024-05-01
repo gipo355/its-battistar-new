@@ -1,13 +1,13 @@
+import type { Static } from '@sinclair/typebox';
 import {
-  Static,
   // TSchema,
   // TString,
   Type,
 } from '@sinclair/typebox';
 import type mongoose from 'mongoose';
 
-import { IAccountSafe } from './account.entity';
-import { ITodo } from './todo.entity';
+import type { IAccountSafe } from './account.entity';
+import type { ITodo } from './todo.entity';
 
 export enum ERole {
   SUPER = 'SUPER',

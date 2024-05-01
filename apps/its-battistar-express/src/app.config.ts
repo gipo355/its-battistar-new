@@ -1,8 +1,8 @@
 /* eslint-disable no-magic-numbers */
-import { CorsOptions } from 'cors';
-import { CookieOptions } from 'express';
-import { HelmetOptions } from 'helmet';
-import { IRateLimiterRedisOptions } from 'rate-limiter-flexible';
+import type { CorsOptions } from 'cors';
+import type { CookieOptions } from 'express';
+import type { HelmetOptions } from 'helmet';
+import type { IRateLimiterRedisOptions } from 'rate-limiter-flexible';
 
 import { rateLimitRedisConnection } from './db/redis';
 import { e } from './environments';

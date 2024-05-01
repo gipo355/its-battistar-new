@@ -15,11 +15,11 @@
 //   CustomResponse,
 // stringifyCustomResponseFactory,
 // } from '@its-battistar/shared-types';
-import { ErrorRequestHandler } from 'express';
+import type { ErrorRequestHandler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { e } from '../environments';
-import { AppError } from '../utils/app-error';
+import type { AppError } from '../utils/app-error';
 import { logger } from '../utils/logger';
 import {
   handleCastError,

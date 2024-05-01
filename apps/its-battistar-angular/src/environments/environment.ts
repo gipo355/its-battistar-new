@@ -1,4 +1,4 @@
-import { IEnvironment } from './environment.entity';
+import type { IEnvironment } from './environment.entity';
 
 export const environment: IEnvironment = {
   sentryDsn: '',

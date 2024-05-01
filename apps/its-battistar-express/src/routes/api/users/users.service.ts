@@ -1,17 +1,21 @@
-import {
+import type {
   ELocalStrategy,
   ESocialStrategy,
-  EStrategy,
   IAccount,
   IUser,
+} from '@its-battistar/shared-types';
+import {
+  EStrategy,
   LocalAccount,
   SocialAccount,
   User,
 } from '@its-battistar/shared-types';
-import { HydratedDocument } from 'mongoose';
+import type { HydratedDocument } from 'mongoose';
 
-import { AccountDocument, AccountModel } from './accounts.model';
-import { UserDocument, UserModel } from './users.model';
+import type { AccountDocument } from './accounts.model';
+import { AccountModel } from './accounts.model';
+import type { UserDocument } from './users.model';
+import { UserModel } from './users.model';
 
 // TODO: use typescript conditionals to return the right types
 export const getAccountAndUserOrThrow = async ({

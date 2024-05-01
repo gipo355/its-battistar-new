@@ -1,5 +1,7 @@
-import { EStrategy, IAccount } from '@its-battistar/shared-types';
-import mongoose, { Model } from 'mongoose';
+import type { IAccount } from '@its-battistar/shared-types';
+import { EStrategy } from '@its-battistar/shared-types';
+import type { Model } from 'mongoose';
+import mongoose from 'mongoose';
 import isEmail from 'validator/lib/isEmail';
 
 import { APP_CONFIG as c } from '../../../app.config';

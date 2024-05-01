@@ -1,4 +1,4 @@
-import { IUser } from '@its-battistar/shared-types';
+import type { IUser } from '@its-battistar/shared-types';
 import { StatusCodes } from 'http-status-codes';
 
 import { verifyJWT } from '../../utils';

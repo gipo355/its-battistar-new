@@ -1,5 +1,5 @@
 import type IORedis from 'ioredis';
-import mongoose from 'mongoose';
+import type mongoose from 'mongoose';
 
 import { APP_CONFIG as c } from '../app.config';
 
