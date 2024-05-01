@@ -41,10 +41,8 @@ const accountSchema = new mongoose.Schema<
       ref: 'User',
     },
     /**
-     * Difficult: how to handle multiple emails per user?
+     * FIXME: Difficult: how to handle multiple emails per user?
      * but there can't be multiple users with same email
-     *
-     *
      *
      * the first email should be primary by default
      */
@@ -131,7 +129,7 @@ accountSchema.pre('save', async function preSave(next) {
       this.password = await hashPassword(this.password);
     }
 
-    await this.save();
+    // void this.save();
 
     next();
   } catch (error) {
@@ -148,14 +146,14 @@ accountSchema.pre('save', async function preSave(next) {
  * ## set deletedAt to current date if active is changed to false
  * doesn't work with updates, must save
  */
-accountSchema.pre('save', async function preSave(next) {
+accountSchema.pre('save', function preSave(next) {
   try {
     if (!this.isNew && this.active && this.isModified('active')) {
       this.deletedAt = new Date();
     }
 
     // does it conflict with the other preSave and future save?
-    await this.save();
+    // void this.save();
 
     next();
   } catch (error) {
@@ -171,7 +169,7 @@ accountSchema.pre('save', async function preSave(next) {
 /**
  * ## update passwordChangedAt when password is modified
  */
-accountSchema.pre('save', async function updatePasswordModified(next) {
+accountSchema.pre('save', function updatePasswordModified(next) {
   if (this.isNew || !this.isModified('password')) {
     next();
     return;
@@ -181,7 +179,7 @@ accountSchema.pre('save', async function updatePasswordModified(next) {
   // eslint-disable-next-line no-magic-numbers
   this.passwordChangedAt = new Date(Date.now() - 500);
 
-  await this.save();
+  // void this.save();
 
   next();
 });

@@ -40,12 +40,6 @@ interface TodosState {
    */
   currentNewTodo: Todo | null;
 
-  /**
-   * this todo is the result of the http call to sync the todos
-   * used to inject the final todo in the store after exiting the modal
-   */
-  // currentTodoForSync: ITodo | null;
-
   errors: string[] | null;
 
   /**
@@ -78,8 +72,6 @@ const initialState: TodosState = {
   currentSelectedTodo: null,
 
   currentNewTodo: null,
-
-  // currentTodoForSync: null,
 
   errors: null,
 
