@@ -1,4 +1,5 @@
 import {
+  ELocalStrategy,
   ESocialStrategy,
   EStrategy,
   IAccount,
@@ -58,7 +59,7 @@ export const getAccountAndUserOrThrow = async ({
 
 type ICreateUserAndAccount =
   | {
-      strategy: typeof EStrategy.LOCAL;
+      strategy: keyof typeof ELocalStrategy;
       email: string;
       password: string;
     }
@@ -69,6 +70,29 @@ type ICreateUserAndAccount =
       email: string;
     };
 
+/**
+ *
+ * createUserAndAccount is used to register a user and create an account for them.
+ * This function takes an object of type `ICreateUserAndAccount` as an argument and returns a Promise that resolves to an object containing a user, an account, and an error.
+ *
+ * The function begins by trying to find any existing accounts with the same email as the one provided in the argument object.
+ * If an account with the same email and strategy already exists, the function returns an error stating "Account already exists".
+ *
+ * If an account with the same email but a different strategy exists, and the strategy is not local, the function adds a new account to the existing user.
+ * It creates a new `SocialAccount` and returns the user and the new account.
+ * However, if the strategy is local, the function returns an error stating "Account already exists".
+ *
+ * If no account with the same email exists, the function creates a new user and account.
+ * If the strategy is local, it creates a new `LocalAccount`, saves it, and returns the user and the new account.
+ * If the strategy is not local, it creates a new `SocialAccount`, saves it, and returns the user and the new account.
+ *
+ * If any error occurs during the execution of the function, it is caught and a new error stating "Error creating user and account" is thrown.
+ * If none of the conditions are met, the function falls back to returning an object with null user and account and an error stating "Error creating user and account".
+ *
+ * This function is a part of a larger user management system where users can have multiple accounts with different strategies (local or social).
+ * The function ensures that a user cannot have multiple accounts with the same strategy and that a new user and account are created only when no account with the same email exists.
+ *
+ */
 export const createUserAndAccount = async (
   a: ICreateUserAndAccount
 ): Promise<{

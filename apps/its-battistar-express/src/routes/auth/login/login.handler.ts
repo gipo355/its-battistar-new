@@ -12,6 +12,7 @@ import {
 import { getAccountAndUserOrThrow } from '../../api/users/users.service';
 
 export const loginHandler: Handler = catchAsync(async (req, res) => {
+  // INPUT: email, password
   const { email, password } = req.body as {
     email: string | undefined;
     password: string | undefined;
