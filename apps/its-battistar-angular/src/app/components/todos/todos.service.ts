@@ -28,7 +28,7 @@ export class TodosService {
       })
       .pipe(timeout(3000), retry(2), take(1));
 
-    return await lastValueFrom<CustomResponse<ITodo[]>>(request$);
+    return lastValueFrom<CustomResponse<ITodo[]>>(request$);
   }
 
   async updateTodo$(todo: ITodo): Promise<CustomResponse<ITodo>> {
@@ -45,7 +45,7 @@ export class TodosService {
       )
       .pipe(timeout(3000), retry(2), take(1));
 
-    return await lastValueFrom<CustomResponse<ITodo>>(request$);
+    return lastValueFrom<CustomResponse<ITodo>>(request$);
   }
 
   async createTodo$(todo: Todo): Promise<CustomResponse<ITodo>> {
@@ -55,7 +55,7 @@ export class TodosService {
       })
       .pipe(timeout(3000), retry(2), take(1));
 
-    return await lastValueFrom<CustomResponse<ITodo>>(request$);
+    return lastValueFrom<CustomResponse<ITodo>>(request$);
   }
 
   async deleteTodo$(id: string): Promise<CustomResponse<null>> {
@@ -68,6 +68,6 @@ export class TodosService {
       })
       .pipe(timeout(3000), retry(2), take(1));
 
-    return await lastValueFrom<CustomResponse<null>>(request$);
+    return lastValueFrom<CustomResponse<null>>(request$);
   }
 }
