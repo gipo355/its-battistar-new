@@ -1,19 +1,24 @@
 import { inject, InjectionToken } from '@angular/core';
-import { TSafeUser } from '@its-battistar/shared-types';
+import { TUserSafe } from '@its-battistar/shared-types';
 import { signalStore, withState } from '@ngrx/signals';
 
 // FIXME: fix type mess from shared lybrary
 interface UserState {
-  user: TSafeUser | null;
+  user: TUserSafe | null;
 }
 
 const initialState: UserState = {
   user: {
     id: 'aslkdfalsdkfasldf',
-    name: 'John Doe',
-    email: 'johndoe@gmail.com',
-    verified: true,
+    username: 'John Doe',
     avatar: 'https://avatar.iran.liara.run/public/3',
+    accounts: [
+      {
+        id: 'asldkfjasldkfj',
+        provider: 'google',
+        email: 'test@gipo.dev',
+      },
+    ],
   },
 };
 

@@ -6,6 +6,7 @@ import {
   ITodo,
   ITodoColorOptions,
   ITodoSortByOptions,
+  Todo,
 } from '@its-battistar/shared-types';
 import {
   patchState,
@@ -20,17 +21,23 @@ import { TodosService } from './todos.service';
 
 interface TodosState {
   // TODO: possibly use a map instead of an array for faster state updates
-  todos: Map<string, ITodo>;
+  todos: Map<ITodo['id'], ITodo>;
 
   isLoading: boolean;
+
   /**
    * used to keep track of the todo being edited in the modal
+   * doesn't have all the properties of a todo
+   * only the updatable ones
    */
   currentSelectedTodo: ITodo | null;
+
   /**
    * used to keep track of the todo being created in the modal
+   * doesn't have all the properties of a todo
+   * only the updatable ones
    */
-  currentNewTodo: ITodo | null;
+  currentNewTodo: ITodo | Todo | null;
 
   errors: string[] | null;
 
@@ -254,10 +261,6 @@ export const TodosStore = signalStore(
 
         const newTodo = response.data;
 
-        // BUG: not setting due date
-        // not getting back dueDate from the server
-        console.log('newTodo', newTodo);
-
         // handle possible errors
         if (!newTodo?.id) {
           throw new Error('Error creating todo');
@@ -405,14 +408,13 @@ export const TodosStore = signalStore(
 
         const currentSelectedTodo = state.currentSelectedTodo;
 
-        const currentNewTodo = state.currentNewTodo;
+        const currentNewTodo = state.currentNewTodo as ITodo | null;
 
         // handle updating an existing todo
         if (currentSelectedTodo?.id) {
           todos.set(currentSelectedTodo.id, currentSelectedTodo);
-        }
-        // handle creating a new todo
-        if (currentNewTodo?.id) {
+          // handle creating a new todo
+        } else if (currentNewTodo?.id) {
           todos.set(currentNewTodo.id, currentNewTodo);
         }
 
@@ -441,7 +443,6 @@ export const TodosStore = signalStore(
     },
 
     updateCurrentNewTodoValues(todo: Partial<ITodo>): void {
-      // eslint-disable-next-line complexity
       patchState(store, (state) => {
         const currentTodo = state.currentNewTodo;
 
@@ -449,20 +450,16 @@ export const TodosStore = signalStore(
         // keep in mind incoming values and state values may be partial
         // we must make sure the item stored has all the properties set
         // to avoid type errors
-        // FIXME: reduce complexity (20), fix type hack
-        const newTodo: ITodo = {
-          title: todo.title ?? currentTodo?.title ?? '',
-          description: todo.description ?? currentTodo?.description ?? '',
-          color: todo.color ?? currentTodo?.color ?? 'default',
-          dueDate: todo.dueDate ?? currentTodo?.dueDate ?? new Date(),
-          expired: todo.expired ?? currentTodo?.expired ?? false,
-          completed: todo.completed ?? currentTodo?.completed ?? false,
-          createdAt: todo.createdAt ?? currentTodo?.createdAt ?? new Date(),
-          updatedAt: new Date(),
-        };
+        const newTodo = new Todo({
+          title: todo.title ?? currentTodo?.title,
+          description: todo.description ?? currentTodo?.description,
+          color: todo.color ?? currentTodo?.color,
+          dueDate: todo.dueDate ?? currentTodo?.dueDate,
+        });
 
         return {
           currentNewTodo: {
+            ...currentTodo,
             ...newTodo,
           },
         };

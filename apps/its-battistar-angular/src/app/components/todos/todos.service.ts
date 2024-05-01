@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { CustomResponse, ITodo } from '@its-battistar/shared-types';
+import { CustomResponse, ITodo, Todo } from '@its-battistar/shared-types';
 import { lastValueFrom, retry, take, timeout } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -11,6 +11,8 @@ import { environment } from '../../../environments/environment';
 })
 export class TodosService {
   http = inject(HttpClient);
+
+  // TODO: Add error handling for all requests
 
   async getTodos$({
     showCompleted = true,
@@ -46,8 +48,7 @@ export class TodosService {
     return await lastValueFrom<CustomResponse<ITodo>>(request$);
   }
 
-  async createTodo$(todo: ITodo): Promise<CustomResponse<ITodo>> {
-    console.log('createTodo$', todo);
+  async createTodo$(todo: Todo): Promise<CustomResponse<ITodo>> {
     const request$ = this.http
       .post<CustomResponse<ITodo>>(`${environment.apiUrl}/api/todos`, todo, {
         withCredentials: true,

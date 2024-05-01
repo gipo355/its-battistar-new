@@ -26,6 +26,7 @@ function generateTestTodos(n: number): ITodo[] {
       createdAt: faker.date.recent(),
       updatedAt: faker.date.recent(),
       color: faker.helpers.enumValue(TodoColorOptions),
+      user: faker.string.uuid(),
     };
 
     todos.push(newTodo);
