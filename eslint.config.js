@@ -169,7 +169,7 @@ module.exports = tseslint.config(
 
   // FIXME: compatility mode after nx migration
   // do they override previous rules?
-  // do these even work??
+  // do these even work?? they don't
 
   // all files
   ...compat
@@ -201,11 +201,13 @@ module.exports = tseslint.config(
   // typescript files
   ...compat
     .config({
-      //     plugins: [
-      //       // '@typescript-eslint'
-      //     ],
+      plugins: [
+        // '@typescript-eslint'
+        'typescript-sort-keys',
+      ],
       extends: [
         'plugin:@nx/typescript', //TODO:
+        'plugin:typescript-sort-keys/recommended',
       ],
     })
     .map((config) => ({
