@@ -1,10 +1,11 @@
 import { createHash, randomUUID } from 'node:crypto';
 
 import { EStrategy } from '@its-battistar/shared-types';
+import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as jose from 'jose';
 
-import { APP_CONFIG as c } from '../app.config';
+import { APP_CONFIG, APP_CONFIG as c } from '../app.config';
 import { e } from '../environments';
 import { AppError } from './app-error';
 import { logger } from './logger';
@@ -78,4 +79,55 @@ export const verifyJWT = async (
     if (error instanceof Error) logger.error(`invalid jwt: ${error.message}`);
     throw new AppError('invalid jwt', StatusCodes.BAD_REQUEST);
   }
+};
+
+interface IGenerateTokens {
+  generateAccessToken?: boolean;
+  generateRefreshToken?: boolean;
+  setCookiesOn?: Response | null;
+  payload: CustomJWTClaims;
+}
+export const generateTokens = async ({
+  generateAccessToken = true,
+  generateRefreshToken = true,
+  setCookiesOn = null,
+  payload,
+}: IGenerateTokens): Promise<{
+  accessToken: string | undefined;
+  refreshToken: string | undefined;
+}> => {
+  let accessToken: string | undefined;
+  if (generateAccessToken) {
+    accessToken = await createJWT({
+      data: payload,
+      type: 'access',
+    });
+  }
+
+  let refreshToken: string | undefined;
+  if (generateRefreshToken) {
+    refreshToken = await createJWT({
+      data: payload,
+      type: 'refresh',
+    });
+  }
+
+  if (setCookiesOn) {
+    if (accessToken) {
+      setCookiesOn.cookie(
+        'access_token',
+        accessToken,
+        APP_CONFIG.JWT_ACCESS_COOKIE_OPTIONS
+      );
+    }
+    if (refreshToken) {
+      setCookiesOn.cookie(
+        'refresh_token',
+        refreshToken,
+        APP_CONFIG.JWT_REFRESH_COOKIE_OPTIONS
+      );
+    }
+  }
+
+  return { accessToken, refreshToken };
 };

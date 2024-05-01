@@ -10,6 +10,7 @@ import {
   AppError,
   catchAsync,
   createJWT,
+  generateTokens,
   getUserInfoFromOauthToken,
 } from '../../../utils';
 import { UserModel } from '../../api/users/users.model';
@@ -65,28 +66,21 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
     if (error) {
       throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
     }
+    if (!user) {
+      throw new AppError('No user found', StatusCodes.NOT_FOUND);
+    }
 
     // TODO: check discriminator mongoose to separate accounts
 
     // TODO: should either use cookies or headers, possibly refactor this into
     // a factory to use in different places to differentiate
-    const accessToken = await createJWT({
-      data: {
-        user: realUser._id.toString(),
+    const { refreshToken } = await generateTokens({
+      setCookiesOn: res,
+      payload: {
+        user: user._id.toString(),
         strategy: 'LOCAL',
       },
-      type: 'access',
     });
-    const refreshToken = await createJWT({
-      data: {
-        user: realUser._id.toString(),
-        strategy: 'LOCAL',
-      },
-      type: 'refresh',
-    });
-
-    res.cookie('accessToken', accessToken, c.JWT_ACCESS_COOKIE_OPTIONS);
-    res.cookie('refreshToken', refreshToken, c.JWT_REFRESH_COOKIE_OPTIONS);
 
     // TODO: move to util fn
     /**

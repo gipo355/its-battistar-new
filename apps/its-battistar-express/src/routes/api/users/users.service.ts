@@ -180,5 +180,5 @@ export const createUserAndAccount = async (
 export const addAccountToUser = (): void => {
   // this method will add an account to a user
   // allowing different email addresses to be associated with a single user
-  throw new Error('Not implemented');
+  console.log('method not implemented');
 };
