@@ -8,6 +8,8 @@ import fastJsonStringify from 'fast-json-stringify';
 import type mongoose from 'mongoose';
 
 import ajvInstance from '../../utils/ajv';
+import { IAccountSafe } from './account.entity';
+import { ITodo } from './todo.entity';
 
 export enum ERole {
   SUPER = 'SUPER',
@@ -106,9 +108,9 @@ export interface IUserSafe extends IUserInput {
   role: keyof typeof ERole;
 
   // needed to type interface when populating client side
-  todos: string[] | mongoose.Schema.Types.ObjectId[]; // created by mongoose
+  todos?: string[] | mongoose.Schema.Types.ObjectId[] | ITodo; // created by mongoose
 
-  accounts: string[] | mongoose.Schema.Types.ObjectId[]; // created by mongoose
+  accounts?: string[] | mongoose.Schema.Types.ObjectId[] | IAccountSafe[]; // created by mongoose
 }
 
 // interface used for full user

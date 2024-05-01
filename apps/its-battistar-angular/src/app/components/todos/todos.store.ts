@@ -6,6 +6,7 @@ import {
   ITodo,
   ITodoColorOptions,
   ITodoSortByOptions,
+  // BUG: again, importing from here breaks the build
   Todo,
 } from '@its-battistar/shared-types';
 import {
@@ -27,7 +28,7 @@ interface TodosState {
 
   /**
    * used to keep track of the todo being edited in the modal
-   * doesn't have all the properties of a todo
+   * We receive those objects from the db, so they are full todos
    * only the updatable ones
    */
   currentSelectedTodo: ITodo | null;
@@ -35,9 +36,16 @@ interface TodosState {
   /**
    * used to keep track of the todo being created in the modal
    * doesn't have all the properties of a todo
+   * it's the partial todo object that is being created to send to the db
    * only the updatable ones
    */
-  currentNewTodo: ITodo | Todo | null;
+  currentNewTodo: Todo | null;
+
+  /**
+   * this todo is the result of the http call to sync the todos
+   * used to inject the final todo in the store after exiting the modal
+   */
+  currentTodoForSync: ITodo | null;
 
   errors: string[] | null;
 
@@ -71,6 +79,8 @@ const initialState: TodosState = {
   currentSelectedTodo: null,
 
   currentNewTodo: null,
+
+  currentTodoForSync: null,
 
   errors: null,
 
@@ -450,17 +460,18 @@ export const TodosStore = signalStore(
         // keep in mind incoming values and state values may be partial
         // we must make sure the item stored has all the properties set
         // to avoid type errors
-        const newTodo = new Todo({
-          title: todo.title ?? currentTodo?.title,
-          description: todo.description ?? currentTodo?.description,
-          color: todo.color ?? currentTodo?.color,
+        const updatedTodoValues = new Todo({
+          title: todo.title ?? currentTodo?.title ?? '',
+          description: todo.description ?? currentTodo?.description ?? '',
+          image: todo.image ?? currentTodo?.image ?? '',
+          color: todo.color ?? currentTodo?.color ?? 'default',
           dueDate: todo.dueDate ?? currentTodo?.dueDate,
         });
 
         return {
           currentNewTodo: {
             ...currentTodo,
-            ...newTodo,
+            ...updatedTodoValues,
           },
         };
       });

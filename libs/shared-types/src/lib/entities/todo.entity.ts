@@ -101,7 +101,6 @@ export interface ITodoInput {
   title: string;
   description: string;
   color: keyof ITodoColorOptions;
-  completed: boolean;
   dueDate?: Date;
   image?: string;
 }
@@ -110,6 +109,8 @@ export interface ITodo extends ITodoInput {
   id?: string;
 
   expired: boolean;
+
+  completed: boolean;
 
   createdAt: Date;
 
@@ -130,8 +131,6 @@ export class Todo implements ITodoInput {
 
   color: keyof ITodoColorOptions;
 
-  completed: boolean;
-
   dueDate?: Date;
 
   image?: string;
@@ -142,21 +141,18 @@ export class Todo implements ITodoInput {
     description,
     dueDate,
     image,
-    completed,
   }: {
     title: string;
     color: keyof ITodoColorOptions;
     description: string;
-    dueDate: Date;
+    dueDate?: Date;
     image: string;
-    completed: boolean;
   }) {
     this.title = title;
     this.color = color;
     this.description = description;
     this.dueDate = dueDate;
     this.image = image;
-    this.completed = completed;
   }
 }
 

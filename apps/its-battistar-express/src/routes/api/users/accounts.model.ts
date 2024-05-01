@@ -172,14 +172,13 @@ accountSchema.pre('save', async function preSave(next) {
  * ## update passwordChangedAt when password is modified
  */
 accountSchema.pre('save', async function updatePasswordModified(next) {
-  // fixing problem of new document
   if (this.isNew || !this.isModified('password')) {
     next();
     return;
   }
 
-  // eslint-disable-next-line no-magic-numbers
   // NOTE: must remove 500ms or conflicts with the json web token expiry. (iat in seconds)
+  // eslint-disable-next-line no-magic-numbers
   this.passwordChangedAt = new Date(Date.now() - 500);
 
   await this.save();
@@ -266,7 +265,7 @@ accountSchema.methods.createEmailVerificationToken = async function () {
   // NOTE: we need to save the document to save the token and expiry date in db
   // IMP: we need validateBeforeSave false because
   // otherwise it asks to insert all required fields
-  this.save({ validateBeforeSave: false });
+  await this.save({ validateBeforeSave: false }); // if i await save, does it block the next step?
 
   return generatedRandomToken;
 };
