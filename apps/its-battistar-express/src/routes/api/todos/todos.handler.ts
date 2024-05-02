@@ -108,11 +108,11 @@ export const getOneTodo = catchAsync(async (req, res) => {
 
   // make sure the todo belongs to the user
   const todo = await TodoModel.findOne({
-    id: string,
+    _id: string,
     user: req.user.id,
   });
 
-  if (!todo?.id) {
+  if (!todo?._id) {
     throw new AppError('Todo not found', StatusCodes.NOT_FOUND);
   }
 
