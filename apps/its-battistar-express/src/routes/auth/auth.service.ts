@@ -1,4 +1,5 @@
 import type { IUser } from '@its-battistar/shared-types';
+import type { Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { sessionRedisConnection } from '../../db/redis';
@@ -41,16 +42,11 @@ export const protectRoute: TProtectRoute = (
     // STEP 4b: Check if user is not banned or has the role
     // STEP 5: Find the user from the database and add it to the request object
 
-    const { access_token } = req.cookies as {
-      access_token: string | undefined;
-    }; // cookies strategy
-
-    const { authorization } = req.headers; // bearer token strategy
-
     const { token, error } = getAuthTokenFromCookieOrHeader({
-      token: access_token,
-      bearer: authorization,
+      request: req,
+      type: 'access_token',
     });
+
     if (error) {
       throw new AppError(error.message, StatusCodes.UNAUTHORIZED);
     }
@@ -90,15 +86,8 @@ export const protectRoute: TProtectRoute = (
   });
 
 interface IGetAuthTokenFromCookieOrHeader {
-  /**
-   * The token from the cookie
-   */
-  token: string | undefined;
-  /**
-   * The token from the header
-   * including the Bearer prefix
-   */
-  bearer: string | undefined;
+  request: Request;
+  type: 'access_token' | 'refresh_token';
   /**
    * The priority of the token if both are present.
    * default is cookie
@@ -137,16 +126,38 @@ interface IGetAuthTokenFromCookieOrHeader {
  *
  */
 export const getAuthTokenFromCookieOrHeader = ({
-  token,
-  bearer,
+  request,
+  type,
   priority = 'cookie',
   only,
 }: IGetAuthTokenFromCookieOrHeader): {
   token: string;
   error: Error | null;
 } => {
+  let token = '';
+  let bearer = '';
+  if (type === 'access_token') {
+    const { access_token } = request.cookies as {
+      access_token: string | undefined;
+    }; // cookies strategy
+
+    const { authorization } = request.headers; // bearer token strategy
+
+    token = access_token ?? '';
+    bearer = authorization ?? '';
+  } else {
+    const { refresh_token } = request.cookies as {
+      refresh_token: string | undefined;
+    }; // cookies strategy
+
+    const { authorization } = request.headers; // bearer token strategy
+
+    token = refresh_token ?? '';
+    bearer = authorization ?? '';
+  }
+
   if (!only && !token && !bearer) {
-    return { token: '', error: new Error('No refresh token found') };
+    return { token: '', error: new Error(`No ${type} token found`) };
   }
 
   let tokenValue = '';

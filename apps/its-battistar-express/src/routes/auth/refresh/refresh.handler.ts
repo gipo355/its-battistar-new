@@ -33,14 +33,9 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
    * add the refresh token to the whitelist in redis both
    */
 
-  const { refresh_token } = req.cookies as {
-    refresh_token: string | undefined;
-  };
-  const { authorization } = req.headers;
-
   const { token, error } = getAuthTokenFromCookieOrHeader({
-    token: refresh_token,
-    bearer: authorization,
+    request: req,
+    type: 'refresh_token',
   });
   if (error) {
     throw new AppError(error.message, StatusCodes.UNAUTHORIZED);
