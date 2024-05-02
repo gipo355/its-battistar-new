@@ -5,7 +5,7 @@ import { sessionRedisConnection } from '../../db/redis';
 import { invalidateAllSessionsForUser, verifyJWT } from '../../utils';
 import { AppError } from '../../utils/app-error';
 import { catchAsync } from '../../utils/catch-async';
-import { UserModel } from '../api/users/users.model';
+import { getAccountAndUserOrThrow } from '../api/users/users.service';
 
 interface IProtectRouteOptions {
   /**
@@ -31,8 +31,11 @@ export const protectRoute: TProtectRoute = (
   }
 ) =>
   catchAsync(async (req, _, next) => {
+    // TODO: logic for active was moved to accounts model
+
+    // STEP 1: Get the tokens
     // STEP 1: Verify the jwt with jose
-    // STEP 2: Check if user still exists
+    // STEP 2: Check if user still exists and is active
     // STEP 3: Find the strategy used to login from token
     // STEP 4: Check if user is active
     // STEP 4b: Check if user is not banned or has the role
@@ -53,14 +56,22 @@ export const protectRoute: TProtectRoute = (
     // verify the token
     const { payload } = await verifyJWT(token);
 
-    const user = await UserModel.findOne({ _id: payload.user });
-
-    if (!user) {
-      await invalidateAllSessionsForUser(sessionRedisConnection, payload.user);
-      throw new AppError('Unauthorized', StatusCodes.NOT_FOUND);
-    }
+    const { account, user } = await getAccountAndUserOrThrow({
+      userId: payload.user,
+      strategy: payload.strategy,
+    });
 
     // TODO: logic for blacklist, ban, active,etc.
+
+    // check if user still exists
+    // and the account used to login is active (wasn't deleted)
+    if (!user || !account?.active) {
+      await invalidateAllSessionsForUser(sessionRedisConnection, payload.user);
+      throw new AppError(
+        'Unauthorized, please login again.',
+        StatusCodes.FORBIDDEN
+      );
+    }
 
     // eslint-disable-next-line no-magic-numbers
     if (restrictTo.length > 0 && !restrictTo.includes(user.role)) {
