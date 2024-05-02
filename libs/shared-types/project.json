@@ -12,16 +12,12 @@
         "cwd": "libs/shared-types"
       }
     },
-    "pre-lint": {
+    "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "tsc --noEmit -p ./tsconfig.lib.json && prettier -c ./src",
+        "command": "tsc --noEmit -p ./tsconfig.lib.json && eslint ./src && prettier -c ./src",
         "cwd": "libs/shared-types"
       }
-    },
-    "lint": {
-      "dependsOn": ["pre-lint"],
-      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/vite:test",

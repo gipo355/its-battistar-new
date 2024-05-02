@@ -78,16 +78,12 @@
         "cwd": "apps/its-battistar-angular"
       }
     },
-    "pre-lint": {
+    "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "tsc --noEmit -p ./tsconfig.editor.json && prettier -c ./src",
+        "command": "tsc --noEmit -p ./tsconfig.editor.json && eslint ./src && prettier -c ./src",
         "cwd": "apps/its-battistar-angular"
       }
-    },
-    "lint": {
-      "dependsOn": ["pre-lint"],
-      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",

@@ -194,7 +194,7 @@ export const TodosStore = signalStore(
         });
 
         if (!request.ok) {
-          throw new Error(`Error loading todos: ${request.message ?? ''}`);
+          throw new Error(`Error loading todos: ${request.message}`);
         }
         const todos = request.data;
 
@@ -244,7 +244,7 @@ export const TodosStore = signalStore(
 
         const response = await todoService.createTodo$(currentNewTodo);
         if (!response.ok) {
-          throw new Error(`Error creating todo: ${response.message ?? ''}`);
+          throw new Error(`Error creating todo: ${response.message}`);
         }
 
         const newTodo = response.data;
@@ -279,7 +279,7 @@ export const TodosStore = signalStore(
 
         const response = await todoService.deleteTodo$(todoToDelete.id);
         if (!response.ok) {
-          throw new Error(`Error deleting todo: ${response.message ?? ''}`);
+          throw new Error(`Error deleting todo: ${response.message}`);
         }
 
         const todos = new Map(store.todos());
@@ -313,7 +313,7 @@ export const TodosStore = signalStore(
 
         const response = await todoService.updateTodo$(newTodo);
         if (!response.ok) {
-          throw new Error(`Error updating todo: ${response.message ?? ''}`);
+          throw new Error(`Error updating todo: ${response.message}`);
         }
 
         patchState(store, () => {
