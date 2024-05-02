@@ -122,17 +122,31 @@ interface IValidateSessionRedis {
     errorMessage: string;
   };
 }
+
+export const generateSessionUserKey = (
+  user: string | mongoose.Types.ObjectId
+): string => `${c.REDIS_USER_SESSION_PREFIX}${user.toString()}`;
+
+export const invalidateAllSessionsForUser = async (
+  redisConnection: IORedis,
+  user: string | mongoose.Types.ObjectId
+): Promise<string> => {
+  const key = generateSessionUserKey(user);
+  await redisConnection.del(key);
+  return key;
+};
+
 export const validateSessionRedis = async (
   o: IValidateSessionRedis
 ): Promise<Error | null> => {
   const { redisConnection, token, user, checkSessionIP, checkSessionUA } = o;
 
   // get all the sessions tokens active for the user
-  const userSessionsKey = `${c.REDIS_USER_SESSION_PREFIX}${user.toString()}`;
+  const userSessionsKey = generateSessionUserKey(user);
   const redisSessionsList = await redisConnection.smembers(userSessionsKey); // [token1, token2, ...]
   // invalidate all sessions for the user if the token is not found (whitelist check)
   if (!redisSessionsList.includes(token)) {
-    await redisConnection.del(userSessionsKey);
+    await invalidateAllSessionsForUser(redisConnection, user);
     return new Error('Invalid token used, all sessions invalidated');
   }
 
@@ -143,13 +157,12 @@ export const validateSessionRedis = async (
   // verify the token payload is in redis
   const t = await redisConnection.get(token);
   if (!t) {
-    // delete the key
-    await redisConnection.del(userSessionsKey);
-    // remove it from the list
+    // remove it from the list of sessions for the user
     await redisConnection.srem(userSessionsKey, token);
 
     return new Error('Invalid token used, session not found in redis');
   }
+
   // const tokenRedisPayload: IRedisSessionPayload = JSON.parse(t);
   const tokenRedisPayload = JSON.parse(t);
   assertAjvValidationOrThrow<TRedisSessionPayload>(
