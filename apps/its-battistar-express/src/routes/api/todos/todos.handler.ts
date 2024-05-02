@@ -3,7 +3,10 @@ import {
   type ITodo,
   type ITodoInput,
 } from '@its-battistar/shared-types';
-import { stringifyGetAllTodosResponse } from '@its-battistar/shared-utils';
+import {
+  assertAjvValidationOrThrow,
+  stringifyGetAllTodosResponse,
+} from '@its-battistar/shared-utils';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError } from '../../../utils/app-error';
@@ -37,6 +40,8 @@ export const createTodo = catchAsync(async (req, res) => {
   // INPUT: title, dueDate, description, color
   const { title, dueDate, description, color, image } =
     req.body as Partial<ITodoInput>;
+
+  // assertAjvValidationOrThrow(data, validatorFN, error)
 
   // FIXME: this validation doesn't work
   // if (!validateTodo({ title, dueDate })) {

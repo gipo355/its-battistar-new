@@ -1,41 +1,19 @@
-import type { ESocialStrategy } from '@its-battistar/shared-types';
+import type {
+  ESocialStrategy,
+  GithubUser2,
+  ReturnedGithubUser,
+  TGithubUsers,
+} from '@its-battistar/shared-types';
 import {
-  ajvInstance,
   assertAjvValidationOrThrow,
+  validateGithubUser2,
+  validateGithubUsers,
 } from '@its-battistar/shared-utils';
-import { type Static, Type } from '@sinclair/typebox';
 import { StatusCodes } from 'http-status-codes';
 import { Client } from 'undici';
 
 import { AppError } from './app-error';
 import { logger } from './logger';
-
-// TODO: refactor, too much code
-
-// TODO: those util functions, together with services and utils all around the project,
-// should be extracted to external lib to make it reusable like plugins
-const githubUserSchema = Type.Object({
-  email: Type.String(),
-  primary: Type.Boolean(),
-  verified: Type.Boolean(),
-  visibility: Type.Optional(Type.String()),
-});
-const githubUsersSchema = Type.Array(githubUserSchema);
-type TGithubUsers = Static<typeof githubUsersSchema>;
-const validateGithubUsers = ajvInstance.compile(githubUsersSchema);
-
-const githubUserSchema2 = Type.Object({
-  login: Type.String(),
-  id: Type.Number(),
-});
-type GithubUser2 = Static<typeof githubUserSchema2>;
-const validateGithubUser2 = ajvInstance.compile(githubUserSchema2);
-
-interface ReturnedUser {
-  email: string;
-  firstName: string;
-  providerUid: string;
-}
 
 const clientAddresses: Record<keyof typeof ESocialStrategy, string> = {
   GITHUB: 'https://api.github.com',
@@ -55,7 +33,7 @@ const clientGoogle = new Client(clientAddresses.GOOGLE);
 export const getUserInfoFromOauthToken = async (
   token: string,
   strategy: keyof typeof ESocialStrategy
-): Promise<ReturnedUser | null> => {
+): Promise<ReturnedGithubUser | null> => {
   const provider = strategy;
 
   const client = provider === 'GITHUB' ? clientGithub : clientGoogle;
@@ -114,7 +92,7 @@ export const getUserInfoFromOauthToken = async (
    * ## GITHUB CASE
    */
   if (provider === 'GITHUB') {
-    const githubUser: ReturnedUser = {
+    const githubUser: ReturnedGithubUser = {
       email: '',
       firstName: '',
       providerUid: '',

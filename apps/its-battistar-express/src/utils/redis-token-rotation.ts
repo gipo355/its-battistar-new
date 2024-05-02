@@ -1,24 +1,14 @@
+import type { TRedisSessionPayload } from '@its-battistar/shared-types';
 import {
-  ajvInstance,
   assertAjvValidationOrThrow,
+  validateRedisSessionPayload,
 } from '@its-battistar/shared-utils';
-import { type Static, Type } from '@sinclair/typebox';
 import { StatusCodes } from 'http-status-codes';
 import type IORedis from 'ioredis';
 import type mongoose from 'mongoose';
 
 import { APP_CONFIG as c } from '../app.config';
 import { AppError } from './app-error';
-
-const redisSessionPayloadSchema = Type.Object({
-  ip: Type.Optional(Type.String()),
-  userAgent: Type.Optional(Type.String()),
-  user: Type.Optional(Type.String()),
-});
-type TRedisSessionPayload = Static<typeof redisSessionPayloadSchema>;
-const validateRedisSessionPayload = ajvInstance.compile(
-  redisSessionPayloadSchema
-);
 
 export const generateSessionUserKey = (
   user: string | mongoose.Types.ObjectId

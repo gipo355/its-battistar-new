@@ -1,43 +1,12 @@
-import type { ESocialStrategy } from '@its-battistar/shared-types';
-import {
-  ajvInstance,
-  assertAjvValidationOrThrow,
-} from '@its-battistar/shared-utils';
-import { type Static, Type } from '@sinclair/typebox';
+import type {
+  ESocialStrategy,
+  ReturnedGithubUser,
+} from '@its-battistar/shared-types';
+import { assertAjvValidationOrThrow } from '@its-battistar/shared-utils';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError } from './app-error';
 import { logger } from './logger';
-
-// TODO: refactor, too much code
-
-// TODO: those util functions, together with services and utils all around the project,
-// should be extracted to external lib to make it reusable like plugins
-const githubUserSchema = Type.Object(
-  {
-    email: Type.String(),
-    primary: Type.Boolean(),
-    verified: Type.Boolean(),
-    visibility: Type.Optional(Type.String()),
-  },
-  { additionalProperties: true }
-);
-const githubUsersSchema = Type.Array(githubUserSchema);
-type TGithubUsers = Static<typeof githubUsersSchema>;
-const validateGithubUsers = ajvInstance.compile(githubUsersSchema);
-
-const githubUserSchema2 = Type.Object({
-  login: Type.String(),
-  id: Type.Number(),
-});
-type GithubUser2 = Static<typeof githubUserSchema2>;
-const validateGithubUser2 = ajvInstance.compile(githubUserSchema2);
-
-interface ReturnedUser {
-  email: string;
-  firstName: string;
-  providerUid: string;
-}
 
 const GITHUB_CLIENT_ADDRESS = 'https://api.github.com';
 const GITHUB_CLIENT_USER_PATH = `${GITHUB_CLIENT_ADDRESS}/user`;
@@ -46,7 +15,7 @@ const GITHUB_CLIENT_EMAILS_PATH = `${GITHUB_CLIENT_USER_PATH}/emails`;
 export const getGithubUserInfoFromOauthTokenFetch = async (
   token: string,
   strategy: keyof typeof ESocialStrategy
-): Promise<ReturnedUser | null> => {
+): Promise<ReturnedGithubUser | null> => {
   const provider = strategy;
 
   const response = await fetch(GITHUB_CLIENT_EMAILS_PATH, {
@@ -75,7 +44,7 @@ export const getGithubUserInfoFromOauthTokenFetch = async (
    * this part of the code will fetch the user info
    */
 
-  const githubUser: ReturnedUser = {
+  const githubUser: ReturnedGithubUser = {
     email: '',
     firstName: '',
     providerUid: '',
