@@ -1,4 +1,4 @@
-import type { EStrategy } from '@its-battistar/shared-types';
+import type { ESocialStrategy, EStrategy } from '@its-battistar/shared-types';
 import {
   ajvInstance,
   assertAjvValidationOrThrow,
@@ -8,6 +8,7 @@ import { StatusCodes } from 'http-status-codes';
 import { Client } from 'undici';
 
 import { AppError } from './app-error';
+import { logger } from './logger';
 
 // TODO: refactor, too much code
 
@@ -36,16 +37,14 @@ interface ReturnedUser {
   providerUid: string;
 }
 
-const clientAddresses: Record<keyof typeof EStrategy, string> = {
+const clientAddresses: Record<keyof typeof ESocialStrategy, string> = {
   GITHUB: 'https://api.github.com',
   GOOGLE: 'https://www.googleapis.com',
-  LOCAL: '',
 };
 
-const clientAddressesPaths: Record<keyof typeof EStrategy, string> = {
+const clientAddressesPaths: Record<keyof typeof ESocialStrategy, string> = {
   GITHUB: '/user',
   GOOGLE: '/oauth2/v3/userinfo',
-  LOCAL: '',
 };
 
 const clientGithub = new Client(clientAddresses.GITHUB);
@@ -55,7 +54,7 @@ const clientGoogle = new Client(clientAddresses.GOOGLE);
 
 export const getUserInfoFromOauthToken = async (
   token: string,
-  strategy: keyof typeof EStrategy
+  strategy: keyof typeof ESocialStrategy
 ): Promise<ReturnedUser | null> => {
   const provider = strategy;
 
@@ -71,17 +70,16 @@ export const getUserInfoFromOauthToken = async (
         ? `${clientAddressesPaths[provider]}/emails`
         : clientAddressesPaths[provider],
     headers: {
-      'User-Agent': 'fastify-example',
+      'User-Agent': 'its-battistar',
       Authorization: `Bearer ${token}`,
       ...(provider === 'GITHUB' && {
         Accept: 'application/vnd.github+json',
       }),
+      ...(provider === 'GITHUB' && {
+        ['X-Github-Api-Version']: '2022-11-28',
+      }),
     },
   });
-
-  if (response.statusCode >= StatusCodes.BAD_REQUEST.valueOf()) {
-    throw new AppError('Authenticate again 1', StatusCodes.UNAUTHORIZED);
-  }
 
   let payload = '';
 
@@ -91,8 +89,20 @@ export const getUserInfoFromOauthToken = async (
     if (typeof chunk === 'string') payload += chunk;
   }
 
+  if (response.statusCode >= StatusCodes.BAD_REQUEST.valueOf()) {
+    logger.error({
+      message: 'Error in getUserInfoFromOauthToken',
+      response: JSON.stringify(response),
+      payload,
+      token,
+      provider,
+    });
+    throw new AppError('Authenticate again 1', StatusCodes.UNAUTHORIZED);
+  }
+
   // eslint-disable-next-line no-magic-numbers
   if (payload.length === 0) {
+    logger.error('Error in getUserInfoFromOauthToken, payload is empty');
     throw new AppError('Authenticate again 2', StatusCodes.UNAUTHORIZED);
   }
 
@@ -133,6 +143,7 @@ export const getUserInfoFromOauthToken = async (
     }
 
     if (!githubUser.email) {
+      logger.error('Error in getUserInfoFromOauthToken, email not found');
       throw new AppError('Authenticate again 4', StatusCodes.UNAUTHORIZED);
     }
 
@@ -150,6 +161,11 @@ export const getUserInfoFromOauthToken = async (
     });
 
     if (response2.statusCode >= StatusCodes.BAD_REQUEST.valueOf()) {
+      logger.error('Error in getUserInfoFromOauthToken', {
+        response: JSON.stringify(response2),
+        token,
+        provider,
+      });
       throw new AppError('Authenticate again 5', StatusCodes.UNAUTHORIZED);
     }
 
