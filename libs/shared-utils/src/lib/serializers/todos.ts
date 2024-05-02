@@ -5,6 +5,8 @@ import {
 import { Type } from '@sinclair/typebox';
 import stringify from 'fast-json-stringify';
 
+import { stringifyCustomResponseFactory } from '../utils';
+
 /**
  * TODOS serializers
  */
@@ -14,13 +16,13 @@ export const getAllTodosResponseDataSchema = Type.Array(todoSchema);
 export const getAllTodosResponseSchema = customResponseSchemaFactory(
   getAllTodosResponseDataSchema
 );
-export const stringifyGetAllTodosResponse = stringify(
-  customResponseSchemaFactory(getAllTodosResponseDataSchema)
+export const stringifyGetAllTodosResponse = stringifyCustomResponseFactory(
+  getAllTodosResponseDataSchema
 );
 
 // send one todo
 export const sendOneTodoResponseSchema =
   customResponseSchemaFactory(todoSchema);
-export const stringifySendOneTodoResponse = stringify(
-  customResponseSchemaFactory(sendOneTodoResponseSchema)
+export const stringifySendOneTodoResponse = stringifyCustomResponseFactory(
+  sendOneTodoResponseSchema
 );

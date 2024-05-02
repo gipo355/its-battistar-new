@@ -15,24 +15,21 @@ import { TodoModel } from './todos.model';
 export const getAllTodos = catchAsync(async (req, res) => {
   const { showCompleted } = req.query as { showCompleted: string | undefined };
 
-  // TODO: validation for query params
-
   const todos = await TodoModel.find({
     ...(showCompleted !== 'true' && { completed: { $ne: 'true' } }),
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const newResponse = stringifyGetAllTodosResponse(
-    new CustomResponse<ITodo[]>({
-      ok: true,
-      length: todos.length,
-      statusCode: StatusCodes.OK,
-      message: 'Todos fetched successfully',
-      data: todos,
-    })
+  res.status(StatusCodes.OK).send(
+    stringifyGetAllTodosResponse(
+      new CustomResponse<ITodo[]>({
+        ok: true,
+        length: todos.length,
+        statusCode: StatusCodes.OK,
+        message: 'Todos fetched successfully',
+        data: todos,
+      })
+    )
   );
-
-  res.status(StatusCodes.OK).send(newResponse);
 });
 
 // TODO: validation for all inputs, stringify for responses
@@ -51,7 +48,6 @@ export const createTodo = catchAsync(async (req, res) => {
     ...(dueDate && { dueDate: new Date(dueDate) }),
     description,
     color,
-    // (dueDate && ...{dueDate}),
   });
 
   if (!newTodo.id) {

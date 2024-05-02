@@ -1,4 +1,4 @@
 export * from './ajv';
 // export * from './assertSerialization';
 export * from './assertValidation';
-export * from './responseSchemaFactory';
+export * from './serializeResponseSchemaFactory';

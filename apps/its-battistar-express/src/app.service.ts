@@ -79,7 +79,7 @@ if (e.SENTRY_DSN) {
 /**
  * ## Rate limiter
  */
-if (e.ENABLE_RATE_LIMITER !== 'false') {
+if (e.ENABLE_RATE_LIMITER !== 'false' && e.NODE_ENV !== 'development') {
   router.use(rateLimiterMiddleware);
   logger.info(
     `Rate limiter set to ${e.RATE_LIMITER_POINTS.toString()} requests per ${e.RATE_LIMITER_DURATION.toString()} seconds`
