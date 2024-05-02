@@ -34,7 +34,7 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
 
   // FIXME: must sanitize user input
   const { user, account, error } = await getAccountAndUserOrThrow({
-    email: sanitizedEmail,
+    accountEmail: sanitizedEmail,
     strategy: 'LOCAL',
   });
   if (error ?? (!user || !account)) {
