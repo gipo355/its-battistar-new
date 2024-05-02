@@ -9,6 +9,8 @@ export const requiredEnvironmentSchema = Type.Object({
   REDIS_USERNAME: Type.String({}),
   REDIS_PASSWORD: Type.String({}),
 
+  BASE_URL: Type.String({}),
+
   SENTRY_DSN: Type.Optional(Type.String()),
 
   NODE_ENV: Type.Union([

@@ -18,6 +18,8 @@ const requiredKeys: Partial<TRequiredEnvironment> = {
   REDIS_USERNAME: process.env.REDIS_USERNAME,
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,
 
+  BASE_URL: process.env.BASE_URL,
+
   NODE_ENV:
     (process.env.NODE_ENV as
       | 'development'
