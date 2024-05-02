@@ -1,11 +1,14 @@
-import {
-  CustomResponse,
-  type ITodo,
-  type ITodoInput,
+import type {
+  ITodo,
+  ITodoInput,
+  ITodoInputWithUser,
 } from '@its-battistar/shared-types';
+import { CustomResponse } from '@its-battistar/shared-types';
 import {
   assertAjvValidationOrThrow,
   stringifyGetAllTodosResponse,
+  stringifySendOneTodoResponse,
+  validateTodoInput,
 } from '@its-battistar/shared-utils';
 import { StatusCodes } from 'http-status-codes';
 
@@ -21,6 +24,7 @@ export const getAllTodos = catchAsync(async (req, res) => {
   const todos = await TodoModel.find({
     ...(showCompleted !== 'true' && { completed: { $ne: 'true' } }),
   });
+  console.log('todos', todos);
 
   res.status(StatusCodes.OK).send(
     stringifyGetAllTodosResponse(
@@ -41,34 +45,38 @@ export const createTodo = catchAsync(async (req, res) => {
   const { title, dueDate, description, color, image } =
     req.body as Partial<ITodoInput>;
 
-  // assertAjvValidationOrThrow(data, validatorFN, error)
+  // TODO: sanitize inputs
 
-  // FIXME: this validation doesn't work
-  // if (!validateTodo({ title, dueDate })) {
-  //   throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
-  // }
-
-  const newTodo = await TodoModel.create({
+  const candidateTodo: Partial<ITodoInputWithUser> = {
     title,
-    ...(dueDate && { dueDate: new Date(dueDate) }),
+    dueDate,
     description,
     color,
-  });
+    image,
+    user: req.user?.id,
+  };
 
-  if (!newTodo.id) {
-    throw new AppError(
-      'Failed to create todo',
-      StatusCodes.INTERNAL_SERVER_ERROR
-    );
-  }
+  console.log('candidateTodo', candidateTodo);
 
-  res.status(StatusCodes.CREATED).json(
-    new CustomResponse<ITodo>({
-      ok: true,
-      statusCode: StatusCodes.CREATED,
-      message: 'Todo created successfully',
-      data: newTodo,
-    })
+  assertAjvValidationOrThrow<ITodoInputWithUser>(
+    candidateTodo,
+    validateTodoInput,
+    new AppError('Failed to create todo', StatusCodes.INTERNAL_SERVER_ERROR)
+  );
+
+  const newTodo = await TodoModel.create(candidateTodo);
+
+  console.log('newTodo', newTodo);
+
+  res.status(StatusCodes.CREATED).send(
+    stringifySendOneTodoResponse(
+      new CustomResponse<ITodo>({
+        ok: true,
+        statusCode: StatusCodes.CREATED,
+        message: 'Todo created successfully',
+        data: newTodo,
+      })
+    )
   );
 });
 

@@ -83,6 +83,9 @@ export const protectRoute: TProtectRoute = (
       );
     }
 
+    // eslint-disable-next-line require-atomic-updates
+    req.user = user;
+
     next();
   });
 

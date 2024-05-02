@@ -1,5 +1,4 @@
-import { accountSchema } from '@its-battistar/shared-types';
-import fastJsonStringify from 'fast-json-stringify';
+import { todoSchemaInput } from '@its-battistar/shared-types';
 
 import { ajvInstance } from '../utils/ajv';
 
@@ -7,6 +6,4 @@ import { ajvInstance } from '../utils/ajv';
  * Validation and serialization functions for the schemas provided
  */
 
-export const stringifyAccount = fastJsonStringify(accountSchema);
-
-export const validateAccount = ajvInstance.compile(accountSchema);
+export const validateTodoInput = ajvInstance.compile(todoSchemaInput);

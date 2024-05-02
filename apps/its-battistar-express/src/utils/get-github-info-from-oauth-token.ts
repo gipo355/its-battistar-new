@@ -1,8 +1,14 @@
 import type {
   ESocialStrategy,
+  GithubUser2,
   ReturnedGithubUser,
+  TGithubUsers,
 } from '@its-battistar/shared-types';
-import { assertAjvValidationOrThrow } from '@its-battistar/shared-utils';
+import {
+  assertAjvValidationOrThrow,
+  validateGithubUser2,
+  validateGithubUsers,
+} from '@its-battistar/shared-utils';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError } from './app-error';

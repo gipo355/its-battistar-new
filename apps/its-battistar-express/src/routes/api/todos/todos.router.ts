@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { protectRoute } from '../../auth/auth.service';
 import {
   createTodo,
   deleteOneTodo,
@@ -11,6 +12,8 @@ import {
 const todosRouter = Router({
   mergeParams: true,
 });
+
+todosRouter.use(protectRoute());
 
 /**
  * @openapi

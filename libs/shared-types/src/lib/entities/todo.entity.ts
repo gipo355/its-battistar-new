@@ -92,7 +92,11 @@ export interface ITodoInput {
   image?: string;
 }
 
-export interface ITodo extends ITodoInput {
+export interface ITodoInputWithUser extends ITodoInput {
+  user: string | mongoose.Schema.Types.ObjectId;
+}
+
+export interface ITodo extends ITodoInputWithUser {
   id?: string;
 
   expired: boolean;
@@ -102,8 +106,6 @@ export interface ITodo extends ITodoInput {
   createdAt: Date;
 
   updatedAt: Date;
-
-  user: string | mongoose.Schema.Types.ObjectId;
 }
 
 /**
