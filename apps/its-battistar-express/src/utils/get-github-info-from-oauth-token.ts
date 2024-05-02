@@ -18,6 +18,7 @@ const githubUserSchema = Type.Object(
     email: Type.String(),
     primary: Type.Boolean(),
     verified: Type.Boolean(),
+    visibility: Type.Optional(Type.String()),
   },
   { additionalProperties: true }
 );

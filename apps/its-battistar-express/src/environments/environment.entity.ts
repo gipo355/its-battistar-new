@@ -48,6 +48,7 @@ export const optionalEnvironmentSchema = Type.Object({
   GITHUB_SCOPE: Type.String(),
   GITHUB_STATE: Type.String(),
   GITHUB_FINAL_REDIRECT: Type.String(),
+  GITHUB_FINAL_REDIRECT_ON_ERROR: Type.String(),
 });
 
 export type TRequiredEnvironment = Static<typeof requiredEnvironmentSchema>;

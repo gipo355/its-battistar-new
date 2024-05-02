@@ -56,6 +56,8 @@ const optionalKeys: TOptionalEnvironment = {
   GITHUB_SCOPE: process.env.GITHUB_SCOPE ?? 'user:email',
   GITHUB_STATE: process.env.GITHUB_STATE ?? '3(#0/!~',
   GITHUB_FINAL_REDIRECT: process.env.GITHUB_FINAL_REDIRECT ?? '',
+  GITHUB_FINAL_REDIRECT_ON_ERROR:
+    process.env.GITHUB_FINAL_REDIRECT_ON_ERROR ?? '',
 
   ENABLE_LOKI: process.env.ENABLE_LOKI ?? 'false',
 } as const;
