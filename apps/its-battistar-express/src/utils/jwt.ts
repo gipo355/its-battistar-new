@@ -5,7 +5,7 @@ import type { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as jose from 'jose';
 
-import { APP_CONFIG, APP_CONFIG as c } from '../app.config';
+import { APP_CONFIG as c } from '../app.config';
 import { e } from '../environments';
 import { AppError } from './app-error';
 import { logger } from './logger';
@@ -127,16 +127,16 @@ export const generateTokens = async ({
   if (setCookiesOn) {
     if (accessToken) {
       setCookiesOn.cookie(
-        'access_token',
+        c.JWT_ACCESS_TOKEN_OPTIONS.cookieName,
         accessToken,
-        APP_CONFIG.JWT_ACCESS_COOKIE_OPTIONS
+        c.JWT_ACCESS_COOKIE_OPTIONS
       );
     }
     if (refreshToken) {
       setCookiesOn.cookie(
-        'refresh_token',
+        c.JWT_REFRESH_TOKEN_OPTIONS.cookieName,
         refreshToken,
-        APP_CONFIG.JWT_REFRESH_COOKIE_OPTIONS
+        c.JWT_REFRESH_COOKIE_OPTIONS
       );
     }
   }

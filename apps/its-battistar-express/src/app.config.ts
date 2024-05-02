@@ -62,11 +62,13 @@ export const APP_CONFIG = {
   JWT_ACCESS_TOKEN_OPTIONS: {
     expirationTime: '2m',
     expSeconds: 1000 * 60 * 2,
+    cookieName: 'access_token',
   },
 
   JWT_REFRESH_TOKEN_OPTIONS: {
     expirationTime: '7d',
     expSeconds: 60 * 60 * 24 * 7,
+    cookieName: 'refresh_token',
   },
 
   REDIS_USER_SESSION_PREFIX: 'userSession_',
