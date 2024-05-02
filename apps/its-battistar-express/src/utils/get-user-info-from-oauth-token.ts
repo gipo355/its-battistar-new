@@ -1,4 +1,8 @@
 import type { EStrategy } from '@its-battistar/shared-types';
+import {
+  ajvInstance,
+  assertAjvValidationOrThrow,
+} from '@its-battistar/shared-utils';
 import { type Static, Type } from '@sinclair/typebox';
 import { StatusCodes } from 'http-status-codes';
 import { Client } from 'undici';
@@ -7,13 +11,24 @@ import { AppError } from './app-error';
 
 // TODO: refactor, too much code
 
-const GithubUserSchema = Type.Object({
+// TODO: those util functions, together with services and utils all around the project,
+// should be extracted to external lib to make it reusable like plugins
+const githubUserSchema = Type.Object({
   email: Type.String(),
   primary: Type.Boolean(),
   verified: Type.Boolean(),
   visibility: Type.Optional(Type.String()),
 });
-type GithubUser = Static<typeof GithubUserSchema>;
+const githubUsersSchema = Type.Array(githubUserSchema);
+type TGithubUsers = Static<typeof githubUsersSchema>;
+const validateGithubUsers = ajvInstance.compile(githubUsersSchema);
+
+const githubUserSchema2 = Type.Object({
+  login: Type.String(),
+  id: Type.Number(),
+});
+type GithubUser2 = Static<typeof githubUserSchema2>;
+const validateGithubUser2 = ajvInstance.compile(githubUserSchema2);
 
 interface ReturnedUser {
   email: string;
@@ -98,13 +113,19 @@ export const getUserInfoFromOauthToken = async (
     /**
      * ## Get user email from payload
      */
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const parsedPayload: GithubUser[] | undefined = JSON.parse(payload);
+
+    // const parsedPayload: TGithubUser[] = JSON.parse(payload);
+    const parsedPayload = JSON.parse(payload);
+    assertAjvValidationOrThrow<TGithubUsers>(
+      parsedPayload,
+      validateGithubUsers,
+      new AppError('Authenticate again 3', StatusCodes.UNAUTHORIZED)
+    );
 
     // lenght > 0 and not undefined
-    if (!parsedPayload) {
-      throw new AppError('Authenticate again 3', StatusCodes.UNAUTHORIZED);
-    }
+    // if (!parsedPayload) {
+    //   throw new AppError('Authenticate again 3', StatusCodes.UNAUTHORIZED);
+    // }
 
     // only one email is primary
     for (const ele of parsedPayload) {
@@ -140,13 +161,13 @@ export const getUserInfoFromOauthToken = async (
       }
     }
 
-    interface GithubUser2 {
-      login: string;
-      id: number;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const parsedPayload2: GithubUser2 = JSON.parse(payload2);
+    // const parsedPayload2: GithubUser2 = JSON.parse(payload2);
+    const parsedPayload2 = JSON.parse(payload2);
+    assertAjvValidationOrThrow<GithubUser2>(
+      parsedPayload2,
+      validateGithubUser2,
+      new AppError('Authenticate again 6', StatusCodes.UNAUTHORIZED)
+    );
 
     // console.log(parsedPayload2, 'parsedPayload2');
 

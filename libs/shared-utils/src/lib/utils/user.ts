@@ -1,7 +1,7 @@
 import { userSchema, userSchemaInput } from '@its-battistar/shared-types';
 import fastJsonStringify from 'fast-json-stringify';
 
-import ajvInstance from './ajv';
+import {ajvInstance} from './ajv';
 
 // TODO: fix validation for different use cases and data types
 export const stringifyUser = fastJsonStringify(userSchema);
