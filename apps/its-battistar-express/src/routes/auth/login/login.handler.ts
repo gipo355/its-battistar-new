@@ -71,18 +71,17 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
     },
   });
 
+  const data = {
+    access_token: accessToken,
+    refresh_token: refreshToken,
+  };
+
   res.status(StatusCodes.OK).json(
-    new CustomResponse<{
-      accessToken: string;
-      refreshToken: string;
-    }>({
+    new CustomResponse<typeof data>({
       ok: true,
       statusCode: StatusCodes.OK,
       message: 'Logged in successfully',
-      data: {
-        accessToken,
-        refreshToken,
-      },
+      data,
     })
   );
 });

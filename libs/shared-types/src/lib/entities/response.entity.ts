@@ -2,23 +2,34 @@
 import type { TSchema } from '@sinclair/typebox';
 import { Type } from '@sinclair/typebox';
 
+// utility function to create a custom response schema for a given data schema
 export const customResponseSchemaFactory = <T extends TSchema>(T: T) =>
   Type.Object(
     {
       ok: Type.Boolean(),
       statusCode: Type.Number(),
       message: Type.Optional(Type.String()),
+      length: Type.Optional(Type.Number()),
       data: Type.Optional(T),
     },
     { additionalProperties: false }
   );
+
+// example usage
+export const tokensResponseDataSchema = Type.Object({
+  access_token: Type.String(),
+  refresh_token: Type.String(),
+});
+export const tokensResponseSchema = customResponseSchemaFactory(
+  tokensResponseDataSchema
+);
 
 export class CustomResponse<T> {
   ok: boolean;
 
   statusCode: number;
 
-  message?: string;
+  message: string;
 
   length?: number;
 
@@ -33,7 +44,7 @@ export class CustomResponse<T> {
   }: {
     ok: boolean;
     statusCode: number;
-    message?: string;
+    message: string;
     length?: number;
     data?: T;
   }) {
@@ -41,6 +52,6 @@ export class CustomResponse<T> {
     this.statusCode = statusCode;
     this.message = message;
     length && (this.length = length);
-    this.data = data;
+    data && (this.data = data);
   }
 }
