@@ -3,6 +3,34 @@
 This file was generated using
 [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [1.0.0](https://github.com/gipo355/its-battistar/compare/its-battistar-angular-0.1.0...its-battistar-angular-1.0.0) (2024-05-02)
+
+### ⚠ BREAKING CHANGES
+
+- **its-battistar-angular:** created new lib
+
+### Features
+
+- **its-battistar-angular:** :sparkles: add loading spinner when loading todos
+  ([6e93d0c](https://github.com/gipo355/its-battistar/commit/6e93d0ca19eea472f1e802e1f0e417eefdd109ac))
+- **its-battistar-angular:** :sparkles: error handler
+  ([7350603](https://github.com/gipo355/its-battistar/commit/7350603e4234172ae8b3b109bb57f1448cfc8513))
+- **its-battistar-angular:** :sparkles: init organizing auth
+  ([6daaf47](https://github.com/gipo355/its-battistar/commit/6daaf47857bd260b555daff1387283179f804085))
+- **its-battistar-angular:** :sparkles: make it just a tiny bit more responsive
+  ([dc0ba66](https://github.com/gipo355/its-battistar/commit/dc0ba66310b84ecffb12189d73236ac33ddea584))
+- **its-battistar-angular:** :sparkles: prepare errors state in todos
+  ([c11250f](https://github.com/gipo355/its-battistar/commit/c11250f8c9a69116623d9a73e2245bd4957aeb6a))
+- **its-battistar-express:** :sparkles: init github oauth2
+  ([337f2ce](https://github.com/gipo355/its-battistar/commit/337f2ce8efc37e55ad868b3c12156096a815228b))
+
+### Bug Fixes
+
+- **its-battistar-angular:** :bug: fast-json-stringify was importing node only
+  lib
+  ([7214a00](https://github.com/gipo355/its-battistar/commit/7214a00e32730cdfca404b9e442919ce5111cf17)),
+  closes [#69](https://github.com/gipo355/its-battistar/issues/69)
+
 ## 0.1.0 (2024-4-28)
 
 ### Features
