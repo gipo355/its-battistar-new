@@ -14,15 +14,14 @@ import { createUserAndAccount } from '../../api/users/users.service';
 
 export const signupHandler: Handler = catchAsync(async (req, res) => {
   // INPUT: email, password, passwordConfirm
-  const { email, password, passwordConfirm } = req.body as {
+  const { email, password } = req.body as {
     email: string | undefined;
     password: string | undefined;
-    passwordConfirm: string | undefined;
   };
 
   // TODO: validate email and password in mongoose schema or ajv
   // TODO: validate only client side password Confirm
-  if (!email || !password || !passwordConfirm) {
+  if (!email || !password) {
     throw new AppError(
       'Email, password and password confirmations are required',
       StatusCodes.BAD_REQUEST
@@ -79,23 +78,21 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
     },
   });
 
+  const data = {
+    access_token: accessToken,
+    refresh_token: refreshToken,
+    userId: user._id.toString(),
+  };
+
   // we only return the id
   // TODO: if we want to return the use object, make a stringify function
   // to prevent leaks
   res.status(StatusCodes.CREATED).json(
-    new CustomResponse<{
-      accessToken: string;
-      refreshToken: string;
-      userId: string;
-    }>({
+    new CustomResponse<typeof data>({
       ok: true,
       statusCode: StatusCodes.CREATED,
       message: 'Registered successfully',
-      data: {
-        accessToken,
-        refreshToken,
-        userId: user._id.toString(),
-      },
+      data,
     })
   );
 });

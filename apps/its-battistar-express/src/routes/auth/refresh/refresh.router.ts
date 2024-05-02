@@ -17,6 +17,6 @@ const r = Router({
  *    200:
  *     description: logged in
  */
-r.get('/', refreshHandler);
+r.post('/', refreshHandler);
 
 export { r as refreshRouter };

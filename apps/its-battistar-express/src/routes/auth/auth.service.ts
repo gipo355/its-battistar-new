@@ -41,12 +41,14 @@ export const protectRoute: TProtectRoute = (
     // STEP 4b: Check if user is not banned or has the role
     // STEP 5: Find the user from the database and add it to the request object
 
-    const { accessToken } = req.cookies as { accessToken: string | undefined }; // cookies strategy
+    const { access_token } = req.cookies as {
+      access_token: string | undefined;
+    }; // cookies strategy
 
     const { authorization } = req.headers; // bearer token strategy
 
     const { token, error } = getAuthTokenFromCookieOrHeader({
-      token: accessToken,
+      token: access_token,
       bearer: authorization,
     });
     if (error) {

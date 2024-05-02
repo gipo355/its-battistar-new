@@ -33,11 +33,13 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
    * add the refresh token to the whitelist in redis both
    */
 
-  const { refreshToken } = req.cookies as { refreshToken: string | undefined };
+  const { refresh_token } = req.cookies as {
+    refresh_token: string | undefined;
+  };
   const { authorization } = req.headers;
 
   const { token, error } = getAuthTokenFromCookieOrHeader({
-    token: refreshToken,
+    token: refresh_token,
     bearer: authorization,
   });
   if (error) {
@@ -108,8 +110,8 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
   });
 
   const data = {
-    accessToken: newAccessToken,
-    refreshToken: newRefreshToken,
+    access_token: newAccessToken,
+    refresh_token: newRefreshToken,
   };
   res.status(StatusCodes.OK).json(
     new CustomResponse<typeof data>({
