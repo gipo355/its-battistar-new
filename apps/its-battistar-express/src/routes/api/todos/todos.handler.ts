@@ -77,8 +77,7 @@ export const createTodo = catchAsync(async (req, res) => {
             messages += error.message + '\n';
         }
       new AppError(messages, StatusCodes.INTERNAL_SERVER_ERROR);
-    },
-    logger
+    }
   );
 
   const newTodo = await TodoModel.create(candidateTodo);
