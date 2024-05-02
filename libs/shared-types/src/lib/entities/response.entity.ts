@@ -15,15 +15,6 @@ export const customResponseSchemaFactory = <T extends TSchema>(T: T) =>
     { additionalProperties: false }
   );
 
-// example usage
-export const tokensResponseDataSchema = Type.Object({
-  access_token: Type.String(),
-  refresh_token: Type.String(),
-});
-export const tokensResponseSchema = customResponseSchemaFactory(
-  tokensResponseDataSchema
-);
-
 export class CustomResponse<T> {
   ok: boolean;
 

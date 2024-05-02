@@ -27,7 +27,11 @@ export const todoSchemaInput = Type.Object({
     maxLength: 50,
   }),
 
-  completed: Type.Optional(Type.Boolean()),
+  description: Type.Optional(
+    Type.String({
+      maxLength: 300,
+    })
+  ),
 
   color: Type.Optional(
     Type.String({
@@ -35,21 +39,15 @@ export const todoSchemaInput = Type.Object({
     })
   ),
 
-  image: Type.Optional(
-    Type.String({
-      format: 'uri',
-    })
-  ),
-
-  description: Type.Optional(
-    Type.String({
-      maxLength: 300,
-    })
-  ),
-
   dueDate: Type.Optional(
     Type.String({
       format: 'date-time',
+    })
+  ),
+
+  image: Type.Optional(
+    Type.String({
+      format: 'uri',
     })
   ),
 });
@@ -66,6 +64,8 @@ export const todoSchema = Type.Object({
   ...todoSchemaInput.properties,
 
   expired: Type.Boolean(),
+
+  completed: Type.Optional(Type.Boolean()),
 
   createdAt: Type.String({
     format: 'date-time',

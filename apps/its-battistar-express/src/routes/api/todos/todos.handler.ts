@@ -1,5 +1,9 @@
-import type { ETodoColorOptions, ITodo } from '@its-battistar/shared-types';
-import { CustomResponse } from '@its-battistar/shared-types';
+import {
+  CustomResponse,
+  type ITodo,
+  type ITodoInput,
+} from '@its-battistar/shared-types';
+import { stringifyGetAllTodosResponse } from '@its-battistar/shared-utils';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError } from '../../../utils/app-error';
@@ -17,7 +21,8 @@ export const getAllTodos = catchAsync(async (req, res) => {
     ...(showCompleted !== 'true' && { completed: { $ne: 'true' } }),
   });
 
-  res.status(StatusCodes.OK).json(
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const newResponse = stringifyGetAllTodosResponse(
     new CustomResponse<ITodo[]>({
       ok: true,
       length: todos.length,
@@ -26,23 +31,15 @@ export const getAllTodos = catchAsync(async (req, res) => {
       data: todos,
     })
   );
+
+  res.status(StatusCodes.OK).send(newResponse);
 });
 
 // TODO: validation for all inputs, stringify for responses
 export const createTodo = catchAsync(async (req, res) => {
   // INPUT: title, dueDate, description, color
-  const { title, dueDate, description, color } = req.body as {
-    title: string;
-    dueDate: string;
-    description: string;
-    color: keyof typeof ETodoColorOptions;
-  };
-
-  // let date: string | Date | undefined;
-
-  // if (dueDate) {
-  //   date = new Date(dueDate);
-  // }
+  const { title, dueDate, description, color, image } =
+    req.body as Partial<ITodoInput>;
 
   // FIXME: this validation doesn't work
   // if (!validateTodo({ title, dueDate })) {
@@ -51,7 +48,7 @@ export const createTodo = catchAsync(async (req, res) => {
 
   const newTodo = await TodoModel.create({
     title,
-    dueDate: new Date(dueDate),
+    ...(dueDate && { dueDate: new Date(dueDate) }),
     description,
     color,
     // (dueDate && ...{dueDate}),

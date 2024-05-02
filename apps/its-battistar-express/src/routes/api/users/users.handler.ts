@@ -1,5 +1,4 @@
 import { CustomResponse } from '@its-battistar/shared-types';
-import { validateUser } from '@its-battistar/shared-utils';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError } from '../../../utils/app-error';
@@ -36,9 +35,9 @@ export const createUserHandler = catchAsync(async (req, res) => {
   // }
 
   // FIXME: this validation doesn't work
-  if (!validateUser({ title, dueDate })) {
-    throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
-  }
+  // if (!validateUser({ title, dueDate })) {
+  //   throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
+  // }
 
   const newUser = await UserModel.create({
     title,
