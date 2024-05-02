@@ -10,9 +10,9 @@ import {
   AppError,
   catchAsync,
   generateTokens,
-  getUserInfoFromOauthToken,
   rotateRefreshTokenRedis,
 } from '../../../utils';
+import { getGithubUserInfoFromOauthTokenFetch } from '../../../utils/get-github-info-from-oauth-token';
 import { createUserAndAccount } from '../../api/users/users.service';
 import { githubAuthorizationUri, oauthGithubClient } from './github.service';
 
@@ -23,80 +23,76 @@ export const githubHandler: Handler = (_, res) => {
 
 // NOTE: will probably be handler by a dependency
 export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
-  try {
-    const { code } = req.query as { code: string | undefined };
+  const { code } = req.query as { code: string | undefined };
 
-    if (!code) {
-      throw new AppError('Missing code', StatusCodes.BAD_REQUEST);
-    }
-
-    const options: AuthorizationTokenConfig = {
-      redirect_uri: 'http://localhost:3000/auth/github/callback',
-      code,
-    };
-
-    const githubAccessToken = await oauthGithubClient.getToken(options);
-    // {
-    //   "access_token": "string",
-    //   "token_type": "bearer",
-    //   "scope": "notifications"
-    // }
-
-    if (typeof githubAccessToken.token.access_token !== 'string') {
-      throw new AppError('No access token', StatusCodes.INTERNAL_SERVER_ERROR);
-    }
-
-    const githubUser = await getUserInfoFromOauthToken(
-      githubAccessToken.token.access_token,
-      'GITHUB'
-    );
-
-    if (!githubUser) {
-      throw new AppError('No user found', StatusCodes.NOT_FOUND);
-    }
-
-    const { user, error } = await createUserAndAccount({
-      email: githubUser.email,
-      providerUid: githubUser.providerUid,
-      accessToken: githubAccessToken.token.access_token,
-      strategy: 'GITHUB',
-    });
-
-    if (error) {
-      throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
-    }
-    if (!user) {
-      throw new AppError('No user found', StatusCodes.NOT_FOUND);
-    }
-
-    // TODO: check discriminator mongoose to separate accounts
-
-    const { refreshToken } = await generateTokens({
-      setCookiesOn: res,
-      payload: {
-        user: user._id.toString(),
-        strategy: 'LOCAL',
-      },
-    });
-
-    if (!refreshToken) {
-      throw new AppError('No refresh token', StatusCodes.INTERNAL_SERVER_ERROR);
-    }
-
-    await rotateRefreshTokenRedis({
-      redisConnection: sessionRedisConnection,
-      newToken: refreshToken,
-      user: user._id.toString(),
-      payload: {
-        user: user._id.toString(),
-        ip: req.ip,
-        userAgent: req.get('User-Agent'),
-      },
-    });
-
-    // TODO: redirect to dashboard, must be in config
-    res.redirect(e.GITHUB_FINAL_REDIRECT);
-  } catch (error) {
-    throw new Error('Access Token Error');
+  if (!code) {
+    throw new AppError('Missing code', StatusCodes.BAD_REQUEST);
   }
+
+  const options: AuthorizationTokenConfig = {
+    redirect_uri: e.GITHUB_CALLBACK_URL,
+    code,
+  };
+
+  const githubAccessToken = await oauthGithubClient.getToken(options);
+  // {
+  //   "access_token": "string",
+  //   "token_type": "bearer",
+  //   "scope": "notifications"
+  // }
+
+  if (typeof githubAccessToken.token.access_token !== 'string') {
+    throw new AppError('No access token', StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+
+  const githubUser = await getGithubUserInfoFromOauthTokenFetch(
+    githubAccessToken.token.access_token,
+    'GITHUB'
+  );
+
+  if (!githubUser) {
+    throw new AppError('No user found', StatusCodes.NOT_FOUND);
+  }
+
+  const { user, error } = await createUserAndAccount({
+    email: githubUser.email,
+    providerUid: githubUser.providerUid,
+    accessToken: githubAccessToken.token.access_token,
+    strategy: 'GITHUB',
+  });
+
+  if (error) {
+    throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+  if (!user) {
+    throw new AppError('No user found', StatusCodes.NOT_FOUND);
+  }
+
+  // TODO: check discriminator mongoose to separate accounts
+
+  const { refreshToken } = await generateTokens({
+    setCookiesOn: res,
+    payload: {
+      user: user._id.toString(),
+      strategy: 'LOCAL',
+    },
+  });
+
+  if (!refreshToken) {
+    throw new AppError('No refresh token', StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+
+  await rotateRefreshTokenRedis({
+    redisConnection: sessionRedisConnection,
+    newToken: refreshToken,
+    user: user._id.toString(),
+    payload: {
+      user: user._id.toString(),
+      ip: req.ip,
+      userAgent: req.get('User-Agent'),
+    },
+  });
+
+  // TODO: redirect to dashboard, must be in config
+  res.redirect(e.GITHUB_FINAL_REDIRECT);
 });

@@ -21,6 +21,6 @@ export const oauthGithubClient = new AuthorizationCode({
 // Authorization uri definition
 export const githubAuthorizationUri = oauthGithubClient.authorizeURL({
   redirect_uri: e.GITHUB_CALLBACK_URL,
-  scope: [e.GITHUB_SCOPE],
+  scope: ['user:email'], // BUG: if i put a variable here it won't work why??
   state: e.GITHUB_STATE,
 });
