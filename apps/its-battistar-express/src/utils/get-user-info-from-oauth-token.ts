@@ -1,4 +1,4 @@
-import type { ESocialStrategy, EStrategy } from '@its-battistar/shared-types';
+import type { ESocialStrategy } from '@its-battistar/shared-types';
 import {
   ajvInstance,
   assertAjvValidationOrThrow,
