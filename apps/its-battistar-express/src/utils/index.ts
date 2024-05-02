@@ -7,4 +7,5 @@ export * from './jwt';
 export * from './logger';
 export * from './random-bytes';
 export * from './redis-token-rotation';
+export * from './sanitize';
 export * from './timer';

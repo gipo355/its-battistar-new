@@ -1,5 +1,4 @@
 import { CustomResponse } from '@its-battistar/shared-types';
-import { Sanitize } from 'apps/its-battistar-express/src/utils/sanitize';
 import type { Handler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
@@ -9,6 +8,7 @@ import {
   catchAsync,
   generateTokens,
   rotateRefreshTokenRedis,
+  Sanitize,
 } from '../../../utils';
 import { createUserAndAccount } from '../../api/users/users.service';
 

@@ -2,7 +2,7 @@ import blacklist from 'validator/lib/blacklist';
 import escape from 'validator/lib/escape';
 import isEmail from 'validator/lib/isEmail';
 import normalizeEmail from 'validator/lib/normalizeEmail';
-import trim from 'validator/lib/trim';
+// import trim from 'validator/lib/trim';
 
 // TODO: IMPROVE SANITIZATION
 // use libs like DOMPurify or sanitize-html against XSS
