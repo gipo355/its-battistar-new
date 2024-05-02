@@ -1,13 +1,24 @@
+import {
+  ajvInstance,
+  assertAjvValidationOrThrow,
+} from '@its-battistar/shared-utils';
+import { type Static, Type } from '@sinclair/typebox';
+import { StatusCodes } from 'http-status-codes';
 import type IORedis from 'ioredis';
 import type mongoose from 'mongoose';
 
 import { APP_CONFIG as c } from '../app.config';
+import { AppError } from './app-error';
 
-interface IRedisSessionPayload {
-  ip?: string;
-  userAgent?: string;
-  user?: string | mongoose.Types.ObjectId;
-}
+const redisSessionPayloadSchema = Type.Object({
+  ip: Type.Optional(Type.String()),
+  userAgent: Type.Optional(Type.String()),
+  user: Type.Optional(Type.String()),
+});
+type TRedisSessionPayload = Static<typeof redisSessionPayloadSchema>;
+const validateRedisSessionPayload = ajvInstance.compile(
+  redisSessionPayloadSchema
+);
 
 interface IRotateRefreshToken {
   redisConnection: IORedis;
@@ -28,7 +39,7 @@ interface IRotateRefreshToken {
    * The payload of the redis item to link to the new refresh token
    * Put ip, user agent, etc. here
    */
-  payload: IRedisSessionPayload;
+  payload: TRedisSessionPayload;
   /**
    * The prefix of the redis key for the user key holding the refresh tokens list
    */
@@ -139,7 +150,13 @@ export const validateSessionRedis = async (
 
     return new Error('Invalid token used, session not found in redis');
   }
-  const tokenRedisPayload: IRedisSessionPayload = JSON.parse(t);
+  // const tokenRedisPayload: IRedisSessionPayload = JSON.parse(t);
+  const tokenRedisPayload = JSON.parse(t);
+  assertAjvValidationOrThrow<TRedisSessionPayload>(
+    tokenRedisPayload,
+    validateRedisSessionPayload,
+    new AppError('Invalid token payload', StatusCodes.BAD_REQUEST)
+  );
 
   if (checkSessionIP) {
     if (tokenRedisPayload.ip !== checkSessionIP.ip) {
