@@ -10,6 +10,7 @@ import {
   SocialAccount,
   User,
 } from '@its-battistar/shared-types';
+import type mongoose from 'mongoose';
 import type { HydratedDocument } from 'mongoose';
 
 import type { AccountDocument } from './accounts.model';
@@ -18,19 +19,32 @@ import type { UserDocument } from './users.model';
 import { UserModel } from './users.model';
 
 // TODO: use typescript conditionals to return the right types
+/**
+ * getAccountAndUserOrThrow is used to get an account and a user based on the provided account email, user id, and strategy.
+ * This function takes an object as an argument and returns a Promise that resolves to an object containing a user, an account, and an error.
+ *
+ * either accountEmail or userId must be provided
+ */
 export const getAccountAndUserOrThrow = async ({
-  email,
+  accountEmail,
+  userId,
   strategy,
 }: {
-  email: string;
+  accountEmail?: string;
+  userId?: string | mongoose.Types.ObjectId;
   strategy: keyof typeof EStrategy;
 }): Promise<{
   user: UserDocument | null;
   account: AccountDocument | null;
   error: Error | null;
 }> => {
+  if (!accountEmail && !userId) {
+    throw new Error('Either accountEmail or userId must be provided');
+  }
+
   const account = await AccountModel.findOne({
-    email,
+    ...(accountEmail && { email: accountEmail }),
+    ...(userId && { user: userId }),
     strategy,
   });
 
