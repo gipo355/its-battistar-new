@@ -28,9 +28,11 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
     );
   }
 
-  const sanitizedEmail = new Sanitize(email).email().forMongoInjection().end;
+  const { string: sanitizedEmail } = new Sanitize(email)
+    .email()
+    .forMongoInjection().done;
 
-  const sanitizedPassword = new Sanitize(password).password().end;
+  const { string: sanitizedPassword } = new Sanitize(password).password().done;
 
   // FIXME: must sanitize user input
   const { user, account, error } = await getAccountAndUserOrThrow({

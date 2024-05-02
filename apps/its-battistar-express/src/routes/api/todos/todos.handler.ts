@@ -10,7 +10,9 @@ import {
   stringifySendOneTodoResponse,
   validateTodoInput,
 } from '@its-battistar/shared-utils';
+import { Sanitize } from 'apps/its-battistar-express/src/utils';
 import { StatusCodes } from 'http-status-codes';
+import { isMongoId } from 'validator';
 
 import { AppError } from '../../../utils/app-error';
 import { catchAsync } from '../../../utils/catch-async';
@@ -18,13 +20,20 @@ import { TodoModel } from './todos.model';
 
 // FIXME:  validation, add input sanitization
 
+// ALL THESE ROUTES ARE PROTECTED
+// we have access to req.user from the middleware
+
 export const getAllTodos = catchAsync(async (req, res) => {
+  if (!req.user?.id) {
+    throw new AppError('There was an error', StatusCodes.NOT_FOUND);
+  }
+
   const { showCompleted } = req.query as { showCompleted: string | undefined };
 
   const todos = await TodoModel.find({
+    user: req.user.id,
     ...(showCompleted !== 'true' && { completed: { $ne: 'true' } }),
   });
-  console.log('todos', todos);
 
   res.header('Content-type', 'application/json; charset=utf-8');
   res.status(StatusCodes.OK).send(
@@ -81,20 +90,35 @@ export const createTodo = catchAsync(async (req, res) => {
 });
 
 export const getOneTodo = catchAsync(async (req, res) => {
-  const { id } = req.params as { id: string };
+  if (!req.user?.id) {
+    throw new AppError('There was an error', StatusCodes.NOT_FOUND);
+  }
 
-  const todo = await TodoModel.findById(id);
+  const { id: candidateID } = req.params as { id: string };
 
-  if (!todo || !todo.id) {
+  const { string, error } = new Sanitize(candidateID).isMongoId().done;
+  if (error) {
+    throw new AppError('Invalid ID', StatusCodes.BAD_REQUEST);
+  }
+
+  // make sure the todo belongs to the user
+  const todo = await TodoModel.findOne({
+    id: string,
+    user: req.user.id,
+  });
+
+  if (!todo?.id) {
     throw new AppError('Todo not found', StatusCodes.NOT_FOUND);
   }
 
   res.status(StatusCodes.OK).json(
-    new CustomResponse<ITodo>({
-      ok: true,
-      statusCode: StatusCodes.OK,
-      data: todo,
-    })
+    stringifySendOneTodoResponse(
+      new CustomResponse<ITodo>({
+        ok: true,
+        statusCode: StatusCodes.CREATED,
+        data: todo,
+      })
+    )
   );
 });
 

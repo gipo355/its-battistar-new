@@ -1,3 +1,4 @@
+import { isMongoId } from 'validator';
 import blacklist from 'validator/lib/blacklist';
 import escape from 'validator/lib/escape';
 import isEmail from 'validator/lib/isEmail';
@@ -18,8 +19,14 @@ export class Sanitize {
     private error: Error | null = null
   ) {}
 
-  get end(): string {
-    return this.content;
+  get done(): {
+    string: string;
+    error: Error | null;
+  } {
+    return {
+      string: this.content,
+      error: this.error,
+    };
   }
 
   get isValid(): boolean {
@@ -41,6 +48,16 @@ export class Sanitize {
     // sanitized = trim(sanitized);
 
     this.content = sanitized;
+
+    return this;
+  }
+
+  isMongoId(): this {
+    if (!this.content || !isMongoId(this.content)) {
+      this.error = new Error('Not a valid Mongo ID');
+
+      return this;
+    }
 
     return this;
   }
