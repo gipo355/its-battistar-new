@@ -6,6 +6,7 @@ import { APP_CONFIG as c } from '../../../app.config';
 import { sessionRedisConnection } from '../../../db/redis';
 import { AppError, catchAsync, createJWT, verifyJWT } from '../../../utils';
 import { UserModel } from '../../api/users/users.model';
+import { getAuthTokenFromCookieOrHeader } from './refresh.service';
 
 // import { AppError } from '../../utils/app-error';
 // import { catchAsync } from '../../utils/catch-async';
@@ -29,24 +30,32 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
   const { authorization } = req.headers as {
     authorization: string | undefined;
   };
+  //
+  // if (!refreshToken && !authorization) {
+  //   throw new AppError('No refresh token found', StatusCodes.UNAUTHORIZED);
+  // }
 
-  if (!refreshToken && !authorization) {
-    throw new AppError('No refresh token found', StatusCodes.UNAUTHORIZED);
-  }
+  // let token = '';
+  //
+  // // get the token
+  // if (refreshToken) {
+  //   token = refreshToken;
+  // } else if (authorization) {
+  //   const [type, value] = authorization.split(' ');
+  //
+  //   if (type !== 'Bearer') {
+  //     throw new AppError('Invalid token type', StatusCodes.UNAUTHORIZED);
+  //   }
+  //
+  //   token = value;
+  // }
 
-  let token = '';
-
-  // get the token
-  if (refreshToken) {
-    token = refreshToken;
-  } else if (authorization) {
-    const [type, value] = authorization.split(' ');
-
-    if (type !== 'Bearer') {
-      throw new AppError('Invalid token type', StatusCodes.UNAUTHORIZED);
-    }
-
-    token = value;
+  const { token, error } = getAuthTokenFromCookieOrHeader({
+    token: refreshToken,
+    bearer: authorization,
+  });
+  if (error) {
+    throw new AppError(error.message, StatusCodes.UNAUTHORIZED);
   }
 
   // verify the token
