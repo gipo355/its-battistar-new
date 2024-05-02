@@ -3,6 +3,50 @@
 This file was generated using
 [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [1.0.0](https://github.com/gipo355/its-battistar/compare/its-battistar-express-0.1.0...its-battistar-express-1.0.0) (2024-05-02)
+
+### ⚠ BREAKING CHANGES
+
+- **its-battistar-angular:** created new lib
+
+### Features
+
+- **its-battistar-express:** :sparkles: add github oauth
+  ([81c5a5b](https://github.com/gipo355/its-battistar/commit/81c5a5b8508693004a3274b3b48beaa46258fbcb)),
+  closes [#59](https://github.com/gipo355/its-battistar/issues/59)
+  [#61](https://github.com/gipo355/its-battistar/issues/61)
+  [#62](https://github.com/gipo355/its-battistar/issues/62)
+  [#63](https://github.com/gipo355/its-battistar/issues/63)
+- **its-battistar-express:** :sparkles: implement hashing functions with argon
+  ([d0af1c7](https://github.com/gipo355/its-battistar/commit/d0af1c7c51bcf05ef574418fcf592d8ede1b76a8))
+- **its-battistar-express:** :sparkles: implement local strat signup and login
+  ([00c1b97](https://github.com/gipo355/its-battistar/commit/00c1b97fcbb7552ce047dfd520734a9c2b76886c))
+- **its-battistar-express:** :sparkles: improving local strat with redis
+  ([3208d95](https://github.com/gipo355/its-battistar/commit/3208d95d2d042f12c2f0877f7502c7b79ad75c89))
+- **its-battistar-express:** :sparkles: init github oauth2
+  ([337f2ce](https://github.com/gipo355/its-battistar/commit/337f2ce8efc37e55ad868b3c12156096a815228b))
+- **its-battistar-express:** :sparkles: local strat auth
+  ([fdfcd92](https://github.com/gipo355/its-battistar/commit/fdfcd92b8cf2d12890e68cb866123a77f8a2f948))
+- **its-battistar-express:** :sparkles: local strategy basis implemented
+  ([7752f3a](https://github.com/gipo355/its-battistar/commit/7752f3a01ee04e917bfe2fc9a6afdda8b3a64cd0))
+- **its-battistar-express:** :sparkles: prepare models for auth, users and
+  accounts
+  ([2402639](https://github.com/gipo355/its-battistar/commit/2402639ddf62ae7c75999a4a005a56f518373381))
+- **its-battistar-express:** :sparkles: protect route middleware
+  ([fe359c2](https://github.com/gipo355/its-battistar/commit/fe359c28889cecc89439a683b29b42fb277818a9))
+- **its-battistar-express:** :sparkles: tentative init of local strat auth with
+  refactor
+  ([4e768d0](https://github.com/gipo355/its-battistar/commit/4e768d048e679d66a855d733c77fa23098b4c34f))
+
+### Bug Fixes
+
+- **its-battistar-angular:** :bug: fast-json-stringify was importing node only
+  lib
+  ([7214a00](https://github.com/gipo355/its-battistar/commit/7214a00e32730cdfca404b9e442919ce5111cf17)),
+  closes [#69](https://github.com/gipo355/its-battistar/issues/69)
+- **its-battistar-express:** :bug: fix verify argon fn
+  ([daa5051](https://github.com/gipo355/its-battistar/commit/daa50515651e522957da7b29a1a03c19e185c9f0))
+
 ## 0.1.0 (2024-4-28)
 
 ### Features
