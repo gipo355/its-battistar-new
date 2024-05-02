@@ -1,4 +1,5 @@
 import { CustomResponse } from '@its-battistar/shared-types';
+import { Sanitize } from 'apps/its-battistar-express/src/utils/sanitize';
 import type { Handler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
@@ -28,14 +29,18 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
     );
   }
 
+  const sanitizedEmail = new Sanitize(email).email().forMongoInjection().end;
+  const sanitizedPassword = new Sanitize(password).password().end;
+
+  // FIXME: must sanitize user input
   /**
    * check the logic inside the function
    * handling different accounts with many strategies
    */
   const { user, account, error } = await createUserAndAccount({
     strategy: 'LOCAL',
-    email,
-    password,
+    email: sanitizedEmail,
+    password: sanitizedPassword,
   });
 
   if (error) {

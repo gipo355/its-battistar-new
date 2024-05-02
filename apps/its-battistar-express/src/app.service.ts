@@ -102,6 +102,7 @@ router.use(
 
 /**
  * ## Sanitize
+ * after parsers
  */
 router.use(
   ExpressMongoSanitize({

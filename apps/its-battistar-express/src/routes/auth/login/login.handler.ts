@@ -1,4 +1,5 @@
 import { CustomResponse } from '@its-battistar/shared-types';
+import { Sanitize } from 'apps/its-battistar-express/src/utils/sanitize';
 import type { Handler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
@@ -18,7 +19,8 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
     password: string | undefined;
   };
 
-  // TODO: validate email and password in mongoose schema or ajv
+  // TODO: validate email and password in mongoose schema or ajv or here before
+  // sending to the db
   if (!email || !password) {
     throw new AppError(
       'Email and password are required',
@@ -26,15 +28,20 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
     );
   }
 
+  const sanitizedEmail = new Sanitize(email).email().forMongoInjection().end;
+
+  const sanitizedPassword = new Sanitize(password).password().end;
+
+  // FIXME: must sanitize user input
   const { user, account, error } = await getAccountAndUserOrThrow({
-    email,
+    email: sanitizedEmail,
     strategy: 'LOCAL',
   });
   if (error ?? (!user || !account)) {
     throw new AppError('Wrong credentials', StatusCodes.BAD_REQUEST);
   }
 
-  const isValid = await account.comparePassword(password);
+  const isValid = await account.comparePassword(sanitizedPassword);
   if (!isValid) {
     throw new AppError('Invalid email or password', StatusCodes.UNAUTHORIZED);
   }
