@@ -45,6 +45,8 @@ export const todoSchemaInput = Type.Object({
     })
   ),
 
+  completed: Type.Optional(Type.Boolean()),
+
   image: Type.Optional(
     Type.String({
       format: 'uri',
@@ -64,8 +66,6 @@ export const todoSchema = Type.Object({
   ...todoSchemaInput.properties,
 
   expired: Type.Boolean(),
-
-  completed: Type.Optional(Type.Boolean()),
 
   createdAt: Type.String({
     format: 'date-time',
@@ -92,16 +92,19 @@ export interface ITodoInput {
   image?: string;
 }
 
-export interface ITodoInputWithUser extends ITodoInput {
+export interface ITodoInputWithCompleted extends ITodoInput {
+  completed: boolean;
+}
+
+export interface ITodoInputWithUserAndCompleted
+  extends ITodoInputWithCompleted {
   user: string | mongoose.Schema.Types.ObjectId;
 }
 
-export interface ITodo extends ITodoInputWithUser {
+export interface ITodo extends ITodoInputWithUserAndCompleted {
   id?: string;
 
   expired: boolean;
-
-  completed: boolean;
 
   createdAt: Date;
 

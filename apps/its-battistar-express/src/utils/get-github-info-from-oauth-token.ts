@@ -69,7 +69,15 @@ export const getGithubUserInfoFromOauthTokenFetch = async (
   assertAjvValidationOrThrow<TGithubUsers>(
     userData,
     validateGithubUsers,
-    new AppError('Authenticate again 3', StatusCodes.UNAUTHORIZED),
+    (errors) => {
+      let messages = '';
+      if (errors)
+        for (const error of errors) {
+          if (typeof error.message === 'string')
+            messages += error.message + '\n';
+        }
+      new AppError(messages, StatusCodes.INTERNAL_SERVER_ERROR);
+    },
     logger
   );
 
@@ -108,7 +116,15 @@ export const getGithubUserInfoFromOauthTokenFetch = async (
   assertAjvValidationOrThrow<GithubUser2>(
     userData2,
     validateGithubUser2,
-    new AppError('Authenticate again 6', StatusCodes.UNAUTHORIZED)
+    (errors) => {
+      let messages = '';
+      if (errors)
+        for (const error of errors) {
+          if (typeof error.message === 'string')
+            messages += error.message + '\n';
+        }
+      new AppError(messages, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
   );
 
   githubUser.firstName = userData2.login;

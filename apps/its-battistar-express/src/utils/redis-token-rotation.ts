@@ -178,7 +178,15 @@ export const validateSessionRedis = async (
   assertAjvValidationOrThrow<TRedisSessionPayload>(
     tokenRedisPayload,
     validateRedisSessionPayload,
-    new AppError('Invalid token payload', StatusCodes.BAD_REQUEST)
+    (errors) => {
+      let messages = '';
+      if (errors)
+        for (const error of errors) {
+          if (typeof error.message === 'string')
+            messages += error.message + '\n';
+        }
+      new AppError(messages, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
   );
 
   if (checkSessionIP) {

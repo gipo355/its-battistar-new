@@ -1,20 +1,21 @@
-import type { ValidateFunction } from 'ajv';
+import type { ErrorObject, ValidateFunction } from 'ajv';
 import type { Logger } from 'pino';
 
 export function assertAjvValidationOrThrow<T>(
   data: unknown,
   validatorFN: ValidateFunction,
-  error: Error,
+  // this callback gives access to validatorFN.errors
+  errorCB: (err: ErrorObject[] | null | undefined) => void,
   logger?: Logger
 ): asserts data is T {
   const isValid = validatorFN(data);
+
   if (!isValid) {
     logger?.error({
-      message: error.message,
       data,
       errors: validatorFN.errors,
     });
 
-    throw error;
+    errorCB(validatorFN.errors);
   }
 }

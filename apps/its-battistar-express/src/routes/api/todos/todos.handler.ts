@@ -1,7 +1,8 @@
 import type {
   ITodo,
   ITodoInput,
-  ITodoInputWithUser,
+  ITodoInputWithCompleted,
+  ITodoInputWithUserAndCompleted,
 } from '@its-battistar/shared-types';
 import { CustomResponse } from '@its-battistar/shared-types';
 import {
@@ -10,18 +11,17 @@ import {
   stringifySendOneTodoResponse,
   validateTodoInput,
 } from '@its-battistar/shared-utils';
-import { Sanitize } from 'apps/its-battistar-express/src/utils';
 import { StatusCodes } from 'http-status-codes';
-import { isMongoId } from 'validator';
 
-import { AppError } from '../../../utils/app-error';
-import { catchAsync } from '../../../utils/catch-async';
+import { AppError, catchAsync, logger, Sanitize } from '../../../utils';
 import { TodoModel } from './todos.model';
 
 // FIXME:  validation, add input sanitization
 
 // ALL THESE ROUTES ARE PROTECTED
-// we have access to req.user from the middleware
+// we have access to req.user from the middleware,
+// if we need it, check at the start of the fn to type cast it
+// and add safety check
 
 export const getAllTodos = catchAsync(async (req, res) => {
   if (!req.user?.id) {
@@ -30,6 +30,7 @@ export const getAllTodos = catchAsync(async (req, res) => {
 
   const { showCompleted } = req.query as { showCompleted: string | undefined };
 
+  // limit to only the todos that belong to the user
   const todos = await TodoModel.find({
     user: req.user.id,
     ...(showCompleted !== 'true' && { completed: { $ne: 'true' } }),
@@ -56,7 +57,7 @@ export const createTodo = catchAsync(async (req, res) => {
 
   // TODO: sanitize inputs
 
-  const candidateTodo: Partial<ITodoInputWithUser> = {
+  const candidateTodo: Partial<ITodoInputWithUserAndCompleted> = {
     title,
     dueDate,
     description,
@@ -65,17 +66,22 @@ export const createTodo = catchAsync(async (req, res) => {
     user: req.user?.id,
   };
 
-  console.log('candidateTodo', candidateTodo);
-
-  assertAjvValidationOrThrow<ITodoInputWithUser>(
+  assertAjvValidationOrThrow<ITodoInputWithUserAndCompleted>(
     candidateTodo,
     validateTodoInput,
-    new AppError('Failed to create todo', StatusCodes.INTERNAL_SERVER_ERROR)
+    (errors) => {
+      let messages = '';
+      if (errors)
+        for (const error of errors) {
+          if (typeof error.message === 'string')
+            messages += error.message + '\n';
+        }
+      new AppError(messages, StatusCodes.INTERNAL_SERVER_ERROR);
+    },
+    logger
   );
 
   const newTodo = await TodoModel.create(candidateTodo);
-
-  console.log('newTodo', newTodo);
 
   res.header('Content-type', 'application/json; charset=utf-8');
   res.status(StatusCodes.CREATED).send(
@@ -111,7 +117,8 @@ export const getOneTodo = catchAsync(async (req, res) => {
     throw new AppError('Todo not found', StatusCodes.NOT_FOUND);
   }
 
-  res.status(StatusCodes.OK).json(
+  res.header('Content-type', 'application/json; charset=utf-8');
+  res.status(StatusCodes.OK).send(
     stringifySendOneTodoResponse(
       new CustomResponse<ITodo>({
         ok: true,
@@ -123,35 +130,70 @@ export const getOneTodo = catchAsync(async (req, res) => {
 });
 
 export const patchOneTodo = catchAsync(async (req, res) => {
+  if (!req.user?.id) {
+    throw new AppError('There was an error', StatusCodes.UNAUTHORIZED);
+  }
+
   // INPUT: title, completed, dueDate, description
-  const { id } = req.params as { id: string };
-  const { title, completed, dueDate, description } = req.body as Partial<ITodo>;
+  const { id: candidateID } = req.params as { id: string };
+
+  const { string: id, error } = new Sanitize(candidateID).isMongoId().done;
+  if (error) {
+    throw new AppError('Invalid ID', StatusCodes.BAD_REQUEST);
+  }
 
   const todo = await TodoModel.findById(id);
-
   if (!todo || !todo.id) {
     throw new AppError('Todo not found', StatusCodes.NOT_FOUND);
   }
 
-  // FIXME: fix validation
-  // if (!validateTodo({ title, dueDate })) {
-  //   throw new AppError('Invalid data', StatusCodes.BAD_REQUEST);
-  // }
+  const { title, completed, dueDate, description, image, color } =
+    req.body as Partial<ITodoInputWithCompleted>;
 
-  title && (todo.title = title);
-  completed && (todo.completed = completed);
-  dueDate && (todo.dueDate = dueDate);
-  description && (todo.description = description);
+  // TODO: sanitize inputs
 
-  const newTodo = await todo.save();
+  const candidateTodo: Partial<ITodoInputWithUserAndCompleted> = {
+    title,
+    dueDate,
+    description,
+    color,
+    image,
+    user: req.user.id,
+    completed,
+  };
 
-  res.status(StatusCodes.OK).json(
-    new CustomResponse<ITodo>({
-      ok: true,
-      statusCode: StatusCodes.OK,
-      message: 'Todo updated successfully',
-      data: newTodo,
-    })
+  assertAjvValidationOrThrow<ITodoInputWithUserAndCompleted>(
+    candidateTodo,
+    validateTodoInput,
+    (errors) => {
+      let messages = '';
+      if (errors)
+        for (const error of errors) {
+          if (typeof error.message === 'string')
+            messages += error.message + '\n';
+        }
+      new AppError(messages, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  );
+
+  // title && (todo.title = title);
+  // completed && (todo.completed = completed);
+  // dueDate && (todo.dueDate = dueDate);
+  // description && (todo.description = description);
+
+  const newTodo = todo.set(candidateTodo);
+  await newTodo.save();
+  // const newTodo = await todo.save();
+
+  res.header('Content-type', 'application/json; charset=utf-8');
+  res.status(StatusCodes.OK).send(
+    stringifySendOneTodoResponse(
+      new CustomResponse<ITodo>({
+        ok: true,
+        statusCode: StatusCodes.OK,
+        data: newTodo,
+      })
+    )
   );
 });
 

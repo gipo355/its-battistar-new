@@ -107,7 +107,15 @@ export const getUserInfoFromOauthToken = async (
     assertAjvValidationOrThrow<TGithubUsers>(
       parsedPayload,
       validateGithubUsers,
-      new AppError('Authenticate again 3', StatusCodes.UNAUTHORIZED)
+      (errors) => {
+        let messages = '';
+        if (errors)
+          for (const error of errors) {
+            if (typeof error.message === 'string')
+              messages += error.message + '\n';
+          }
+        new AppError(messages, StatusCodes.INTERNAL_SERVER_ERROR);
+      }
     );
 
     // lenght > 0 and not undefined
@@ -160,7 +168,15 @@ export const getUserInfoFromOauthToken = async (
     assertAjvValidationOrThrow<GithubUser2>(
       parsedPayload2,
       validateGithubUser2,
-      new AppError('Authenticate again 6', StatusCodes.UNAUTHORIZED)
+      (errors) => {
+        let messages = '';
+        if (errors)
+          for (const error of errors) {
+            if (typeof error.message === 'string')
+              messages += error.message + '\n';
+          }
+        new AppError(messages, StatusCodes.INTERNAL_SERVER_ERROR);
+      }
     );
 
     // console.log(parsedPayload2, 'parsedPayload2');
