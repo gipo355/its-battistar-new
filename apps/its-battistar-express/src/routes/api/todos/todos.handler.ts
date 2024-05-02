@@ -134,6 +134,7 @@ export const patchOneTodo = catchAsync(async (req, res) => {
   }
 
   // INPUT: title, completed, dueDate, description
+  // TODO: repeating this code, refactor
   const { id: candidateID } = req.params as { id: string };
 
   const { string: id, error } = new Sanitize(candidateID).isMongoId().done;
@@ -197,11 +198,19 @@ export const patchOneTodo = catchAsync(async (req, res) => {
 });
 
 export const deleteOneTodo = catchAsync(async (req, res) => {
-  const { id } = req.params as { id: string };
+  // TODO: repeating this code, refactor
+  if (!req.user?.id) {
+    throw new AppError('There was an error', StatusCodes.UNAUTHORIZED);
+  }
 
-  // TODO: is this double query necessary?
+  const { id: candidateID } = req.params as { id: string };
+
+  const { string: id, error } = new Sanitize(candidateID).isMongoId().done;
+  if (error) {
+    throw new AppError('Invalid ID', StatusCodes.BAD_REQUEST);
+  }
+
   const todo = await TodoModel.findById(id);
-
   if (!todo || !todo.id) {
     throw new AppError('Todo not found', StatusCodes.NOT_FOUND);
   }
@@ -209,10 +218,9 @@ export const deleteOneTodo = catchAsync(async (req, res) => {
   await TodoModel.findByIdAndDelete(id);
 
   res.status(StatusCodes.OK).json(
-    new CustomResponse<ITodo | null>({
+    new CustomResponse<null>({
       ok: true,
       statusCode: StatusCodes.NO_CONTENT,
-      message: 'Todo deleted successfully',
       data: null,
     })
   );
