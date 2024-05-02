@@ -4,7 +4,16 @@ import { StatusCodes } from 'http-status-codes';
 
 import { APP_CONFIG as c } from '../../../app.config';
 import { sessionRedisConnection } from '../../../db/redis';
-import { AppError, catchAsync, createJWT, verifyJWT } from '../../../utils';
+import {
+  AppError,
+  catchAsync,
+  createJWT,
+  generateTokens,
+  invalidateAllSessionsForUser,
+  rotateRefreshTokenRedis,
+  validateSessionRedis,
+  verifyJWT,
+} from '../../../utils';
 import { UserModel } from '../../api/users/users.model';
 import { getAuthTokenFromCookieOrHeader } from './refresh.service';
 
@@ -70,52 +79,74 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
   // const item = await sessionRedisConnection.get(token);
 
   // get all the tokens for the user
-  const key = `${c.REDIS_USER_SESSION_PREFIX}${payload.user}`;
-  const item2 = await sessionRedisConnection.smembers(key); // [token1, token2, ...]
+  // const key = `${c.REDIS_USER_SESSION_PREFIX}${payload.user}`;
+  // const item2 = await sessionRedisConnection.smembers(key); // [token1, token2, ...]
+  //
+  // // invalidate all sessions for the user if the token is not found
+  // if (!item2.includes(token)) {
+  //   await sessionRedisConnection.del(key);
+  //   throw new AppError('Invalid token', StatusCodes.UNAUTHORIZED);
+  // }
+  const ip = req.ip;
+  const userAgent = req.get('User-Agent');
+  await validateSessionRedis({
+    redisConnection: sessionRedisConnection,
+    token,
+    user: payload.user,
+    ...(ip && {
+      checkSessionIP: {
+        ip,
+        errorMessage: 'Invalid IP address used',
+      },
+    }),
+    ...(userAgent && {
+      checkSessionUA: {
+        ua: userAgent,
+        errorMessage: 'Invalid User Agent used',
+      },
+    }),
+  });
 
-  // invalidate all sessions for the user if the token is not found
-  if (!item2.includes(token)) {
-    await sessionRedisConnection.del(key);
-    throw new AppError('Invalid token', StatusCodes.UNAUTHORIZED);
-  }
+  // TODO: should validation be done for user or account?
 
-  // TODO: refactor to abstract logics, make an exist method in the service
   // check if user exists
   const user = await UserModel.findById(payload.user);
   if (!user) {
-    await sessionRedisConnection.del(key);
+    await invalidateAllSessionsForUser(sessionRedisConnection, payload.user);
     throw new AppError('User not found', StatusCodes.NOT_FOUND);
   }
 
-  // rotate the refresh, create new access
-  const newAccessToken = await createJWT({
-    data: {
-      user: user._id.toString(),
-      strategy: 'LOCAL',
-    },
-    type: 'access',
-  });
+  const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+    await generateTokens({
+      setCookiesOn: res,
+      payload: {
+        user: user._id.toString(),
+        strategy: payload.strategy,
+      },
+    });
+  if (!newAccessToken || !newRefreshToken) {
+    throw new AppError(
+      'Could not generate tokens',
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
 
-  const newRefreshToken = await createJWT({
-    data: {
+  await rotateRefreshTokenRedis({
+    redisConnection: sessionRedisConnection,
+    oldToken: token,
+    newToken: newRefreshToken,
+    user: user._id.toString(),
+    payload: {
       user: user._id.toString(),
-      strategy: 'LOCAL',
+      ip: req.ip,
+      userAgent: req.get('User-Agent'),
     },
-    type: 'refresh',
   });
-
-  await sessionRedisConnection.del(token);
-  await sessionRedisConnection.srem(key, token);
-  await sessionRedisConnection.sadd(key, newRefreshToken);
 
   const data = {
     accessToken: newAccessToken,
     refreshToken: newRefreshToken,
   };
-
-  res.cookie('accessToken', newAccessToken, c.JWT_ACCESS_COOKIE_OPTIONS);
-  res.cookie('refreshToken', refreshToken, c.JWT_REFRESH_COOKIE_OPTIONS);
-
   res.status(StatusCodes.OK).json(
     new CustomResponse<typeof data>({
       ok: true,

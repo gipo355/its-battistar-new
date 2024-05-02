@@ -20,6 +20,10 @@ const validateRedisSessionPayload = ajvInstance.compile(
   redisSessionPayloadSchema
 );
 
+export const generateSessionUserKey = (
+  user: string | mongoose.Types.ObjectId
+): string => `${c.REDIS_USER_SESSION_PREFIX}${user.toString()}`;
+
 interface IRotateRefreshToken {
   redisConnection: IORedis;
   /**
@@ -40,10 +44,6 @@ interface IRotateRefreshToken {
    * Put ip, user agent, etc. here
    */
   payload: TRedisSessionPayload;
-  /**
-   * The prefix of the redis key for the user key holding the refresh tokens list
-   */
-  prefix?: string;
 }
 /**
  * set up the whitelist for the refresh token, add it as a key to the redis store
@@ -54,10 +54,10 @@ interface IRotateRefreshToken {
 export const rotateRefreshTokenRedis = async (
   o: IRotateRefreshToken
 ): Promise<void> => {
-  const { redisConnection, newToken, oldToken, user, payload, prefix } = o;
+  const { redisConnection, newToken, oldToken, user, payload } = o;
 
   // set the key for the user's list of refresh tokens
-  const key = `${prefix ?? ''}${user.toString()}`;
+  const key = generateSessionUserKey(user);
 
   if (oldToken) {
     // delete the old token
@@ -81,6 +81,15 @@ export const rotateRefreshTokenRedis = async (
   await redisConnection.sadd(key, newToken);
   // reset the expiration time for the user sessions
   await redisConnection.expire(key, c.REDIS_USER_SESSION_MAX_EX);
+};
+
+export const invalidateAllSessionsForUser = async (
+  redisConnection: IORedis,
+  user: string | mongoose.Types.ObjectId
+): Promise<string> => {
+  const key = generateSessionUserKey(user);
+  await redisConnection.del(key);
+  return key;
 };
 
 interface IValidateSessionRedis {
@@ -122,20 +131,31 @@ interface IValidateSessionRedis {
     errorMessage: string;
   };
 }
+/**
+ * Validate the session token in redis
+ *
+ * The function begins by destructuring the input object to extract the `redisConnection`, `token`, `user`, `checkSessionIP`, and `checkSessionUA` properties.
+ * The `redisConnection` is used to interact with the Redis database, `token` is the session token to be validated,
+ * `user` is the user associated with the session,
+ * and `checkSessionIP` and `checkSessionUA` are optional checks for the IP address and user agent, respectively.
+*
+* The function then retrieves all active session tokens for the user from the Redis database.
+* If the provided token is not found in this list, all sessions for the user are invalidated and an error is returned.
+*
+* If the token is found, and if either `checkSessionIP` or `checkSessionUA` is true, the function retrieves the payload of the token from Redis.
+* If the token payload is not found in Redis, the token is removed from the user's session list and an error is returned.
+*
+* The token payload is then parsed from JSON and validated using the `assertAjvValidationOrThrow` function. If the payload is invalid, an error is thrown.
+*
+* If the `checkSessionIP` property is true, the function checks if the IP address in the token payload matches the IP address provided in the `checkSessionIP` object.
+* If they do not match, an error is returned with the message from `checkSessionIP.errorMessage` and invalidates all user sessions as attempted login with stolen token.
+*
+* Similarly, if the `checkSessionUA` property is true, the function checks if the user agent in the token payload matches the user agent provided in the `checkSessionUA` object.
+* If they do not match, an error is returned with the message from `checkSessionUA.errorMessage` and invalidates all user sessions as attempted login with stolen token.
+*
+* If all checks pass, the function returns null, indicating that the session token is valid.
 
-export const generateSessionUserKey = (
-  user: string | mongoose.Types.ObjectId
-): string => `${c.REDIS_USER_SESSION_PREFIX}${user.toString()}`;
-
-export const invalidateAllSessionsForUser = async (
-  redisConnection: IORedis,
-  user: string | mongoose.Types.ObjectId
-): Promise<string> => {
-  const key = generateSessionUserKey(user);
-  await redisConnection.del(key);
-  return key;
-};
-
+ */
 export const validateSessionRedis = async (
   o: IValidateSessionRedis
 ): Promise<Error | null> => {
@@ -173,12 +193,14 @@ export const validateSessionRedis = async (
 
   if (checkSessionIP) {
     if (tokenRedisPayload.ip !== checkSessionIP.ip) {
+      await invalidateAllSessionsForUser(redisConnection, user);
       return new Error(checkSessionIP.errorMessage);
     }
   }
 
   if (checkSessionUA) {
     if (tokenRedisPayload.userAgent !== checkSessionUA.ua) {
+      await invalidateAllSessionsForUser(redisConnection, user);
       return new Error(checkSessionUA.errorMessage);
     }
   }
