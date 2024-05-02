@@ -5,4 +5,4 @@ const ajvInstance = new ajv();
 
 addFormats(ajvInstance);
 
-export { ajvInstance};
+export { ajvInstance };
