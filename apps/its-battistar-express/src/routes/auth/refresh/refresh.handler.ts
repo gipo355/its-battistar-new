@@ -13,7 +13,7 @@ import {
   verifyJWT,
 } from '../../../utils';
 import { UserModel } from '../../api/users/users.model';
-import { getAuthTokenFromCookieOrHeader } from './refresh.service';
+import { getAuthTokenFromCookieOrHeader } from '../auth.service';
 
 // import { AppError } from '../../utils/app-error';
 // import { catchAsync } from '../../utils/catch-async';
@@ -34,28 +34,7 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
    */
 
   const { refreshToken } = req.cookies as { refreshToken: string | undefined };
-  const { authorization } = req.headers as {
-    authorization: string | undefined;
-  };
-  //
-  // if (!refreshToken && !authorization) {
-  //   throw new AppError('No refresh token found', StatusCodes.UNAUTHORIZED);
-  // }
-
-  // let token = '';
-  //
-  // // get the token
-  // if (refreshToken) {
-  //   token = refreshToken;
-  // } else if (authorization) {
-  //   const [type, value] = authorization.split(' ');
-  //
-  //   if (type !== 'Bearer') {
-  //     throw new AppError('Invalid token type', StatusCodes.UNAUTHORIZED);
-  //   }
-  //
-  //   token = value;
-  // }
+  const { authorization } = req.headers;
 
   const { token, error } = getAuthTokenFromCookieOrHeader({
     token: refreshToken,
@@ -71,20 +50,7 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
   /**
    * here we could check if same user agent and ip is used for the session
    */
-  // saving individual token as key is used to save info about the session
-  // like IP, user agent, etc.
-  // check if the token is whitelisted
-  // const item = await sessionRedisConnection.get(token);
 
-  // get all the tokens for the user
-  // const key = `${c.REDIS_USER_SESSION_PREFIX}${payload.user}`;
-  // const item2 = await sessionRedisConnection.smembers(key); // [token1, token2, ...]
-  //
-  // // invalidate all sessions for the user if the token is not found
-  // if (!item2.includes(token)) {
-  //   await sessionRedisConnection.del(key);
-  //   throw new AppError('Invalid token', StatusCodes.UNAUTHORIZED);
-  // }
   const ip = req.ip;
   const userAgent = req.get('User-Agent');
   await validateSessionRedis({
