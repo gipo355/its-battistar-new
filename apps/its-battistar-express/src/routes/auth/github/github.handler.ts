@@ -11,7 +11,7 @@ import {
   catchAsync,
   generateTokens,
   getUserInfoFromOauthToken,
-  rotateRefreshToken,
+  rotateRefreshTokenRedis,
 } from '../../../utils';
 import { createUserAndAccount } from '../../api/users/users.service';
 import { githubAuthorizationUri, oauthGithubClient } from './github.service';
@@ -83,7 +83,7 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
       throw new AppError('No refresh token', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 
-    await rotateRefreshToken({
+    await rotateRefreshTokenRedis({
       redisConnection: sessionRedisConnection,
       newToken: refreshToken,
       user: user._id.toString(),

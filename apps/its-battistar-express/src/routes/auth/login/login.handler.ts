@@ -7,7 +7,7 @@ import {
   AppError,
   catchAsync,
   generateTokens,
-  rotateRefreshToken,
+  rotateRefreshTokenRedis,
 } from '../../../utils';
 import { getAccountAndUserOrThrow } from '../../api/users/users.service';
 
@@ -53,7 +53,7 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
     );
   }
 
-  await rotateRefreshToken({
+  await rotateRefreshTokenRedis({
     redisConnection: sessionRedisConnection,
     newToken: refreshToken,
     user: user._id.toString(),

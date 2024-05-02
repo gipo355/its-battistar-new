@@ -3,6 +3,12 @@ import type mongoose from 'mongoose';
 
 import { APP_CONFIG as c } from '../app.config';
 
+interface IRedisSessionPayload {
+  ip?: string;
+  userAgent?: string;
+  user?: string | mongoose.Types.ObjectId;
+}
+
 interface IRotateRefreshToken {
   redisConnection: IORedis;
   /**
@@ -22,7 +28,7 @@ interface IRotateRefreshToken {
    * The payload of the redis item to link to the new refresh token
    * Put ip, user agent, etc. here
    */
-  payload: Record<string, unknown>;
+  payload: IRedisSessionPayload;
   /**
    * The prefix of the redis key for the user key holding the refresh tokens list
    */
@@ -34,7 +40,7 @@ interface IRotateRefreshToken {
  * we need to store the id of the user to be able to revoke all the refresh tokens associated with the user in case
  * a an invalid refresh token is used
  */
-export const rotateRefreshToken = async (
+export const rotateRefreshTokenRedis = async (
   o: IRotateRefreshToken
 ): Promise<void> => {
   const { redisConnection, newToken, oldToken, user, payload, prefix } = o;
@@ -64,4 +70,88 @@ export const rotateRefreshToken = async (
   await redisConnection.sadd(key, newToken);
   // reset the expiration time for the user sessions
   await redisConnection.expire(key, c.REDIS_USER_SESSION_MAX_EX);
+};
+
+interface IValidateSessionRedis {
+  redisConnection: IORedis;
+  /**
+   * The refresh token to be checked in the redis store
+   */
+  token: string;
+  /**
+   * The user id
+   * usually the id extracted from the payload of the refresh token
+   */
+  user: string | mongoose.Types.ObjectId;
+  /**
+   * Check if the session IP is the same as the one used to create the session
+   * if provided, the requestIP must be provided
+   */
+  checkSessionIP?: {
+    /**
+     * The IP address to check against
+     */
+    ip: string;
+    /**
+     * The error message to throw if the IP is different
+     */
+    errorMessage: string;
+  };
+  /**
+   * Check if the session user agent is the same as the one used to create the session
+   */
+  checkSessionUA?: {
+    /**
+     * The user agent to check against
+     */
+    ua: string;
+    /**
+     * The error message to throw if the user agent is different
+     */
+    errorMessage: string;
+  };
+}
+export const validateSessionRedis = async (
+  o: IValidateSessionRedis
+): Promise<Error | null> => {
+  const { redisConnection, token, user, checkSessionIP, checkSessionUA } = o;
+
+  // get all the sessions tokens active for the user
+  const userSessionsKey = `${c.REDIS_USER_SESSION_PREFIX}${user.toString()}`;
+  const redisSessionsList = await redisConnection.smembers(userSessionsKey); // [token1, token2, ...]
+  // invalidate all sessions for the user if the token is not found (whitelist check)
+  if (!redisSessionsList.includes(token)) {
+    await redisConnection.del(userSessionsKey);
+    return new Error('Invalid token used, all sessions invalidated');
+  }
+
+  // if we have to check the IP and user agent, get the token payload
+  if (!checkSessionIP && !checkSessionUA) {
+    return null;
+  }
+  // verify the token payload is in redis
+  const t = await redisConnection.get(token);
+  if (!t) {
+    // delete the key
+    await redisConnection.del(userSessionsKey);
+    // remove it from the list
+    await redisConnection.srem(userSessionsKey, token);
+
+    return new Error('Invalid token used, session not found in redis');
+  }
+  const tokenRedisPayload: IRedisSessionPayload = JSON.parse(t);
+
+  if (checkSessionIP) {
+    if (tokenRedisPayload.ip !== checkSessionIP.ip) {
+      return new Error(checkSessionIP.errorMessage);
+    }
+  }
+
+  if (checkSessionUA) {
+    if (tokenRedisPayload.userAgent !== checkSessionUA.ua) {
+      return new Error(checkSessionUA.errorMessage);
+    }
+  }
+
+  return null;
 };
