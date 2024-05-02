@@ -20,7 +20,7 @@ export class CustomResponse<T> {
 
   statusCode: number;
 
-  message: string;
+  message?: string;
 
   length?: number;
 
@@ -35,7 +35,7 @@ export class CustomResponse<T> {
   }: {
     ok: boolean;
     statusCode: number;
-    message: string;
+    message?: string;
     length?: number;
     data?: T;
   }) {

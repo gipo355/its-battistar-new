@@ -135,7 +135,9 @@ export const getAuthTokenFromCookieOrHeader = ({
   error: Error | null;
 } => {
   let token = '';
+
   let bearer = '';
+
   if (type === 'access_token') {
     const { access_token } = request.cookies as {
       access_token: string | undefined;
@@ -144,6 +146,7 @@ export const getAuthTokenFromCookieOrHeader = ({
     const { authorization } = request.headers; // bearer token strategy
 
     token = access_token ?? '';
+
     bearer = authorization ?? '';
   } else {
     const { refresh_token } = request.cookies as {
@@ -153,6 +156,7 @@ export const getAuthTokenFromCookieOrHeader = ({
     const { authorization } = request.headers; // bearer token strategy
 
     token = refresh_token ?? '';
+
     bearer = authorization ?? '';
   }
 

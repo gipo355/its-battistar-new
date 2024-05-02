@@ -26,13 +26,13 @@ export const getAllTodos = catchAsync(async (req, res) => {
   });
   console.log('todos', todos);
 
+  res.header('Content-type', 'application/json; charset=utf-8');
   res.status(StatusCodes.OK).send(
     stringifyGetAllTodosResponse(
       new CustomResponse<ITodo[]>({
         ok: true,
         length: todos.length,
         statusCode: StatusCodes.OK,
-        message: 'Todos fetched successfully',
         data: todos,
       })
     )
@@ -68,12 +68,12 @@ export const createTodo = catchAsync(async (req, res) => {
 
   console.log('newTodo', newTodo);
 
+  res.header('Content-type', 'application/json; charset=utf-8');
   res.status(StatusCodes.CREATED).send(
     stringifySendOneTodoResponse(
       new CustomResponse<ITodo>({
         ok: true,
         statusCode: StatusCodes.CREATED,
-        message: 'Todo created successfully',
         data: newTodo,
       })
     )
@@ -93,7 +93,6 @@ export const getOneTodo = catchAsync(async (req, res) => {
     new CustomResponse<ITodo>({
       ok: true,
       statusCode: StatusCodes.OK,
-      message: 'Todo checked successfully',
       data: todo,
     })
   );
