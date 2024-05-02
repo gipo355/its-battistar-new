@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node';
 import { json, Router, urlencoded } from 'express';
 
-import { corsOptions, helmetOptions } from './app.config';
+import { APP_CONFIG as c } from './app.config';
 import ExpressMongoSanitize = require('express-mongo-sanitize');
 import helmet from 'helmet';
 import hpp = require('hpp');
@@ -19,10 +19,10 @@ const router = Router();
 /**
  * ## Security
  */
-router.use(cors(corsOptions));
-router.options('*', cors(corsOptions));
+router.use(cors(c.corsOptions));
+router.options('*', cors(c.corsOptions));
 
-router.use(helmet(helmetOptions));
+router.use(helmet(c.helmetOptions));
 
 router.use(
   // prevent parameter pollution
@@ -102,6 +102,7 @@ router.use(
 
 /**
  * ## Sanitize
+ * after parsers
  */
 router.use(
   ExpressMongoSanitize({

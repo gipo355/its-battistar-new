@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { TSchema, Type } from '@sinclair/typebox';
-import fastJsonStringify from 'fast-json-stringify';
+import type { TSchema } from '@sinclair/typebox';
+import { Type } from '@sinclair/typebox';
 
 export const customResponseSchemaFactory = <T extends TSchema>(T: T) =>
   Type.Object(
@@ -44,10 +44,3 @@ export class CustomResponse<T> {
     this.data = data;
   }
 }
-
-/**
- * @description must pass the data schema to the function to stringify the response
- * Do it globally to cache the stringify function on startup
- */
-export const stringifyCustomResponseFactory = <T extends TSchema>(T: T) =>
-  fastJsonStringify(customResponseSchemaFactory(T));

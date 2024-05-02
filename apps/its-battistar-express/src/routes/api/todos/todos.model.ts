@@ -1,7 +1,9 @@
 /* eslint-disable no-magic-numbers */
-import { ITodo, TodoColorOptions } from '@its-battistar/shared-types';
+import type { ITodo } from '@its-battistar/shared-types';
+import { ETodoColorOptions } from '@its-battistar/shared-types';
 import mongoose from 'mongoose';
 import isAscii from 'validator/lib/isAscii';
+import isURL from 'validator/lib/isURL';
 
 const todoSchema = new mongoose.Schema<ITodo>(
   {
@@ -20,11 +22,21 @@ const todoSchema = new mongoose.Schema<ITodo>(
         message: 'A todo title must only contain ASCII characters',
       },
     },
+
+    color: {
+      type: String,
+      enum: {
+        values: Object.keys(ETodoColorOptions),
+        message: `Color is either: ${Object.keys(ETodoColorOptions).join(', ')}`,
+      },
+      default: 'default',
+    },
+
     description: {
       type: String,
       trim: true,
       maxlength: [
-        200,
+        300,
         'A todo description must have less or equal then 200 characters',
       ],
       validate: {
@@ -34,29 +46,39 @@ const todoSchema = new mongoose.Schema<ITodo>(
         message: 'A todo description must only contain ASCII characters',
       },
     },
+
     dueDate: {
       type: Date,
     },
 
-    color: {
+    image: {
       type: String,
-      enum: {
-        values: Object.keys(TodoColorOptions),
-        message: `Color is either: ${Object.keys(TodoColorOptions).join(', ')}`,
+      validate: {
+        validator: function validator(value: string) {
+          return isURL(value);
+        },
+        message: 'A todo image must be a valid URL',
       },
-      default: 'default',
     },
+
     completed: {
       type: Boolean,
       default: false,
     },
+
     createdAt: {
       type: Date,
       default: Date.now(),
     },
+
     updatedAt: {
       type: Date,
       default: Date.now(),
+    },
+
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
   },
   {
@@ -82,6 +104,6 @@ todoSchema.pre<ITodo>('save', function setUpdatedAt(next) {
   next();
 });
 
-const TodoModel = mongoose.model('Todo', todoSchema);
+export const TodoModel = mongoose.model('Todo', todoSchema);
 
-export { TodoModel };
+export type TodoDocument = InstanceType<typeof TodoModel>;

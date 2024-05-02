@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable no-magic-numbers */
-import { ITodo } from '@its-battistar/shared-types';
+import type { ITodo } from '@its-battistar/shared-types';
 import {
   applicationConfig,
   type Meta,

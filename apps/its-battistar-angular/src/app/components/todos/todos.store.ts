@@ -2,10 +2,11 @@
 // Testing signals store with state in ngrx/signals
 
 import { computed, inject, InjectionToken } from '@angular/core';
+import type { ITodo } from '@its-battistar/shared-types';
 import {
-  ITodo,
-  ITodoColorOptions,
-  ITodoSortByOptions,
+  ETodoColorOptions,
+  ETodoSortByOptions,
+  Todo,
 } from '@its-battistar/shared-types';
 import {
   patchState,
@@ -20,17 +21,24 @@ import { TodosService } from './todos.service';
 
 interface TodosState {
   // TODO: possibly use a map instead of an array for faster state updates
-  todos: Map<string, ITodo>;
+  todos: Map<ITodo['id'], ITodo>;
 
   isLoading: boolean;
+
   /**
    * used to keep track of the todo being edited in the modal
+   * We receive those objects from the db, so they are full todos
+   * only the updatable ones
    */
   currentSelectedTodo: ITodo | null;
+
   /**
    * used to keep track of the todo being created in the modal
+   * doesn't have all the properties of a todo
+   * it's the partial todo object that is being created to send to the db
+   * only the updatable ones
    */
-  currentNewTodo: ITodo | null;
+  currentNewTodo: Todo | null;
 
   errors: string[] | null;
 
@@ -40,7 +48,7 @@ interface TodosState {
   filter: {
     showCompleted: boolean;
     showExpired: boolean;
-    currentSortBy: keyof ITodoSortByOptions;
+    currentSortBy: keyof typeof ETodoSortByOptions;
     query: string;
   };
   filteredTodos?: ITodo[];
@@ -50,8 +58,8 @@ interface TodosState {
    * and provide intellisens
    */
   // FIXME: make them arrays?
-  todoSortByOptions: ITodoSortByOptions;
-  todoColorOptions: ITodoColorOptions;
+  todoSortByOptions: typeof ETodoSortByOptions;
+  todoColorOptions: typeof ETodoColorOptions;
 }
 
 // TODO: move to express backend init
@@ -76,20 +84,9 @@ const initialState: TodosState = {
 
   filteredTodos: [],
 
-  todoSortByOptions: {
-    Newest: 'Newest',
-    Oldest: 'Oldest',
-    Title: 'Title',
-    DueDate: 'DueDate',
-  },
-  todoColorOptions: {
-    red: 'red',
-    blue: 'blue',
-    green: 'green',
-    yellow: 'yellow',
-    pink: 'pink',
-    default: 'default',
-  },
+  todoSortByOptions: ETodoSortByOptions,
+
+  todoColorOptions: ETodoColorOptions,
 };
 
 const TODOS_STATE = new InjectionToken<TodosState>('TodosState', {
@@ -199,8 +196,6 @@ export const TodosStore = signalStore(
         if (!request.ok) {
           throw new Error(`Error loading todos: ${request.message ?? ''}`);
         }
-
-        // BUG: not receiving completed todos because it expects query param showCompleted
         const todos = request.data;
 
         if (!todos) {
@@ -253,10 +248,6 @@ export const TodosStore = signalStore(
         }
 
         const newTodo = response.data;
-
-        // BUG: not setting due date
-        // not getting back dueDate from the server
-        console.log('newTodo', newTodo);
 
         // handle possible errors
         if (!newTodo?.id) {
@@ -405,14 +396,13 @@ export const TodosStore = signalStore(
 
         const currentSelectedTodo = state.currentSelectedTodo;
 
-        const currentNewTodo = state.currentNewTodo;
+        const currentNewTodo = state.currentNewTodo as ITodo | null;
 
         // handle updating an existing todo
         if (currentSelectedTodo?.id) {
           todos.set(currentSelectedTodo.id, currentSelectedTodo);
-        }
-        // handle creating a new todo
-        if (currentNewTodo?.id) {
+          // handle creating a new todo
+        } else if (currentNewTodo?.id) {
           todos.set(currentNewTodo.id, currentNewTodo);
         }
 
@@ -441,7 +431,6 @@ export const TodosStore = signalStore(
     },
 
     updateCurrentNewTodoValues(todo: Partial<ITodo>): void {
-      // eslint-disable-next-line complexity
       patchState(store, (state) => {
         const currentTodo = state.currentNewTodo;
 
@@ -449,21 +438,18 @@ export const TodosStore = signalStore(
         // keep in mind incoming values and state values may be partial
         // we must make sure the item stored has all the properties set
         // to avoid type errors
-        // FIXME: reduce complexity (20), fix type hack
-        const newTodo: ITodo = {
+        const updatedTodoValues = new Todo({
           title: todo.title ?? currentTodo?.title ?? '',
           description: todo.description ?? currentTodo?.description ?? '',
+          image: todo.image ?? currentTodo?.image ?? '',
           color: todo.color ?? currentTodo?.color ?? 'default',
-          dueDate: todo.dueDate ?? currentTodo?.dueDate ?? new Date(),
-          expired: todo.expired ?? currentTodo?.expired ?? false,
-          completed: todo.completed ?? currentTodo?.completed ?? false,
-          createdAt: todo.createdAt ?? currentTodo?.createdAt ?? new Date(),
-          updatedAt: new Date(),
-        };
+          dueDate: todo.dueDate ?? currentTodo?.dueDate,
+        });
 
         return {
           currentNewTodo: {
-            ...newTodo,
+            ...currentTodo,
+            ...updatedTodoValues,
           },
         };
       });

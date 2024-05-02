@@ -71,6 +71,13 @@
         "buildTarget": "its-battistar-angular:build"
       }
     },
+    "fix": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint --fix ./src && prettier --write ./src",
+        "cwd": "apps/its-battistar-angular"
+      }
+    },
     "pre-lint": {
       "executor": "nx:run-commands",
       "options": {

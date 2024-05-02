@@ -43,10 +43,7 @@ if (e.ENABLE_LOKI === 'true') {
   console.log('🚀 Loki enabled. Check grafana on http://localhost:3200');
 }
 
-export const logger =
-  e.NODE_ENV === 'development'
-    ? console
-    : pino(
-        { level: e.NODE_ENV === 'production' ? 'info' : 'debug' },
-        pino.multistream(streams)
-      );
+export const logger = pino(
+  { level: e.NODE_ENV === 'production' ? 'info' : 'debug' },
+  pino.multistream(streams)
+);

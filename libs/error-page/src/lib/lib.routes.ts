@@ -1,4 +1,4 @@
-import { Route } from '@angular/router';
+import type { Route } from '@angular/router';
 
 import { ErrorPageComponent } from './error-page/error-page.component';
 

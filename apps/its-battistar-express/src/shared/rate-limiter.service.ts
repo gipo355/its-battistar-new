@@ -2,11 +2,11 @@ import type { NextFunction, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { RateLimiterRedis } from 'rate-limiter-flexible';
 
-import { rateLimiterOptions } from '../app.config';
+import { APP_CONFIG as c } from '../app.config';
 import { AppError } from '../utils/app-error';
 import { catchAsync } from '../utils/catch-async';
 
-const rateLimiterRedis = new RateLimiterRedis(rateLimiterOptions);
+const rateLimiterRedis = new RateLimiterRedis(c.rateLimiterOptions);
 
 const rateLimiterMiddleware = catchAsync(
   async (request: Request, _, next: NextFunction) => {

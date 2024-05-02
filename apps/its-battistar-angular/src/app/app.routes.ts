@@ -1,4 +1,4 @@
-import { Route } from '@angular/router';
+import type { Route } from '@angular/router';
 
 /**
  * this is the schema for the routes:
@@ -17,7 +17,7 @@ import { Route } from '@angular/router';
 export const appRoutes: Route[] = [
   {
     path: '',
-    loadComponent: () =>
+    loadComponent: async () =>
       import('./pages/home/home.component').then((m) => m.HomeComponent),
     pathMatch: 'full',
   },
@@ -25,7 +25,7 @@ export const appRoutes: Route[] = [
   // NOTE: lazy loading the dashboard routes and all its components, nested routes
   {
     path: 'dashboard',
-    loadChildren: () =>
+    loadChildren: async () =>
       import('./pages/dashboard/dashboard.routes').then(
         (routes) => routes.dashboardRoutes
       ),
@@ -33,13 +33,13 @@ export const appRoutes: Route[] = [
 
   {
     path: 'login',
-    loadComponent: () =>
+    loadComponent: async () =>
       import('./pages/login/login.component').then((m) => m.LoginComponent),
   },
 
   {
     path: 'signup',
-    loadComponent: () =>
+    loadComponent: async () =>
       import('./pages/login/login.component').then((m) => m.LoginComponent),
   },
 
@@ -48,7 +48,7 @@ export const appRoutes: Route[] = [
     // pass this component to the error data to show with a resolver?
     // ideally the url name should match the error type (page-not-found, server-error, etc)
     pathMatch: 'full',
-    loadChildren: () =>
+    loadChildren: async () =>
       import('@its-battistar/error-page').then((m) => m.errorPageRoutes),
   },
 

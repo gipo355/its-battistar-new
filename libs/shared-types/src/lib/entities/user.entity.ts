@@ -1,40 +1,54 @@
-import { Static, TSchema, TString, Type } from '@sinclair/typebox';
-import fastJsonStringify from 'fast-json-stringify';
+import type { Static } from '@sinclair/typebox';
+import {
+  // TSchema,
+  // TString,
+  Type,
+} from '@sinclair/typebox';
+import type mongoose from 'mongoose';
 
-import ajvInstance from '../../utils/ajv';
-import { accountsSchema, TAccount } from './account.entity';
+import type { IAccountSafe } from './account.entity';
+import type { ITodo } from './todo.entity';
 
-export const userSchemaUserInput = Type.Object({
-  name: Type.String(),
-  email: Type.String({
-    format: 'email',
-  }),
-  avatar: Type.Optional(Type.String()),
-});
+export enum ERole {
+  SUPER = 'SUPER',
+  USER = 'USER',
+}
+
+/**
+ * IMP: the schemas must reflect the mongoose schema
+ * there must be a single source of truth
+ * can't use typbebox schemas for mongoose as it requires Date type and ObjectID
+ * which are not used for validation and serialization
+ */
+
 /**
  * @description
  * this is a user type that can be used to create a new user.
- * used for validation
+ * used for validation and serialization
  */
-export type TUserInput = Static<typeof userSchemaUserInput>;
-
-export const safeUserSchema = Type.Object({
-  ...userSchemaUserInput.properties,
-  id: Type.Optional(Type.String()),
-  verified: Type.Boolean(),
+export const userSchemaInput = Type.Object({
+  username: Type.String(),
+  avatar: Type.Optional(
+    Type.String({
+      format: 'uri',
+    })
+  ),
 });
+export type TUserInput = Static<typeof userSchemaInput>;
+
 /**
  * @description
  * this is a safe user schema that can be used to send to the client
+ * includes the id for serialization
+ * doesn't include sensitive data
+ * we may display the role in the dashboard
  */
-export type TSafeUser = Static<typeof safeUserSchema>;
+export const userSchemaSafe = Type.Object({
+  id: Type.Optional(Type.String()),
 
-export const userSchema = Type.Object({
-  ...safeUserSchema.properties,
-
-  role: Type.String(),
-
-  active: Type.Boolean(),
+  role: Type.String({
+    enum: Object.keys(ERole),
+  }),
 
   createdAt: Type.String({
     format: 'date-time',
@@ -44,66 +58,88 @@ export const userSchema = Type.Object({
     format: 'date-time',
   }),
 
-  deletedAt: Type.String({
-    format: 'date-time',
-  }),
+  ...userSchemaInput.properties,
 
-  accounts: Type.Array(accountsSchema),
+  accounts: Type.Array(Type.String()),
+
+  todos: Type.Array(Type.String()),
 });
+export type TUserSafe = Static<typeof userSchemaSafe>;
+
 /**
  * @description
  * this is a user schema that can be used to identify all the user properties
- * provided to mongoose
  */
+export const userSchema = Type.Object({
+  ...userSchemaSafe.properties,
+
+  deletedAt: Type.Optional(
+    Type.String({
+      format: 'date-time',
+    })
+  ),
+});
 export type TUser = Static<typeof userSchema>;
 
-// HACK: at the moment this is a hack to be able to provide the type to mongoose
-// mongoose doesn't support typescript types (date)
-export enum ERole {
-  SUPER = 'super',
-  USER = 'user',
-}
 /**
- * @description
- * This is the user interface that can be used to enforce mongoose schema
+ * MONGOOSE INTERFACE
+ * needed for mongoose as it requires Date type and other types that
+ * can't be handled by ajv and fast-json-stringify
+ * since they only handle json natives
  */
-export interface IUser {
-  id?: string;
 
-  name: string;
+// interface used for typind input
+export interface IUserInput {
+  username: string;
 
-  email: string;
+  avatar?: string;
 
   role: keyof typeof ERole;
-
-  createdAt: Date;
-
-  updatedAt: Date;
-
-  deletedAt: Date;
-
-  active: boolean;
-
-  verified: boolean;
-
-  accounts: TAccount[];
 }
 
-// TODO: mongoose types
-// export type TMongooseUser = Models['User'];
+// interface used for typing output
+export interface IUserSafe extends IUserInput {
+  id?: string | mongoose.Schema.Types.ObjectId; // created by mongoose
 
-// FIXME: can't use this to stringify everything. Must find
-// a way to standardize the data
-export const stringifyUser = fastJsonStringify(userSchema);
+  createdAt: Date; // created by mongoose
 
-export const validateUser = ajvInstance.compile(userSchemaUserInput);
+  updatedAt: Date; // created by mongoose
+
+  // needed to type interface when populating client side
+  todos?: string[] | mongoose.Schema.Types.ObjectId[] | ITodo; // created by mongoose
+
+  accounts?: string[] | mongoose.Schema.Types.ObjectId[] | IAccountSafe[]; // created by mongoose
+}
+
+// interface used for full user
+export interface IUser extends IUserSafe {
+  deletedAt?: Date;
+}
+
+/**
+ * @description
+ * This is a class used to create new User objects
+ * only includes props that are required for creation
+ * NOTE: this is used only server side, no user input
+ */
+export class User {
+  username: string;
+  avatar?: string;
+  role: keyof typeof ERole;
+
+  constructor(user: IUserInput) {
+    this.username = user.username;
+    this.avatar = user.avatar;
+    this.role = user.role;
+  }
+}
 
 // NOTE: solve conflict with mongoose data type?
 // [https://github.com/sinclairzx81/typebox/issues/2]
-export const DateKind = Symbol('DateKind');
-export interface TDate extends TSchema {
-  type: 'string';
-  $static: Date;
-  kind: typeof DateKind;
-}
-export const TypeDate = Type.String({ format: 'date-time' }) as TString | TDate;
+// export const DateKind = Symbol('DateKind');
+// export interface TDate extends TSchema {
+//   type: 'string';
+//   $static: Date;
+//   kind: typeof DateKind;
+// }
+// export const TypeDate = Type.String({ format: 'date-time' }) as TString | TDate;

@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 // TODO: remove faker, reduce budget max size to 1mb in project.json
 import { faker } from '@faker-js/faker/locale/en';
-import { ITodo } from '@its-battistar/shared-types';
+import type { ITodo } from '@its-battistar/shared-types';
 
 // must provide an enum to faker
 enum TodoColorOptions {
@@ -26,6 +26,7 @@ function generateTestTodos(n: number): ITodo[] {
       createdAt: faker.date.recent(),
       updatedAt: faker.date.recent(),
       color: faker.helpers.enumValue(TodoColorOptions),
+      user: faker.string.uuid(),
     };
 
     todos.push(newTodo);

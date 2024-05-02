@@ -2,7 +2,7 @@
 // https://stackoverflow.com/questions/41857876/angular-2-submodule-routing-and-nested-router-outlet
 // https://medium.com/@oranaki9910/how-to-create-a-dynamic-layout-using-a-named-router-outlet-in-angular-8f211afe4ea2
 
-import { Route } from '@angular/router';
+import type { Route } from '@angular/router';
 
 import { todoModalResolverServiceFN } from './todo-modal/todo-modal-resolver.service';
 
@@ -17,7 +17,7 @@ export const todosRoutes: Route[] = [
   // works with external component, but how would i inject stores and services?
   {
     path: '',
-    loadComponent: () =>
+    loadComponent: async () =>
       import('./todos.component').then((m) => m.TodosComponent),
     // FIXME: why named outlet is not working?
     // outlet: 'content',
@@ -25,14 +25,14 @@ export const todosRoutes: Route[] = [
     children: [
       {
         path: 'new',
-        loadComponent: () =>
+        loadComponent: async () =>
           import('./todo-modal/todo-modal.component').then(
             (m) => m.TodoModalComponent
           ),
       },
       {
         path: ':id',
-        loadComponent: () =>
+        loadComponent: async () =>
           import('./todo-modal/todo-modal.component').then(
             (m) => m.TodoModalComponent
           ),

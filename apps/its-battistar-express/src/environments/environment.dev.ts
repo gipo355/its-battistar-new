@@ -1,6 +1,6 @@
 import 'dotenv-defaults/config';
 
-import {
+import type {
   TOptionalEnvironment,
   TRequiredEnvironment,
 } from './environment.entity';
@@ -29,6 +29,8 @@ const requiredKeys: Partial<TRequiredEnvironment> = {
 
   CORS_ORIGINS: process.env.CORS_ORIGINS,
 
+  ARGON2_SECRET: process.env.ARGON2_SECRET,
+
   // TODO: CHANGE STRICT REQUIREMENT IN PRODUCTION
   CSRF_SECRET: process.env.CSRF_SECRET,
   JWT_SECRET: process.env.JWT_SECRET,
@@ -47,6 +49,15 @@ const optionalKeys: TOptionalEnvironment = {
 
   EXPRESS_TRUST_NUMBER_OF_PROXIES:
     process.env.EXPRESS_TRUST_NUMBER_OF_PROXIES ?? '0',
+
+  GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID ?? '',
+  GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET ?? '',
+  GITHUB_CALLBACK_URL: process.env.GITHUB_CALLBACK_URL ?? '',
+  GITHUB_SCOPE: process.env.GITHUB_SCOPE ?? 'user:email',
+  GITHUB_STATE: process.env.GITHUB_STATE ?? '3(#0/!~',
+  GITHUB_FINAL_REDIRECT: process.env.GITHUB_FINAL_REDIRECT ?? '',
+  GITHUB_FINAL_REDIRECT_ON_ERROR:
+    process.env.GITHUB_FINAL_REDIRECT_ON_ERROR ?? '',
 
   ENABLE_LOKI: process.env.ENABLE_LOKI ?? 'false',
 } as const;

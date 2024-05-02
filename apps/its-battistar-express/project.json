@@ -12,6 +12,13 @@
         "cwd": "apps/its-battistar-express"
       }
     },
+    "fix": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint --fix ./src && prettier --write ./src",
+        "cwd": "apps/its-battistar-express"
+      }
+    },
     "pre-lint": {
       "executor": "nx:run-commands",
       "options": {

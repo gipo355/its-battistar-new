@@ -14,7 +14,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { ITodo, ITodoColorOptions } from '@its-battistar/shared-types';
+import { ETodoColorOptions, ITodo, Todo } from '@its-battistar/shared-types';
 import { initFlowbite } from 'flowbite';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 
@@ -94,7 +94,8 @@ export class TodoModalComponent implements OnDestroy, OnInit {
       .pipe(takeUntil(this.destroy$), debounceTime(this.s.inputDebounceTime))
       .subscribe((value) => {
         // create a new todo with only the values that are not empty
-        const newTodo: Partial<ITodo> = {
+        // as we don't want to overwrite the existing values with empty ones
+        const newTodo: Partial<Todo> = {
           ...(value.title && { title: value.title }),
           ...(value.description && { description: value.description }),
           ...(value.color && { color: value.color }),
@@ -127,6 +128,8 @@ export class TodoModalComponent implements OnDestroy, OnInit {
   }
 
   // The resolver uses the id param to populate the selectedTodo in the store
+  // NOTE: could move this to dumb component and use resolver to populate the todo
+  // with input
   todo = this.store.currentSelectedTodo;
 
   // utility with typecasting for safety used to initialize the form
@@ -144,6 +147,7 @@ export class TodoModalComponent implements OnDestroy, OnInit {
       Validators.maxLength.bind(this, 50),
       Validators.pattern.bind(this, /^[a-zA-Z0-9\s]*$/),
     ]),
+
     description: new FormControl<string>(this.getTodo()?.description ?? '', [
       Validators.required.bind(this),
       Validators.maxLength.bind(this, 500),
@@ -158,7 +162,8 @@ export class TodoModalComponent implements OnDestroy, OnInit {
         Validators.pattern.bind(this, /^\d{4}-\d{2}-\d{2}$/),
       ]
     ),
-    color: new FormControl<keyof ITodoColorOptions>(
+
+    color: new FormControl<keyof typeof ETodoColorOptions>(
       this.getTodo()?.color ?? 'green',
       [Validators.required.bind(this)]
     ),
@@ -219,7 +224,6 @@ export class TodoModalComponent implements OnDestroy, OnInit {
     await this.onExit();
   }
 
-  // BUG: doesn't update the db
   async onToggleCompleted(): Promise<void> {
     const selectedTodo = this.store.currentSelectedTodo();
 

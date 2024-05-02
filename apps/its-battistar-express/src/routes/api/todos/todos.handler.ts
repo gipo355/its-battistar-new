@@ -1,8 +1,5 @@
-import {
-  CustomResponse,
-  ITodo,
-  ITodoColorOptions,
-} from '@its-battistar/shared-types';
+import type { ETodoColorOptions, ITodo } from '@its-battistar/shared-types';
+import { CustomResponse } from '@its-battistar/shared-types';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError } from '../../../utils/app-error';
@@ -33,12 +30,12 @@ export const getAllTodos = catchAsync(async (req, res) => {
 
 // TODO: validation for all inputs, stringify for responses
 export const createTodo = catchAsync(async (req, res) => {
-  console.log('createTodo', req.body);
+  // INPUT: title, dueDate, description, color
   const { title, dueDate, description, color } = req.body as {
     title: string;
     dueDate: string;
     description: string;
-    color: keyof ITodoColorOptions;
+    color: keyof typeof ETodoColorOptions;
   };
 
   // let date: string | Date | undefined;
@@ -97,7 +94,7 @@ export const getOneTodo = catchAsync(async (req, res) => {
 });
 
 export const patchOneTodo = catchAsync(async (req, res) => {
-  console.log(req.body);
+  // INPUT: title, completed, dueDate, description
   const { id } = req.params as { id: string };
   const { title, completed, dueDate, description } = req.body as Partial<ITodo>;
 

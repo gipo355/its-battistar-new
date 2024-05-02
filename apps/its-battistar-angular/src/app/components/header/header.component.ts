@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { TSafeUser } from '@its-battistar/shared-types';
+import { IUserSafe } from '@its-battistar/shared-types';
 
 @Component({
   selector: 'app-header',
@@ -14,5 +14,5 @@ import { TSafeUser } from '@its-battistar/shared-types';
 export class HeaderComponent {
   title = 'its-battistar';
 
-  user = input<TSafeUser | null>(null);
+  user = input<IUserSafe | null>(null);
 }

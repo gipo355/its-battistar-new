@@ -15,11 +15,11 @@
 //   CustomResponse,
 // stringifyCustomResponseFactory,
 // } from '@its-battistar/shared-types';
-import { ErrorRequestHandler } from 'express';
+import type { ErrorRequestHandler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { e } from '../environments';
-import { AppError } from '../utils/app-error';
+import type { AppError } from '../utils/app-error';
 import { logger } from '../utils/logger';
 import {
   handleCastError,
@@ -40,10 +40,11 @@ export const finalErrorHandler: ErrorRequestHandler = (
 ) => {
   logger.debug('error handler');
 
-  response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-    status: 'error',
-    message: 'Something went wrong',
-  });
+  // BUG: why was this here, was preventing error handling
+  // response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+  //   status: 'error',
+  //   message: 'Something went wrong',
+  // });
 
   // FIXME: this code is a mess of mutations and reassignments
   // and prototype inheritance loss

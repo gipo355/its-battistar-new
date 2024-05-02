@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
+import type { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { TodosStore } from '../todos.store';
 

@@ -1,8 +1,5 @@
-import {
-  CustomResponse,
-  // IUser,
-  validateTodo as validateUser,
-} from '@its-battistar/shared-types';
+import { CustomResponse } from '@its-battistar/shared-types';
+import { validateUser } from '@its-battistar/shared-utils';
 import { StatusCodes } from 'http-status-codes';
 
 import { AppError } from '../../../utils/app-error';

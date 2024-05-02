@@ -47,11 +47,11 @@
         <!--     Light -->
         <!--   </button> -->
         <!-- </li> -->
-        @if (user()?.name) {
+        @if (user()?.username) {
           <li
             class="flex items-center justify-center gap-3 bg-none text-slate-200"
           >
-            <h2>Hello, {{ user()?.name }}</h2>
+            <h2>Hello, {{ user()?.username }}</h2>
             <img
               class="h-10 w-10 rounded-full"
               [src]="user()?.avatar"

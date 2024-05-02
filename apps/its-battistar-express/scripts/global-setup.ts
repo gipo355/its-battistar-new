@@ -37,7 +37,7 @@ const buildTestEnvironment = async () => {
   // ️️️✅ Best Practice: Speed up during development, if already live then do nothing
   const isDBReachable = await isPortReachable({
     // need environment variable for dev
-    port: +process.env.MONGO_PORT,
+    port: Number(process.env.MONGO_PORT),
   });
 
   if (!isDBReachable) {

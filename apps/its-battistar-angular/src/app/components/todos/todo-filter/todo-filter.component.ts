@@ -7,7 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ITodoSortByOptions } from '@its-battistar/shared-types';
+import { ETodoSortByOptions } from '@its-battistar/shared-types';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 
 import { TodosStore } from '../todos.store';
@@ -100,7 +100,7 @@ export class TodoFilterComponent implements OnInit, OnDestroy {
       this.todoStore.filter.showCompleted()
     ), // checked/unchecked
     // reset the original sort by hardcoding it, can improve this
-    sortBy: new FormControl<keyof ITodoSortByOptions>('Newest'), // date/title
+    sortBy: new FormControl<keyof typeof ETodoSortByOptions>('Newest'), // date/title
     filterBox: new FormControl<string>(''), // search
     showExpired: new FormControl<boolean>(this.todoStore.filter.showExpired()), // checked/unchecked
   });
