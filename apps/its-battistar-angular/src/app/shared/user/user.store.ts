@@ -1,6 +1,6 @@
 import { inject, InjectionToken } from '@angular/core';
 import type { IUserSafe } from '@its-battistar/shared-types';
-import { signalStore, withState } from '@ngrx/signals';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 
 // interface UserWithAccounts extends IUserSafe {
 //   accounts: IAccountSafe[];
@@ -8,6 +8,13 @@ import { signalStore, withState } from '@ngrx/signals';
 
 interface UserState {
   user: IUserSafe | null;
+  /**
+   * If the user is authenticated or not.
+   * This is useful to show different UIs based on the user's authentication status.
+   * Can be used for an authguard to protect routes.
+   * Can be used to send a fetch to refresh before redirecting to login.
+   */
+  isAuthenticated: boolean;
 }
 
 const initialState: UserState = {
@@ -30,6 +37,8 @@ const initialState: UserState = {
       },
     ],
   },
+
+  isAuthenticated: false,
 };
 
 const USER_STATE = new InjectionToken<UserState>('TodosState', {
@@ -38,5 +47,22 @@ const USER_STATE = new InjectionToken<UserState>('TodosState', {
 
 export const UserStore = signalStore(
   { providedIn: 'root' }, // 👈 Defining the store as a singleton. No need to provide it in the module.
-  withState(() => inject(USER_STATE))
+  withState(() => inject(USER_STATE)),
+
+  withMethods((store) => ({
+    login() {
+      patchState(store, () => {
+        return {
+          isAuthenticated: true,
+        };
+      });
+    },
+    logout() {
+      patchState(store, () => {
+        return {
+          isAuthenticated: false,
+        };
+      });
+    },
+  }))
 );

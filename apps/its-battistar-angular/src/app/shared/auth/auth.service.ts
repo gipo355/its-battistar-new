@@ -5,7 +5,9 @@ import {
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { CustomResponse } from '@its-battistar/shared-types';
-import { lastValueFrom, Observable, retry, take, timeout } from 'rxjs';
+import { lastValueFrom, Observable, retry, take, tap, timeout } from 'rxjs';
+
+import { UserStore } from '../user/user.store';
 
 const AUTH_API = 'http://localhost:3000/auth/';
 
@@ -19,26 +21,89 @@ const httpOptions = {
 })
 export class AuthService {
   private http = inject(HttpClient);
+  private userStore = inject(UserStore);
+
+  logout(): Observable<CustomResponse<void>> {
+    const request$ = this.http
+      .post<CustomResponse<void>>(AUTH_API + 'logout', {}, httpOptions)
+      .pipe(
+        timeout(3000),
+        retry(1),
+        take(1),
+        tap(() => {
+          this.userStore.logout();
+        })
+      );
+
+    return request$;
+  }
 
   // hitting this endpoint sets new cookies
   async getRefreshToken(): Promise<CustomResponse<void>> {
-    // getRefreshToken(): Observable<CustomResponse<void>> {
-
     const request$ = this.http
       .post<CustomResponse<void>>(AUTH_API + 'refresh', {}, httpOptions)
-      .pipe(timeout(3000), retry(1), take(1));
-
-    console.log('in getRefreshToken');
+      .pipe(timeout(2000));
 
     return lastValueFrom<CustomResponse<void>>(request$);
-    // return request$;
   }
 
-  login(): Observable<CustomResponse<void>> {
-    return this.http.get<CustomResponse<void>>('http://localhost:3000/healthz');
+  // LOCAL STRATS
+  login(username: string, password: string): Observable<CustomResponse<void>> {
+    // post username and password to server
+    // if ok, redirect to /dashboard
+    const request$ = this.http
+      .post<CustomResponse<void>>(
+        AUTH_API + 'login',
+        {
+          username,
+          password,
+        },
+        httpOptions
+      )
+      .pipe(
+        timeout(3000),
+        retry(1),
+        take(1),
+        tap(() => {
+          this.userStore.login();
+        })
+      );
+
+    return request$;
   }
 
-  signup(): unknown {
-    throw new Error('Method not implemented.');
+  signup({
+    username,
+    password,
+    passwordConfirm,
+  }: {
+    username: string;
+    password: string;
+    passwordConfirm: string;
+  }): unknown {
+    if (password !== passwordConfirm) {
+      return { error: 'Passwords do not match' };
+    }
+    // post username and password to server
+    // if ok, redirect to /dashboard
+    const request$ = this.http
+      .post<CustomResponse<void>>(
+        AUTH_API + 'signup',
+        {
+          username,
+          password,
+        },
+        httpOptions
+      )
+      .pipe(
+        timeout(3000),
+        retry(1),
+        take(1),
+        tap(() => {
+          this.userStore.login();
+        })
+      );
+
+    return request$;
   }
 }

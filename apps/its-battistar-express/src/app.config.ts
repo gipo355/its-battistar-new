@@ -42,14 +42,14 @@ export const APP_CONFIG = {
     httpOnly: true,
     secure: e.NODE_ENV === 'production',
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 7 days
-    sameSite: 'strict',
+    // sameSite: 'strict',
   } satisfies CookieOptions,
 
   JWT_ACCESS_COOKIE_OPTIONS: {
     httpOnly: true,
     secure: e.NODE_ENV === 'production',
     expires: new Date(Date.now() + 1000 * 60 * 2), // 2 minutes
-    sameSite: 'strict',
+    // sameSite: 'strict',
   } satisfies CookieOptions,
 
   // TODO: move this in config

@@ -1,5 +1,7 @@
 import type { Route } from '@angular/router';
 
+import { canActivate } from './shared/auth/auth-guard.service';
+
 /**
  * this is the schema for the routes:
  * SEO
@@ -25,6 +27,10 @@ export const appRoutes: Route[] = [
   // NOTE: lazy loading the dashboard routes and all its components, nested routes
   {
     path: 'dashboard',
+    // canLoad: [canActivate],
+    canActivateChild: [canActivate],
+    // canMatch: [canMatch],
+    // canActivate: [canActivate],
     loadChildren: async () =>
       import('./pages/dashboard/dashboard.routes').then(
         (routes) => routes.dashboardRoutes
