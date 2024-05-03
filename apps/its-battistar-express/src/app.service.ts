@@ -122,6 +122,7 @@ router.use((request, _, next) => {
   request.requestTime = new Date().toISOString();
   // initialize user for performance and security on every request
   request.user = null;
+  request.userID = undefined;
   next();
 });
 

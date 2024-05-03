@@ -58,7 +58,9 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
     setCookiesOn: res,
     payload: {
       user: user._id.toString(),
+      role: user.role,
       strategy: 'LOCAL',
+      account: account._id.toString(),
     },
   });
 

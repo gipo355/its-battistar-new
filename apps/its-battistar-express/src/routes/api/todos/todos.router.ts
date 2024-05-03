@@ -1,6 +1,9 @@
 import { Router } from 'express';
 
-import { protectRoute } from '../../auth/auth.service';
+import {
+  protectRoute,
+  setUserAndAccountOnRequest,
+} from '../../auth/auth.service';
 import {
   createTodo,
   deleteOneTodo,
@@ -13,6 +16,14 @@ const todosRouter = Router({
   mergeParams: true,
 });
 
+// we check for the access token and set the user and account on the request
+// since every todo is associated with a user
+// this will make a db call for every action, thus making
+// access token strategy pointless
+// todosRouter.use(protectRoute(), setUserAndAccountOnRequest);
+
+// this way we provide the access token payload on the request object
+// which contains the user id
 todosRouter.use(protectRoute());
 
 /**

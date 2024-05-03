@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from 'node:crypto';
 
-import type { EStrategy } from '@its-battistar/shared-types';
+import type { ERole, EStrategy } from '@its-battistar/shared-types';
 import type { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as jose from 'jose';
@@ -10,9 +10,11 @@ import { e } from '../environments';
 import { AppError } from './app-error';
 import { logger } from './logger';
 
-interface CustomJWTClaims extends jose.JWTPayload {
+export interface CustomJWTClaims extends jose.JWTPayload {
   user: string;
+  role: keyof typeof ERole;
   strategy: keyof typeof EStrategy;
+  account: string;
 }
 
 const key = jose.base64url.decode(

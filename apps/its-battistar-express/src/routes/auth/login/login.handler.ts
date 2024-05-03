@@ -39,8 +39,11 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
     accountEmail: sanitizedEmail,
     strategy: 'LOCAL',
   });
-  if (error ?? (!user || !account)) {
+  if (error) {
     throw new AppError('Wrong credentials', StatusCodes.BAD_REQUEST);
+  }
+  if (!user || !account) {
+    throw new AppError('There was a problem', StatusCodes.BAD_REQUEST);
   }
 
   const isValid = await account.comparePassword(sanitizedPassword);
@@ -52,7 +55,9 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
     setCookiesOn: res,
     payload: {
       user: user._id.toString(),
+      role: user.role,
       strategy: 'LOCAL',
+      account: account._id.toString(),
     },
   });
   if (!accessToken || !refreshToken) {

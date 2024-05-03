@@ -12,6 +12,7 @@ import {
   validateSessionRedis,
   verifyJWT,
 } from '../../../utils';
+import { AccountModel } from '../../api/users/accounts.model';
 import { UserModel } from '../../api/users/users.model';
 import { getAuthTokenFromCookieOrHeader } from '../auth.service';
 
@@ -72,7 +73,12 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
 
   // check if user exists
   const user = await UserModel.findById(payload.user);
-  if (!user) {
+  const account = await AccountModel.findOne({
+    user: payload.user,
+    strategy: payload.strategy,
+  });
+
+  if (!user || !account) {
     await invalidateAllSessionsForUser(sessionRedisConnection, payload.user);
     throw new AppError('User not found', StatusCodes.NOT_FOUND);
   }
@@ -82,7 +88,9 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
       setCookiesOn: res,
       payload: {
         user: user._id.toString(),
+        role: user.role,
         strategy: payload.strategy,
+        account: account._id.toString(),
       },
     });
   if (!newAccessToken || !newRefreshToken) {

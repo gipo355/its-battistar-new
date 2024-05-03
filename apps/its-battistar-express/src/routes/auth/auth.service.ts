@@ -14,6 +14,7 @@ interface IProtectRouteOptions {
    * Default is empty array, which means all roles are allowed.
    */
   restrictTo?: IUser['role'][];
+  type: 'access_token' | 'refresh_token';
   allowJWT?: boolean;
   allowBearerToken?: boolean;
 }
@@ -27,8 +28,9 @@ type TProtectRoute = (
  * Restrict access to certain roles if param restrictTo is provided
  */
 export const protectRoute: TProtectRoute = (
-  { restrictTo = [] } = {
+  { restrictTo = [], type = 'access_token' } = {
     restrictTo: [],
+    type: 'access_token',
   }
 ) =>
   catchAsync(async (req, _, next) => {
@@ -44,7 +46,7 @@ export const protectRoute: TProtectRoute = (
 
     const { token, error } = getAuthTokenFromCookieOrHeader({
       request: req,
-      type: 'access_token',
+      type,
     });
 
     if (error) {
@@ -54,36 +56,81 @@ export const protectRoute: TProtectRoute = (
     // verify the token
     const { payload } = await verifyJWT(token);
 
-    const { account, user } = await getAccountAndUserOrThrow({
-      userId: payload.user,
-      strategy: payload.strategy,
-    });
+    // FIXME: if type is access token, we don't
+    // check against redis and don't verify the user
+    // the purpose of the access token is to be stateless and avoid
+    // the need to check against the database
+    // the token must contain the info needed to verify the user
+    // email, role, id, strategy, etc.
 
-    // TODO: logic for blacklist, ban, active,etc.
+    if (type === 'refresh_token') {
+      const { account, user } = await getAccountAndUserOrThrow({
+        userId: payload.user,
+        strategy: payload.strategy,
+      });
 
-    // check if user still exists
-    // and the account used to login is active (wasn't deleted)
-    if (!user || !account?.active) {
-      await invalidateAllSessionsForUser(sessionRedisConnection, payload.user);
-      throw new AppError(
-        'Unauthorized, please login again.',
-        StatusCodes.FORBIDDEN
-      );
+      // TODO: logic for blacklist, ban, active,etc.
+
+      // check if user still exists
+      // and the account used to login is active (wasn't deleted)
+      if (!user || !account?.active) {
+        await invalidateAllSessionsForUser(
+          sessionRedisConnection,
+          payload.user
+        );
+        throw new AppError(
+          'Unauthorized, please login again.',
+          StatusCodes.FORBIDDEN
+        );
+      }
     }
 
+    // at this point, we know the token is valid
+
     // eslint-disable-next-line no-magic-numbers
-    if (restrictTo.length > 0 && !restrictTo.includes(user.role)) {
+    if (restrictTo.length > 0 && !restrictTo.includes(payload.role)) {
       throw new AppError(
         'You do not have permission to perform this action',
         StatusCodes.FORBIDDEN
       );
     }
 
+    // this middleware is only used to protect routes
+    // and provide some info about the user
+    // it doesn't fetch the user from the database or it makes the access
+    // token strategy pointless
+
     // eslint-disable-next-line require-atomic-updates
-    req.user = user;
+    req.tokenPayload = payload;
 
     next();
   });
+
+/**
+ * Middleware to set the user on the request object
+ * using the token payload info
+ *
+ * this way we can split the logic of verifying the token
+ * and fetching the user from the database
+ */
+export const setUserAndAccountOnRequest = catchAsync(async (req, _, next) => {
+  const { tokenPayload } = req;
+  if (!tokenPayload) {
+    throw new AppError('Unauthorized', StatusCodes.UNAUTHORIZED);
+  }
+
+  const { user, account } = await getAccountAndUserOrThrow({
+    userId: tokenPayload.user,
+    strategy: tokenPayload.strategy,
+  });
+
+  // eslint-disable-next-line require-atomic-updates
+  req.user = user;
+  // eslint-disable-next-line require-atomic-updates
+  req.account = account;
+
+  next();
+});
 
 interface IGetAuthTokenFromCookieOrHeader {
   request: Request;
@@ -134,6 +181,7 @@ export const getAuthTokenFromCookieOrHeader = ({
   token: string;
   error: Error | null;
 } => {
+  // TODO: clean up the function
   let token = '';
 
   let bearer = '';
@@ -166,7 +214,7 @@ export const getAuthTokenFromCookieOrHeader = ({
 
   let tokenValue = '';
 
-  // get the token
+  // assign the token based on the priority with overriding
   if (priority === 'cookie' && token) {
     if (token) {
       tokenValue = token;

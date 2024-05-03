@@ -55,7 +55,7 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
       throw new AppError('No user found', StatusCodes.NOT_FOUND);
     }
 
-    const { user, error } = await createUserAndAccount({
+    const { user, error, account } = await createUserAndAccount({
       email: githubUser.email,
       providerUid: githubUser.providerUid,
       accessToken: githubAccessToken.token.access_token,
@@ -65,8 +65,8 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
     if (error) {
       throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
     }
-    if (!user) {
-      throw new AppError('No user found', StatusCodes.NOT_FOUND);
+    if (!user || !account) {
+      throw new AppError('There was a problem', StatusCodes.NOT_FOUND);
     }
 
     // TODO: check discriminator mongoose to separate accounts
@@ -75,7 +75,9 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
       setCookiesOn: res,
       payload: {
         user: user._id.toString(),
+        role: user.role,
         strategy: 'LOCAL',
+        account: account._id.toString(),
       },
     });
 
