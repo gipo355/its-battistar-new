@@ -24,7 +24,9 @@ import { TodoModel } from './todos.model';
 // and add safety check
 
 export const getAllTodos = catchAsync(async (req, res) => {
-  if (!req.user?.id) {
+  // we use access token payload
+  const user = req.tokenPayload?.user;
+  if (!user) {
     throw new AppError('There was an error', StatusCodes.NOT_FOUND);
   }
 
@@ -32,7 +34,7 @@ export const getAllTodos = catchAsync(async (req, res) => {
 
   // limit to only the todos that belong to the user
   const todos = await TodoModel.find({
-    user: req.user.id,
+    user,
     ...(showCompleted !== 'true' && { completed: { $ne: 'true' } }),
   });
 
@@ -51,6 +53,10 @@ export const getAllTodos = catchAsync(async (req, res) => {
 
 // TODO: validation for all inputs, stringify for responses
 export const createTodo = catchAsync(async (req, res) => {
+  const user = req.tokenPayload?.user;
+  if (!user) {
+    throw new AppError('There was an error', StatusCodes.UNAUTHORIZED);
+  }
   // INPUT: title, dueDate, description, color
   const { title, dueDate, description, color, image } =
     req.body as Partial<ITodoInput>;
@@ -63,7 +69,7 @@ export const createTodo = catchAsync(async (req, res) => {
     description,
     color,
     image,
-    user: req.user?.id,
+    user,
   };
 
   assertAjvValidationOrThrow<ITodoInputWithUserAndCompleted>(
@@ -95,7 +101,8 @@ export const createTodo = catchAsync(async (req, res) => {
 });
 
 export const getOneTodo = catchAsync(async (req, res) => {
-  if (!req.user?.id) {
+  const user = req.tokenPayload?.user;
+  if (!user) {
     throw new AppError('There was an error', StatusCodes.NOT_FOUND);
   }
 
@@ -109,7 +116,7 @@ export const getOneTodo = catchAsync(async (req, res) => {
   // make sure the todo belongs to the user
   const todo = await TodoModel.findOne({
     _id: string,
-    user: req.user.id,
+    user,
   });
 
   if (!todo?._id) {
@@ -129,7 +136,8 @@ export const getOneTodo = catchAsync(async (req, res) => {
 });
 
 export const patchOneTodo = catchAsync(async (req, res) => {
-  if (!req.user?.id) {
+  const user = req.tokenPayload?.user;
+  if (!user) {
     throw new AppError('There was an error', StatusCodes.UNAUTHORIZED);
   }
 
@@ -158,7 +166,7 @@ export const patchOneTodo = catchAsync(async (req, res) => {
     description,
     color,
     image,
-    user: req.user.id,
+    user,
     completed,
   };
 
@@ -201,7 +209,8 @@ export const patchOneTodo = catchAsync(async (req, res) => {
 
 export const deleteOneTodo = catchAsync(async (req, res) => {
   // TODO: repeating this code, refactor
-  if (!req.user?.id) {
+  const user = req.tokenPayload?.user;
+  if (!user) {
     throw new AppError('There was an error', StatusCodes.UNAUTHORIZED);
   }
 
