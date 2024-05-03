@@ -38,11 +38,15 @@ export class AuthInterceptor implements HttpInterceptor {
           error instanceof HttpErrorResponse &&
           // BUG: potential bugs here, will check all requests and redirect to refresh
           !authReq.url.includes('auth') &&
-          // !authReq.url.includes('login') &&
-          // !authReq.url.includes('signup') &&
+          !authReq.url.includes('login') &&
+          !authReq.url.includes('signup') &&
           error.status === HttpStatusCode.Unauthorized.valueOf()
         ) {
+          console.log('refreshing token');
           await this.handle401Error(authReq, next);
+          // MUST NOT RETURN HERE, OTHERWISE THE REQUEST WILL BE SENT TWICE before
+          // the refresh token is received
+          // MUST REPEAT THE REQUEST AFTER REFRESHING THE TOKEN
           return next.handle(authReq);
         }
 
@@ -56,25 +60,24 @@ export class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<CustomResponse<void>>,
     next: HttpHandler
   ) {
-    if (!this.isRefreshing) {
-      this.isRefreshing = true;
+    // if (!this.isRefreshing) {
+    //   this.isRefreshing = true;
+    console.log('in handle401Error');
 
-      // this.authService.getRefreshToken().subscribe({
-      //   next: () => {
-      //     return next.handle(request);
-      //   },
-      //   error: () => {
-      //     void this.router.navigate(['/login']);
-      //   },
-      // });
+    // this.authService.getRefreshToken().subscribe({
+    //   next: () => {
+    //     return next.handle(request);
+    //   },
+    //   error: () => {
+    //     void this.router.navigate(['/login']);
+    //   },
+    // });
 
-      await this.authService.getRefreshToken();
+    await this.authService.getRefreshToken();
 
-      this.isRefreshing = false;
+    this.isRefreshing = false;
 
-      return lastValueFrom(next.handle(request));
-    }
-    return next.handle(request);
+    return lastValueFrom(next.handle(request));
   }
 }
 

@@ -117,6 +117,7 @@ export const generateTokens = async ({
       type: 'access',
     });
   }
+  console.log('GENERATED ACCESS TOKEN', accessToken);
 
   let refreshToken: string | undefined;
   if (generateRefreshToken) {

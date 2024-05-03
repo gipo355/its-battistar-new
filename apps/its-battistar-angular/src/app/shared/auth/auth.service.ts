@@ -23,9 +23,12 @@ export class AuthService {
   // hitting this endpoint sets new cookies
   async getRefreshToken(): Promise<CustomResponse<void>> {
     // getRefreshToken(): Observable<CustomResponse<void>> {
+
     const request$ = this.http
       .post<CustomResponse<void>>(AUTH_API + 'refresh', {}, httpOptions)
       .pipe(timeout(3000), retry(1), take(1));
+
+    console.log('in getRefreshToken');
 
     return lastValueFrom<CustomResponse<void>>(request$);
     // return request$;
