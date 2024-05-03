@@ -26,7 +26,7 @@ export class TodosService {
           showCompleted: showCompleted.toString(),
         },
       })
-      .pipe(timeout(3000), retry(2), take(1));
+      .pipe(timeout(3000), retry(1), take(1));
 
     return lastValueFrom<CustomResponse<ITodo[]>>(request$);
   }
@@ -43,17 +43,18 @@ export class TodosService {
           withCredentials: true,
         }
       )
-      .pipe(timeout(3000), retry(2), take(1));
+      .pipe(timeout(3000), retry(1), take(1));
 
     return lastValueFrom<CustomResponse<ITodo>>(request$);
   }
 
+  // TODO: move retries to the interceptor
   async createTodo$(todo: Todo): Promise<CustomResponse<ITodo>> {
     const request$ = this.http
       .post<CustomResponse<ITodo>>(`${environment.apiUrl}/api/todos`, todo, {
         withCredentials: true,
       })
-      .pipe(timeout(3000), retry(2), take(1));
+      .pipe(timeout(3000), retry(1), take(1));
 
     return lastValueFrom<CustomResponse<ITodo>>(request$);
   }
@@ -66,7 +67,7 @@ export class TodosService {
       .delete<CustomResponse<null>>(`${environment.apiUrl}/api/todos/${id}`, {
         withCredentials: true,
       })
-      .pipe(timeout(3000), retry(2), take(1));
+      .pipe(timeout(3000), retry(1), take(1));
 
     return lastValueFrom<CustomResponse<null>>(request$);
   }

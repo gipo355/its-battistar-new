@@ -14,9 +14,14 @@ interface IProtectRouteOptions {
    * Default is empty array, which means all roles are allowed.
    */
   restrictTo?: IUser['role'][];
+
+  /**
+   * The type of token to check.
+   * This allows using this middleware for both
+   * client access token strategy and api keys refresh token strategy.
+   * Default is 'access_token'.
+   */
   type: 'access_token' | 'refresh_token';
-  allowJWT?: boolean;
-  allowBearerToken?: boolean;
 }
 
 type TProtectRoute = (
@@ -56,13 +61,14 @@ export const protectRoute: TProtectRoute = (
     // verify the token
     const { payload } = await verifyJWT(token);
 
-    // FIXME: if type is access token, we don't
-    // check against redis and don't verify the user
-    // the purpose of the access token is to be stateless and avoid
-    // the need to check against the database
-    // the token must contain the info needed to verify the user
-    // email, role, id, strategy, etc.
-
+    /**
+     * if type is access token, we don't
+     * check against redis and don't verify the user
+     * the purpose of the access token is to be stateless and avoid
+     * the need to check against the database
+     * the token must contain the info needed to verify the user
+     * email, role, id, strategy, etc.
+     */
     if (type === 'refresh_token') {
       const { account, user } = await getAccountAndUserOrThrow({
         userId: payload.user,
