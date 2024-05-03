@@ -15,7 +15,7 @@ import {
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CustomResponse } from '@its-battistar/shared-types';
-import { lastValueFrom, Observable, of, throwError } from 'rxjs';
+import { lastValueFrom, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
@@ -23,8 +23,6 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private authService = inject(AuthService);
-
-  private router = inject(Router);
 
   private isRefreshing = false;
 
@@ -34,16 +32,16 @@ export class AuthInterceptor implements HttpInterceptor {
     console.log('intercepted request', authReq.url);
 
     return next.handle(authReq).pipe(
-      catchError((error) => {
-        console.log('caught http error');
-        // if (
-        //   error instanceof HttpErrorResponse &&
-        //   !authReq.url.includes('auth') &&
-        //   error.status === HttpStatusCode.Unauthorized.valueOf()
-        // ) {
-        //   this.handle401Error(authReq, next);
-        //   return next.handle(authReq);
-        // }
+      catchError(async (error) => {
+        console.log('caught http error', error);
+        if (
+          error instanceof HttpErrorResponse &&
+          !authReq.url.includes('auth') &&
+          error.status === HttpStatusCode.Unauthorized.valueOf()
+        ) {
+          await this.handle401Error(authReq, next);
+          return next.handle(authReq);
+        }
 
         // return throwError(() => error);
         return of('error', error);
@@ -67,11 +65,7 @@ export class AuthInterceptor implements HttpInterceptor {
       //   },
       // });
 
-      const res = await this.authService.getRefreshToken();
-
-      if (!res.ok) {
-        void this.router.navigate(['/login']);
-      }
+      await this.authService.getRefreshToken();
 
       this.isRefreshing = false;
 

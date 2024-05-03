@@ -111,7 +111,7 @@ type ICreateUserAndAccount =
  * The function ensures that a user cannot have multiple accounts with the same strategy and that a new user and account are created only when no account with the same email exists.
  *
  */
-export const createUserAndAccount = async (
+export const createOrFindUserAndAccount = async (
   a: ICreateUserAndAccount
 ): Promise<{
   user: HydratedDocument<IUser> | null;
@@ -137,16 +137,20 @@ export const createUserAndAccount = async (
       email: a.email,
     });
 
+    // BUG: if social, if exists must log in
+
     // check if account already exists with same strategy
+    // if strategy is social, return the data
     if (
       accounts.length &&
       accounts.some((account) => account.strategy === a.strategy)
     ) {
-      return {
-        user: null,
-        account: null,
-        error: new Error('Account already exists'),
-      };
+      if (a.strategy !== EStrategy.LOCAL)
+        return {
+          user: null,
+          account: null,
+          error: new Error('Account already exists'),
+        };
     }
 
     // if account exists with different strategies, add account to user

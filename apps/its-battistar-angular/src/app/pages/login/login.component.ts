@@ -5,6 +5,7 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 
 import { AuthService } from '../../shared/auth/auth.service';
 
@@ -16,12 +17,16 @@ import { AuthService } from '../../shared/auth/auth.service';
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   private authService = inject(AuthService);
-  ngOnInit(): void {
-    this.authService.login().subscribe(() => {
-      console.log('logged in');
-    });
-  }
+  private route = inject(ActivatedRoute);
+
+  // eslint-disable-next-line no-magic-numbers
+  path = this.route.snapshot.url[0].path;
+
+  // TODO: put in config
+  loginPath = 'http://localhost:3000/auth/login';
+  signupPath = 'http://localhost:3000/auth/signup';
+
   name = 'Login';
 }

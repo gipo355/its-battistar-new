@@ -194,7 +194,7 @@ export const TodosStore = signalStore(
         });
 
         if (!request.ok) {
-          throw new Error(`Error loading todos: ${request.message}`);
+          throw new Error(`Error loading todos: ${request.message ?? ''}`);
         }
         const todos = request.data;
 
@@ -441,7 +441,7 @@ export const TodosStore = signalStore(
         const updatedTodoValues = new Todo({
           title: todo.title ?? currentTodo?.title ?? '',
           description: todo.description ?? currentTodo?.description ?? '',
-          image: todo.image ?? currentTodo?.image ?? '',
+          image: todo.image ?? currentTodo?.image,
           color: todo.color ?? currentTodo?.color ?? 'default',
           dueDate: todo.dueDate ?? currentTodo?.dueDate,
         });

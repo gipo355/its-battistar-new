@@ -138,7 +138,7 @@ export class Todo implements ITodoInput {
     color: keyof typeof ETodoColorOptions;
     description: string;
     dueDate?: Date;
-    image: string;
+    image?: string;
   }) {
     this.title = title;
     this.color = color;

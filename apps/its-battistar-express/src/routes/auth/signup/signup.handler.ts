@@ -10,7 +10,7 @@ import {
   rotateRefreshTokenRedis,
   Sanitize,
 } from '../../../utils';
-import { createUserAndAccount } from '../../api/users/users.service';
+import { createOrFindUserAndAccount } from '../../api/users/users.service';
 
 export const signupHandler: Handler = catchAsync(async (req, res) => {
   // INPUT: email, password, passwordConfirm
@@ -38,7 +38,7 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
    * check the logic inside the function
    * handling different accounts with many strategies
    */
-  const { user, account, error } = await createUserAndAccount({
+  const { user, account, error } = await createOrFindUserAndAccount({
     strategy: 'LOCAL',
     email: sanitizedEmail,
     password: sanitizedPassword,

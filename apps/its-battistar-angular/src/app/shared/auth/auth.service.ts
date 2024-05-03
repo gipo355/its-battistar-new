@@ -7,7 +7,7 @@ import { inject, Injectable } from '@angular/core';
 import { CustomResponse } from '@its-battistar/shared-types';
 import { lastValueFrom, Observable, retry, take, timeout } from 'rxjs';
 
-const AUTH_API = 'http://localhost:8080/auth/';
+const AUTH_API = 'http://localhost:3000/auth/';
 
 const httpOptions = {
   // headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

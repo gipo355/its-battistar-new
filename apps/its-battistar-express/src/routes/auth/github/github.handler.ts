@@ -13,7 +13,7 @@ import {
   rotateRefreshTokenRedis,
 } from '../../../utils';
 import { getGithubUserInfoFromOauthTokenFetch } from '../../../utils/get-github-info-from-oauth-token';
-import { createUserAndAccount } from '../../api/users/users.service';
+import { createOrFindUserAndAccount } from '../../api/users/users.service';
 import { githubAuthorizationUri, oauthGithubClient } from './github.service';
 
 export const githubHandler: Handler = (_, res) => {
@@ -55,7 +55,7 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
       throw new AppError('No user found', StatusCodes.NOT_FOUND);
     }
 
-    const { user, error, account } = await createUserAndAccount({
+    const { user, error, account } = await createOrFindUserAndAccount({
       email: githubUser.email,
       providerUid: githubUser.providerUid,
       accessToken: githubAccessToken.token.access_token,
