@@ -64,14 +64,39 @@ module.exports = tseslint.config(
   // global configs, any file type
   eslint.configs.recommended,
 
-  ...compat.extends('plugin:import/recommended'),
-  ...compat.extends('plugin:sonarjs/recommended'),
-  ...compat.extends('plugin:@nx/javascript'),
-  ...compat.extends('plugin:@nx/typescript').map((config) => ({
-    ...config,
-    files: ['**/*.ts', '**/*.tsx'],
-    rules: {},
-  })),
+  // COMPATIBILITY MODE for unsupported plugins
+  ...compat.config({
+    plugins: [
+      'import',
+      'sonarjs',
+      //   '@nx/javascript'
+    ],
+    extends: [
+      'plugin:import/recommended',
+      'plugin:sonarjs/recommended',
+      'plugin:@nx/javascript',
+      'plugin:@nx/typescript', //TODO: how to specify files for compatibility mode
+    ],
+    rules: {
+      'import/no-unresolved': 'off',
+      'import/no-extraneous-dependencies': 'off',
+      'import/first': 'error',
+      'import/newline-after-import': 'error',
+      'import/no-duplicates': 'error',
+      'import/order': 'off',
+      'import/export': 'warn',
+      'import/prefer-default-export': 'off',
+      'import/no-default-export': 'warn',
+      'import/namespace': 'off',
+    },
+  }),
+
+  // ...compat.extends('plugin:@nx/typescript'),
+  // .map((config) => ({
+  //   ...config,
+  //   files: ['**/*.ts', '**/*.tsx'],
+  //   rules: {},
+  // })),
 
   // global rules, any file type
   {
@@ -213,6 +238,8 @@ module.exports = tseslint.config(
   // do they override previous rules?
   // do these even work?? they don't
 
+  // BUG: THE MAP DOESN'T WORK with compat mode for assigning files
+
   // all files
   // ...compat
   //   .config({
@@ -270,7 +297,7 @@ module.exports = tseslint.config(
   //   }))
 
   // spec files
-  // ...compat.config({ env: { jest: true } }).map((config) => ({
+  // ...compat.config().map((config) => ({
   //   ...config,
   //   files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.spec.js', '**/*.spec.jsx'],
   //   rules: {},
