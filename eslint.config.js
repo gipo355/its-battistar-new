@@ -206,6 +206,7 @@ module.exports = tseslint.config(
   // do these even work?? they don't
 
   // COMPATIBILITY MODE for unsupported plugins
+  // ...compat.extends('plugin:sonarjs/recommended')
   // ...compat.config({
   //   // plugins: [
   //   //   'import',
@@ -230,7 +231,7 @@ module.exports = tseslint.config(
   //     'import/no-default-export': 'warn',
   //     'import/namespace': 'off',
   //   },
-  // }),
+  // })
 
   // ...compat.extends('plugin:@nx/typescript'),
   // .map((config) => ({
