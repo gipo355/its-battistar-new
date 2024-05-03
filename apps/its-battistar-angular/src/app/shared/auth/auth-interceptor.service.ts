@@ -5,7 +5,6 @@
 import {
   HTTP_INTERCEPTORS,
   HttpErrorResponse,
-  HttpParams,
   HttpStatusCode,
 } from '@angular/common/http';
 import {
@@ -16,8 +15,8 @@ import {
 import { inject, Injectable } from '@angular/core';
 // import { Router } from '@angular/router';
 import { CustomResponse } from '@its-battistar/shared-types';
-import { lastValueFrom, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { from, throwError } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
 
@@ -25,16 +24,14 @@ import { AuthService } from './auth.service';
 export class AuthInterceptor implements HttpInterceptor {
   private authService = inject(AuthService);
 
-  // private isRefreshing = false;
+  private isRefreshing = false;
 
+  // NOTE: does the retry on the auth service trigger before the interceptor catchError?
   intercept(req: HttpRequest<CustomResponse<void>>, next: HttpHandler): any {
     const authReq = req;
 
-    console.log('intercepted request', authReq.url);
-
     return next.handle(authReq).pipe(
       catchError((error) => {
-        console.log('caught http error', error);
         if (
           error instanceof HttpErrorResponse &&
           // BUG: potential bugs here, will check all requests and redirect to refresh
@@ -43,36 +40,45 @@ export class AuthInterceptor implements HttpInterceptor {
           !authReq.url.includes('signup') &&
           error.status === HttpStatusCode.Unauthorized.valueOf()
         ) {
-          console.log('refreshing token');
-          // await this.handle401Error(authReq, next);
-          const cloned = authReq.clone({
-            url: 'http://localhost:3000/auth/refresh',
-            method: 'POST',
-            params: new HttpParams().set(
-              'redirectTo',
-              authReq.url.split('/').pop() ?? ''
-            ),
-          });
+          this.isRefreshing = true;
 
+          // await this.handle401Error(authReq, next);
+          // redirect to refresh token endpoint
+          // const cloned = authReq.clone({
+          //   // TODO: change to environment variable
+          //   url: 'http://localhost:3000/auth/refresh',
+          //   method: 'POST',
+          //   params: new HttpParams().set(
+          //     'redirectTo',
+          //     authReq.url.split('/').pop() ?? ''
+          //   ),
+          // });
           // MUST NOT RETURN HERE, OTHERWISE THE REQUEST WILL BE SENT TWICE before
           // the refresh token is received
           // MUST REPEAT THE REQUEST AFTER REFRESHING THE TOKEN
-          return next.handle(cloned);
+          // return next.handle(cloned);
+
+          // must clone req
+          const cloned = authReq.clone();
+
+          return this.handle401Error().pipe(
+            switchMap(() => {
+              this.isRefreshing = false;
+              return next.handle(cloned);
+            })
+          );
         }
 
-        // return throwError(() => error);
-        return of('error', error);
+        this.isRefreshing = false;
+        return throwError(() => 'error');
       })
     );
   }
 
-  private async handle401Error(
-    request: HttpRequest<CustomResponse<void>>,
-    next: HttpHandler
-  ) {
+  private handle401Error() {
+    // next: HttpHandler // request: HttpRequest<CustomResponse<void>>,
     // if (!this.isRefreshing) {
     //   this.isRefreshing = true;
-    console.log('in handle401Error');
 
     // this.authService.getRefreshToken().subscribe({
     //   next: () => {
@@ -83,11 +89,12 @@ export class AuthInterceptor implements HttpInterceptor {
     //   },
     // });
 
-    await this.authService.getRefreshToken();
+    // await this.authService.getRefreshToken();
 
     // this.isRefreshing = false;
 
-    return lastValueFrom(next.handle(request));
+    // return of(next.handle(request));
+    return from(this.authService.getRefreshToken());
   }
 }
 
