@@ -144,10 +144,7 @@ export const createOrFindUserAndAccount = async (
 
     // if it's local, return error
     // can't recreate local account, we split signup and login handlers for local
-    if (
-      foundAccountWithSameStrat &&
-      foundAccountWithSameStrat.strategy === EStrategy.LOCAL
-    ) {
+    if (foundAccountWithSameStrat?.strategy === EStrategy.LOCAL) {
       return {
         user: null,
         account: null,
@@ -170,8 +167,18 @@ export const createOrFindUserAndAccount = async (
      * but it's still better to have email verification
      */
 
+    // if user exists and wanted signup strategy is local, throw error (for now)
+    // this step is necessary because we won't allow adding local strats
+    if (accounts.length && a.strategy === EStrategy.LOCAL) {
+      return {
+        user: null,
+        account: null,
+        error: new Error('Account already exists'),
+      };
+    }
+
     // if user exists, account exists, return user and account
-    // if user exists, account doesn't exist and strategy is not local, create account
+    // if user exists, accounts doesn't exist and strategy is not local, create account
     if (accounts.length && a.strategy !== EStrategy.LOCAL) {
       // get user
       const user = await UserModel.findOne({
@@ -196,6 +203,7 @@ export const createOrFindUserAndAccount = async (
         };
       }
 
+      // if user exists, account does not exist, create account
       const account = await AccountModel.create(
         new SocialAccount({
           user: user._id.toString(),
@@ -211,16 +219,9 @@ export const createOrFindUserAndAccount = async (
       return { user, account, error: null };
     }
 
-    // if user exists and wanted signup strategy is local, throw error (for now)
-    if (accounts.length && a.strategy === EStrategy.LOCAL) {
-      return {
-        user: null,
-        account: null,
-        error: new Error('Account already exists'),
-      };
-    }
+    // VULN: potential for account takeover?
 
-    // if user does not exist, create user and account
+    // if user does not exist (no account with email), create user and account
     if (!accounts.length) {
       const user = await UserModel.create(
         new User({
