@@ -3,7 +3,11 @@ import type { Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { sessionRedisConnection } from '../../db/redis';
-import { invalidateAllSessionsForUser, verifyJWT } from '../../utils';
+import {
+  clearTokens,
+  invalidateAllSessionsForUser,
+  verifyJWT,
+} from '../../utils';
 import { AppError } from '../../utils/app-error';
 import { catchAsync } from '../../utils/catch-async';
 import { getAccountAndUserOrThrow } from '../api/users/users.service';
@@ -38,7 +42,7 @@ export const protectRoute: TProtectRoute = (
     type: 'access_token',
   }
 ) =>
-  catchAsync(async (req, _, next) => {
+  catchAsync(async (req, res, next) => {
     // TODO: logic for active was moved to accounts model
 
     // STEP 1: Get the tokens
@@ -59,7 +63,15 @@ export const protectRoute: TProtectRoute = (
     }
 
     // verify the token
-    const { payload } = await verifyJWT(token);
+    // verify the token
+    const {
+      decryptedJWT: { payload },
+      error: verifyError,
+    } = await verifyJWT(token);
+    if (verifyError) {
+      clearTokens(res);
+      throw new AppError(verifyError.message, StatusCodes.UNAUTHORIZED);
+    }
 
     /**
      * if type is access token, we don't

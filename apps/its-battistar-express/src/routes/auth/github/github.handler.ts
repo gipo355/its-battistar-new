@@ -29,13 +29,6 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
       throw new AppError('Missing code', StatusCodes.BAD_REQUEST);
     }
 
-    // we get the refresh token from the cookies
-    // this github handler is used for login aswell
-    // if it's present we use it to rotate the token
-    const { refresh_token } = req.cookies as {
-      refresh_token: string | undefined;
-    };
-
     const options: AuthorizationTokenConfig = {
       redirect_uri: e.GITHUB_CALLBACK_URL,
       code,
@@ -77,17 +70,15 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
 
     // TODO: check discriminator mongoose to separate accounts
 
-    const { refreshToken: newRefreshToken, accessToken } = await generateTokens(
-      {
-        setCookiesOn: res,
-        payload: {
-          user: user._id.toString(),
-          role: user.role,
-          strategy: 'GITHUB',
-          account: account._id.toString(),
-        },
-      }
-    );
+    const { refreshToken: newRefreshToken } = await generateTokens({
+      setCookiesOn: res,
+      payload: {
+        user: user._id.toString(),
+        role: user.role,
+        strategy: 'GITHUB',
+        account: account._id.toString(),
+      },
+    });
 
     if (!newRefreshToken) {
       throw new AppError('No refresh token', StatusCodes.INTERNAL_SERVER_ERROR);
@@ -96,7 +87,6 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
     await rotateRefreshTokenRedis({
       redisConnection: sessionRedisConnection,
       newToken: newRefreshToken,
-      oldToken: refresh_token,
       // BUG: must handle old token if present
       user: user._id.toString(),
       payload: {

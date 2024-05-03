@@ -6,6 +6,7 @@ import { sessionRedisConnection } from '../../../db/redis';
 import {
   AppError,
   catchAsync,
+  clearTokens,
   generateTokens,
   invalidateAllSessionsForUser,
   rotateRefreshTokenRedis,
@@ -43,7 +44,14 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
   }
 
   // verify the token
-  const { payload } = await verifyJWT(token);
+  const {
+    decryptedJWT: { payload },
+    error: verifyError,
+  } = await verifyJWT(token);
+  if (verifyError) {
+    clearTokens(res);
+    throw new AppError(verifyError.message, StatusCodes.UNAUTHORIZED);
+  }
 
   /**
    * here we could check if same user agent and ip is used for the session
@@ -51,7 +59,7 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
 
   const ip = req.ip;
   const userAgent = req.get('User-Agent');
-  await validateSessionRedis({
+  const redisError = await validateSessionRedis({
     redisConnection: sessionRedisConnection,
     token,
     user: payload.user,
@@ -68,6 +76,10 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
       },
     }),
   });
+  if (redisError) {
+    clearTokens(res);
+    throw new AppError(redisError.message, StatusCodes.UNAUTHORIZED);
+  }
 
   // TODO: should validation be done for user or account?
 
@@ -79,8 +91,9 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
   });
 
   if (!user || !account) {
+    clearTokens(res);
     await invalidateAllSessionsForUser(sessionRedisConnection, payload.user);
-    throw new AppError('User not found', StatusCodes.NOT_FOUND);
+    throw new AppError('Invalid token, reported', StatusCodes.BAD_REQUEST);
   }
 
   const { accessToken: newAccessToken, refreshToken: newRefreshToken } =

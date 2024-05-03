@@ -60,7 +60,10 @@ export const createJWT = async ({
  */
 export const verifyJWT = async (
   token: string
-): Promise<jose.JWTDecryptResult<CustomJWTClaims>> => {
+): Promise<{
+  decryptedJWT: jose.JWTDecryptResult<CustomJWTClaims>;
+  error: Error | null;
+}> => {
   try {
     const { payload, protectedHeader } = await jose.jwtDecrypt<CustomJWTClaims>(
       token,
@@ -71,16 +74,32 @@ export const verifyJWT = async (
       }
     );
 
-    if (protectedHeader.alg !== 'dir') throw new Error('invalid jwt');
+    if (protectedHeader.alg !== 'dir') {
+      throw new Error('invalid jwt');
+    }
 
     return {
-      payload,
-      protectedHeader,
+      error: null,
+      decryptedJWT: {
+        payload,
+        protectedHeader,
+      },
     };
   } catch (error) {
     if (error instanceof Error) logger.error(`invalid jwt: ${error.message}`);
     throw new AppError('invalid jwt', StatusCodes.BAD_REQUEST);
   }
+};
+
+export const clearTokens = (res: Response): void => {
+  res.clearCookie(
+    c.JWT_ACCESS_TOKEN_OPTIONS.cookieName,
+    c.JWT_ACCESS_COOKIE_OPTIONS
+  );
+  res.clearCookie(
+    c.JWT_REFRESH_TOKEN_OPTIONS.cookieName,
+    c.JWT_REFRESH_COOKIE_OPTIONS
+  );
 };
 
 /**
