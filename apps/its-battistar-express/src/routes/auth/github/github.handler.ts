@@ -30,6 +30,13 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
       throw new AppError('Missing code', StatusCodes.BAD_REQUEST);
     }
 
+    // we get the refresh token from the cookies
+    // this github handler is used for login aswell
+    // if it's present we use it to rotate the token
+    const { refresh_token } = req.cookies as {
+      refresh_token: string | undefined;
+    };
+
     const options: AuthorizationTokenConfig = {
       redirect_uri: e.GITHUB_CALLBACK_URL,
       code,
@@ -76,7 +83,7 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
       payload: {
         user: user._id.toString(),
         role: user.role,
-        strategy: 'LOCAL',
+        strategy: 'GITHUB',
         account: account._id.toString(),
       },
     });
@@ -88,6 +95,8 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
     await rotateRefreshTokenRedis({
       redisConnection: sessionRedisConnection,
       newToken: refreshToken,
+      oldToken: refresh_token,
+      // BUG: must handle old token if present
       user: user._id.toString(),
       payload: {
         user: user._id.toString(),

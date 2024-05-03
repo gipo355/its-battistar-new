@@ -137,28 +137,41 @@ export const createOrFindUserAndAccount = async (
       email: a.email,
     });
 
-    // BUG: if social, if exists must log in
-
     // check if account already exists with same strategy
-    // if strategy is social, return the data
+    const foundAccountWithSameStrat = accounts.find(
+      (account) => account.strategy === a.strategy
+    );
+
+    // if it's local, return error
+    // can't recreate local account, we split signup and login handlers for local
     if (
-      accounts.length &&
-      accounts.some((account) => account.strategy === a.strategy)
+      foundAccountWithSameStrat &&
+      foundAccountWithSameStrat.strategy === EStrategy.LOCAL
     ) {
-      if (a.strategy !== EStrategy.LOCAL)
-        return {
-          user: null,
-          account: null,
-          error: new Error('Account already exists'),
-        };
+      return {
+        user: null,
+        account: null,
+        error: new Error('Account already exists'),
+      };
     }
 
-    // if account exists with different strategies, add account to user
-    // IMPORTANT: FOR LOCAL STRATEGY, WE NEED EMAIL VERIFICATION 100%
-    // or anyone can get access to the account
-    // for now, we will only allow local strategy if the user is new and has no accounts
+    // if account exists with different strategies, add account to user unless it's local
 
-    // if user exists and strategy is not local, add account
+    /**
+     * VULN:
+     * IMPORTANT: FOR LOCAL STRATEGY, WE NEED EMAIL VERIFICATION 100%
+     * or anyone can get access to the account
+     * for now, we will only allow local strategy if the user is new and has no accounts
+     *
+     * this means, a user cannot add a local account to an existing account with social
+     * strategies if they can't verify the email or they get access to the account
+     * without proof of ownership
+     * can be allowed only if first signup or from inside the account settings
+     * but it's still better to have email verification
+     */
+
+    // if user exists, account exists, return user and account
+    // if user exists, account doesn't exist and strategy is not local, create account
     if (accounts.length && a.strategy !== EStrategy.LOCAL) {
       // get user
       const user = await UserModel.findOne({
@@ -174,7 +187,16 @@ export const createOrFindUserAndAccount = async (
         };
       }
 
-      const account = new AccountModel(
+      // user exists, account exists, return user and account for login
+      if (foundAccountWithSameStrat) {
+        return {
+          user,
+          account: foundAccountWithSameStrat,
+          error: null,
+        };
+      }
+
+      const account = await AccountModel.create(
         new SocialAccount({
           user: user._id.toString(),
           email: a.email,
@@ -200,17 +222,16 @@ export const createOrFindUserAndAccount = async (
 
     // if user does not exist, create user and account
     if (!accounts.length) {
-      const user = new UserModel(
+      const user = await UserModel.create(
         new User({
           username: a.email,
           role: 'USER',
         })
       );
-      await user.save();
 
       // handle local strategy
       if (a.strategy === EStrategy.LOCAL) {
-        const account = new AccountModel(
+        const account = await AccountModel.create(
           new LocalAccount({
             user: user._id.toString(),
             email: a.email,
@@ -218,13 +239,12 @@ export const createOrFindUserAndAccount = async (
             password: a.password,
           })
         );
-        await account.save();
 
         return { user, account, error: null };
       }
 
       // handle social strategy
-      const account = new AccountModel(
+      const account = await AccountModel.create(
         new SocialAccount({
           user: user._id.toString(),
           email: a.email,
@@ -235,7 +255,6 @@ export const createOrFindUserAndAccount = async (
           providerAccessToken: a.accessToken,
         })
       );
-      await account.save();
 
       return { user, account, error: null };
     }
