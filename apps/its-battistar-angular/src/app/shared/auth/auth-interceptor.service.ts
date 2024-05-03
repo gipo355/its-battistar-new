@@ -36,7 +36,10 @@ export class AuthInterceptor implements HttpInterceptor {
         console.log('caught http error', error);
         if (
           error instanceof HttpErrorResponse &&
+          // BUG: potential bugs here, will check all requests and redirect to refresh
           !authReq.url.includes('auth') &&
+          // !authReq.url.includes('login') &&
+          // !authReq.url.includes('signup') &&
           error.status === HttpStatusCode.Unauthorized.valueOf()
         ) {
           await this.handle401Error(authReq, next);

@@ -36,6 +36,7 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
     const { refresh_token } = req.cookies as {
       refresh_token: string | undefined;
     };
+    console.log('refresh_token', refresh_token);
 
     const options: AuthorizationTokenConfig = {
       redirect_uri: e.GITHUB_CALLBACK_URL,
@@ -78,23 +79,28 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
 
     // TODO: check discriminator mongoose to separate accounts
 
-    const { refreshToken } = await generateTokens({
-      setCookiesOn: res,
-      payload: {
-        user: user._id.toString(),
-        role: user.role,
-        strategy: 'GITHUB',
-        account: account._id.toString(),
-      },
-    });
+    const { refreshToken: newRefreshToken, accessToken } = await generateTokens(
+      {
+        setCookiesOn: res,
+        payload: {
+          user: user._id.toString(),
+          role: user.role,
+          strategy: 'GITHUB',
+          account: account._id.toString(),
+        },
+      }
+    );
 
-    if (!refreshToken) {
+    console.log('newRefreshToken', newRefreshToken);
+    console.log('accessToken', accessToken);
+
+    if (!newRefreshToken) {
       throw new AppError('No refresh token', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 
     await rotateRefreshTokenRedis({
       redisConnection: sessionRedisConnection,
-      newToken: refreshToken,
+      newToken: newRefreshToken,
       oldToken: refresh_token,
       // BUG: must handle old token if present
       user: user._id.toString(),
