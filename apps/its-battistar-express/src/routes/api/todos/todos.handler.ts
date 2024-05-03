@@ -150,13 +150,10 @@ export const patchOneTodo = catchAsync(async (req, res) => {
     throw new AppError('Invalid ID', StatusCodes.BAD_REQUEST);
   }
 
-  const todo = await TodoModel.findById(id);
-  if (!todo || !todo.id) {
-    throw new AppError('Todo not found', StatusCodes.NOT_FOUND);
-  }
-
   const { title, completed, dueDate, description, image, color } =
     req.body as Partial<ITodoInputWithCompleted>;
+
+  console.log({ title, completed, dueDate, description, image, color });
 
   // TODO: sanitize inputs
 
@@ -184,16 +181,19 @@ export const patchOneTodo = catchAsync(async (req, res) => {
     }
   );
 
-  // title && (todo.title = title);
-  // completed && (todo.completed = completed);
-  // dueDate && (todo.dueDate = dueDate);
-  // description && (todo.description = description);
-
-  const newTodo = todo.set(candidateTodo, {
-    runValidators: true,
-  });
-  await newTodo.save();
-  // const newTodo = await todo.save();
+  const todo = await TodoModel.findOneAndUpdate(
+    {
+      _id: id,
+      user,
+    },
+    candidateTodo,
+    {
+      new: true,
+    }
+  );
+  if (!todo || !todo.id) {
+    throw new AppError('Todo not found', StatusCodes.NOT_FOUND);
+  }
 
   res.header('Content-type', 'application/json; charset=utf-8');
   res.status(StatusCodes.OK).send(
@@ -201,7 +201,7 @@ export const patchOneTodo = catchAsync(async (req, res) => {
       new CustomResponse<ITodo>({
         ok: true,
         statusCode: StatusCodes.OK,
-        data: newTodo,
+        data: todo,
       })
     )
   );

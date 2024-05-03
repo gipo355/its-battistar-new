@@ -194,6 +194,7 @@ export const TodosStore = signalStore(
         });
 
         if (!request.ok) {
+          patchState(store, { isLoading: false, todos: new Map() });
           throw new Error(`Error loading todos: ${request.message ?? ''}`);
         }
         const todos = request.data;

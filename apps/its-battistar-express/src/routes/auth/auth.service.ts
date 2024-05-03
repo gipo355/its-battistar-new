@@ -59,6 +59,7 @@ export const protectRoute: TProtectRoute = (
     });
 
     if (error) {
+      res.clearCookie(type);
       throw new AppError(error.message, StatusCodes.UNAUTHORIZED);
     }
 
