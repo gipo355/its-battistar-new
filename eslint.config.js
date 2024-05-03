@@ -64,6 +64,15 @@ module.exports = tseslint.config(
   // global configs, any file type
   eslint.configs.recommended,
 
+  ...compat.extends('plugin:import/recommended'),
+  ...compat.extends('plugin:sonarjs/recommended'),
+  ...compat.extends('plugin:@nx/javascript'),
+  ...compat.extends('plugin:@nx/typescript').map((config) => ({
+    ...config,
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {},
+  })),
+
   // global rules, any file type
   {
     rules: {
@@ -198,56 +207,56 @@ module.exports = tseslint.config(
       },
     },
     rules: {},
-  },
+  }
 
   // FIXME: compatility mode after nx migration
   // do they override previous rules?
   // do these even work?? they don't
 
   // all files
-  ...compat
-    .config({
-      plugins: ['sonarjs'],
-      extends: [
-        'plugin:@nx/javascript',
-        'plugin:import/recommended', // TODO:
-        'plugin:sonarjs/recommended',
-      ],
-    })
-    .map((config) => ({
-      ...config,
-      // files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
-      rules: {
-        'import/no-unresolved': 'off',
-        'import/no-extraneous-dependencies': 'off',
-        // 'import/first': 'error',
-        // 'import/newline-after-import': 'error', // BUG: new config
-        'import/no-duplicates': 'error',
-        'import/order': 'off',
-        'import/export': 'warn',
-        'import/prefer-default-export': 'off',
-        'import/no-default-export': 'warn',
-        'import/namespace': 'off',
-      },
-    })),
+  // ...compat
+  //   .config({
+  //     plugins: ['sonarjs'],
+  //     extends: [
+  //       'plugin:@nx/javascript',
+  //       'plugin:import/recommended', // TODO:
+  //       'plugin:sonarjs/recommended',
+  //     ],
+  //   })
+  //   .map((config) => ({
+  //     ...config,
+  //     // files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+  //     rules: {
+  //       'import/no-unresolved': 'off',
+  //       'import/no-extraneous-dependencies': 'off',
+  //       // 'import/first': 'error',
+  //       // 'import/newline-after-import': 'error', // BUG: new config
+  //       'import/no-duplicates': 'error',
+  //       'import/order': 'off',
+  //       'import/export': 'warn',
+  //       'import/prefer-default-export': 'off',
+  //       'import/no-default-export': 'warn',
+  //       'import/namespace': 'off',
+  //     },
+  //   })),
 
   // typescript files
-  ...compat
-    .config({
-      plugins: [
-        // '@typescript-eslint'
-        'typescript-sort-keys',
-      ],
-      extends: [
-        'plugin:@nx/typescript', //TODO:
-        'plugin:typescript-sort-keys/recommended',
-      ],
-    })
-    .map((config) => ({
-      ...config,
-      files: ['**/*.ts', '**/*.tsx'],
-      rules: {},
-    }))
+  // ...compat
+  //   .config({
+  //     plugins: [
+  //       // '@typescript-eslint'
+  //       'typescript-sort-keys',
+  //     ],
+  //     extends: [
+  //       'plugin:@nx/typescript', //TODO:
+  //       'plugin:typescript-sort-keys/recommended',
+  //     ],
+  //   })
+  //   .map((config) => ({
+  //     ...config,
+  //     files: ['**/*.ts', '**/*.tsx'],
+  //     rules: {},
+  //   }))
 
   // javascript files only
   // ...compat
