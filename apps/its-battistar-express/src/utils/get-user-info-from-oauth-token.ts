@@ -179,8 +179,6 @@ export const getUserInfoFromOauthToken = async (
       }
     );
 
-    // console.log(parsedPayload2, 'parsedPayload2');
-
     githubUser.firstName = parsedPayload2.login;
     githubUser.providerUid = parsedPayload2.id.toString();
 

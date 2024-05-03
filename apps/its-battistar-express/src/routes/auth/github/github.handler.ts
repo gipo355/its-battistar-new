@@ -17,7 +17,6 @@ import { createOrFindUserAndAccount } from '../../api/users/users.service';
 import { githubAuthorizationUri, oauthGithubClient } from './github.service';
 
 export const githubHandler: Handler = (_, res) => {
-  console.log(githubAuthorizationUri);
   res.redirect(githubAuthorizationUri);
 };
 
@@ -36,7 +35,6 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
     const { refresh_token } = req.cookies as {
       refresh_token: string | undefined;
     };
-    console.log('refresh_token', refresh_token);
 
     const options: AuthorizationTokenConfig = {
       redirect_uri: e.GITHUB_CALLBACK_URL,
@@ -90,9 +88,6 @@ export const githubCallbackHandler: Handler = catchAsync(async (req, res) => {
         },
       }
     );
-
-    console.log('newRefreshToken', newRefreshToken);
-    console.log('accessToken', accessToken);
 
     if (!newRefreshToken) {
       throw new AppError('No refresh token', StatusCodes.INTERNAL_SERVER_ERROR);

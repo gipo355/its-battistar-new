@@ -32,7 +32,7 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "its-battistar-express:build",
-        "inspect": false
+        "inspect": true
       },
       "configurations": {
         "development": {

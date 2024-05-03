@@ -59,7 +59,6 @@ export const getGithubUserInfoFromOauthTokenFetch = async (
   /**
    * ## Get user email from payload
    */
-  console.log(userData);
   // [{
   //   email: '',
   //   primary: true,
