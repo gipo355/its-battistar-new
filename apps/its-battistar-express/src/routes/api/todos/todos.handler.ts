@@ -13,7 +13,7 @@ import {
 } from '@its-battistar/shared-utils';
 import { StatusCodes } from 'http-status-codes';
 
-import { AppError, catchAsync, logger, Sanitize } from '../../../utils';
+import { AppError, catchAsync, Sanitize } from '../../../utils';
 import { TodoModel } from './todos.model';
 
 // FIXME:  validation, add input sanitization
@@ -181,7 +181,9 @@ export const patchOneTodo = catchAsync(async (req, res) => {
   // dueDate && (todo.dueDate = dueDate);
   // description && (todo.description = description);
 
-  const newTodo = todo.set(candidateTodo);
+  const newTodo = todo.set(candidateTodo, {
+    runValidators: true,
+  });
   await newTodo.save();
   // const newTodo = await todo.save();
 
