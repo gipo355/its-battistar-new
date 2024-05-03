@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/prefer-module */
 /* eslint-disable no-magic-numbers */
 const globals = require('globals');
-const { FlatCompat } = require('@eslint/eslintrc');
+// const { FlatCompat } = require('@eslint/eslintrc');
 const nodePlugin = require('eslint-plugin-n');
 const nxEslintPlugin = require('@nx/eslint-plugin');
 const eslintPluginSimpleImportSort = require('eslint-plugin-simple-import-sort');
@@ -14,10 +14,10 @@ const eslint = require('@eslint/js');
 // const eslintrc = require('@eslint/eslintrc');
 // const eslintPluginImport = require('eslint-plugin-import');
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: eslint.configs.recommended,
-});
+// const compat = new FlatCompat({
+//   baseDirectory: __dirname,
+//   recommendedConfig: eslint.configs.recommended,
+// });
 
 // TODO: fix nx lint
 
@@ -63,40 +63,6 @@ module.exports = tseslint.config(
 
   // global configs, any file type
   eslint.configs.recommended,
-
-  // COMPATIBILITY MODE for unsupported plugins
-  ...compat.config({
-    plugins: [
-      'import',
-      'sonarjs',
-      //   '@nx/javascript'
-    ],
-    extends: [
-      'plugin:import/recommended',
-      'plugin:sonarjs/recommended',
-      'plugin:@nx/javascript',
-      'plugin:@nx/typescript', //TODO: how to specify files for compatibility mode
-    ],
-    // rules: {
-    //   'import/no-unresolved': 'off',
-    //   'import/no-extraneous-dependencies': 'off',
-    //   'import/first': 'error',
-    //   'import/newline-after-import': 'error',
-    //   'import/no-duplicates': 'error',
-    //   'import/order': 'off',
-    //   'import/export': 'warn',
-    //   'import/prefer-default-export': 'off',
-    //   'import/no-default-export': 'warn',
-    //   'import/namespace': 'off',
-    // },
-  }),
-
-  // ...compat.extends('plugin:@nx/typescript'),
-  // .map((config) => ({
-  //   ...config,
-  //   files: ['**/*.ts', '**/*.tsx'],
-  //   rules: {},
-  // })),
 
   // global rules, any file type
   {
@@ -235,8 +201,43 @@ module.exports = tseslint.config(
   }
 
   // FIXME: compatility mode after nx migration
+
   // do they override previous rules?
   // do these even work?? they don't
+
+  // COMPATIBILITY MODE for unsupported plugins
+  // ...compat.config({
+  //   // plugins: [
+  //   //   'import',
+  //   //   // 'sonarjs',
+  //   //   //   '@nx/javascript'
+  //   // ],
+  //   extends: [
+  //     'plugin:import/recommended',
+  //     'plugin:sonarjs/recommended',
+  //     'plugin:@nx/javascript',
+  //     'plugin:@nx/typescript', //TODO: how to specify files for compatibility mode
+  //   ],
+  //   rules: {
+  //     'import/no-unresolved': 'off',
+  //     'import/no-extraneous-dependencies': 'off',
+  //     'import/first': 'error',
+  //     'import/newline-after-import': 'error',
+  //     'import/no-duplicates': 'error',
+  //     'import/order': 'off',
+  //     'import/export': 'warn',
+  //     'import/prefer-default-export': 'off',
+  //     'import/no-default-export': 'warn',
+  //     'import/namespace': 'off',
+  //   },
+  // }),
+
+  // ...compat.extends('plugin:@nx/typescript'),
+  // .map((config) => ({
+  //   ...config,
+  //   files: ['**/*.ts', '**/*.tsx'],
+  //   rules: {},
+  // })),
 
   // BUG: THE MAP DOESN'T WORK with compat mode for assigning files
 
