@@ -5,6 +5,7 @@
 import {
   HTTP_INTERCEPTORS,
   HttpErrorResponse,
+  HttpParams,
   HttpStatusCode,
 } from '@angular/common/http';
 import {
@@ -32,7 +33,7 @@ export class AuthInterceptor implements HttpInterceptor {
     console.log('intercepted request', authReq.url);
 
     return next.handle(authReq).pipe(
-      catchError(async (error) => {
+      catchError((error) => {
         console.log('caught http error', error);
         if (
           error instanceof HttpErrorResponse &&
@@ -43,11 +44,20 @@ export class AuthInterceptor implements HttpInterceptor {
           error.status === HttpStatusCode.Unauthorized.valueOf()
         ) {
           console.log('refreshing token');
-          await this.handle401Error(authReq, next);
+          // await this.handle401Error(authReq, next);
+          const cloned = authReq.clone({
+            url: 'http://localhost:3000/auth/refresh',
+            method: 'POST',
+            params: new HttpParams().set(
+              'redirectTo',
+              authReq.url.split('/').pop() ?? ''
+            ),
+          });
+
           // MUST NOT RETURN HERE, OTHERWISE THE REQUEST WILL BE SENT TWICE before
           // the refresh token is received
           // MUST REPEAT THE REQUEST AFTER REFRESHING THE TOKEN
-          return next.handle(authReq);
+          return next.handle(cloned);
         }
 
         // return throwError(() => error);
@@ -80,6 +90,10 @@ export class AuthInterceptor implements HttpInterceptor {
     return lastValueFrom(next.handle(request));
   }
 }
+
+// flow
+// catch the 401 error, switchMap to refresh token http
+// interceptor for requests to refesh, if success, return to the original request
 
 export const authInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
