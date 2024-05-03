@@ -13,7 +13,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
 import { CustomResponse } from '@its-battistar/shared-types';
 import { lastValueFrom, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -24,7 +24,7 @@ import { AuthService } from './auth.service';
 export class AuthInterceptor implements HttpInterceptor {
   private authService = inject(AuthService);
 
-  private isRefreshing = false;
+  // private isRefreshing = false;
 
   intercept(req: HttpRequest<CustomResponse<void>>, next: HttpHandler): any {
     const authReq = req;
@@ -75,7 +75,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     await this.authService.getRefreshToken();
 
-    this.isRefreshing = false;
+    // this.isRefreshing = false;
 
     return lastValueFrom(next.handle(request));
   }

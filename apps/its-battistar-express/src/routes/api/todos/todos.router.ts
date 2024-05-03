@@ -1,9 +1,6 @@
 import { Router } from 'express';
 
-import {
-  protectRoute,
-  setUserAndAccountOnRequest,
-} from '../../auth/auth.service';
+import { protectRoute } from '../../auth/auth.service';
 import {
   createTodo,
   deleteOneTodo,

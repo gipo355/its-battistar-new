@@ -3,11 +3,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  OnInit,
+  // OnInit,
 } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import {
+  ActivatedRoute,
+  // ActivatedRouteSnapshot
+} from '@angular/router';
 
-import { AuthService } from '../../shared/auth/auth.service';
+// import { AuthService } from '../../shared/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -18,11 +21,11 @@ import { AuthService } from '../../shared/auth/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-  private authService = inject(AuthService);
+  // private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
 
   // eslint-disable-next-line no-magic-numbers
-  path = this.route.snapshot.url[0].path;
+  path = this.route.snapshot.url[0]?.path;
 
   // TODO: put in config
   loginPath = 'http://localhost:3000/auth/login';
