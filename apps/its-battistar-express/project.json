@@ -63,6 +63,13 @@
       "options": {
         "preset": "conventionalcommits"
       }
+    },
+    "preview": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build", "^build"],
+      "options": {
+        "command": "node --env-file=apps/its-battistar-express/.env ./dist/apps/its-battistar-express/main.js"
+      }
     }
   }
 }
