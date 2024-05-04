@@ -8,14 +8,14 @@
     "fix": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "eslint --fix ./src && prettier --write ./src",
+        "command": "eslint --fix ./src && prettier --write -c ./src",
         "cwd": "libs/shared-types"
       }
     },
     "pre-lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "tsc --noEmit -p ./tsconfig.lib.json & eslint ./src & prettier -c ./src",
+        "command": "tsc --noEmit -p ./tsconfig.lib.json & prettier -c ./src",
         "cwd": "libs/shared-types"
       }
     },
