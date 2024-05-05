@@ -8,7 +8,7 @@ module.exports = {
   plugins: [
     new NxWebpackPlugin({
       target: 'node',
-      sourceMap: true,
+      sourceMap: 'eval-source-map',
       compiler: 'tsc',
       main: './src/main.ts',
       tsConfig: './tsconfig.app.json',

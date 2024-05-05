@@ -12,12 +12,12 @@ export const APP_CONFIG = {
 
   corsOptions: {
     origin: e.CORS_ORIGINS,
-    methods: 'GET,PATCH,POST,DELETE',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: 'GET,PATCH,POST,DELETE,OPTIONS',
+    // preflightContinue: false,
+    // optionsSuccessStatus: 204,
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
     credentials: true,
-    maxAge: 86400,
+    // maxAge: 86400,
   } satisfies CorsOptions,
 
   helmetOptions: {} satisfies HelmetOptions,
@@ -38,18 +38,25 @@ export const APP_CONFIG = {
 
   RESET_TOKEN_EXPIRY_MINS: 10,
 
+  // https://stackoverflow.com/questions/18795220/set-cookie-header-not-working
+  // https://stackoverflow.com/questions/61555100/cookie-in-set-cookie-header-not-being-set
   JWT_REFRESH_COOKIE_OPTIONS: {
     httpOnly: true,
     secure: e.NODE_ENV === 'production',
+    // TODO: set secure to true in production
+    // secure: false,
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 7 days
-    // sameSite: 'strict',
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 60 * 24 * 7,
   } satisfies CookieOptions,
 
   JWT_ACCESS_COOKIE_OPTIONS: {
     httpOnly: true,
     secure: e.NODE_ENV === 'production',
+    // secure: false,
     expires: new Date(Date.now() + 1000 * 60 * 2), // 2 minutes
-    // sameSite: 'strict',
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 2,
   } satisfies CookieOptions,
 
   // TODO: move this in config
