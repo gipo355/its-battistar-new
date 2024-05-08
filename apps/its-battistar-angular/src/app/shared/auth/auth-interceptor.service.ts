@@ -18,11 +18,14 @@ import { CustomResponse } from '@its-battistar/shared-types';
 import { from, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
+import { UserStore } from '../user/user.store';
 import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private authService = inject(AuthService);
+
+  private userStore = inject(UserStore);
 
   private isRefreshing = false;
 
@@ -69,8 +72,14 @@ export class AuthInterceptor implements HttpInterceptor {
           );
         }
 
+        console.log('error in interceptor', error);
+        this.userStore.logout();
         this.isRefreshing = false;
-        return throwError(() => 'error');
+        return throwError(() =>
+          error instanceof HttpErrorResponse
+            ? error
+            : new Error('Unknown error')
+        );
       })
     );
   }

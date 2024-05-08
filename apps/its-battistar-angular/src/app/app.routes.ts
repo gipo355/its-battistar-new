@@ -28,9 +28,9 @@ export const appRoutes: Route[] = [
   {
     path: 'dashboard',
     // canLoad: [canActivate],
-    canActivateChild: [canActivate],
-    // canMatch: [canMatch],
-    // canActivate: [canActivate],
+    // canActivateChild: [canActivate],
+    // canMatch: [canMatchAuth],
+    canActivate: [canActivate],
     loadChildren: async () =>
       import('./pages/dashboard/dashboard.routes').then(
         (routes) => routes.dashboardRoutes

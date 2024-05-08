@@ -4,6 +4,7 @@
 
 import type { Route } from '@angular/router';
 
+import { canActivate } from '../../shared/auth/auth-guard.service';
 import { todoModalResolverServiceFN } from './todo-modal/todo-modal-resolver.service';
 
 // this is the schema for the routes:
@@ -17,6 +18,7 @@ export const todosRoutes: Route[] = [
   // works with external component, but how would i inject stores and services?
   {
     path: '',
+    canActivate: [canActivate],
     loadComponent: async () =>
       import('./todos.component').then((m) => m.TodosComponent),
     // FIXME: why named outlet is not working?
