@@ -10,8 +10,10 @@ import {
   rotateRefreshTokenRedis,
   Sanitize,
 } from '../../../utils';
-import { UserModel } from '../../api/users/users.model';
-import { getAccountAndUserOrThrow } from '../../api/users/users.service';
+import {
+  findUserWithAccounts,
+  getAccountAndUserOrThrow,
+} from '../../api/users/users.service';
 
 export const loginHandler: Handler = catchAsync(async (req, res) => {
   // INPUT: email, password
@@ -36,6 +38,7 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
   const { string: sanitizedPassword } = new Sanitize(password).password().done;
 
   // FIXME: must sanitize user input
+  // TODO: possibly use the findUserWithAccounts function instead of getAccountAndUserOrThrow?
   const { user, account, error } = await getAccountAndUserOrThrow({
     accountEmail: sanitizedEmail,
     strategy: 'LOCAL',
@@ -89,56 +92,51 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
   //   .exec();
 
   // REVERSE POPULATE
-  // TODO: put in user service
-  // TODO: must exclude inactive users and accounts from all queries
+  // FIXME: double query in this fn
   // VULN: sensitive data, don't expose, only select what is needed
-  const userPop = await UserModel.aggregate([
-    {
-      $match: {
-        _id: user._id,
-      },
-    },
-    // populate accounts
-    // TODO: transform _id into id for accounts and user
-    // TODO: filter out active: false accounts
-    {
-      $lookup: {
-        from: 'accounts',
-        localField: '_id',
-        foreignField: 'user',
-        as: 'accounts',
-        // Sub pipeline to filter out inactive accounts and sensitive data
-        pipeline: [
-          {
-            $match: {
-              active: true,
-            },
-          },
-          {
-            $project: {
-              password: 0,
-              user: 0,
-              __v: 0,
-              active: 0,
-            },
-          },
-        ],
-      },
-    },
-    // remove sensitive data
-    {
-      $project: {
-        todos: 0,
-        __v: 0,
-      },
-    },
-  ]);
+  const { user: userWithAccounts, error: error2 } = await findUserWithAccounts(
+    user._id.toString()
+  );
+  if (error2) {
+    throw new AppError(
+      'Error finding user with accounts',
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
 
   const data = {
     access_token: accessToken,
     refresh_token: refreshToken,
-    user: userPop,
+    user: userWithAccounts.pop(),
   };
+
+  // "data": {
+  //      "access_token": "",
+  //      "refresh_token": "",
+  //      "user": {
+  //          "id": ""
+  //          "username": "email", TODO: why username is email?
+  //          "createdAt": "2024-05-09T06:55:37.236Z",
+  //          "updatedAt": "2024-05-09T06:55:42.734Z",
+  //          "avatar": "url",
+  //          "accounts": [
+  //              {
+  //                  "email": "",
+  //                  "verified": false,
+  //                  "primary": true,
+  //                  "createdAt": "",
+  //                  "updatedAt": "2024-05-09T06:55:37.232Z",
+  //                  "strategy": "LOCAL",
+  //                  "id": ""
+  //              }
+  //          ],
+  //      }
+  //  }
+
+  // TODO: serialize the response in all handlers
+
+  // TODO: make a factory to choose if to send access and refresh in body
+  // in all handlers
 
   res.status(StatusCodes.OK).json(
     new CustomResponse<typeof data>({

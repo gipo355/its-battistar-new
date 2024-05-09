@@ -3,6 +3,7 @@ import type {
   ESocialStrategy,
   IAccount,
   IUser,
+  TUserSafeWithAccounts,
 } from '@its-battistar/shared-types';
 import {
   EStrategy,
@@ -275,4 +276,100 @@ export const addAccountToUser = (): void => {
   // this method will add an account to a user
   // allowing different email addresses to be associated with a single user
   console.log('method not implemented');
+};
+
+/**
+ * @description
+ * findUserWithAccounts is used to find a user with their accounts based on the provided user id.
+ * It uses the `aggregate` method of the `UserModel` to query
+ * the database and populate the `accounts` field of the user.
+ *
+ * It also omits sensitive data such as passwords and inactive accounts from the response.
+ */
+export const findUserWithAccounts = async (
+  id: string
+): Promise<{
+  user: TUserSafeWithAccounts[];
+  error: Error | null;
+}> => {
+  const user = await UserModel.aggregate([
+    {
+      $match: {
+        _id: id,
+      },
+      // $limit: 1,
+    },
+    // populate accounts
+    // transform _id into id for accounts and user
+    {
+      $set: {
+        id: '$_id',
+      },
+    },
+    // remove useless fields from user, exclude by default
+    {
+      $project: {
+        id: 1,
+        username: 1,
+        avatar: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        accounts: 1,
+        _id: 0,
+        // role: 1, // we don't want to expose the role to the client
+        // todos: 0,
+        // __v: 0,
+      },
+    },
+    // populate accounts field with accounts
+    {
+      $lookup: {
+        from: 'accounts',
+        localField: 'id', // we swapped _id to id
+        foreignField: 'user',
+        as: 'accounts',
+        // Sub pipeline to filter out inactive accounts and sensitive data
+        pipeline: [
+          // filter out active: false accounts
+          {
+            $match: {
+              active: true,
+            },
+          },
+          // remove sensitive data
+          // giving 1s to the fields to include, exclude by default to prevent
+          // unexpected data leaks
+          {
+            $set: {
+              id: '$_id',
+            },
+          },
+          {
+            $project: {
+              id: 1,
+              email: 1,
+              strategy: 1,
+              primary: 1,
+              verified: 1,
+              createdAt: 1,
+              updatedAt: 1,
+              _id: 0,
+            },
+          },
+        ],
+      },
+    },
+  ]);
+
+  if (!user.length) {
+    return {
+      user: [],
+      error: new Error('User not found'),
+    };
+  }
+
+  return {
+    user: user as TUserSafeWithAccounts[],
+    error: null,
+  };
 };

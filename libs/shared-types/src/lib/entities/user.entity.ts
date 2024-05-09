@@ -6,7 +6,7 @@ import {
 } from '@sinclair/typebox';
 import type mongoose from 'mongoose';
 
-import type { IAccountSafe } from './account.entity';
+import { accountSchemaSafe, type IAccountSafe } from './account.entity';
 import type { ITodo } from './todo.entity';
 
 export enum ERole {
@@ -60,11 +60,18 @@ export const userSchemaSafe = Type.Object({
 
   ...userSchemaInput.properties,
 
-  accounts: Type.Array(Type.String()),
+  accounts: Type.Optional(Type.Array(Type.String())),
 
-  todos: Type.Array(Type.String()),
+  todos: Type.Optional(Type.Array(Type.String())),
 });
 export type TUserSafe = Static<typeof userSchemaSafe>;
+
+export const userSchemaSafeWithAccounts = Type.Object({
+  ...userSchemaSafe.properties,
+
+  accounts: Type.Optional(Type.Array(accountSchemaSafe)),
+});
+export type TUserSafeWithAccounts = Static<typeof userSchemaSafeWithAccounts>;
 
 /**
  * @description
