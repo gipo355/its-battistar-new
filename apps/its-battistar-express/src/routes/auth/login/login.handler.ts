@@ -138,6 +138,14 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
   // TODO: make a factory to choose if to send access and refresh in body
   // in all handlers
 
+  // TODO: group up functions and utils in external libs on functionalities, make them reusable and standalone
+
+  // TODO: document, write tests
+
+  // TODO: implement redis session instead of JWT strat
+
+  // TODO: test implementation of full oauth2 flow (no own redis)
+
   res.status(StatusCodes.OK).json(
     new CustomResponse<typeof data>({
       ok: true,
