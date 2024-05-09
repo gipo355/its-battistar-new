@@ -128,6 +128,7 @@ export const refreshHandler: Handler = catchAsync(async (req, res) => {
   const data = {
     access_token: newAccessToken,
     refresh_token: newRefreshToken,
+    user,
   };
   res.status(StatusCodes.OK).json(
     new CustomResponse<typeof data>({

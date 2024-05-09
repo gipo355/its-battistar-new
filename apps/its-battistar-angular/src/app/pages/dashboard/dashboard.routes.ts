@@ -4,7 +4,7 @@
 
 import type { Route } from '@angular/router';
 
-import { canActivate } from '../../shared/auth/auth-guard.service';
+import { canMatchAuth } from '../../shared/auth/auth-guard.service';
 
 // this is the schema for the routes:
 // / => welcome page
@@ -17,9 +17,9 @@ export const dashboardRoutes: Route[] = [
   // works with external component, but how would i inject stores and services?
   {
     path: '',
-    canActivate: [canActivate],
     // canActivateChild: [canActivate],
-    // canMatch: [canMatchAuth],
+    // canActivate: [canActivate],
+    canMatch: [canMatchAuth],
     loadComponent: async () =>
       import('./dashboard.component').then((m) => m.DashboardComponent),
     children: [

@@ -85,7 +85,8 @@ export const signupHandler: Handler = catchAsync(async (req, res) => {
   const data = {
     access_token: accessToken,
     refresh_token: refreshToken,
-    userId: user._id.toString(),
+    // userId: user._id.toString(),
+    user,
   };
 
   // we only return the id

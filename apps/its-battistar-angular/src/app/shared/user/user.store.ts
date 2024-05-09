@@ -17,6 +17,7 @@ interface UserState {
   isAuthenticated: boolean;
 }
 
+// TODO: implement logic to get the user from the server on login, refresh, signup
 const initialState: UserState = {
   user: {
     id: 'aslkdfalsdkfasldf',

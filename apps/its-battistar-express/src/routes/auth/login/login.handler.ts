@@ -10,6 +10,7 @@ import {
   rotateRefreshTokenRedis,
   Sanitize,
 } from '../../../utils';
+import { UserModel } from '../../api/users/users.model';
 import { getAccountAndUserOrThrow } from '../../api/users/users.service';
 
 export const loginHandler: Handler = catchAsync(async (req, res) => {
@@ -78,9 +79,65 @@ export const loginHandler: Handler = catchAsync(async (req, res) => {
     },
   });
 
+  // BUG: user.accounts is not populated
+  // await user.populate('account');
+  // const userPop = await UserModel.findById(user._id)
+  //   .populate({
+  //     path: 'accounts',
+  //     select: '-password',
+  //   })
+  //   .exec();
+
+  // REVERSE POPULATE
+  // TODO: put in user service
+  // TODO: must exclude inactive users and accounts from all queries
+  // VULN: sensitive data, don't expose, only select what is needed
+  const userPop = await UserModel.aggregate([
+    {
+      $match: {
+        _id: user._id,
+      },
+    },
+    // populate accounts
+    // TODO: transform _id into id for accounts and user
+    // TODO: filter out active: false accounts
+    {
+      $lookup: {
+        from: 'accounts',
+        localField: '_id',
+        foreignField: 'user',
+        as: 'accounts',
+        // Sub pipeline to filter out inactive accounts and sensitive data
+        pipeline: [
+          {
+            $match: {
+              active: true,
+            },
+          },
+          {
+            $project: {
+              password: 0,
+              user: 0,
+              __v: 0,
+              active: 0,
+            },
+          },
+        ],
+      },
+    },
+    // remove sensitive data
+    {
+      $project: {
+        todos: 0,
+        __v: 0,
+      },
+    },
+  ]);
+
   const data = {
     access_token: accessToken,
     refresh_token: refreshToken,
+    user: userPop,
   };
 
   res.status(StatusCodes.OK).json(

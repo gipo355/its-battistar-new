@@ -8,11 +8,12 @@ const r = Router({
 
 /**
  * @openapi
- * /auth/refresh:
+ * /auth/verify:
  *  get:
  *   tags:
  *    - auth
- *   description: get refresh token
+ *   description: this function checks if there are query params to verify email or password reset.
+ *   if not, it will verify the access token and return 200 with the user object.
  *   responses:
  *    200:
  *     description: logged in
