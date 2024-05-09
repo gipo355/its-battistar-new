@@ -8,6 +8,9 @@ import { prepareMongo } from '../src/db/mongo';
 import { setup } from './global-setup';
 import { seedDB } from './seed-mongo';
 
+const sleep = async (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
 async function setupEnvironment() {
   try {
     // const started = await setup();
@@ -20,6 +23,9 @@ async function setupEnvironment() {
     await prepareMongo();
 
     await seedDB();
+
+    // sleep to allow the seeding to finish and dockers to spin up
+    await sleep(1000);
 
     // await teardown();
     await mongoose.disconnect();
