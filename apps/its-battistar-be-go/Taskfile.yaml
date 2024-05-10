@@ -9,20 +9,15 @@ tasks:
       - go install github.com/a-h/templ/cmd/templ@latest
       - go install github.com/vektra/mockery/v2@latest
       - go mod tidy
-  # assets:
-  #   desc: Build the assets
-  #   cmds:
-  #     - tailwindcss -i ./web/vite/tailwind.css -o ./web/dist/styles.css
-  # TODO: for now i manually have to import the hashed files
   assets:
     desc: Build the assets
     cmds:
-      - pnpm build
+      - echo "Building assets"
   generate:
     desc: Generate stuff and things
     cmds:
       - go generate ./...
-      - swag init -g ./cmd/api/main.go
+      # - swag init -g ./cmd/api/main.go
   run:
     desc: Run the application
     deps:
@@ -30,42 +25,21 @@ tasks:
       - generate
     cmds:
       - go run ./cmd/app/...
-  dev-app:
-    desc: Develop the application
-    deps:
-      - assets
-      - generate
-    cmds:
-      - air -c .air.app.toml
   dev:
     desc: Develop the api
-    # deps:
-    #   - assets
-    #   - generate
-    cmds:
-      - air -c .air.toml
-  build-app:
-    desc: build the application
     deps:
       - assets
       - generate
     cmds:
-      - go build -o ./bin/app ./cmd/app/...
+      - air -c .air.api.toml
   build-api:
     desc: build the api
     deps:
       - assets
       - generate
     cmds:
-      - go build -o ./bin/api ./cmd/api/...
-  serve-app:
-    desc: Build and serve the application
-    deps:
-      - assets
-      - generate
-      - build-app
-    cmds:
-      - ./bin/app
+      # - go build -o ./bin/api ./cmd/api/...
+      - go build -o=../../dist/apps/its-battistar-be-go/ ./cmd/server
   serve-api:
     desc: Build and serve the api
     deps:
@@ -73,7 +47,8 @@ tasks:
       - generate
       - build-api
     cmds:
-      - ./bin/api
+      # - ./bin/api
+      - ../../dist/apps/its-battistar-be-go/server
   test:
     desc: Run the tests
     cmds:

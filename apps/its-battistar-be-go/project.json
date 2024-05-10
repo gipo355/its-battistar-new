@@ -15,7 +15,14 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "go run ./cmd/server",
+        "command": "go-task serve-api",
+        "cwd": "apps/its-battistar-be-go"
+      }
+    },
+    "init": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go-task init",
         "cwd": "apps/its-battistar-be-go"
       }
     },
