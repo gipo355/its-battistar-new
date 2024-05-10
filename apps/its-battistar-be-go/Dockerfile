@@ -42,12 +42,14 @@ COPY dist/apps/its-battistar-be-go its-battistar-be-go
 RUN chown -R its-battistar-be-go:its-battistar-be-go .
 
 # install infisical cli
-RUN apk add --no-cache bash curl
-RUN curl -1sLf \
-  'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.alpine.sh' \
-  | bash
-RUN apk update && apk add infisical
+# can inject secrets into env
+# RUN apk add --no-cache bash curl
+# RUN curl -1sLf \
+#   'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.alpine.sh' \
+#   | bash
+# RUN apk update && apk add infisical
 
 EXPOSE ${PORT}
 
+# CMD [ "infisical run -- ", "./its-battistar-be-go/server" ]
 CMD [ "./its-battistar-be-go/server" ]
