@@ -43,8 +43,6 @@ tasks:
   serve-api:
     desc: Build and serve the api
     deps:
-      - assets
-      - generate
       - build-api
     cmds:
       # - ./bin/api
