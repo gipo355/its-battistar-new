@@ -12,6 +12,10 @@
         "cwd": "apps/its-battistar-be-go"
       }
     },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/its-battistar-be-go/Dockerfile . -t its-battistar-be-go"
+    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
