@@ -12,7 +12,7 @@ const tsParser = require('@typescript-eslint/parser');
 const eslint = require('@eslint/js');
 
 // const eslintrc = require('@eslint/eslintrc');
-// const eslintPluginImport = require('eslint-plugin-import');
+const eslintPluginImport = require('eslint-plugin-import');
 
 // const compat = new FlatCompat({
 //   baseDirectory: __dirname,
@@ -50,7 +50,7 @@ module.exports = tseslint.config(
       'simple-import-sort': eslintPluginSimpleImportSort,
 
       // BUG: esling-plugin-import doesn't support flat config
-      // import: eslintPluginImport,
+      import: eslintPluginImport,
 
       unicorn: eslintPluginUnicorn,
 
@@ -104,6 +104,18 @@ module.exports = tseslint.config(
       'simple-import-sort/exports': 'error',
 
       'sort-imports': 'off',
+
+      ...eslintPluginImport.configs.errors.rules,
+      'import/no-unresolved': 'off',
+      'import/no-extraneous-dependencies': 'off',
+      'import/first': 'error',
+      'import/newline-after-import': 'error',
+      'import/no-duplicates': 'error',
+      'import/order': 'off',
+      'import/export': 'warn',
+      'import/prefer-default-export': 'off',
+      'import/no-default-export': 'warn',
+      'import/namespace': 'off',
 
       'unicorn/no-abusive-eslint-disable': 'off',
       'unicorn/no-null': 'off',
