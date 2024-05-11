@@ -19,13 +19,10 @@ const eslint = require('@eslint/js');
 //   recommendedConfig: eslint.configs.recommended,
 // });
 
-// TODO: fix nx lint
-
 // tseslint.config is an utility function provided by typescript-eslint
 // to provide type safety and intellisense to the configuration
 module.exports = tseslint.config(
   {
-    // TODO: fix ignores chains
     // must be on its own for glob pattern to work
     ignores: ['!**/*', 'node_modules', 'dist', 'tmp', '.angular'],
   },
@@ -168,6 +165,7 @@ module.exports = tseslint.config(
 
   // alternative way as the one above
   {
+    // TODO: missing @nx/typescript
     files: ['**/*.ts', '**/*.tsx'],
     // extends is an utiliy function provided by typescript-eslint
     extends: [
