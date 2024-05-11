@@ -9,7 +9,6 @@
 - echo
 - gin
 - gorilla/websocket
-- go-rabbitmq
 - protobuf
 
 ## config
@@ -38,11 +37,14 @@
 ## validation
 
 - validator
+- ozzo-validation
 
 ## auth
 
 - paseto
 - jwt
+- "golang.org/x/crypto/argon2"
+- "golang.org/x/crypto/bcrypt"
 
 ## test and mockery
 
@@ -52,9 +54,11 @@
 
 ## dbs
 
-- gorm or sqlx
+- gorm
+- sqlx
 - go-redis
 - mongo-driver
+- go-rabbitmq
 - golang-migrate
 
 # non go tools
