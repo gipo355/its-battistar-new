@@ -1,4 +1,4 @@
-# some examples
+# some examples projects
 
 <https://github.com/alexferl/echo-boilerplate>
 <https://github.com/nix-united/golang-echo-boilerplate>
@@ -6,6 +6,7 @@
 # project structure
 
 <https://github.com/golang-standards/project-layout>
+<https://medium.com/evendyne/getting-started-with-go-project-structure-ab8814ded9c3>
 
 # security
 
@@ -24,7 +25,7 @@
 - golangci-lint
 - gosec
 
-# most used libs
+# most used 3d party libs
 
 ## cli
 
@@ -56,9 +57,10 @@
 - changeset
 - swag
 - go-kit
-- lo
+- lo (lodash style utils for go)
 - goreleaser
-- uuid
+- google/uuid
+- lancet <https://github.com/duke-git/lancet>
 
 ## validation
 
@@ -67,12 +69,12 @@
 
 ## auth
 
-- paseto
-- jwt
+- paseto (<https://github.com/o1egl/paseto>)
+- jwt (<https://github.com/golang-jwt/jwt>)
 - "golang.org/x/crypto/argon2"
 - "golang.org/x/crypto/bcrypt"
 
-## test and mockery
+## test and mocks
 
 - mockery
 - testify
