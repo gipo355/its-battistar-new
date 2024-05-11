@@ -9,8 +9,8 @@ export async function isPortReachable({
 
   timeout = 1000,
 }: {
-  port: number;
   host?: string;
+  port: number;
   timeout?: number;
 }): Promise<boolean> {
   if (typeof host !== 'string' || host.length === 0) {
