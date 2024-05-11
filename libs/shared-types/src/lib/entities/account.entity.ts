@@ -7,8 +7,8 @@ export enum ELocalStrategy {
 }
 
 export enum ESocialStrategy {
-  GOOGLE = 'GOOGLE',
   GITHUB = 'GITHUB',
+  GOOGLE = 'GOOGLE',
 }
 
 export const EStrategy = {
@@ -101,32 +101,33 @@ export type TAccount = Static<typeof accountSchema>;
  * safe to display interface
  */
 export interface IAccountSafe {
-  id?: string; // created by mongoose
+  createdAt: Date | string; // created by mongoose
   email: string;
+  id?: string;
   primary: boolean;
-  verified: boolean;
   strategy: keyof typeof EStrategy;
-  createdAt: Date | string;
   updatedAt: Date | string;
+  verified: boolean;
 }
 
 /**
  * full account interface
  */
 export interface IAccount extends IAccountSafe {
-  user: string | mongoose.Schema.Types.ObjectId;
   active: boolean;
   deletedAt?: Date | string;
-
-  // social
-  providerId?: string;
-  providerAccessToken?: string;
-
   // local
   password?: string;
+
+  // created by mongoose
+  passwordChangedAt?: Date;
+  passwordResetExpires?: Date;
+
   passwordResetToken?: string;
-  passwordResetExpires?: Date; // created by mongoose
-  passwordChangedAt?: Date; // created by mongoose
+  providerAccessToken?: string;
+  // social
+  providerId?: string;
+  user: string | mongoose.Schema.Types.ObjectId; // created by mongoose
 }
 
 /**
@@ -173,12 +174,12 @@ export class SocialAccount extends Account {
     primary,
     verified,
   }: {
-    strategy: keyof typeof ESocialStrategy;
-    providerId: string;
-    providerAccessToken: string;
-    user: string | mongoose.Schema.Types.ObjectId;
     email: string;
     primary: boolean;
+    providerAccessToken: string;
+    providerId: string;
+    strategy: keyof typeof ESocialStrategy;
+    user: string | mongoose.Schema.Types.ObjectId;
     verified: boolean;
   }) {
     super(user, email, primary, verified);
@@ -201,10 +202,10 @@ export class LocalAccount extends Account {
     primary,
     password,
   }: {
-    user: string | mongoose.Schema.Types.ObjectId;
     email: string;
-    primary: boolean;
     password: string;
+    primary: boolean;
+    user: string | mongoose.Schema.Types.ObjectId;
   }) {
     super(user, email, primary);
     this.password = password;

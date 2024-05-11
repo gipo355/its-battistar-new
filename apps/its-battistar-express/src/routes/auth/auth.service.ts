@@ -152,17 +152,17 @@ export const setUserAndAccountOnRequest = catchAsync(async (req, _, next) => {
 });
 
 interface IGetAuthTokenFromCookieOrHeader {
-  request: Request;
-  type: 'access_token' | 'refresh_token';
+  /**
+   * if provided, only the token from the cookie or header will be checked
+   */
+  only?: 'cookie' | 'header';
   /**
    * The priority of the token if both are present.
    * default is cookie
    */
   priority?: 'cookie' | 'header';
-  /**
-   * if provided, only the token from the cookie or header will be checked
-   */
-  only?: 'cookie' | 'header';
+  request: Request;
+  type: 'access_token' | 'refresh_token';
 }
 
 /**
@@ -197,8 +197,8 @@ export const getAuthTokenFromCookieOrHeader = ({
   priority = 'cookie',
   only,
 }: IGetAuthTokenFromCookieOrHeader): {
-  token: string;
   error: Error | null;
+  token: string;
 } => {
   // TODO: clean up the function
   let token = '';

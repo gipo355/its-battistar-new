@@ -26,7 +26,7 @@ export const getAllUsersHandler = catchAsync(async (req, res) => {
 
 // TODO: validation for all inputs, stringify for responses
 export const createUserHandler = catchAsync(async (req, res) => {
-  const { title } = req.body as { title: string; dueDate: string };
+  const { title } = req.body as { dueDate: string; title: string };
 
   // let date: string | Date | undefined;
 

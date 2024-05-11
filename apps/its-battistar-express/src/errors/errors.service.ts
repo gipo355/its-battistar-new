@@ -56,11 +56,11 @@ export const handleJWTUnauthorized = (): AppError => {
 };
 
 interface DevelopmentResponseData {
-  status: 'error' | 'success' | 'fail';
-  stack: Error['stack'];
-  originalError: Error;
-  newError: Error;
   message: string;
+  newError: Error;
+  originalError: Error;
+  stack: Error['stack'];
+  status: 'error' | 'success' | 'fail';
 }
 
 export const sendErrorDevelopment = (

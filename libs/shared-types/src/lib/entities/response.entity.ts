@@ -33,11 +33,11 @@ export class CustomResponse<T> {
     length,
     data,
   }: {
+    data?: T;
+    length?: number;
+    message?: string;
     ok: boolean;
     statusCode: number;
-    message?: string;
-    length?: number;
-    data?: T;
   }) {
     this.ok = ok;
     this.statusCode = statusCode;

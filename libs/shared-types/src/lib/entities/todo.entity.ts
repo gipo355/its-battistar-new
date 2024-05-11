@@ -4,18 +4,18 @@ import type mongoose from 'mongoose';
 
 // BUG: importing an enum into angular from here breaks the build
 export enum ETodoSortByOptions {
+  DueDate = 'DueDate',
   Newest = 'Newest',
   Oldest = 'Oldest',
   Title = 'Title',
-  DueDate = 'DueDate',
 }
 export enum ETodoColorOptions {
-  red = 'red',
   blue = 'blue',
-  green = 'green',
-  yellow = 'yellow',
-  pink = 'pink',
   default = 'default',
+  green = 'green',
+  pink = 'pink',
+  red = 'red',
+  yellow = 'yellow',
 }
 
 /**
@@ -85,11 +85,11 @@ export type TTodo = Static<typeof todoSchema>;
  * so we use this interface to pass to mongoose
  */
 export interface ITodoInput {
-  title: string;
-  description: string;
   color: keyof typeof ETodoColorOptions;
+  description: string;
   dueDate?: Date;
   image?: string;
+  title: string;
 }
 
 export interface ITodoInputWithCompleted extends ITodoInput {
@@ -102,11 +102,11 @@ export interface ITodoInputWithUserAndCompleted
 }
 
 export interface ITodo extends ITodoInputWithUserAndCompleted {
-  id?: string;
+  createdAt: Date;
 
   expired: boolean;
 
-  createdAt: Date;
+  id?: string;
 
   updatedAt: Date;
 }
@@ -134,11 +134,11 @@ export class Todo implements ITodoInput {
     dueDate,
     image,
   }: {
-    title: string;
     color: keyof typeof ETodoColorOptions;
     description: string;
     dueDate?: Date;
     image?: string;
+    title: string;
   }) {
     this.title = title;
     this.color = color;

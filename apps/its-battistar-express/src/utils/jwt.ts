@@ -11,10 +11,10 @@ import { AppError } from './app-error';
 import { logger } from './logger';
 
 export interface CustomJWTClaims extends jose.JWTPayload {
-  user: string;
+  account: string;
   role: keyof typeof ERole;
   strategy: keyof typeof EStrategy;
-  account: string;
+  user: string;
 }
 
 const key = jose.base64url.decode(
@@ -114,8 +114,8 @@ export const generateTokens = async ({
 }: {
   generateAccessToken?: boolean;
   generateRefreshToken?: boolean;
-  setCookiesOn?: Response | null;
   payload: CustomJWTClaims;
+  setCookiesOn?: Response | null;
 }): Promise<{
   accessToken: string | undefined;
   refreshToken: string | undefined;

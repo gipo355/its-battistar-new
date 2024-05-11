@@ -15,7 +15,6 @@ export const generateSessionUserKey = (
 ): string => `${c.REDIS_USER_SESSION_PREFIX}${user.toString()}`;
 
 interface IRotateRefreshToken {
-  redisConnection: IORedis;
   /**
    * The new refresh token to be rotated in
    */
@@ -26,14 +25,15 @@ interface IRotateRefreshToken {
    */
   oldToken?: string;
   /**
-   * The user id or username
-   */
-  user: string | mongoose.Types.ObjectId;
-  /**
    * The payload of the redis item to link to the new refresh token
    * Put ip, user agent, etc. here
    */
   payload: TRedisSessionPayload;
+  redisConnection: IORedis;
+  /**
+   * The user id or username
+   */
+  user: string | mongoose.Types.ObjectId;
 }
 /**
  * set up the whitelist for the refresh token, add it as a key to the redis store
@@ -83,6 +83,33 @@ export const invalidateAllSessionsForUser = async (
 };
 
 interface IValidateSessionRedis {
+  /**
+   * Check if the session IP is the same as the one used to create the session
+   * if provided, the requestIP must be provided
+   */
+  checkSessionIP?: {
+    /**
+     * The error message to throw if the IP is different
+     */
+    errorMessage: string;
+    /**
+     * The IP address to check against
+     */
+    ip: string;
+  };
+  /**
+   * Check if the session user agent is the same as the one used to create the session
+   */
+  checkSessionUA?: {
+    /**
+     * The error message to throw if the user agent is different
+     */
+    errorMessage: string;
+    /**
+     * The user agent to check against
+     */
+    ua: string;
+  };
   redisConnection: IORedis;
   /**
    * The refresh token to be checked in the redis store
@@ -93,33 +120,6 @@ interface IValidateSessionRedis {
    * usually the id extracted from the payload of the refresh token
    */
   user: string | mongoose.Types.ObjectId;
-  /**
-   * Check if the session IP is the same as the one used to create the session
-   * if provided, the requestIP must be provided
-   */
-  checkSessionIP?: {
-    /**
-     * The IP address to check against
-     */
-    ip: string;
-    /**
-     * The error message to throw if the IP is different
-     */
-    errorMessage: string;
-  };
-  /**
-   * Check if the session user agent is the same as the one used to create the session
-   */
-  checkSessionUA?: {
-    /**
-     * The user agent to check against
-     */
-    ua: string;
-    /**
-     * The error message to throw if the user agent is different
-     */
-    errorMessage: string;
-  };
 }
 /**
  * Validate the session token in redis

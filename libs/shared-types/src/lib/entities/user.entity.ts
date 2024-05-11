@@ -97,25 +97,27 @@ export type TUser = Static<typeof userSchema>;
 
 // interface used for typind input
 export interface IUserInput {
-  username: string;
-
   avatar?: string;
 
   role: keyof typeof ERole;
+
+  username: string;
 }
 
 // interface used for typing output
 export interface IUserSafe extends IUserInput {
+  // created by mongoose
+  accounts?: string[] | mongoose.Schema.Types.ObjectId[] | IAccountSafe[]; // created by mongoose
+
+  createdAt: Date;
+
   id?: string | mongoose.Schema.Types.ObjectId; // created by mongoose
 
-  createdAt: Date; // created by mongoose
-
-  updatedAt: Date; // created by mongoose
-
   // needed to type interface when populating client side
-  todos?: string[] | mongoose.Schema.Types.ObjectId[] | ITodo; // created by mongoose
+  todos?: string[] | mongoose.Schema.Types.ObjectId[] | ITodo;
 
-  accounts?: string[] | mongoose.Schema.Types.ObjectId[] | IAccountSafe[]; // created by mongoose
+  // created by mongoose
+  updatedAt: Date; // created by mongoose
 }
 
 // interface used for full user

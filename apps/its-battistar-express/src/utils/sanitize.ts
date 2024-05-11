@@ -20,8 +20,8 @@ export class Sanitize {
   ) {}
 
   get done(): {
-    string: string;
     error: Error | null;
+    string: string;
   } {
     return {
       string: this.content,

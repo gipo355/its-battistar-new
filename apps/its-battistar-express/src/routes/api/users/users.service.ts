@@ -32,12 +32,12 @@ export const getAccountAndUserOrThrow = async ({
   strategy,
 }: {
   accountEmail?: string;
-  userId?: string | mongoose.Types.ObjectId;
   strategy: keyof typeof EStrategy;
+  userId?: string | mongoose.Types.ObjectId;
 }): Promise<{
-  user: UserDocument | null;
   account: AccountDocument | null;
   error: Error | null;
+  user: UserDocument | null;
 }> => {
   if (!accountEmail && !userId) {
     throw new Error('Either accountEmail or userId must be provided');
@@ -78,15 +78,15 @@ export const getAccountAndUserOrThrow = async ({
 
 type ICreateUserAndAccount =
   | {
-      strategy: keyof typeof ELocalStrategy;
       email: string;
       password: string;
+      strategy: keyof typeof ELocalStrategy;
     }
   | {
-      strategy: keyof typeof ESocialStrategy;
-      providerUid: string;
       accessToken: string;
       email: string;
+      providerUid: string;
+      strategy: keyof typeof ESocialStrategy;
     };
 
 /**
@@ -115,9 +115,9 @@ type ICreateUserAndAccount =
 export const createOrFindUserAndAccount = async (
   a: ICreateUserAndAccount
 ): Promise<{
-  user: HydratedDocument<IUser> | null;
   account: HydratedDocument<IAccount> | null;
   error: Error | null;
+  user: HydratedDocument<IUser> | null;
 }> => {
   // TODO: must to transaction.
   // must be able to rollback if one fails
@@ -289,8 +289,8 @@ export const addAccountToUser = (): void => {
 export const findUserWithAccounts = async (
   id: string
 ): Promise<{
-  user: TUserSafeWithAccounts[];
   error: Error | null;
+  user: TUserSafeWithAccounts[];
 }> => {
   const user = await UserModel.aggregate([
     {

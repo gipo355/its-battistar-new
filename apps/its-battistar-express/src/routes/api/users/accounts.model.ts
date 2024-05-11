@@ -23,10 +23,10 @@ import {
 // the fields i can work with are: userId, email, strategy, primary
 
 interface IAccountMethods {
-  comparePassword: (candidatePassword: string) => Promise<boolean>;
-  hasPasswordChangedSinceTokenIssuance: (iat: number) => boolean;
-  createEmailVerificationToken: () => Promise<string>;
   clearPasswordResetToken: () => void;
+  comparePassword: (candidatePassword: string) => Promise<boolean>;
+  createEmailVerificationToken: () => Promise<string>;
+  hasPasswordChangedSinceTokenIssuance: (iat: number) => boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
