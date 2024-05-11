@@ -4,6 +4,7 @@ const globals = require('globals');
 // const { FlatCompat } = require('@eslint/eslintrc');
 const nodePlugin = require('eslint-plugin-n');
 const nxEslintPlugin = require('@nx/eslint-plugin');
+const tsSortKeys = require('eslint-plugin-typescript-sort-keys');
 const eslintPluginSimpleImportSort = require('eslint-plugin-simple-import-sort');
 const tseslint = require('typescript-eslint');
 const eslintPluginUnicorn = require('eslint-plugin-unicorn');
@@ -49,8 +50,9 @@ module.exports = tseslint.config(
 
       'simple-import-sort': eslintPluginSimpleImportSort,
 
-      // BUG: esling-plugin-import doesn't support flat config
       import: eslintPluginImport,
+
+      'typescript-sort-keys': tsSortKeys,
 
       unicorn: eslintPluginUnicorn,
 
@@ -186,6 +188,8 @@ module.exports = tseslint.config(
       ...tseslint.configs.stylisticTypeChecked,
     ],
     rules: {
+      ...tsSortKeys.configs.recommended.rules,
+
       '@typescript-eslint/explicit-module-boundary-types': ['error'],
       // '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/consistent-type-exports': 'error',
