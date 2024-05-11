@@ -5,12 +5,12 @@ import type { ITodo } from '@its-battistar/shared-types';
 
 // must provide an enum to faker
 enum TodoColorOptions {
-  red = 'red',
   blue = 'blue',
-  green = 'green',
-  yellow = 'yellow',
-  pink = 'pink',
   default = 'default',
+  green = 'green',
+  pink = 'pink',
+  red = 'red',
+  yellow = 'yellow',
 }
 
 function generateTestTodos(n: number): ITodo[] {

@@ -9,14 +9,14 @@ import {
 // import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 interface MenuItem {
-  title: string;
   icon: string;
   link: string;
+  title: string;
 }
 
 interface DashboardState {
-  menuItems: MenuItem[];
   isLoading: boolean;
+  menuItems: MenuItem[];
   selectedMenuItem: MenuItem | null;
 }
 

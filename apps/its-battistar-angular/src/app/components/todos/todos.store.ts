@@ -20,18 +20,6 @@ import { TodosService } from './todos.service';
 // import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 interface TodosState {
-  // TODO: possibly use a map instead of an array for faster state updates
-  todos: Map<ITodo['id'], ITodo>;
-
-  isLoading: boolean;
-
-  /**
-   * used to keep track of the todo being edited in the modal
-   * We receive those objects from the db, so they are full todos
-   * only the updatable ones
-   */
-  currentSelectedTodo: ITodo | null;
-
   /**
    * used to keep track of the todo being created in the modal
    * doesn't have all the properties of a todo
@@ -40,18 +28,29 @@ interface TodosState {
    */
   currentNewTodo: Todo | null;
 
+  /**
+   * used to keep track of the todo being edited in the modal
+   * We receive those objects from the db, so they are full todos
+   * only the updatable ones
+   */
+  currentSelectedTodo: ITodo | null;
+
   errors: string[] | null;
 
   /**
    * used to filter todos by query
    */
   filter: {
-    showCompleted: boolean;
-    showExpired: boolean;
     currentSortBy: keyof typeof ETodoSortByOptions;
     query: string;
+    showCompleted: boolean;
+    showExpired: boolean;
   };
+
   filteredTodos?: ITodo[];
+
+  isLoading: boolean;
+  todoColorOptions: typeof ETodoColorOptions;
 
   /**
    * Options used to display menus in the UI
@@ -59,7 +58,8 @@ interface TodosState {
    */
   // FIXME: make them arrays?
   todoSortByOptions: typeof ETodoSortByOptions;
-  todoColorOptions: typeof ETodoColorOptions;
+  // TODO: possibly use a map instead of an array for faster state updates
+  todos: Map<ITodo['id'], ITodo>;
 }
 
 // TODO: move to express backend init

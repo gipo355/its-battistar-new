@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 export interface IMenuItem {
-  title: string;
   icon: string;
   link: string;
+  title: string;
 }
 @Injectable({
   providedIn: 'root',
