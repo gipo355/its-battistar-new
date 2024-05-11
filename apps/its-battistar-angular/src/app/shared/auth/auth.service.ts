@@ -77,9 +77,9 @@ export class AuthService {
     password,
     passwordConfirm,
   }: {
-    username: string;
     password: string;
     passwordConfirm: string;
+    username: string;
   }): unknown {
     if (password !== passwordConfirm) {
       return { error: 'Passwords do not match' };

@@ -7,7 +7,6 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 // }
 
 interface UserState {
-  user: IUserSafe | null;
   /**
    * If the user is authenticated or not.
    * This is useful to show different UIs based on the user's authentication status.
@@ -15,6 +14,7 @@ interface UserState {
    * Can be used to send a fetch to refresh before redirecting to login.
    */
   isAuthenticated: boolean;
+  user: IUserSafe | null;
 }
 
 // TODO: implement logic to get the user from the server on login, refresh, signup
