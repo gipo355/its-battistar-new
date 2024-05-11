@@ -27,6 +27,10 @@
 
 # most used 3d party libs
 
+## trending
+
+<https://github.com/trending/go>
+
 ## cli
 
 - cobra
