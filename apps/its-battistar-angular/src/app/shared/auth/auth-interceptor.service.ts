@@ -5,12 +5,10 @@
 import {
   HTTP_INTERCEPTORS,
   HttpErrorResponse,
-  HttpStatusCode,
-} from '@angular/common/http';
-import {
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
+  HttpStatusCode,
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 // import { Router } from '@angular/router';

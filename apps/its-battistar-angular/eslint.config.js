@@ -3,8 +3,8 @@
 //
 /* eslint-disable unicorn/prefer-module */
 const ng = require('@angular-eslint/eslint-plugin');
-const ngTeplate = require('@angular-eslint/eslint-plugin-template');
-const ngParser = require('@angular-eslint/template-parser');
+// const ngTeplate = require('@angular-eslint/eslint-plugin-template');
+// const ngParser = require('@angular-eslint/template-parser');
 const baseConfig = require('../../eslint.config.js');
 const globals = require('globals');
 const tseslint = require('typescript-eslint');
@@ -56,17 +56,20 @@ module.exports = tseslint.config(
     },
   },
 
-  {
-    files: ['**/*.html'],
-    plugins: { '@angular-eslint/template': ngTeplate },
-    languageOptions: {
-      parser: ngParser,
-    },
-    rules: {
-      ...ngTeplate.configs.recommended.rules,
-      ...ngTeplate.configs.accessibility.rules,
-    },
-  },
+  // {
+  //   files: ['**/*.html'],
+  //   plugins: {
+  //     '@angular-eslint/template': ngTeplate,
+  //   },
+  //   languageOptions: {
+  //     // BUG: not using the parser
+  //     parser: ngParser,
+  //   },
+  //   rules: {
+  //     ...ngTeplate.configs.recommended.rules,
+  //     ...ngTeplate.configs.accessibility.rules,
+  //   },
+  // },
 
   {
     files: ['**/*.spec.ts'],
