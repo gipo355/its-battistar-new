@@ -1,14 +1,27 @@
 {
   "name": "its-battistar-be-go",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/its-battistar-be-go/cmd/server",
   "root": "apps/its-battistar-be-go",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "go build -o=../../dist/apps/its-battistar-be-go/ ./cmd/server",
+        "command": "go-task build",
+        "cwd": "apps/its-battistar-be-go"
+      }
+    },
+    "preview": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go-task preview",
+        "cwd": "apps/its-battistar-be-go"
+      }
+    },
+    "run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go-task run",
         "cwd": "apps/its-battistar-be-go"
       }
     },
@@ -43,13 +56,6 @@
     "docker-build": {
       "dependsOn": ["build"],
       "command": "docker build -f apps/its-battistar-be-go/Dockerfile . -t its-battistar-be-go"
-    },
-    "serve": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "go-task serve-api",
-        "cwd": "apps/its-battistar-be-go"
-      }
     },
     "init": {
       "executor": "nx:run-commands",
