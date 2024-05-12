@@ -12,6 +12,34 @@
         "cwd": "apps/its-battistar-be-go"
       }
     },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go-task lint",
+        "cwd": "apps/its-battistar-be-go"
+      }
+    },
+    "fix": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go-task fix",
+        "cwd": "apps/its-battistar-be-go"
+      }
+    },
+    "release": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go-task release",
+        "cwd": "apps/its-battistar-be-go"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go-task test",
+        "cwd": "apps/its-battistar-be-go"
+      }
+    },
     "docker-build": {
       "dependsOn": ["build"],
       "command": "docker build -f apps/its-battistar-be-go/Dockerfile . -t its-battistar-be-go"
