@@ -1,12 +1,27 @@
 package main
 
-import "log/slog"
+import (
+	"github.com/gipo355/its-battistar-be-go/internal/config"
+	"github.com/gipo355/its-battistar-be-go/pkg/app"
+)
 
+//	@title			Echo Battistar API
+//	@version		1.0
+//	@description	Echo Battistar API
+
+//	@contact.name	gipo355
+//	@contact.url	github.com/gipo355
+//	@contact.email	github.com/gipo355
+
+//	@securityDefinitions.apikey	ApiKeyAuth
+//	@in							header
+//	@name						Authorization
+
+// @BasePath	/
 func main() {
-	// Start the server
-	// println("Hello, World!")
+	cfg := config.New()
 
-	for i := 0; i < 10; i++ {
-		slog.Info("Hello, World!")
-	}
+	// TODO: add swagger
+
+	app.Start(cfg)
 }

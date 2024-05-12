@@ -1,0 +1,34 @@
+version: '3.9' # optional since v1.27.0
+services:
+  ########## postgres
+  postgresdev:
+    env_file: ./.env
+    image: postgres:latest
+    # restart: unless-stopped
+    # user: postgres
+    # network_mode: host
+    ports:
+      - 127.0.0.1:5432:5432
+      # - 5432:5432
+    container_name: postgresdev
+    volumes:
+      #     - ~/data/postgres:/var/lib/postgresql/data
+      - /tmp/db/psql:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres # default
+      POSTGRES_PASSWORD: ${DEV_DB_PW}
+      POSTGRES_DB: battistar
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4:latest
+    # restart: unless-stopped
+    # network_mode: host
+    depends_on:
+      - postgresdev
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+      # PGADMIN_LISTEN_PORT: 9001
+    ports:
+      - 127.0.0.1:9001:80
+      # - 9001:80
