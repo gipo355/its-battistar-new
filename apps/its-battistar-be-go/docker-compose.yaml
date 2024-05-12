@@ -8,16 +8,16 @@ services:
     # user: postgres
     # network_mode: host
     ports:
-      - 127.0.0.1:5432:5432
+      - ${DB_HOST}:${DB_PORT}:5432
       # - 5432:5432
     container_name: postgresdev
     volumes:
       #     - ~/data/postgres:/var/lib/postgresql/data
       - /tmp/db/psql:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres # default
-      POSTGRES_PASSWORD: ${DEV_DB_PW}
-      POSTGRES_DB: battistar
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4:latest

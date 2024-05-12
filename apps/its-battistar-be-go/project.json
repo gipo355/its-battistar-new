@@ -7,7 +7,7 @@
     "docker-compose": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker-compose up",
+        "command": "docker-compose up -d --no-recreate",
         "cwd": "apps/its-battistar-be-go"
       }
     },
