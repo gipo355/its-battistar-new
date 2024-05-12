@@ -1,5 +1,6 @@
 # some examples projects
 
+<https://github.com/codoworks/go-boilerplate>
 <https://github.com/alexferl/echo-boilerplate>
 <https://github.com/nix-united/golang-echo-boilerplate>
 

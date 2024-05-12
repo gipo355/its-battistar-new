@@ -15,8 +15,7 @@ tasks:
       - go install golang.org/x/tools/cmd/goimports@latest
       - go install github.com/securego/gosec/v2/cmd/gosec@latest
       - go install mvdan.cc/gofumpt@latest
-      # prepare dependencies
-      - go mod tidy
+      - go get
   assets:
     desc: Build the assets
     cmds:

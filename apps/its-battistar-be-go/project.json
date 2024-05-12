@@ -14,14 +14,14 @@
     "preview": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "go-task preview",
+        "command": "infisical run -- go-task preview",
         "cwd": "apps/its-battistar-be-go"
       }
     },
     "run": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "go-task run",
+        "command": "infisical run -- go-task run",
         "cwd": "apps/its-battistar-be-go"
       }
     },
