@@ -4,6 +4,13 @@
   "root": "apps/its-battistar-be-go",
   "projectType": "application",
   "targets": {
+    "docker-compose": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker-compose up",
+        "cwd": "apps/its-battistar-be-go"
+      }
+    },
     "build": {
       "executor": "nx:run-commands",
       "options": {
@@ -66,6 +73,7 @@
     },
     "dev": {
       "executor": "nx:run-commands",
+      "dependsOn": ["docker-compose"],
       "options": {
         "command": "infisical run -- go-task dev",
         "cwd": "apps/its-battistar-be-go"
