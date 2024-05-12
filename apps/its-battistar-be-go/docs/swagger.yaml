@@ -1,0 +1,16 @@
+basePath: /.
+info:
+  contact:
+    email: github.com/gipo355
+    name: gipo355
+    url: github.com/gipo355
+  description: Echo Battistar API
+  title: Echo Battistar API
+  version: "1.0"
+paths: {}
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+
+	"github.com/gipo355/its-battistar-be-go/docs"
 	"github.com/gipo355/its-battistar-be-go/internal/config"
 	"github.com/gipo355/its-battistar-be-go/pkg/app"
 )
@@ -22,6 +25,7 @@ func main() {
 	cfg := config.New()
 
 	// TODO: add swagger
+	docs.SwaggerInfo.Host = fmt.Sprintf("%s:%s", cfg.HTTP.Host, cfg.HTTP.Port)
 
 	app.Start(cfg)
 }

@@ -3,10 +3,12 @@ package server
 import (
 	"fmt"
 
+	"github.com/labstack/echo/v4"
+	echoSwagger "github.com/swaggo/echo-swagger"
+	"gorm.io/gorm"
+
 	"github.com/gipo355/its-battistar-be-go/db"
 	"github.com/gipo355/its-battistar-be-go/internal/config"
-	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 )
 
 type Server struct {
@@ -23,8 +25,10 @@ func New(cfg *config.Config) *Server {
 	}
 }
 
-func (s *Server) Start(addr string) error {
-	err := s.Echo.Start(":" + addr)
+func (s *Server) Start(port string) error {
+	s.Echo.GET("/swagger/*", echoSwagger.WrapHandler)
+
+	err := s.Echo.Start(":" + port)
 
 	return fmt.Errorf("server error: %w", err)
 }
