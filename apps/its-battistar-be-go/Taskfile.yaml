@@ -65,6 +65,8 @@ tasks:
   lint:
     desc: Lint project
     cmds:
+      - golines --shorten-comments -l .
+      - goimports -l .
       - gofumpt -l .
       - golangci-lint run
       - gosec ./...
