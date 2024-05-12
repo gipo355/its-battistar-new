@@ -62,6 +62,7 @@ tasks:
       - golines --shorten-comments -w .
       - goimports -w .
       - gofumpt -w .
+      - golangci-lint run --fix
       - go mod tidy
   lint:
     desc: Lint project

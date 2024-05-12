@@ -17,7 +17,7 @@ import (
 //	@in							header
 //	@name						Authorization
 
-// @BasePath	/
+// @BasePath	/.
 func main() {
 	cfg := config.New()
 

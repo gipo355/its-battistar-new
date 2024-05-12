@@ -3,11 +3,10 @@ package server
 import (
 	"fmt"
 
-	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
-
 	"github.com/gipo355/its-battistar-be-go/db"
 	"github.com/gipo355/its-battistar-be-go/internal/config"
+	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type Server struct {

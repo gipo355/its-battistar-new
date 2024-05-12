@@ -16,7 +16,7 @@ type Config struct {
 func New() *Config {
 	err := godotenv.Load()
 	if err != nil {
-		log.Panic(fmt.Errorf("Error loading .env file: %w", err))
+		log.Panic(fmt.Errorf("error loading .env file: %w", err))
 	}
 
 	return &Config{
