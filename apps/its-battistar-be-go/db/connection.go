@@ -21,11 +21,10 @@ func Init(cfg *config.Config) *gorm.DB {
 	)
 
 	log.Println("Connecting to database...")
-	log.Println("dataSourceName: ", dataSourceName)
 
 	db, err := gorm.Open(postgres.Open(dataSourceName), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("failed to connect to database: %v", err)
+		log.Panic("failed to connect to database: %v", err)
 	}
 
 	// TODO: add seeders

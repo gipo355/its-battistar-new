@@ -52,6 +52,7 @@
 
 - zap
 - logrus
+- zerolog
 
 ## template
 
