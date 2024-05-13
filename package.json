@@ -9,7 +9,7 @@
     "lint-test-build": "nx run-many -t lint test build",
     "serve-express": "nx run its-battistar-express:serve",
     "serve-angular": "nx run its-battistar-angular:serve",
-    "server-nest": "nx run its-battistar-nest:serve",
+    "serve-nest": "nx run its-battistar-nest:serve",
     "serve-go": "nx run its-battistar-be-go:dev",
     "prepare": "husky",
     "storybook": "nx run its-battistar-angular:storybook",
