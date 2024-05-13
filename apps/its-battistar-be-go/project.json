@@ -14,49 +14,49 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "go-task build",
+        "command": "task build",
         "cwd": "apps/its-battistar-be-go"
       }
     },
     "preview": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "infisical run -- go-task preview",
+        "command": "infisical run -- task preview",
         "cwd": "apps/its-battistar-be-go"
       }
     },
     "run": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "infisical run -- go-task run",
+        "command": "infisical run -- task run",
         "cwd": "apps/its-battistar-be-go"
       }
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "go-task lint",
+        "command": "task lint",
         "cwd": "apps/its-battistar-be-go"
       }
     },
     "fix": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "go-task fix",
+        "command": "task fix",
         "cwd": "apps/its-battistar-be-go"
       }
     },
     "release": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "go-task release",
+        "command": "task release",
         "cwd": "apps/its-battistar-be-go"
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "go-task test",
+        "command": "task test",
         "cwd": "apps/its-battistar-be-go"
       }
     },
@@ -67,7 +67,7 @@
     "init": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "go-task init",
+        "command": "task init",
         "cwd": "apps/its-battistar-be-go"
       }
     },
@@ -75,7 +75,7 @@
       "executor": "nx:run-commands",
       "dependsOn": ["docker-compose"],
       "options": {
-        "command": "infisical run -- go-task dev",
+        "command": "infisical run -- task dev",
         "cwd": "apps/its-battistar-be-go"
       }
     }
