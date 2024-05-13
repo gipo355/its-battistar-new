@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/gipo355/its-battistar-be-go/docs"
 	"github.com/gipo355/its-battistar-be-go/internal/config"
@@ -27,5 +28,15 @@ func main() {
 	// TODO: add swagger
 	docs.SwaggerInfo.Host = fmt.Sprintf("%s:%s", cfg.HTTP.Host, cfg.HTTP.Port)
 
+	bar()
+
 	app.Start(cfg)
+}
+
+func foo() *int {
+	return nil
+}
+
+func bar() {
+	log.Println(*foo())
 }
