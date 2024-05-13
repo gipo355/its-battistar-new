@@ -32,6 +32,7 @@
     "@changesets/cli": "^2.27.1",
     "@nestjs/common": "^10.0.2",
     "@nestjs/core": "^10.0.2",
+    "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.0.2",
     "@ngrx/effects": "^17.2.0",
     "@ngrx/signals": "^17.2.0",
