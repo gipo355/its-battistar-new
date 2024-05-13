@@ -4,7 +4,7 @@ import { UsersModule } from './users/users.module';
 @Module({
   controllers: [],
   providers: [],
-  exports: [],
+  exports: [UsersModule],
   imports: [UsersModule],
 })
 export class NestUsersModule {}
