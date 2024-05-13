@@ -5,10 +5,9 @@
 
 import 'dotenv-defaults/config';
 
-import { NestExpressApplication } from '@nestjs/platform-express';
-
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 
 import { AppModule } from './app/app.module';
 import { connectMongoloid } from './app/db/mongo';

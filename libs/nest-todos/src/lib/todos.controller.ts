@@ -1,42 +1,43 @@
 import {
+  Body,
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
   Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
-import { TodosService } from './todos.service';
-import { CreateTodoDto } from './dto/create-todo.dto';
+
 import { AssignTodoDto } from './dto/assign-todo.dto';
+import { CreateTodoDto } from './dto/create-todo.dto';
+import { TodosService } from './todos.service';
 
 @Controller('todos')
 export class TodosController {
   constructor(private readonly todosService: TodosService) {}
 
   @Post()
-  create(@Body() createTodoDto: CreateTodoDto) {
+  async create(@Body() createTodoDto: CreateTodoDto) {
     return this.todosService.create(createTodoDto);
   }
 
   @Get()
-  findAll(@Query('showCompleted') showCompleted: boolean) {
+  async findAll(@Query('showCompleted') showCompleted: boolean) {
     return this.todosService.findAll(showCompleted);
   }
 
   @Patch(':id/check')
-  check(@Param('id') id: string) {
+  async check(@Param('id') id: string) {
     return this.todosService.check(id);
   }
 
   @Patch(':id/uncheck')
-  uncheck(@Param('id') id: string) {
+  async uncheck(@Param('id') id: string) {
     return this.todosService.uncheck(id);
   }
 
   @Post(':id/assign')
-  assign(@Param('id') id: string, @Body() assignTodoDto: AssignTodoDto) {
+  async assign(@Param('id') id: string, @Body() assignTodoDto: AssignTodoDto) {
     return this.todosService.assign(id, assignTodoDto.userId);
   }
 

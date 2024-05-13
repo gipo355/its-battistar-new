@@ -1,5 +1,5 @@
-import { IsDate, IsString, MinDate } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { IsDate, IsString, MinDate } from 'class-validator';
 export class CreateTodoDto {
   @IsString()
   title?: string;

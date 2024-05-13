@@ -1,7 +1,8 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { NestAuthService } from './nest-auth.service';
-import { RegisterNestAuthDto } from './dto/register-nest-auth.dto';
+import { Body,Controller, Post } from '@nestjs/common';
+
 import { LoginNestAuthDto } from './dto/login-nest-auth.dto';
+import { RegisterNestAuthDto } from './dto/register-nest-auth.dto';
+import { NestAuthService } from './nest-auth.service';
 
 @Controller()
 export class NestAuthController {
