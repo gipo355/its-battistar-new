@@ -1,11 +1,14 @@
-import { IsDate, IsString } from 'class-validator';
+import { IsDate, IsString, MinDate } from 'class-validator';
+import { Transform } from 'class-transformer';
 export class CreateTodoDto {
   @IsString()
-  title!: string;
+  title?: string;
 
   @IsDate()
-  dueDate!: Date;
+  @Transform(({ value }) => new Date(value))
+  @MinDate(new Date())
+  dueDate?: Date;
 
   @IsString()
-  assignedTo!: string;
+  assignedTo?: string;
 }

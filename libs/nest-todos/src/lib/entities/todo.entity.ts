@@ -5,7 +5,7 @@ export class Todo {
   id!: number;
   title!: string;
   dueDate!: Date;
-  assignedTo!: string;
+  assignedTo!: string | mongoose.Schema.Types.ObjectId;
   completed!: boolean;
   expired!: boolean;
   createdBy!: string | mongoose.Schema.Types.ObjectId;
@@ -23,14 +23,14 @@ const todoSchema = new mongoose.Schema<Todo>({
     type: Date,
   },
   assignedTo: {
-    type: String,
-    required: true,
-    validate: IsAscii,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
   completed: {
     type: Boolean,
     required: true,
     validate: isBoolean,
+    default: false,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
