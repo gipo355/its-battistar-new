@@ -34,6 +34,11 @@ jobs:
           node-version: 20.5.0
       - name: setup go
         uses: actions/setup-go@v5
+      - name: Install Task
+        uses: arduino/setup-task@v1
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       # setup pnpm
       - uses: pnpm/action-setup@v3
         name: Install pnpm
