@@ -18,6 +18,10 @@
 <https://github.com/Binject/awesome-go-security>
 <https://github.com/securego/gosec>
 
+# task file
+
+- `task` is a task runner written in go
+
 # formatters/linters/cli
 
 - gofumpt
@@ -25,6 +29,7 @@
 - goimports
 - golangci-lint
 - gosec
+- nilaway
 
 # most used 3d party libs
 
