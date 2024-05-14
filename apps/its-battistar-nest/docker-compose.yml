@@ -2,11 +2,11 @@
 version: '3.9'
 services:
   ########## mongo
-  mongo:
+  mongo-battistar-nest:
     env_file: ./.env
     image: mongo
     user: mongodb
-    container_name: mongo-battistar
+    container_name: mongo-battistar-nest
     network_mode: host
     ports:
       - 127.0.0.1:27017:27017
@@ -14,23 +14,24 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
   ########## mongo express ui
-  mongo-express:
+  mongo-express-battistar-nest:
     env_file: ./.env
     # profiles: [full]
-    image: mongo-express
-    container_name: mongo-battistar-redis-express
+    image: mongo-express-battistar-nest
+    container_name: mongo-express-battistar-nest
     network_mode: host
     ports:
       - 127.0.0.1:9001:8081
     depends_on:
-      - mongo
+      - mongo-battistar-nest
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
       ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@127.0.0.1:${MONGO_PORT}/simulazione-01
   ########## redis
-  redisdev:
+  redisdev-battistar-nest:
     env_file: ./.env
+    container_name: redisdev-battistar-nest
     image: redis/redis-stack:latest
     # user: redis
     network_mode: host
@@ -38,7 +39,6 @@ services:
       - 127.0.0.1:6379:6379
       #  redis insight
       - 127.0.0.1:9002:8001
-    container_name: redisdev
     volumes:
       - /tmp/db/redis:/data
     environment:

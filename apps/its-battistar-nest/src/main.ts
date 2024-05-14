@@ -15,6 +15,7 @@ import { connectMongoloid } from './app/db/mongo';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  Logger.log('Connecting to MongoDB');
   await connectMongoloid();
 
   app.disable('x-powered-by');
