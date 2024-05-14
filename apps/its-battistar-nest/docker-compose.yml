@@ -17,7 +17,7 @@ services:
   mongo-express-battistar-nest:
     env_file: ./.env
     # profiles: [full]
-    image: mongo-express-battistar-nest
+    image: mongo-express
     container_name: mongo-express-battistar-nest
     network_mode: host
     ports:
