@@ -28,8 +28,8 @@ import { TodoModel } from './entities/todo.entity';
 
 @Injectable()
 export class TodosService {
-  async create(createTodoDto: CreateTodoDto) {
-    return await this.tryCatch(async () => {
+  async create(createTodoDto: CreateTodoDto): Promise<unknown> {
+    return this.tryCatch(async () => {
       const newTodo = await TodoModel.create(createTodoDto);
       // TODO: populate when user entity is created
 
@@ -37,8 +37,8 @@ export class TodosService {
     });
   }
 
-  async findAll(showCompleted: boolean) {
-    return await this.tryCatch(async () => {
+  async findAll(showCompleted: boolean): Promise<unknown> {
+    return this.tryCatch(async () => {
       const todos = await TodoModel.find({
         completed: showCompleted,
       });
@@ -46,8 +46,8 @@ export class TodosService {
     });
   }
 
-  async check(id: string) {
-    return await this.tryCatch(async () => {
+  async check(id: string): Promise<unknown> {
+    return this.tryCatch(async () => {
       const todo = await TodoModel.findByIdAndUpdate(
         {
           _id: id,
@@ -66,8 +66,8 @@ export class TodosService {
     });
   }
 
-  async uncheck(id: string) {
-    return await this.tryCatch(async () => {
+  async uncheck(id: string): Promise<unknown> {
+    return this.tryCatch(async () => {
       const todo = TodoModel.findByIdAndUpdate(
         {
           _id: id,
@@ -86,8 +86,8 @@ export class TodosService {
     });
   }
 
-  async assign(id: string, userId: string) {
-    return await this.tryCatch(async () => {
+  async assign(id: string, userId: string): Promise<unknown> {
+    return this.tryCatch(async () => {
       const todo = TodoModel.findByIdAndUpdate(
         {
           _id: id,
@@ -106,7 +106,7 @@ export class TodosService {
     });
   }
 
-  async tryCatch(cb: () => Promise<any>) {
+  async tryCatch(cb: () => Promise<unknown>): Promise<unknown> {
     try {
       return cb();
     } catch (error) {

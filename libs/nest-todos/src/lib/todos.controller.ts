@@ -17,27 +17,32 @@ export class TodosController {
   constructor(private readonly todosService: TodosService) {}
 
   @Post()
-  async create(@Body() createTodoDto: CreateTodoDto) {
+  async create(@Body() createTodoDto: CreateTodoDto): Promise<unknown> {
     return this.todosService.create(createTodoDto);
   }
 
   @Get()
-  async findAll(@Query('showCompleted') showCompleted: boolean) {
+  async findAll(
+    @Query('showCompleted') showCompleted: boolean
+  ): Promise<unknown> {
     return this.todosService.findAll(showCompleted);
   }
 
   @Patch(':id/check')
-  async check(@Param('id') id: string) {
+  async check(@Param('id') id: string): Promise<unknown> {
     return this.todosService.check(id);
   }
 
   @Patch(':id/uncheck')
-  async uncheck(@Param('id') id: string) {
+  async uncheck(@Param('id') id: string): Promise<unknown> {
     return this.todosService.uncheck(id);
   }
 
   @Post(':id/assign')
-  async assign(@Param('id') id: string, @Body() assignTodoDto: AssignTodoDto) {
+  async assign(
+    @Param('id') id: string,
+    @Body() assignTodoDto: AssignTodoDto
+  ): Promise<unknown> {
     return this.todosService.assign(id, assignTodoDto.userId);
   }
 

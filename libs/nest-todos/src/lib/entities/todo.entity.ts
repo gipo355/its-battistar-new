@@ -1,4 +1,4 @@
-import { IsAscii, isAscii, isBoolean } from 'class-validator';
+import { isAscii, isBoolean } from 'class-validator';
 import mongoose from 'mongoose';
 
 export class Todo {
@@ -38,7 +38,7 @@ const todoSchema = new mongoose.Schema<Todo>({
   },
 });
 
-todoSchema.virtual('expired').get(function (this: any) {
+todoSchema.virtual('expired').get(function () {
   return this.dueDate < new Date();
 });
 
