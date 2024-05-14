@@ -7,4 +7,6 @@ import { UsersService } from './users.service';
   controllers: [UsersController],
   providers: [UsersService],
 })
-export class NestUsersModule {}
+export class NestUsersModule {
+  name = 'NestUsersModule';
+}
