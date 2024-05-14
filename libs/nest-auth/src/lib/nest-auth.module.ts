@@ -8,4 +8,6 @@ import { NestAuthService } from './nest-auth.service';
   providers: [NestAuthService],
   exports: [NestAuthService], // 👈 Export the service to inject it in other modules
 })
-export class NestAuthModule {}
+export class NestAuthModule {
+  name = 'NestAuthModule';
+}

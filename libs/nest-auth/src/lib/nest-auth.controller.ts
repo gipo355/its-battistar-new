@@ -1,4 +1,4 @@
-import { Body,Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 
 import { LoginNestAuthDto } from './dto/login-nest-auth.dto';
 import { RegisterNestAuthDto } from './dto/register-nest-auth.dto';
@@ -9,12 +9,12 @@ export class NestAuthController {
   constructor(private readonly nestAuthService: NestAuthService) {}
 
   @Post('register')
-  register(@Body() createNestAuthDto: RegisterNestAuthDto) {
+  register(@Body() createNestAuthDto: RegisterNestAuthDto): string {
     return this.nestAuthService.register(createNestAuthDto);
   }
 
   @Post('login')
-  login(@Body() loginNestAuthDto: LoginNestAuthDto) {
+  login(@Body() loginNestAuthDto: LoginNestAuthDto): string {
     return this.nestAuthService.login(loginNestAuthDto);
   }
 }

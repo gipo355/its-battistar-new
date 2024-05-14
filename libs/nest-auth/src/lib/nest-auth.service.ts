@@ -5,10 +5,12 @@ import { RegisterNestAuthDto } from './dto/register-nest-auth.dto';
 
 @Injectable()
 export class NestAuthService {
-  login(_createNestAuthDto: LoginNestAuthDto) {
+  login(createNestAuthDto: LoginNestAuthDto): string {
+    console.log(createNestAuthDto);
     return 'This action adds a new nestAuth';
   }
-  register(_createNestAuthDto: RegisterNestAuthDto) {
+  register(createNestAuthDto: RegisterNestAuthDto): string {
+    console.log(createNestAuthDto);
     return 'This action adds a new nestAuth';
   }
 }
