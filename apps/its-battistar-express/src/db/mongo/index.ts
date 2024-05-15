@@ -18,7 +18,9 @@ export const prepareMongo = async (): Promise<void> => {
     // handle deprecation warning
     mongoose.set('strictQuery', false);
 
-    await mongoose.connect(e.MONGO_STRING, {});
+    await mongoose.connect(e.MONGO_STRING, {
+      authSource: 'admin',
+    });
   } catch (error) {
     throw new Error(`Error connecting to MongoDB: ${JSON.stringify(error)}`);
   }

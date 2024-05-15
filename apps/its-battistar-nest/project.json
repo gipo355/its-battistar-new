@@ -14,7 +14,7 @@
         "cwd": "apps/its-battistar-nest"
       }
     },
-    "serve": {
+    "serve.bak": {
       "dependsOn": ["compose"],
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
