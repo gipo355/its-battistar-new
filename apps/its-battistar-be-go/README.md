@@ -48,6 +48,10 @@
 - gorilla/websocket
 - protobuf
 
+## microservices
+
+- go-micro
+
 ## config
 
 - viper
