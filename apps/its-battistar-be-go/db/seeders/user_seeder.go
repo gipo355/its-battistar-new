@@ -2,6 +2,8 @@ package seeders
 
 import (
 	"gorm.io/gorm"
+
+	"github.com/gipo355/its-battistar-be-go/internal/models"
 )
 
 type UserSeeder struct {
