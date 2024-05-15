@@ -26,9 +26,11 @@ func New(cfg *config.Config) *Server {
 }
 
 func (s *Server) Start(port string) error {
+	// start on /swagger/index.html
 	s.Echo.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	err := s.Echo.Start(":" + port)
 
+	// wrap the error
 	return fmt.Errorf("server error: %w", err)
 }

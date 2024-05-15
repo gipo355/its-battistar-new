@@ -28,6 +28,8 @@
 - golines
 - goimports
 - golangci-lint
+- fieldalignment
+- betteralign (aligns the fields in structs to use less memory)
 - gosec
 - nilaway
 

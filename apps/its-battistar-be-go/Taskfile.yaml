@@ -6,6 +6,7 @@ tasks:
     cmds:
       # tools
       - go install github.com/swaggo/swag/cmd/swag@latest
+      - go install github.com/dkorunic/betteralign/cmd/betteralign@latest
       - go install github.com/goreleaser/goreleaser@latest
       - go install -tags 'postgres'
         github.com/golang-migrate/migrate/v4/cmd/migrate@latest
@@ -63,6 +64,7 @@ tasks:
       - golines --shorten-comments -w .
       - goimports -w .
       - gofumpt -w .
+      - betteralign -apply ./...
       - golangci-lint run --fix
       - go mod tidy
   lint:

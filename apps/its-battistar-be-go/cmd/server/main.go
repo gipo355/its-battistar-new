@@ -1,3 +1,4 @@
+//nolint:godot // ignore godot for swagger
 package main
 
 import (
@@ -20,11 +21,10 @@ import (
 //	@in							header
 //	@name						Authorization
 
-// @BasePath	/.
+// @BasePath	/
 func main() {
 	cfg := config.New()
 
-	// TODO: add swagger
 	docs.SwaggerInfo.Host = fmt.Sprintf("%s:%s", cfg.HTTP.Host, cfg.HTTP.Port)
 
 	app.Start(cfg)
