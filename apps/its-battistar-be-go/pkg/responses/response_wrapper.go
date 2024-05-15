@@ -1,6 +1,9 @@
 package responses
 
 import (
+	"fmt"
+	"log/slog"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -14,11 +17,15 @@ type Data struct {
 	Code    int    `json:"code"`
 }
 
+// context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+// context.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+// context.Writer.Header().Set("Access-Control-Allow-Headers", "Authorization").
 func Response(c echo.Context, statusCode int, data interface{}) error {
-	// nolint // context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-	// nolint // context.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
-	// nolint // context.Writer.Header().Set("Access-Control-Allow-Headers", "Authorization")
-	return c.JSON(statusCode, data)
+	err := c.JSON(statusCode, data)
+	if err != nil {
+		slog.Error(fmt.Sprintf("Error while sending response: %v", err))
+	}
+	return fmt.Errorf("Error while sending response: %w", err)
 }
 
 func MessageResponse(c echo.Context, statusCode int, message string) error {
