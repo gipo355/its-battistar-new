@@ -22,6 +22,19 @@
 
 - `task` is a task runner written in go
 
+# cli tools
+
+- cobra
+- viper
+- glamour (pretty ui) <https://github.com/charmbracelet/glamour>
+- promptui
+
+<https://dev.to/lukehagar/writing-better-cobra-cli-help-messages-with-glamour-1525>
+
+<https://dev.to/divrhino/building-an-interactive-cli-app-with-go-cobra-promptui-346n>
+
+<https://dev.to/divrhino/building-an-interactive-cli-app-with-go-cobra-promptui-346n>
+
 # formatters/linters/cli
 
 - gofumpt
