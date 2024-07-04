@@ -1,5 +1,5 @@
 {
-  "global": {
-    "audit": "enabled"
-  }
+    "global": {
+        "audit": "enabled"
+    }
 }

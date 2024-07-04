@@ -14,116 +14,116 @@ import normalizeEmail from 'validator/lib/normalizeEmail';
  * chain the methods to sanitize the content
  */
 export class Sanitize {
-  constructor(
-    private content: string,
-    private error: Error | null = null
-  ) {}
+    constructor(
+        private content: string,
+        private error: Error | null = null
+    ) {}
 
-  get done(): {
-    error: Error | null;
-    string: string;
-  } {
-    return {
-      string: this.content,
-      error: this.error,
-    };
-  }
-
-  get isValid(): boolean {
-    return !this.error;
-  }
-
-  get errorMessage(): string {
-    return this.error?.message ?? '';
-  }
-
-  forMongoInjection(): this {
-    let sanitized = this.content.trim();
-
-    sanitized = escape(sanitized);
-
-    // blacklist chars with regex for possible mongo injection
-    sanitized = blacklist(sanitized, '\\/<>$%^&*()=+{}[];:"\'');
-
-    // sanitized = trim(sanitized);
-
-    this.content = sanitized;
-
-    return this;
-  }
-
-  isMongoId(): this {
-    if (!this.content || !isMongoId(this.content)) {
-      this.error = new Error('Not a valid Mongo ID');
-
-      return this;
+    get done(): {
+        error: Error | null;
+        string: string;
+    } {
+        return {
+            string: this.content,
+            error: this.error,
+        };
     }
 
-    return this;
-  }
-
-  email(): this {
-    let sanitizedEmail = this.content.trim().toLowerCase();
-
-    const normalizedEmail = normalizeEmail(sanitizedEmail);
-
-    if (!normalizedEmail) {
-      this.error = new Error('Invalid email');
-
-      return this;
+    get isValid(): boolean {
+        return !this.error;
     }
 
-    sanitizedEmail = normalizedEmail;
-
-    if (!sanitizedEmail) {
-      this.error = new Error('Invalid email');
-
-      return this;
+    get errorMessage(): string {
+        return this.error?.message ?? '';
     }
 
-    if (!isEmail(sanitizedEmail)) {
-      this.error = new Error('Invalid email');
+    forMongoInjection(): this {
+        let sanitized = this.content.trim();
 
-      return this;
+        sanitized = escape(sanitized);
+
+        // blacklist chars with regex for possible mongo injection
+        sanitized = blacklist(sanitized, '\\/<>$%^&*()=+{}[];:"\'');
+
+        // sanitized = trim(sanitized);
+
+        this.content = sanitized;
+
+        return this;
     }
 
-    // TODO: IMPROVE SANITIZATION
-    // blacklist chars with regex for possible mongo injection?
-    // sanitizedEmail = blacklist(sanitizedEmail, '\\/<>$%^&*()=+{}[];:"\'');
+    isMongoId(): this {
+        if (!this.content || !isMongoId(this.content)) {
+            this.error = new Error('Not a valid Mongo ID');
 
-    // sanitizedEmail = trim(sanitizedEmail);
+            return this;
+        }
 
-    this.content = sanitizedEmail;
+        return this;
+    }
 
-    return this;
-  }
+    email(): this {
+        let sanitizedEmail = this.content.trim().toLowerCase();
 
-  password(): this {
-    const sanitizedPassword = this.content.trim();
+        const normalizedEmail = normalizeEmail(sanitizedEmail);
 
-    // TODO: IMPROVE SANITIZATION
-    // blacklist chars with regex for possible mongo injection
-    // sanitizedPassword = blacklist(sanitizedPassword, '\\/<>$%^&*()=+{}[];:"\'');
+        if (!normalizedEmail) {
+            this.error = new Error('Invalid email');
 
-    // sanitizedPassword = trim(sanitizedPassword);
+            return this;
+        }
 
-    this.content = sanitizedPassword;
+        sanitizedEmail = normalizedEmail;
 
-    return this;
-  }
+        if (!sanitizedEmail) {
+            this.error = new Error('Invalid email');
 
-  forXSS(): this {
-    const sanitized = escape(this.content.trim());
+            return this;
+        }
 
-    // blacklist chars with regex for possible XSS
-    // sanitized = blacklist(sanitized, '\\/<>$%^&*()=+{}[];:"\'');
+        if (!isEmail(sanitizedEmail)) {
+            this.error = new Error('Invalid email');
 
-    // sanitized = trim(sanitized);
+            return this;
+        }
 
-    this.content = sanitized;
+        // TODO: IMPROVE SANITIZATION
+        // blacklist chars with regex for possible mongo injection?
+        // sanitizedEmail = blacklist(sanitizedEmail, '\\/<>$%^&*()=+{}[];:"\'');
 
-    return this;
-  }
+        // sanitizedEmail = trim(sanitizedEmail);
+
+        this.content = sanitizedEmail;
+
+        return this;
+    }
+
+    password(): this {
+        const sanitizedPassword = this.content.trim();
+
+        // TODO: IMPROVE SANITIZATION
+        // blacklist chars with regex for possible mongo injection
+        // sanitizedPassword = blacklist(sanitizedPassword, '\\/<>$%^&*()=+{}[];:"\'');
+
+        // sanitizedPassword = trim(sanitizedPassword);
+
+        this.content = sanitizedPassword;
+
+        return this;
+    }
+
+    forXSS(): this {
+        const sanitized = escape(this.content.trim());
+
+        // blacklist chars with regex for possible XSS
+        // sanitized = blacklist(sanitized, '\\/<>$%^&*()=+{}[];:"\'');
+
+        // sanitized = trim(sanitized);
+
+        this.content = sanitized;
+
+        return this;
+    }
 }
 
 // export const sanitizeForMongoInjection = (content: string): string => {

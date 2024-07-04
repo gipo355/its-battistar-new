@@ -7,21 +7,21 @@ import { todosRoutes } from '../todos.routes';
 import { TodoModalComponent } from './todo-modal.component';
 
 describe('TodoModalComponent', () => {
-  let component: TodoModalComponent;
-  let fixture: ComponentFixture<TodoModalComponent>;
+    let component: TodoModalComponent;
+    let fixture: ComponentFixture<TodoModalComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TodoModalComponent],
-      providers: [provideRouter(todosRoutes), provideHttpClient()],
-    }).compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [TodoModalComponent],
+            providers: [provideRouter(todosRoutes), provideHttpClient()],
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(TodoModalComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(TodoModalComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

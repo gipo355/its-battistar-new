@@ -4,31 +4,31 @@
 # compare head to head-1
 name: pre-release
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        default: 'warning'
-      tags:
-        description: 'Test scenario tags'
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+        inputs:
+            logLevel:
+                description: 'Log level'
+                default: 'warning'
+            tags:
+                description: 'Test scenario tags'
 jobs:
-  pre-release:
-    name: Pre Release
-    runs-on: ubuntu-22.04
-    permissions: 'write-all'
-    # contents: 'read'
-    # actions: 'write'
-    steps:
-      - name: Create github release
-        uses: 'marvinpinto/action-automatic-releases@latest'
-        with:
-          repo_token: '${{ secrets.GITHUB_TOKEN }}'
-          automatic_release_tag: 'latest'
-          prerelease: true
-          title: 'Development Build'
-          files: |
-            apps/its-battistar-angular/CHANGELOG.md
-            apps/its-battistar-express/CHANGELOG.md
+    pre-release:
+        name: Pre Release
+        runs-on: ubuntu-22.04
+        permissions: 'write-all'
+        # contents: 'read'
+        # actions: 'write'
+        steps:
+            - name: Create github release
+              uses: 'marvinpinto/action-automatic-releases@latest'
+              with:
+                  repo_token: '${{ secrets.GITHUB_TOKEN }}'
+                  automatic_release_tag: 'latest'
+                  prerelease: true
+                  title: 'Development Build'
+                  files: |
+                      apps/its-battistar-angular/CHANGELOG.md
+                      apps/its-battistar-express/CHANGELOG.md

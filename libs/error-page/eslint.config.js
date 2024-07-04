@@ -7,83 +7,83 @@ const { FlatCompat } = require('@eslint/eslintrc');
 const js = require('@eslint/js');
 
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
+    baseDirectory: __dirname,
+    recommendedConfig: js.configs.recommended,
 });
 
 module.exports = tseslint.config(
-  ...baseConfig,
+    ...baseConfig,
 
-  {
-    ignores: ['!**/*', 'node_modules', 'dist'],
-  },
-
-  {
-    languageOptions: {
-      parserOptions: {
-        project: ['tsconfig.*?.json'],
-        tsconfigRootDir: __dirname,
-      },
-      globals: {
-        ...globals.browser,
-        ...globals.serviceworker,
-      },
+    {
+        ignores: ['!**/*', 'node_modules', 'dist'],
     },
-  },
 
-  {
-    rules: {},
-  },
+    {
+        languageOptions: {
+            parserOptions: {
+                project: ['tsconfig.*?.json'],
+                tsconfigRootDir: __dirname,
+            },
+            globals: {
+                ...globals.browser,
+                ...globals.serviceworker,
+            },
+        },
+    },
 
-  // FIXME: old compatibility mode
-  // do these even work?
-  ...compat
-    .config({
-      extends: [
-        'plugin:@nx/angular',
-        'plugin:@angular-eslint/recommended',
-        'plugin:@angular-eslint/template/process-inline-templates',
-        'plugin:angular/johnpapa',
-      ],
-      // why do i need to specify this in the overrides too?
-      parserOptions: {
-        // project: ['./tsconfig.*?.json'],
-        tsconfigRootDir: __dirname,
-        project: ['tsconfig.*?.json'],
-      },
-    })
-    .map((config) => ({
-      ...config,
-      files: ['**/*.ts'],
-      rules: {
-        '@angular-eslint/directive-selector': [
-          'error',
-          {
-            type: 'attribute',
-            prefix: 'app',
-            style: 'camelCase',
-          },
-        ],
-        '@angular-eslint/component-selector': [
-          'error',
-          {
-            type: 'element',
-            prefix: 'lib',
-            style: 'kebab-case',
-          },
-        ],
-      },
-    })),
+    {
+        rules: {},
+    },
 
-  // FIXME: doesn't lint html files
-  ...compat
-    .config({
-      parser: '@angular-eslint/template-parser',
-      extends: ['plugin:@nx/angular-template'],
-    })
-    .map((config) => ({
-      ...config,
-      files: ['**/*.html'],
-      rules: {},
-    }))
+    // FIXME: old compatibility mode
+    // do these even work?
+    ...compat
+        .config({
+            extends: [
+                'plugin:@nx/angular',
+                'plugin:@angular-eslint/recommended',
+                'plugin:@angular-eslint/template/process-inline-templates',
+                'plugin:angular/johnpapa',
+            ],
+            // why do i need to specify this in the overrides too?
+            parserOptions: {
+                // project: ['./tsconfig.*?.json'],
+                tsconfigRootDir: __dirname,
+                project: ['tsconfig.*?.json'],
+            },
+        })
+        .map((config) => ({
+            ...config,
+            files: ['**/*.ts'],
+            rules: {
+                '@angular-eslint/directive-selector': [
+                    'error',
+                    {
+                        type: 'attribute',
+                        prefix: 'app',
+                        style: 'camelCase',
+                    },
+                ],
+                '@angular-eslint/component-selector': [
+                    'error',
+                    {
+                        type: 'element',
+                        prefix: 'lib',
+                        style: 'kebab-case',
+                    },
+                ],
+            },
+        })),
+
+    // FIXME: doesn't lint html files
+    ...compat
+        .config({
+            parser: '@angular-eslint/template-parser',
+            extends: ['plugin:@nx/angular-template'],
+        })
+        .map((config) => ({
+            ...config,
+            files: ['**/*.html'],
+            rules: {},
+        }))
 );

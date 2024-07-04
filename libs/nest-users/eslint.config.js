@@ -14,57 +14,57 @@ const nodePlugin = require('eslint-plugin-n');
 // });
 
 module.exports = tseslint.config(
-  ...baseConfig,
+    ...baseConfig,
 
-  // https://www.reddit.com/r/learnjavascript/comments/xsiowg/i_need_some_help_configuring_my_eslint_correctly/
-  {
-    // default is ignore all
-    ignores: ['!**/*', 'node_modules', 'dist'],
-  },
-
-  {
-    languageOptions: {
-      parserOptions: {
-        project: ['tsconfig.*?.json'],
-        tsconfigRootDir: __dirname,
-      },
-      // TODO: increase specificity between projects of globals available
-      globals: {
-        ...globals.node,
-        ...globals.worker,
-      },
+    // https://www.reddit.com/r/learnjavascript/comments/xsiowg/i_need_some_help_configuring_my_eslint_correctly/
+    {
+        // default is ignore all
+        ignores: ['!**/*', 'node_modules', 'dist'],
     },
-  },
 
-  // nodePlugin.configs['flat/recommended-script'],
-  // nodePlugin.configs['flat/recommended-module'],
-  nodePlugin.configs['flat/recommended'],
-
-  pluginSecurity.configs.recommended,
-
-  {
-    rules: {
-      'n/no-missing-import': 'off',
-      'n/no-extraneous-import': 'off',
-      'n/no-extraneous-require': 'off',
-      'n/no-unpublished-require': 'off',
-      'unicorn/prefer-module': 'off',
-      'unicorn/prefer-top-level-await': 'off',
+    {
+        languageOptions: {
+            parserOptions: {
+                project: ['tsconfig.*?.json'],
+                tsconfigRootDir: __dirname,
+            },
+            // TODO: increase specificity between projects of globals available
+            globals: {
+                ...globals.node,
+                ...globals.worker,
+            },
+        },
     },
-  },
 
-  {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-    rules: {},
-  },
+    // nodePlugin.configs['flat/recommended-script'],
+    // nodePlugin.configs['flat/recommended-module'],
+    nodePlugin.configs['flat/recommended'],
 
-  {
-    files: ['**/*.ts', '**/*.tsx'],
-    rules: {},
-  },
+    pluginSecurity.configs.recommended,
 
-  {
-    files: ['**/*.js', '**/*.jsx'],
-    rules: {},
-  }
+    {
+        rules: {
+            'n/no-missing-import': 'off',
+            'n/no-extraneous-import': 'off',
+            'n/no-extraneous-require': 'off',
+            'n/no-unpublished-require': 'off',
+            'unicorn/prefer-module': 'off',
+            'unicorn/prefer-top-level-await': 'off',
+        },
+    },
+
+    {
+        files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+        rules: {},
+    },
+
+    {
+        files: ['**/*.ts', '**/*.tsx'],
+        rules: {},
+    },
+
+    {
+        files: ['**/*.js', '**/*.jsx'],
+        rules: {},
+    }
 );

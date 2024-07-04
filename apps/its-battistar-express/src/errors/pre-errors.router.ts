@@ -25,8 +25,8 @@ router.use('*', pageNotFoundHandler);
  */
 // The error handler must be before any other error middleware and after all controllers
 if (e.SENTRY_DSN) {
-  router.use(Sentry.Handlers.errorHandler());
-  logger.info('Sentry enabled');
+    router.use(Sentry.Handlers.errorHandler());
+    logger.info('Sentry enabled');
 }
 
 export { router as preErrorsRouter };

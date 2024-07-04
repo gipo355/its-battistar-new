@@ -1,6 +1,6 @@
 import {
-  githubUserSchema2,
-  githubUsersSchema,
+    githubUserSchema2,
+    githubUsersSchema,
 } from '@its-battistar/shared-types';
 
 import { ajvInstance } from '../utils';

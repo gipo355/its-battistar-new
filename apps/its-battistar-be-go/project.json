@@ -1,83 +1,83 @@
 {
-  "name": "its-battistar-be-go",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "root": "apps/its-battistar-be-go",
-  "projectType": "application",
-  "targets": {
-    "docker-compose": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker-compose up -d --no-recreate",
-        "cwd": "apps/its-battistar-be-go"
-      }
-    },
-    "build": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "task build",
-        "cwd": "apps/its-battistar-be-go"
-      }
-    },
-    "preview": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "infisical run -- task preview",
-        "cwd": "apps/its-battistar-be-go"
-      }
-    },
-    "run": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "infisical run -- task run",
-        "cwd": "apps/its-battistar-be-go"
-      }
-    },
-    "lint": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "task lint",
-        "cwd": "apps/its-battistar-be-go"
-      }
-    },
-    "fix": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "task fix",
-        "cwd": "apps/its-battistar-be-go"
-      }
-    },
-    "release": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "task release",
-        "cwd": "apps/its-battistar-be-go"
-      }
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "task test",
-        "cwd": "apps/its-battistar-be-go"
-      }
-    },
-    "docker-build": {
-      "dependsOn": ["build"],
-      "command": "docker build -f apps/its-battistar-be-go/Dockerfile . -t its-battistar-be-go"
-    },
-    "init": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "task init",
-        "cwd": "apps/its-battistar-be-go"
-      }
-    },
-    "dev": {
-      "executor": "nx:run-commands",
-      "dependsOn": ["docker-compose"],
-      "options": {
-        "command": "infisical run -- task dev",
-        "cwd": "apps/its-battistar-be-go"
-      }
+    "name": "its-battistar-be-go",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "root": "apps/its-battistar-be-go",
+    "projectType": "application",
+    "targets": {
+        "docker-compose": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "docker-compose up -d --no-recreate",
+                "cwd": "apps/its-battistar-be-go"
+            }
+        },
+        "build": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "task build",
+                "cwd": "apps/its-battistar-be-go"
+            }
+        },
+        "preview": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "infisical run -- task preview",
+                "cwd": "apps/its-battistar-be-go"
+            }
+        },
+        "run": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "infisical run -- task run",
+                "cwd": "apps/its-battistar-be-go"
+            }
+        },
+        "lint": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "task lint",
+                "cwd": "apps/its-battistar-be-go"
+            }
+        },
+        "fix": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "task fix",
+                "cwd": "apps/its-battistar-be-go"
+            }
+        },
+        "release": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "task release",
+                "cwd": "apps/its-battistar-be-go"
+            }
+        },
+        "test": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "task test",
+                "cwd": "apps/its-battistar-be-go"
+            }
+        },
+        "docker-build": {
+            "dependsOn": ["build"],
+            "command": "docker build -f apps/its-battistar-be-go/Dockerfile . -t its-battistar-be-go"
+        },
+        "init": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "task init",
+                "cwd": "apps/its-battistar-be-go"
+            }
+        },
+        "dev": {
+            "executor": "nx:run-commands",
+            "dependsOn": ["docker-compose"],
+            "options": {
+                "command": "infisical run -- task dev",
+                "cwd": "apps/its-battistar-be-go"
+            }
+        }
     }
-  }
 }

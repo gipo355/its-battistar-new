@@ -9,21 +9,21 @@ import { catchAsync } from '../utils/catch-async';
 const rateLimiterRedis = new RateLimiterRedis(c.rateLimiterOptions);
 
 const rateLimiterMiddleware = catchAsync(
-  async (request: Request, _, next: NextFunction) => {
-    try {
-      if (request.ip) {
-        await rateLimiterRedis.consume(request.ip);
-      }
-      next();
-    } catch {
-      next(
-        new AppError(
-          'Too Many Requests, try again in one hour!',
-          StatusCodes.TOO_MANY_REQUESTS
-        )
-      );
+    async (request: Request, _, next: NextFunction) => {
+        try {
+            if (request.ip) {
+                await rateLimiterRedis.consume(request.ip);
+            }
+            next();
+        } catch {
+            next(
+                new AppError(
+                    'Too Many Requests, try again in one hour!',
+                    StatusCodes.TOO_MANY_REQUESTS
+                )
+            );
+        }
     }
-  }
 );
 
 export { rateLimiterMiddleware };

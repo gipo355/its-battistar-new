@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { logoutHandler } from './logout.handler';
 
 const r = Router({
-  mergeParams: true,
+    mergeParams: true,
 });
 
 /**

@@ -14,34 +14,34 @@ import { todoModalResolverServiceFN } from './todo-modal/todo-modal-resolver.ser
 // /app/feature => feature, lazy loaded, inside the dashboard
 
 export const todosRoutes: Route[] = [
-  // works with external component, but how would i inject stores and services?
-  {
-    path: '',
-    // canActivate: [canActivate],
-    loadComponent: async () =>
-      import('./todos.component').then((m) => m.TodosComponent),
-    // FIXME: why named outlet is not working?
-    // outlet: 'content',
+    // works with external component, but how would i inject stores and services?
+    {
+        path: '',
+        // canActivate: [canActivate],
+        loadComponent: async () =>
+            import('./todos.component').then((m) => m.TodosComponent),
+        // FIXME: why named outlet is not working?
+        // outlet: 'content',
 
-    children: [
-      {
-        path: 'new',
-        loadComponent: async () =>
-          import('./todo-modal/todo-modal.component').then(
-            (m) => m.TodoModalComponent
-          ),
-      },
-      {
-        path: ':id',
-        loadComponent: async () =>
-          import('./todo-modal/todo-modal.component').then(
-            (m) => m.TodoModalComponent
-          ),
-        // use the param to update the selected todo
-        resolve: {
-          todo: todoModalResolverServiceFN,
-        },
-      },
-    ],
-  },
+        children: [
+            {
+                path: 'new',
+                loadComponent: async () =>
+                    import('./todo-modal/todo-modal.component').then(
+                        (m) => m.TodoModalComponent
+                    ),
+            },
+            {
+                path: ':id',
+                loadComponent: async () =>
+                    import('./todo-modal/todo-modal.component').then(
+                        (m) => m.TodoModalComponent
+                    ),
+                // use the param to update the selected todo
+                resolve: {
+                    todo: todoModalResolverServiceFN,
+                },
+            },
+        ],
+    },
 ];

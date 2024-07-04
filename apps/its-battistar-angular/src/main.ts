@@ -7,5 +7,5 @@ import { initSentry } from './sentry';
 initSentry();
 
 bootstrapApplication(AppComponent, appConfig).catch((error: unknown) => {
-  console.error(error);
+    console.error(error);
 });

@@ -9,8 +9,8 @@ import { faker } from '@faker-js/faker';
 import mongoose from 'mongoose';
 
 import {
-  ERole,
-  ETodoColorOptions,
+    ERole,
+    ETodoColorOptions,
 } from '../../../libs/shared-types/src/lib/index';
 import { TodoModel } from '../src/routes/api/todos/todos.model';
 import { AccountModel } from '../src/routes/api/users/accounts.model';
@@ -57,67 +57,67 @@ import { UserModel } from '../src/routes/api/users/users.model';
 // };
 
 export async function seedDB(): Promise<void> {
-  try {
-    console.log('Connected correctly to server');
+    try {
+        console.log('Connected correctly to server');
 
-    // Reset the database on every seed
-    await UserModel.deleteMany({});
-    await AccountModel.deleteMany({});
-    await TodoModel.deleteMany({});
+        // Reset the database on every seed
+        await UserModel.deleteMany({});
+        await AccountModel.deleteMany({});
+        await TodoModel.deleteMany({});
 
-    // populate the database
-    // for (const dataset of todoDataset) {
-    //   await populateData(dataset);
-    // }
+        // populate the database
+        // for (const dataset of todoDataset) {
+        //   await populateData(dataset);
+        // }
 
-    const userIds: string[] = [];
-    for (let i = 0; i < 20; i++) {
-      const user = await UserModel.create({
-        username: faker.internet.userName(),
-        role: faker.helpers.enumValue(ERole),
-      });
-      await AccountModel.create({
-        user: user._id,
-        email: faker.internet.email(),
-        avatar: 'https://avatar.iran.liara.run/public/3',
-        verified: faker.datatype.boolean(),
-        strategy: 'LOCAL',
-        primary: true,
-        password: faker.internet.password(),
-      });
-      await AccountModel.create({
-        user: user._id,
-        email: faker.internet.email(),
-        verified: faker.datatype.boolean(),
-        strategy: 'GITHUB',
-        primary: false,
-        providerId: faker.string.uuid(),
-        providerAccessToken: faker.string.uuid(),
-      });
-      userIds.push(user._id as string);
+        const userIds: string[] = [];
+        for (let i = 0; i < 20; i++) {
+            const user = await UserModel.create({
+                username: faker.internet.userName(),
+                role: faker.helpers.enumValue(ERole),
+            });
+            await AccountModel.create({
+                user: user._id,
+                email: faker.internet.email(),
+                avatar: 'https://avatar.iran.liara.run/public/3',
+                verified: faker.datatype.boolean(),
+                strategy: 'LOCAL',
+                primary: true,
+                password: faker.internet.password(),
+            });
+            await AccountModel.create({
+                user: user._id,
+                email: faker.internet.email(),
+                verified: faker.datatype.boolean(),
+                strategy: 'GITHUB',
+                primary: false,
+                providerId: faker.string.uuid(),
+                providerAccessToken: faker.string.uuid(),
+            });
+            userIds.push(user._id as string);
+        }
+
+        for (let i = 0; i < 100; i++) {
+            // seed todos
+            await TodoModel.create({
+                user: faker.helpers.arrayElement(userIds),
+                title: faker.lorem.sentence(3),
+                description: faker.lorem.sentence(10),
+                dueDate: faker.helpers.arrayElement([
+                    faker.date.future().toString(),
+                    faker.date.recent().toString(),
+                    new Date().toISOString(),
+                    faker.date.past().toString(),
+                ]),
+                completed: faker.datatype.boolean(),
+                color: faker.helpers.enumValue(ETodoColorOptions),
+            });
+        }
+
+        console.log('Database seeded! :)');
+    } catch (err) {
+        await mongoose.disconnect();
+        // propagate the error up
+        throw new Error(err);
     }
-
-    for (let i = 0; i < 100; i++) {
-      // seed todos
-      await TodoModel.create({
-        user: faker.helpers.arrayElement(userIds),
-        title: faker.lorem.sentence(3),
-        description: faker.lorem.sentence(10),
-        dueDate: faker.helpers.arrayElement([
-          faker.date.future().toString(),
-          faker.date.recent().toString(),
-          new Date().toISOString(),
-          faker.date.past().toString(),
-        ]),
-        completed: faker.datatype.boolean(),
-        color: faker.helpers.enumValue(ETodoColorOptions),
-      });
-    }
-
-    console.log('Database seeded! :)');
-  } catch (err) {
-    await mongoose.disconnect();
-    // propagate the error up
-    throw new Error(err);
-  }
 }

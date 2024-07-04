@@ -13,28 +13,28 @@ import { AppModule } from './app/app.module';
 import { connectMongoloid } from './app/db/mongo';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  Logger.log('Connecting to MongoDB');
-  await connectMongoloid();
+    Logger.log('Connecting to MongoDB');
+    await connectMongoloid();
 
-  app.disable('x-powered-by');
+    app.disable('x-powered-by');
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-    })
-  );
+    app.useGlobalPipes(
+        new ValidationPipe({
+            transform: true,
+        })
+    );
 
-  app.enableCors();
+    app.enableCors();
 
-  const port = process.env.PORT ?? '3000';
+    const port = process.env.PORT ?? '3000';
 
-  await app.listen(port);
+    await app.listen(port);
 
-  Logger.log(`🚀 Application is running on: http://localhost:${port}`);
+    Logger.log(`🚀 Application is running on: http://localhost:${port}`);
 }
 
 bootstrap().catch((err: unknown) => {
-  Logger.error(err);
+    Logger.error(err);
 });

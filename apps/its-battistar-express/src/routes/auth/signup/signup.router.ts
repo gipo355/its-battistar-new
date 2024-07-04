@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { signupHandler } from './signup.handler';
 
 const r = Router({
-  mergeParams: true,
+    mergeParams: true,
 });
 
 /**

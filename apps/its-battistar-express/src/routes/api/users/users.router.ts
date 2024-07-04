@@ -1,16 +1,16 @@
 import { Router } from 'express';
 
 import {
-  createUserHandler,
-  deleteOneUserHandler,
-  getAllUsersHandler,
-  getMeHandler,
-  getOneUserHandler,
-  patchOneUserHandler,
+    createUserHandler,
+    deleteOneUserHandler,
+    getAllUsersHandler,
+    getMeHandler,
+    getOneUserHandler,
+    patchOneUserHandler,
 } from './users.handler';
 
 const r = Router({
-  mergeParams: true,
+    mergeParams: true,
 });
 
 /**

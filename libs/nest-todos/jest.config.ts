@@ -1,11 +1,14 @@
 /* eslint-disable */
 export default {
-  displayName: 'nest-todos',
-  preset: '../../jest.preset.js',
-  testEnvironment: 'node',
-  transform: {
-    '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
-  },
-  moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/libs/nest-todos',
+    displayName: 'nest-todos',
+    preset: '../../jest.preset.js',
+    testEnvironment: 'node',
+    transform: {
+        '^.+\\.[tj]s$': [
+            'ts-jest',
+            { tsconfig: '<rootDir>/tsconfig.spec.json' },
+        ],
+    },
+    moduleFileExtensions: ['ts', 'js', 'html'],
+    coverageDirectory: '../../coverage/libs/nest-todos',
 };

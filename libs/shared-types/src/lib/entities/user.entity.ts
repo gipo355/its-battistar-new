@@ -1,8 +1,8 @@
 import type { Static } from '@sinclair/typebox';
 import {
-  // TSchema,
-  // TString,
-  Type,
+    // TSchema,
+    // TString,
+    Type,
 } from '@sinclair/typebox';
 import type mongoose from 'mongoose';
 
@@ -10,8 +10,8 @@ import { accountSchemaSafe, type IAccountSafe } from './account.entity';
 import type { ITodo } from './todo.entity';
 
 export enum ERole {
-  SUPER = 'SUPER',
-  USER = 'USER',
+    SUPER = 'SUPER',
+    USER = 'USER',
 }
 
 /**
@@ -27,12 +27,12 @@ export enum ERole {
  * used for validation and serialization
  */
 export const userSchemaInput = Type.Object({
-  username: Type.String(),
-  avatar: Type.Optional(
-    Type.String({
-      format: 'uri',
-    })
-  ),
+    username: Type.String(),
+    avatar: Type.Optional(
+        Type.String({
+            format: 'uri',
+        })
+    ),
 });
 export type TUserInput = Static<typeof userSchemaInput>;
 
@@ -44,32 +44,32 @@ export type TUserInput = Static<typeof userSchemaInput>;
  * we may display the role in the dashboard
  */
 export const userSchemaSafe = Type.Object({
-  id: Type.Optional(Type.String()),
+    id: Type.Optional(Type.String()),
 
-  role: Type.String({
-    enum: Object.keys(ERole),
-  }),
+    role: Type.String({
+        enum: Object.keys(ERole),
+    }),
 
-  createdAt: Type.String({
-    format: 'date-time',
-  }),
+    createdAt: Type.String({
+        format: 'date-time',
+    }),
 
-  updatedAt: Type.String({
-    format: 'date-time',
-  }),
+    updatedAt: Type.String({
+        format: 'date-time',
+    }),
 
-  ...userSchemaInput.properties,
+    ...userSchemaInput.properties,
 
-  accounts: Type.Optional(Type.Array(Type.String())),
+    accounts: Type.Optional(Type.Array(Type.String())),
 
-  todos: Type.Optional(Type.Array(Type.String())),
+    todos: Type.Optional(Type.Array(Type.String())),
 });
 export type TUserSafe = Static<typeof userSchemaSafe>;
 
 export const userSchemaSafeWithAccounts = Type.Object({
-  ...userSchemaSafe.properties,
+    ...userSchemaSafe.properties,
 
-  accounts: Type.Optional(Type.Array(accountSchemaSafe)),
+    accounts: Type.Optional(Type.Array(accountSchemaSafe)),
 });
 export type TUserSafeWithAccounts = Static<typeof userSchemaSafeWithAccounts>;
 
@@ -78,13 +78,13 @@ export type TUserSafeWithAccounts = Static<typeof userSchemaSafeWithAccounts>;
  * this is a user schema that can be used to identify all the user properties
  */
 export const userSchema = Type.Object({
-  ...userSchemaSafe.properties,
+    ...userSchemaSafe.properties,
 
-  deletedAt: Type.Optional(
-    Type.String({
-      format: 'date-time',
-    })
-  ),
+    deletedAt: Type.Optional(
+        Type.String({
+            format: 'date-time',
+        })
+    ),
 });
 export type TUser = Static<typeof userSchema>;
 
@@ -97,32 +97,32 @@ export type TUser = Static<typeof userSchema>;
 
 // interface used for typind input
 export interface IUserInput {
-  avatar?: string;
+    avatar?: string;
 
-  role: keyof typeof ERole;
+    role: keyof typeof ERole;
 
-  username: string;
+    username: string;
 }
 
 // interface used for typing output
 export interface IUserSafe extends IUserInput {
-  // created by mongoose
-  accounts?: string[] | mongoose.Schema.Types.ObjectId[] | IAccountSafe[]; // created by mongoose
+    // created by mongoose
+    accounts?: string[] | mongoose.Schema.Types.ObjectId[] | IAccountSafe[]; // created by mongoose
 
-  createdAt: Date;
+    createdAt: Date;
 
-  id?: string | mongoose.Schema.Types.ObjectId; // created by mongoose
+    id?: string | mongoose.Schema.Types.ObjectId; // created by mongoose
 
-  // needed to type interface when populating client side
-  todos?: string[] | mongoose.Schema.Types.ObjectId[] | ITodo;
+    // needed to type interface when populating client side
+    todos?: string[] | mongoose.Schema.Types.ObjectId[] | ITodo;
 
-  // created by mongoose
-  updatedAt: Date; // created by mongoose
+    // created by mongoose
+    updatedAt: Date; // created by mongoose
 }
 
 // interface used for full user
 export interface IUser extends IUserSafe {
-  deletedAt?: Date;
+    deletedAt?: Date;
 }
 
 /**
@@ -132,15 +132,15 @@ export interface IUser extends IUserSafe {
  * NOTE: this is used only server side, no user input
  */
 export class User {
-  username: string;
-  avatar?: string;
-  role: keyof typeof ERole;
+    username: string;
+    avatar?: string;
+    role: keyof typeof ERole;
 
-  constructor(user: IUserInput) {
-    this.username = user.username;
-    this.avatar = user.avatar;
-    this.role = user.role;
-  }
+    constructor(user: IUserInput) {
+        this.username = user.username;
+        this.avatar = user.avatar;
+        this.role = user.role;
+    }
 }
 
 // NOTE: solve conflict with mongoose data type?

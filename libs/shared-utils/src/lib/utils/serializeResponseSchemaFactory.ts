@@ -8,4 +8,4 @@ import fastJsonStringify from 'fast-json-stringify';
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const stringifyCustomResponseFactory = <T extends TSchema>(T: T) =>
-  fastJsonStringify(customResponseSchemaFactory(T));
+    fastJsonStringify(customResponseSchemaFactory(T));

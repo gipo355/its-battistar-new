@@ -20,46 +20,46 @@ console.log('projectKey:', projectKey);
 // options Map (optional) Used to pass extra parameters for the analysis.
 // See the [official documentation](https://docs.sonarqube.org/latest/analysis/analysis-parameters/) for more details.
 const options = {
-  'sonar.projectKey': projectKey,
+    'sonar.projectKey': projectKey,
 
-  // projectName - defaults to project key
-  'sonar.projectName': 'test',
+    // projectName - defaults to project key
+    'sonar.projectName': 'test',
 
-  // Path is relative to the sonar-project.properties file. Defaults to .
-  'sonar.sources': 'src',
+    // Path is relative to the sonar-project.properties file. Defaults to .
+    'sonar.sources': 'src',
 
-  // source language
-  'sonar.language': 'ts',
+    // source language
+    'sonar.language': 'ts',
 
-  'sonar.javascript.lcov.reportPaths': 'coverage/lcov.info',
+    'sonar.javascript.lcov.reportPaths': 'coverage/lcov.info',
 
-  // Encoding of the source code. Default is default system encoding
-  'sonar.sourceEncoding': 'UTF-8',
+    // Encoding of the source code. Default is default system encoding
+    'sonar.sourceEncoding': 'UTF-8',
 };
 
 // parameters for sonarqube-scanner
 const params = {
-  serverUrl,
-  token,
-  options,
+    serverUrl,
+    token,
+    options,
 };
 
 const sonarScanner = async () => {
-  console.log(serverUrl);
+    console.log(serverUrl);
 
-  if (!serverUrl) {
-    console.log('SonarQube url not set. Nothing to do...');
-    return;
-  }
+    if (!serverUrl) {
+        console.log('SonarQube url not set. Nothing to do...');
+        return;
+    }
 
-  //  Function Callback (the execution of the analysis is asynchronous).
-  const callback = (result) => {
-    console.log('Sonarqube scanner result:', result);
-  };
+    //  Function Callback (the execution of the analysis is asynchronous).
+    const callback = (result) => {
+        console.log('Sonarqube scanner result:', result);
+    };
 
-  scanner(params, callback);
+    scanner(params, callback);
 };
 
 sonarScanner().catch((err: unknown) => {
-  console.error('Error during sonar scan', err);
+    console.error('Error during sonar scan', err);
 });

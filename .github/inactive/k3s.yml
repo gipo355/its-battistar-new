@@ -1,41 +1,42 @@
 # https://thriveread.com/k3s-production/
 name: k3s deploy
 on:
-  push:
-    branches:
-      - main
-    # run if we update the deployment files
-    paths: ['apps/its-battistar-express/deploy/**']
-  workflow_run:
-    # This workflow is triggered when a workflow run is completed successfully
-    # Use the name of the workflow
-    # Run after successful docker build and push
-    workflows: ['GHCR']
-    types:
-      - completed
+    push:
+        branches:
+            - main
+        # run if we update the deployment files
+        paths: ['apps/its-battistar-express/deploy/**']
+    workflow_run:
+        # This workflow is triggered when a workflow run is completed successfully
+        # Use the name of the workflow
+        # Run after successful docker build and push
+        workflows: ['GHCR']
+        types:
+            - completed
 jobs:
-  deploy:
-    env:
-      KUBECONFIG: ${{ secrets.KUBECONFIG }}
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-    steps:
-      - # Login to the server and run its commands
-        name: Restart K3S deployment
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          # rollout your deployment
-          script: kubectl rollout restart deployment nextjs-app-deployment
-      - uses: azure/setup-kubectl@v3
-        # with:
-        #   version: 3 # default is latest stable
-        id: install
-      - # alternatively we can use the kubectl command from the runner
-        # if we have the kubeconfig file with its credentials
-        name: Restart K3S deployment
-        run: |
-          kubectl rollout restart deployment nextjs-app-deployment
+    deploy:
+        env:
+            KUBECONFIG: ${{ secrets.KUBECONFIG }}
+            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+            DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        steps:
+            - # Login to the server and run its commands
+              name: Restart K3S deployment
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  port: ${{ secrets.SSH_PORT }}
+                  key: ${{ secrets.SSH_KEY }}
+                  # rollout your deployment
+                  script:
+                      kubectl rollout restart deployment nextjs-app-deployment
+            - uses: azure/setup-kubectl@v3
+              # with:
+              #   version: 3 # default is latest stable
+              id: install
+            - # alternatively we can use the kubectl command from the runner
+              # if we have the kubeconfig file with its credentials
+              name: Restart K3S deployment
+              run: |
+                  kubectl rollout restart deployment nextjs-app-deployment

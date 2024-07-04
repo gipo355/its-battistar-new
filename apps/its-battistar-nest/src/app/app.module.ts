@@ -7,10 +7,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
-  imports: [NestTodosModule, NestUsersModule, NestAuthModule],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [NestTodosModule, NestUsersModule, NestAuthModule],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {
-  name = 'AppModule';
+    name = 'AppModule';
 }

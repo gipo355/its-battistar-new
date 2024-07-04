@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
+    ChangeDetectionStrategy,
+    Component,
+    inject,
+    OnInit,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ITodo } from '@its-battistar/shared-types';
@@ -16,41 +16,41 @@ import { TodosService } from './todos.service';
 import { TodosStore } from './todos.store';
 
 @Component({
-  selector: 'app-todos',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TodoFilterComponent,
-    TodoItemComponent,
-    RouterModule,
-    HttpClientModule,
-  ],
-  templateUrl: './todos.component.html',
-  styleUrl: './todos.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-todos',
+    standalone: true,
+    imports: [
+        CommonModule,
+        TodoFilterComponent,
+        TodoItemComponent,
+        RouterModule,
+        HttpClientModule,
+    ],
+    templateUrl: './todos.component.html',
+    styleUrl: './todos.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodosComponent implements OnInit {
-  todoStore = inject(TodosStore);
+    todoStore = inject(TodosStore);
 
-  router = inject(Router);
+    router = inject(Router);
 
-  route = inject(ActivatedRoute);
+    route = inject(ActivatedRoute);
 
-  todoService = inject(TodosService);
+    todoService = inject(TodosService);
 
-  async ngOnInit(): Promise<void> {
-    initFlowbite();
+    async ngOnInit(): Promise<void> {
+        initFlowbite();
 
-    /**
-     * Load todos from the server and store them in the store when the component is initialized.
-     */
-    await this.todoStore.loadTodos();
-  }
+        /**
+         * Load todos from the server and store them in the store when the component is initialized.
+         */
+        await this.todoStore.loadTodos();
+    }
 
-  async onClickTodoItem(todo: ITodo): Promise<void> {
-    // resolver takes care of updating the selected todo using the id
-    await this.router.navigate(['.', todo.id], {
-      relativeTo: this.route,
-    });
-  }
+    async onClickTodoItem(todo: ITodo): Promise<void> {
+        // resolver takes care of updating the selected todo using the id
+        await this.router.navigate(['.', todo.id], {
+            relativeTo: this.route,
+        });
+    }
 }

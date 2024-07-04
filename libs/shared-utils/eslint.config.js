@@ -4,36 +4,36 @@ const baseConfig = require('../../eslint.config.js');
 const tseslint = require('typescript-eslint');
 
 module.exports = tseslint.config(
-  ...baseConfig,
+    ...baseConfig,
 
-  {
-    ignores: ['!**/*', 'node_modules', 'dist'],
-  },
-
-  {
-    languageOptions: {
-      parserOptions: {
-        project: ['tsconfig.*?.json'],
-        tsconfigRootDir: __dirname,
-      },
-      globals: {
-        ...globals.node,
-        ...globals.es2021,
-        ...globals.browser,
-      },
+    {
+        ignores: ['!**/*', 'node_modules', 'dist'],
     },
-  },
-  // {
-  //   files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-  //   rules: {},
-  //   languageSettings: { parserOptions: { project: ['tsconfig.*?.json'] } },
-  // },
-  {
-    files: ['**/*.ts', '**/*.tsx'],
-    rules: {},
-  },
-  {
-    files: ['**/*.js', '**/*.jsx'],
-    rules: {},
-  }
+
+    {
+        languageOptions: {
+            parserOptions: {
+                project: ['tsconfig.*?.json'],
+                tsconfigRootDir: __dirname,
+            },
+            globals: {
+                ...globals.node,
+                ...globals.es2021,
+                ...globals.browser,
+            },
+        },
+    },
+    // {
+    //   files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    //   rules: {},
+    //   languageSettings: { parserOptions: { project: ['tsconfig.*?.json'] } },
+    // },
+    {
+        files: ['**/*.ts', '**/*.tsx'],
+        rules: {},
+    },
+    {
+        files: ['**/*.js', '**/*.jsx'],
+        rules: {},
+    }
 );

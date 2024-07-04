@@ -17,49 +17,53 @@ import { canMatchAuth } from './shared/auth/auth-guard.service';
  */
 
 export const appRoutes: Route[] = [
-  {
-    path: '',
-    loadComponent: async () =>
-      import('./pages/home/home.component').then((m) => m.HomeComponent),
-    pathMatch: 'full',
-  },
+    {
+        path: '',
+        loadComponent: async () =>
+            import('./pages/home/home.component').then((m) => m.HomeComponent),
+        pathMatch: 'full',
+    },
 
-  // NOTE: lazy loading the dashboard routes and all its components, nested routes
-  {
-    path: 'dashboard',
-    // canActivateChild: [canActivate],
-    // canActivate: [canActivate],
-    canMatch: [canMatchAuth],
-    loadChildren: async () =>
-      import('./pages/dashboard/dashboard.routes').then(
-        (routes) => routes.dashboardRoutes
-      ),
-  },
+    // NOTE: lazy loading the dashboard routes and all its components, nested routes
+    {
+        path: 'dashboard',
+        // canActivateChild: [canActivate],
+        // canActivate: [canActivate],
+        canMatch: [canMatchAuth],
+        loadChildren: async () =>
+            import('./pages/dashboard/dashboard.routes').then(
+                (routes) => routes.dashboardRoutes
+            ),
+    },
 
-  {
-    path: 'login',
-    loadComponent: async () =>
-      import('./pages/login/login.component').then((m) => m.LoginComponent),
-  },
+    {
+        path: 'login',
+        loadComponent: async () =>
+            import('./pages/login/login.component').then(
+                (m) => m.LoginComponent
+            ),
+    },
 
-  {
-    path: 'signup',
-    loadComponent: async () =>
-      import('./pages/login/login.component').then((m) => m.LoginComponent),
-  },
+    {
+        path: 'signup',
+        loadComponent: async () =>
+            import('./pages/login/login.component').then(
+                (m) => m.LoginComponent
+            ),
+    },
 
-  {
-    path: ':error',
-    // pass this component to the error data to show with a resolver?
-    // ideally the url name should match the error type (page-not-found, server-error, etc)
-    pathMatch: 'full',
-    loadChildren: async () =>
-      import('@its-battistar/error-page').then((m) => m.errorPageRoutes),
-  },
+    {
+        path: ':error',
+        // pass this component to the error data to show with a resolver?
+        // ideally the url name should match the error type (page-not-found, server-error, etc)
+        pathMatch: 'full',
+        loadChildren: async () =>
+            import('@its-battistar/error-page').then((m) => m.errorPageRoutes),
+    },
 
-  {
-    path: '**',
-    pathMatch: 'full',
-    redirectTo: 'error',
-  },
+    {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: 'error',
+    },
 ];

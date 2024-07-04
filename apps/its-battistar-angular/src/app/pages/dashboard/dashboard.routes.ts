@@ -14,36 +14,36 @@ import { canMatchAuth } from '../../shared/auth/auth-guard.service';
 // /app/feature => feature, lazy loaded, inside the dashboard
 
 export const dashboardRoutes: Route[] = [
-  // works with external component, but how would i inject stores and services?
-  {
-    path: '',
-    // canActivateChild: [canActivate],
-    // canActivate: [canActivate],
-    canMatch: [canMatchAuth],
-    loadComponent: async () =>
-      import('./dashboard.component').then((m) => m.DashboardComponent),
-    children: [
-      {
+    // works with external component, but how would i inject stores and services?
+    {
         path: '',
-        redirectTo: 'overview',
-        pathMatch: 'full',
-      },
-      {
-        path: 'overview',
+        // canActivateChild: [canActivate],
+        // canActivate: [canActivate],
+        canMatch: [canMatchAuth],
         loadComponent: async () =>
-          import('../../components/overview/overview.component').then(
-            (m) => m.OverviewComponent
-          ),
-        // FIXME: why named outlet is not working?
-        // outlet: 'content',
-      },
-      {
-        path: 'todos',
-        loadChildren: async () =>
-          import('../../components/todos/todos.routes').then(
-            (routes) => routes.todosRoutes
-          ),
-      },
-    ],
-  },
+            import('./dashboard.component').then((m) => m.DashboardComponent),
+        children: [
+            {
+                path: '',
+                redirectTo: 'overview',
+                pathMatch: 'full',
+            },
+            {
+                path: 'overview',
+                loadComponent: async () =>
+                    import('../../components/overview/overview.component').then(
+                        (m) => m.OverviewComponent
+                    ),
+                // FIXME: why named outlet is not working?
+                // outlet: 'content',
+            },
+            {
+                path: 'todos',
+                loadChildren: async () =>
+                    import('../../components/todos/todos.routes').then(
+                        (routes) => routes.todosRoutes
+                    ),
+            },
+        ],
+    },
 ];

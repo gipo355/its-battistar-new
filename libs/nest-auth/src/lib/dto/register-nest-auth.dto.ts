@@ -1,8 +1,8 @@
 import { IsEmail, IsStrongPassword } from 'class-validator';
 
 export class RegisterNestAuthDto {
-  @IsEmail()
-  email!: string;
-  @IsStrongPassword()
-  password!: string;
+    @IsEmail()
+    email!: string;
+    @IsStrongPassword()
+    password!: string;
 }

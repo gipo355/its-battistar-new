@@ -9,35 +9,35 @@ import { setup } from './global-setup';
 import { seedDB } from './seed-mongo';
 
 const sleep = async (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+    new Promise((resolve) => setTimeout(resolve, ms));
 
 async function setupEnvironment() {
-  try {
-    // const started = await setup();
-    await setup();
-    // if (!started.commonStarted) {
-    //   console.warn('❌ Did not start the common services, skipping seeding');
-    //   return;
-    // }
+    try {
+        // const started = await setup();
+        await setup();
+        // if (!started.commonStarted) {
+        //   console.warn('❌ Did not start the common services, skipping seeding');
+        //   return;
+        // }
 
-    await prepareMongo();
+        await prepareMongo();
 
-    await seedDB();
+        await seedDB();
 
-    // sleep to allow the seeding to finish and dockers to spin up
-    await sleep(1000);
+        // sleep to allow the seeding to finish and dockers to spin up
+        await sleep(1000);
 
-    // await teardown();
-    await mongoose.disconnect();
-    process.exit(0);
-  } catch (e) {
-    console.error(e);
-    await mongoose.disconnect();
-    process.exit(1);
-  }
+        // await teardown();
+        await mongoose.disconnect();
+        process.exit(0);
+    } catch (e) {
+        console.error(e);
+        await mongoose.disconnect();
+        process.exit(1);
+    }
 }
 
 setupEnvironment().catch((e: unknown) => {
-  console.error(e);
-  process.exit(1);
+    console.error(e);
+    process.exit(1);
 });

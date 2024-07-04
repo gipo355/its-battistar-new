@@ -5,7 +5,7 @@ import ajv from 'ajv';
 import addFormats from 'ajv-formats';
 
 const ajvInstance = new ajv({
-  allErrors: true,
+    allErrors: true,
 });
 
 addFormats(ajvInstance);

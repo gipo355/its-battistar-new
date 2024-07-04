@@ -20,14 +20,14 @@
 
 # task file
 
-- `task` is a task runner written in go
+-   `task` is a task runner written in go
 
 # cli tools
 
-- cobra
-- viper
-- glamour (pretty ui) <https://github.com/charmbracelet/glamour>
-- promptui
+-   cobra
+-   viper
+-   glamour (pretty ui) <https://github.com/charmbracelet/glamour>
+-   promptui
 
 <https://dev.to/lukehagar/writing-better-cobra-cli-help-messages-with-glamour-1525>
 
@@ -37,14 +37,14 @@
 
 # formatters/linters/cli
 
-- gofumpt
-- golines
-- goimports
-- golangci-lint
-- fieldalignment
-- betteralign (aligns the fields in structs to use less memory)
-- gosec
-- nilaway
+-   gofumpt
+-   golines
+-   goimports
+-   golangci-lint
+-   fieldalignment
+-   betteralign (aligns the fields in structs to use less memory)
+-   gosec
+-   nilaway
 
 # most used 3d party libs
 
@@ -54,78 +54,78 @@
 
 ## cli
 
-- cobra
+-   cobra
 
 ## http
 
-- echo
-- gin
-- gorilla/websocket
-- protobuf
+-   echo
+-   gin
+-   gorilla/websocket
+-   protobuf
 
 ## microservices
 
-- go-micro
+-   go-micro
 
 ## config
 
-- viper
-- godotenv
+-   viper
+-   godotenv
 
 ## logger
 
-- zap
-- logrus
-- zerolog
+-   zap
+-   logrus
+-   zerolog
 
 ## template
 
-- templ
+-   templ
 
 ## utils
 
-- changeset
-- swag
-- go-kit
-- lo (lodash style utils for go)
-- goreleaser
-- google/uuid
-- lancet <https://github.com/duke-git/lancet>
+-   changeset
+-   swag
+-   go-kit
+-   lo (lodash style utils for go)
+-   goreleaser
+-   google/uuid
+-   lancet <https://github.com/duke-git/lancet>
 
 ## validation
 
-- validator
-- ozzo-validation
+-   validator
+-   ozzo-validation
 
 ## auth
 
-- paseto (<https://github.com/o1egl/paseto>)
-- jwt (<https://github.com/golang-jwt/jwt>)
-- "golang.org/x/crypto/argon2"
-- "golang.org/x/crypto/bcrypt"
+-   paseto (<https://github.com/o1egl/paseto>)
+-   jwt (<https://github.com/golang-jwt/jwt>)
+-   "golang.org/x/crypto/argon2"
+-   "golang.org/x/crypto/bcrypt"
 
 ## test and mocks
 
-- mockery
-- testify
-- goconvey
+-   mockery
+-   testify
+-   goconvey
 
 ## dbs
 
-- gorm
-- sqlx
-- go-redis
-- mongo-driver
-- go-rabbitmq
-- golang-migrate
+-   gorm
+-   sqlx
+-   go-redis
+-   mongo-driver
+-   go-rabbitmq
+-   golang-migrate
 
 # non go tools
 
-- air
-- task
+-   air
+-   task
 
 # actions
 
-- securego/gosec
+-   securego/gosec
 
 <https://olegk.dev/github-actions-and-go>

@@ -7,21 +7,21 @@ import { todosRoutes } from '../todos.routes';
 import { TodoFilterComponent } from './todo-filter.component';
 
 describe('TodoFilterComponent', () => {
-  let component: TodoFilterComponent;
-  let fixture: ComponentFixture<TodoFilterComponent>;
+    let component: TodoFilterComponent;
+    let fixture: ComponentFixture<TodoFilterComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TodoFilterComponent],
-      providers: [provideRouter(todosRoutes), provideHttpClient()],
-    }).compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [TodoFilterComponent],
+            providers: [provideRouter(todosRoutes), provideHttpClient()],
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(TodoFilterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(TodoFilterComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

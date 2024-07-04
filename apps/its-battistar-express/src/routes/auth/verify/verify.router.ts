@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { verifyHandler } from './verify.handler';
 
 const r = Router({
-  mergeParams: true,
+    mergeParams: true,
 });
 
 /**

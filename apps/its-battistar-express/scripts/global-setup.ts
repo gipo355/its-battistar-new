@@ -17,110 +17,110 @@ let lokiStarted = false;
 let commonStarted = false;
 
 const dockerComposeItems = {
-  loki: {
-    cwd: new URL('../', import.meta.url).pathname,
-    log: true,
-    config: 'docker-compose.loki.yaml',
-  },
-  common: {
-    cwd: new URL('../', import.meta.url).pathname,
-    log: true,
-    config: 'docker-compose.yaml',
-  },
+    loki: {
+        cwd: new URL('../', import.meta.url).pathname,
+        log: true,
+        config: 'docker-compose.loki.yaml',
+    },
+    common: {
+        cwd: new URL('../', import.meta.url).pathname,
+        log: true,
+        config: 'docker-compose.yaml',
+    },
 };
 
 const buildTestEnvironment = async () => {
-  if (!process.env.MONGO_PORT) {
-    throw new Error('MONGO_PORT is not defined');
-  }
-
-  // ️️️✅ Best Practice: Speed up during development, if already live then do nothing
-  const isDBReachable = await isPortReachable({
-    // need environment variable for dev
-    port: Number(process.env.MONGO_PORT),
-  });
-
-  if (!isDBReachable) {
-    console.warn(
-      '🚨 Database is not reachable, starting the infrastructure...'
-    );
-
-    // ️️️✅ Best Practice: Start the infrastructure within a test hook - No failures occur because the DB is down
-    await dockerCompose.upAll(dockerComposeItems.common);
-    commonStarted = true;
-
-    if (e.ENABLE_LOKI === 'true') {
-      await dockerCompose.upAll(dockerComposeItems.loki);
-      lokiStarted = true;
+    if (!process.env.MONGO_PORT) {
+        throw new Error('MONGO_PORT is not defined');
     }
 
-    // await dockerCompose.exec(
-    //     'database',
-    //     ['sh', '-c', 'until pg_isready ; do sleep 1; done'],
-    //     {
-    //         cwd: path.join(__dirname),
-    //     }
-    // );
+    // ️️️✅ Best Practice: Speed up during development, if already live then do nothing
+    const isDBReachable = await isPortReachable({
+        // need environment variable for dev
+        port: Number(process.env.MONGO_PORT),
+    });
 
-    //example, seeding the database
-    // we could write it here or create a separate script
-    //✅ Best Practice: Use npm script for data seeding and migrations
-    // execSync('npx prisma migrate dev');
-    // execSync('tsx ./scripts/seed-mongo.ts');
+    if (!isDBReachable) {
+        console.warn(
+            '🚨 Database is not reachable, starting the infrastructure...'
+        );
 
-    // const { seedDB } = await import('./seed-mongo.js');
-    // await seedDB();
+        // ️️️✅ Best Practice: Start the infrastructure within a test hook - No failures occur because the DB is down
+        await dockerCompose.upAll(dockerComposeItems.common);
+        commonStarted = true;
 
-    commonStarted = true;
+        if (e.ENABLE_LOKI === 'true') {
+            await dockerCompose.upAll(dockerComposeItems.loki);
+            lokiStarted = true;
+        }
 
-    // ✅ Best Practice: Seed only metadata and not test record, read "Dealing with data" section for further information
-    // execSync('npx prisma run db:seed');
-  } else {
-    console.warn(
-      '🚀 Database is already reachable, skipping the infrastructure...'
-    );
-  }
+        // await dockerCompose.exec(
+        //     'database',
+        //     ['sh', '-c', 'until pg_isready ; do sleep 1; done'],
+        //     {
+        //         cwd: path.join(__dirname),
+        //     }
+        // );
 
-  // 👍🏼 We're ready
-  console.info('🌐 global-setup: done');
+        //example, seeding the database
+        // we could write it here or create a separate script
+        //✅ Best Practice: Use npm script for data seeding and migrations
+        // execSync('npx prisma migrate dev');
+        // execSync('tsx ./scripts/seed-mongo.ts');
 
-  return {
-    commonStarted,
-    lokiStarted,
-  };
+        // const { seedDB } = await import('./seed-mongo.js');
+        // await seedDB();
+
+        commonStarted = true;
+
+        // ✅ Best Practice: Seed only metadata and not test record, read "Dealing with data" section for further information
+        // execSync('npx prisma run db:seed');
+    } else {
+        console.warn(
+            '🚀 Database is already reachable, skipping the infrastructure...'
+        );
+    }
+
+    // 👍🏼 We're ready
+    console.info('🌐 global-setup: done');
+
+    return {
+        commonStarted,
+        lokiStarted,
+    };
 };
 
 const teardown = async (): Promise<void> => {
-  // if (lokiStarted) {
-  await dockerCompose.down(dockerComposeItems.loki);
-  // }
+    // if (lokiStarted) {
+    await dockerCompose.down(dockerComposeItems.loki);
+    // }
 
-  // if (commonStarted) {
-  await dockerCompose.down(dockerComposeItems.common);
-  // }
+    // if (commonStarted) {
+    await dockerCompose.down(dockerComposeItems.common);
+    // }
 };
 
 /**
  * ## This is a shared setup hook from globalSetup
  */
 const setup = async (): Promise<{
-  commonStarted: boolean;
-  lokiStarted: boolean;
+    commonStarted: boolean;
+    lokiStarted: boolean;
 }> => {
-  try {
-    const { commonStarted, lokiStarted } = await buildTestEnvironment();
-    return {
-      commonStarted,
-      lokiStarted,
-    };
-  } catch (e) {
-    await teardown();
+    try {
+        const { commonStarted, lokiStarted } = await buildTestEnvironment();
+        return {
+            commonStarted,
+            lokiStarted,
+        };
+    } catch (e) {
+        await teardown();
 
-    return {
-      commonStarted: false,
-      lokiStarted: false,
-    };
-  }
+        return {
+            commonStarted: false,
+            lokiStarted: false,
+        };
+    }
 };
 
 export { setup, teardown };

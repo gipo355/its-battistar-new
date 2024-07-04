@@ -1,5 +1,5 @@
 export interface IEnvironment {
-  apiUrl: string;
-  production: boolean;
-  sentryDsn: string;
+    apiUrl: string;
+    production: boolean;
+    sentryDsn: string;
 }

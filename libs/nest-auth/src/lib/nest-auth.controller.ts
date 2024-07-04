@@ -6,15 +6,15 @@ import { NestAuthService } from './nest-auth.service';
 
 @Controller()
 export class NestAuthController {
-  constructor(private readonly nestAuthService: NestAuthService) {}
+    constructor(private readonly nestAuthService: NestAuthService) {}
 
-  @Post('register')
-  register(@Body() createNestAuthDto: RegisterNestAuthDto): string {
-    return this.nestAuthService.register(createNestAuthDto);
-  }
+    @Post('register')
+    register(@Body() createNestAuthDto: RegisterNestAuthDto): string {
+        return this.nestAuthService.register(createNestAuthDto);
+    }
 
-  @Post('login')
-  login(@Body() loginNestAuthDto: LoginNestAuthDto): string {
-    return this.nestAuthService.login(loginNestAuthDto);
-  }
+    @Post('login')
+    login(@Body() loginNestAuthDto: LoginNestAuthDto): string {
+        return this.nestAuthService.login(loginNestAuthDto);
+    }
 }

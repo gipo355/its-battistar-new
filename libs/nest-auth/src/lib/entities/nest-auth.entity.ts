@@ -1,5 +1,5 @@
 export class NestAuth {
-  id!: number;
-  email!: string;
-  password!: string;
+    id!: number;
+    email!: string;
+    password!: string;
 }

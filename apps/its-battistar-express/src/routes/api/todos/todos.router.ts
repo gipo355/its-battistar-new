@@ -2,15 +2,15 @@ import { Router } from 'express';
 
 import { protectRoute } from '../../auth/auth.service';
 import {
-  createTodo,
-  deleteOneTodo,
-  getAllTodos,
-  getOneTodo,
-  patchOneTodo,
+    createTodo,
+    deleteOneTodo,
+    getAllTodos,
+    getOneTodo,
+    patchOneTodo,
 } from './todos.handler';
 
 const todosRouter = Router({
-  mergeParams: true,
+    mergeParams: true,
 });
 
 // we check for the access token and set the user and account on the request

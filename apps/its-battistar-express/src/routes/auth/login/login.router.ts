@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { loginHandler } from './login.handler';
 
 const r = Router({
-  mergeParams: true,
+    mergeParams: true,
 });
 
 /**

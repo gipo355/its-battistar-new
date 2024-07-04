@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { markForCheck, markForUncheck } from './check.handler';
 
 const checkRouter = Router({
-  mergeParams: true,
+    mergeParams: true,
 });
 
 /**

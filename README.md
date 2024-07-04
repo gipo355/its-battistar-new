@@ -9,12 +9,12 @@
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/en/download/) >= 20.5
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
-- [Nx CLI](https://nx.dev/latest/angular/getting-started/nx-setup) >= 18
-- [Pnpm](https://pnpm.io/installation) >= 8.5.0
-- node-gyp global installation for `argon2`: `npm install -g node-gyp`
+-   [Node.js](https://nodejs.org/en/download/) >= 20.5
+-   [Docker](https://docs.docker.com/get-docker/)
+-   [Docker Compose](https://docs.docker.com/compose/install/)
+-   [Nx CLI](https://nx.dev/latest/angular/getting-started/nx-setup) >= 18
+-   [Pnpm](https://pnpm.io/installation) >= 8.5.0
+-   node-gyp global installation for `argon2`: `npm install -g node-gyp`
 
 ## Installation
 
@@ -36,31 +36,32 @@ config files are located at:
 
 express:
 
-- `apps/its-battistar-express/.env`
-- `apps/its-battistar-express/src/app.config.ts`
+-   `apps/its-battistar-express/.env`
+-   `apps/its-battistar-express/src/app.config.ts`
 
 angular:
 
-- `apps/its-battistar-angular/src/environments/environment.ts` for angular
+-   `apps/its-battistar-angular/src/environments/environment.ts` for angular
 
 ## used tools
 
-- [git-cz](https://cz-git.qbb.sh/guide/)
-- [semver](https://github.com/jscutlery/semver#jscutlerysemver)
-- [nx](https://nx.dev/latest/angular/getting-started/nx-setup)
-- [detect-secrets](https://github.com/Yelp/detect-secrets)
+-   [git-cz](https://cz-git.qbb.sh/guide/)
+-   [semver](https://github.com/jscutlery/semver#jscutlerysemver)
+-   [nx](https://nx.dev/latest/angular/getting-started/nx-setup)
+-   [detect-secrets](https://github.com/Yelp/detect-secrets)
 
 # NOTES
 
 ## bugfixes
 
-- solved a docker bug from [here][https://github.com/nrwl/nx/issues/2625]
+-   solved a docker bug from [here][https://github.com/nrwl/nx/issues/2625]
 
 ## links
 
-- ghcr
-  - [https://dev.to/ken_mwaura1/automate-docker-image-builds-and-push-to-github-registry-using-github-actions-4h20]
-  - [https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#labelling-container-images]
-  - [https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions]
-  - permission errors [https://github.com/docker/build-push-action/issues/687]
-  - [https://docs.docker.com/build/ci/github-actions/manage-tags-labels/]
+-   ghcr
+    -   [https://dev.to/ken_mwaura1/automate-docker-image-builds-and-push-to-github-registry-using-github-actions-4h20]
+    -   [https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#labelling-container-images]
+    -   [https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions]
+    -   permission errors
+        [https://github.com/docker/build-push-action/issues/687]
+    -   [https://docs.docker.com/build/ci/github-actions/manage-tags-labels/]
