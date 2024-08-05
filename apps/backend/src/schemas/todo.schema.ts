@@ -26,7 +26,7 @@ export interface ITodoMongoose extends ITodoBase {
     assignedTo: mongoose.Types.ObjectId;
     createdAt: Date;
     createdBy: mongoose.Types.ObjectId;
-    dueDate: Date;
+    dueDate?: Date;
 }
 
 export interface IPopulatedTodo extends ITodoBase {

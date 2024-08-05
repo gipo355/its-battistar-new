@@ -6,6 +6,7 @@ import type { Handler } from 'express';
 import { catchAsync } from '../utils/catch-async';
 
 export const globalMiddleware: Handler = catchAsync(async (req, res, next) => {
+    // reset on every request
     req.user = null;
 
     // provide a fake logged in user for development and create to db

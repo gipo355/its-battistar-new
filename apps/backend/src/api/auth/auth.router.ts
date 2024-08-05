@@ -2,9 +2,9 @@ import { Router } from 'express';
 
 import { login, register } from './auth.handler';
 
-const router = Router();
+const r = Router();
 
-router.post('/login', login);
-router.post('/register', register);
+r.post('/login', login);
+r.post('/register', register);
 
-export default router;
+export default r;

@@ -93,6 +93,7 @@ export const register = catchAsync(async (req, res) => {
         });
     }
 
+    // use an inner try catch for greater control of the creation phase and rethrow
     try {
         const user = await UserModel.create(userDto);
         const response: IUser = {

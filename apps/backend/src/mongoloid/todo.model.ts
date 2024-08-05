@@ -56,6 +56,9 @@ const todoSchema = new mongoose.Schema<ITodoMongoose>(
 );
 
 todoSchema.virtual('expired').get(function getDurationWeeks() {
+    if (!this.dueDate) {
+        return false;
+    }
     return this.dueDate < new Date();
 });
 

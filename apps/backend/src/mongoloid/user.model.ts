@@ -110,9 +110,6 @@ userSchema.pre('save', async function encryptPassword(next) {
     next();
 });
 
-/**
- * method to compare passwords
- */
 userSchema.methods.comparePassword = async function (
     password: string
 ): Promise<boolean> {

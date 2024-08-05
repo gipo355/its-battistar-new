@@ -1,7 +1,6 @@
-import type { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import type { StatusCodes } from 'http-status-codes';
 import { getReasonPhrase } from 'http-status-codes';
 import type { HTTPError } from 'ky';
-import { TimeoutError } from 'ky';
 
 interface IErrorJSON {
     cause?: {
