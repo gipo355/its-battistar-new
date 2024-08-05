@@ -5,11 +5,11 @@ import morgan from 'morgan';
 
 import apiRouter from './api/routes';
 import { errorHandlers } from './errors';
-import type { User } from './types/user.schema';
+import type { IUser } from './types/user.schema';
 
 declare module 'express' {
     export interface Request {
-        user?: User;
+        user?: IUser;
     }
 }
 

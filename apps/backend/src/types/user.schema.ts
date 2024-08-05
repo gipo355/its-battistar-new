@@ -1,4 +1,4 @@
-export interface User {
+export interface IUser {
     firstName: string;
     fullName: string;
     id: string;
@@ -10,3 +10,5 @@ export interface Credentials {
     password: string;
     username: string;
 }
+
+export type FullUser = IUser & Credentials;

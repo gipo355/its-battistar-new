@@ -1,4 +1,4 @@
-import type { Credentials, User } from './user.schema';
+import type { Credentials, IUser } from './user.schema';
 
 interface Token {
     token: string;
@@ -7,10 +7,10 @@ interface Token {
 export type LoginDTO = Credentials;
 
 export type LoginResponse = Token & {
-    user: User;
+    user: IUser;
 };
 
-export type RegisterDTO = Pick<User, 'firstName' | 'lastName' | 'picture'> &
+export type RegisterDTO = Pick<IUser, 'firstName' | 'lastName' | 'picture'> &
     Credentials;
 
-export type RegisterResponse = Token & User;
+export type RegisterResponse = Token & IUser;
