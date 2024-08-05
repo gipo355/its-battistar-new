@@ -3,10 +3,15 @@ import { isStrongPassword } from 'validator';
 import isAscii from 'validator/lib/isAscii';
 import isURL from 'validator/lib/isURL';
 
-import type { FullUser } from '../types/user.schema';
+import type { FullUser } from '../schemas/user.schema';
 import { comparePassword, hashPassword } from '../utils/bcrypt';
 
-const userSchema = new mongoose.Schema<FullUser>(
+interface IUserMethods {
+    comparePassword(password: string): Promise<boolean>;
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+const userSchema = new mongoose.Schema<FullUser, {}, IUserMethods>(
     {
         username: {
             type: String,
