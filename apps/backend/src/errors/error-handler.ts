@@ -6,6 +6,10 @@ import { ErrorMessage } from '../utils/error-message';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+    if (process.env.NODE_ENV === 'development') {
+        console.error(err);
+    }
+
     if (err instanceof AppError) {
         res.status(err.code).json(
             new ErrorMessage({

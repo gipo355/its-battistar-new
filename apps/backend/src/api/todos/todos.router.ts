@@ -11,7 +11,7 @@ import {
 
 const r = Router();
 
-// r.use(protectRoute);
+r.use(protectRoute);
 
 r.get('/', getTodos);
 r.post('/', createTodo);

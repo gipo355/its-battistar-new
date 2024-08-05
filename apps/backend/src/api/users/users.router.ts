@@ -5,7 +5,7 @@ import { getUsers } from './users.handler';
 
 const r = Router();
 
-// r.use(protectRoute);
+r.use(protectRoute);
 
 r.get('/', getUsers);
 

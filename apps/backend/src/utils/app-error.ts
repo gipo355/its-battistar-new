@@ -92,6 +92,7 @@ export class AppError extends Error {
         message,
         code,
         unknownError,
+        details,
         cause,
         type,
         isSafe = true,
@@ -102,6 +103,11 @@ export class AppError extends Error {
         cause?: Error;
 
         code: (typeof StatusCodes)[keyof typeof StatusCodes];
+
+        /**
+         * Additional details about the error.
+         */
+        details?: Record<string, unknown>;
 
         /**
          * A flag indicating whether this is a safe error
@@ -139,6 +145,8 @@ export class AppError extends Error {
 
         this.code = code;
         this.reason = getReasonPhrase(code);
+
+        this.details = details;
 
         this.unknownError = unknownError;
         this.cause = cause;

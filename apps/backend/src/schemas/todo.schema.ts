@@ -38,6 +38,9 @@ export class TodoDTO {
     @IsMongoId()
     @IsNotEmpty()
     assignedTo: string;
+    @IsMongoId()
+    @IsNotEmpty()
+    createdBy: string;
     completed = false;
     picture = 'https://somedomain.com/somepicture.png';
 
@@ -45,9 +48,11 @@ export class TodoDTO {
         title,
         dueDate,
         assignedTo,
-    }: Pick<ITodo, 'title' | 'dueDate' | 'assignedTo'>) {
+        createdBy,
+    }: Pick<ITodo, 'title' | 'dueDate' | 'assignedTo' | 'createdBy'>) {
         this.title = title;
         this.dueDate = new Date(dueDate);
         this.assignedTo = assignedTo;
+        this.createdBy = createdBy;
     }
 }
