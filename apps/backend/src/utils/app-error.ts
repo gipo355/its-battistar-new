@@ -1,6 +1,7 @@
-import type { ReasonPhrases } from 'http-status-codes';
-import { StatusCodes } from 'http-status-codes';
-import { HTTPError, TimeoutError } from 'ky';
+import type { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { getReasonPhrase } from 'http-status-codes';
+import type { HTTPError } from 'ky';
+import { TimeoutError } from 'ky';
 
 interface IErrorJSON {
     cause?: {
@@ -49,12 +50,12 @@ export class AppError extends Error {
      * The HTTP status code associated with the error.
      * Automatically set when the error is of type `http` and the cause is an instance of `HTTPError` or `TimeoutError`.
      */
-    code?: StatusCodes;
+    code: StatusCodes;
 
     /**
      * The reason for the error. Could be a detailed description of the error.
      */
-    reason?: (typeof ReasonPhrases)[keyof typeof ReasonPhrases];
+    reason: string;
 
     /**
      * Additional details about the error.
@@ -89,7 +90,7 @@ export class AppError extends Error {
      */
     constructor({
         message,
-        reason,
+        code,
         unknownError,
         cause,
         type,
@@ -99,6 +100,8 @@ export class AppError extends Error {
          * The original error that caused this AppError, if any
          */
         cause?: Error;
+
+        code: (typeof StatusCodes)[keyof typeof StatusCodes];
 
         /**
          * A flag indicating whether this is a safe error
@@ -134,7 +137,9 @@ export class AppError extends Error {
         // Capture the stack trace of the error
         Error.captureStackTrace(this, this.constructor);
 
-        this.reason = reason;
+        this.code = code;
+        this.reason = getReasonPhrase(code);
+
         this.unknownError = unknownError;
         this.cause = cause;
         this.type = type;
@@ -142,24 +147,6 @@ export class AppError extends Error {
 
         // Set the original message of the error from the cause if it exists
         this.originalMessage = cause?.message;
-
-        // Set the error code and HTTP stack if the cause is an HTTP error
-        if (this.type === 'http' && cause instanceof HTTPError) {
-            this.code = cause.response.status;
-            this.httpStack = {
-                options: cause.options,
-                request: cause.request,
-                response: cause.response,
-            };
-        }
-
-        // Set the error code and HTTP stack if the cause is a timeout error
-        if (this.type === 'http' && cause instanceof TimeoutError) {
-            this.code = StatusCodes.REQUEST_TIMEOUT;
-            this.httpStack = {
-                request: cause.request,
-            };
-        }
     }
 
     /**

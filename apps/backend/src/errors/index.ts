@@ -1,1 +1,3 @@
-export const errorHandlers = [];
+import { errorHandler } from './error-handler';
+
+export const errorHandlers = [errorHandler];

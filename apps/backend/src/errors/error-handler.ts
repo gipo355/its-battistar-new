@@ -5,22 +5,20 @@ import { AppError } from '../utils/app-error';
 import { ErrorMessage } from '../utils/error-message';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const handler: ErrorRequestHandler = (err, req, res, next) => {
+export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     if (err instanceof AppError) {
-        if (err.code && err.reason) {
-            const e = new ErrorMessage({
+        res.status(err.code).json(
+            new ErrorMessage({
                 message: err.message,
                 status: err.code,
                 error: err.reason,
                 details: err.details,
-            });
-
-            res.status(err.code).send(e);
-            return;
-        }
+            })
+        );
+        return;
     }
 
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(
         new ErrorMessage({
             message: ReasonPhrases.INTERNAL_SERVER_ERROR,
             status: StatusCodes.INTERNAL_SERVER_ERROR,

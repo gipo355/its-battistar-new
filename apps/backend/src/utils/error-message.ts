@@ -8,7 +8,7 @@ interface IErrorMessage {
     /**
      * The message of the error.
      */
-    error: string;
+    error?: string;
     /**
      * The status code of the error.
      */

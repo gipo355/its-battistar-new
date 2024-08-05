@@ -5,6 +5,13 @@ import morgan from 'morgan';
 
 import apiRouter from './api/routes';
 import { errorHandlers } from './errors';
+import type { User } from './types/user.schema';
+
+declare module 'express' {
+    export interface Request {
+        user: User | undefined;
+    }
+}
 
 const app = express();
 
