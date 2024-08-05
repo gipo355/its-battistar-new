@@ -9,7 +9,7 @@ import type { User } from './types/user.schema';
 
 declare module 'express' {
     export interface Request {
-        user: User | undefined;
+        user?: User;
     }
 }
 
