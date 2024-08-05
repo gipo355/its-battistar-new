@@ -14,21 +14,6 @@ export const getTodos = catchAsync(async (req, res) => {
         showCompleted: boolean | undefined;
     };
 
-    //
-    // const todos = await TodoModel.find({
-    //     ...(showCompleted === true ? {} : { completed: false }),
-    // })
-    //     .sort({ dueDate: 'asc' })
-    //     .populate({
-    //         path: 'createdBy',
-    //         select: 'firstName lastName fullName picture',
-    //     })
-    //     .populate({
-    //         path: 'assignedTo',
-    //         select: 'firstName lastName fullName picture',
-    //     })
-    //     .exec();
-
     const todos = await TodoModel.aggregate([
         {
             $match: {
