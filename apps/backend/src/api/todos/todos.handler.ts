@@ -17,13 +17,14 @@ export const getTodos = catchAsync(async (req, res) => {
     const todos = await TodoModel.find({
         completed: showCompleted ? undefined : false,
     })
-        .populate('createdBy', ['firstName', 'lastName', 'fullName', 'picture'])
-        .populate('assignedTo', [
-            'firstName',
-            'lastName',
-            'fullName',
-            'picture',
-        ])
+        .populate({
+            path: 'createdBy',
+            select: 'firstName lastName fullName picture',
+        })
+        .populate({
+            path: 'assignedTo',
+            select: 'firstName lastName fullName picture',
+        })
         .exec();
 
     res.json(todos);
@@ -43,15 +44,6 @@ export const createTodo = catchAsync(async (req, res) => {
         dueDate: string;
         title: string;
     };
-
-    const assignedUser = await UserModel.findById(assignedTo);
-
-    if (!assignedUser) {
-        throw new AppError({
-            message: 'Invalid assigned user',
-            code: StatusCodes.BAD_REQUEST,
-        });
-    }
 
     const todo = new TodoDTO({
         title,
@@ -73,6 +65,15 @@ export const createTodo = catchAsync(async (req, res) => {
             message: 'Validation error',
             code: StatusCodes.BAD_REQUEST,
             details,
+        });
+    }
+
+    const assignedUser = await UserModel.findById(assignedTo);
+
+    if (!assignedUser) {
+        throw new AppError({
+            message: 'Invalid assigned user',
+            code: StatusCodes.BAD_REQUEST,
         });
     }
 
