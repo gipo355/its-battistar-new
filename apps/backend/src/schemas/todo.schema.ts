@@ -1,3 +1,4 @@
+import { IsDate, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 import type mongoose from 'mongoose';
 
 import type { IUser } from './user.schema';
@@ -10,19 +11,43 @@ export interface ITodoBase {
 }
 
 export interface ITodo extends ITodoBase {
-    assignedTo?: string;
+    assignedTo: string;
     createdBy: string;
-    dueDate?: string;
+    dueDate: string;
 }
 
 export interface ITodoMongoose extends ITodoBase {
-    assignedTo?: mongoose.Types.ObjectId;
+    assignedTo: mongoose.Types.ObjectId;
     createdBy: mongoose.Types.ObjectId;
-    dueDate?: Date;
+    dueDate: Date;
 }
 
 export interface IPopulatedTodo extends ITodoBase {
     assignedTo?: IUser;
     createdBy: IUser;
     dueDate?: Date;
+}
+
+export class TodoDTO {
+    @IsString()
+    @IsNotEmpty()
+    title: string;
+    @IsDate()
+    @IsNotEmpty()
+    dueDate: Date;
+    @IsMongoId()
+    @IsNotEmpty()
+    assignedTo: string;
+    completed = false;
+    picture = 'https://somedomain.com/somepicture.png';
+
+    constructor({
+        title,
+        dueDate,
+        assignedTo,
+    }: Pick<ITodo, 'title' | 'dueDate' | 'assignedTo'>) {
+        this.title = title;
+        this.dueDate = new Date(dueDate);
+        this.assignedTo = assignedTo;
+    }
 }

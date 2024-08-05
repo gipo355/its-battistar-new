@@ -1,4 +1,7 @@
+import { validate } from 'class-validator';
+
 import { TodoModel } from '../../mongoloid/todo.model';
+import { TodoDTO } from '../../schemas/todo.schema';
 import { catchAsync } from '../../utils/catch-async';
 
 export const getTodos = catchAsync(async (req, res) => {
@@ -27,6 +30,13 @@ export const createTodo = catchAsync(async (req, res) => {
         dueDate: string;
         title: string;
     };
+
+    const todo = new TodoDTO({ title, dueDate, assignedTo });
+    const errors = await validate(todo);
+
+    if (errors.length) {
+        console.log(errors);
+    }
 
     res.send('create todo');
 });
