@@ -1,5 +1,0 @@
-#!/bin/bash
-
-git diff --staged --name-only -z | xargs -0 detect-secrets-hook --baseline .secrets.baseline --exclude-files pnpm-lock.yaml
-
-pnpm lint-staged
