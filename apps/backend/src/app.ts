@@ -23,8 +23,8 @@ app.use('/api', apiRouter);
 // catch all and return 404
 app.use('*', () => {
     throw new AppError({
-        message: 'Method not allowed',
-        code: StatusCodes.METHOD_NOT_ALLOWED,
+        message: 'Where are you going?',
+        code: StatusCodes.NOT_FOUND,
     });
 });
 

@@ -1,10 +1,9 @@
 import { validate, ValidationError } from 'class-validator';
-import { timingSafeEqual } from 'crypto';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 
 import { UserModel } from '../../mongoloid/user.model';
-import type { LoginDTO, LoginResponse } from '../../schemas/auth.schema';
+import type { LoginResponse } from '../../schemas/auth.schema';
 import { RegisterDTO } from '../../schemas/auth.schema';
 import type { IUser } from '../../schemas/user.schema';
 import { AppError } from '../../utils/app-error';
