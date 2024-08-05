@@ -1,5 +1,6 @@
 import type { Handler } from 'express';
 
+import type { UserDocument } from '../mongoloid/user.model';
 import { UserModel } from '../mongoloid/user.model';
 import { catchAsync } from '../utils/catch-async';
 import { generateToken } from '../utils/jwt';
@@ -18,7 +19,10 @@ export const globalMiddleware: Handler = catchAsync(async (req, res, next) => {
             password: '123456!Amk', // pragma: allowlist secret
         };
 
-        const user = await UserModel.create(fakeUser);
+        let user = await UserModel.findOne({ username: 'johndoe' });
+        if (!user) {
+            user = await UserModel.create(fakeUser);
+        }
 
         const token = generateToken(user);
 

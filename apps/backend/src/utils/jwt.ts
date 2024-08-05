@@ -7,7 +7,9 @@ import { AppError } from './app-error';
 const SECRET = 'secret';
 
 export const generateToken = (user: IUser): string => {
-    const token = sign({ user }, SECRET);
+    const token = sign({ user }, SECRET, {
+        expiresIn: '7d',
+    });
 
     return token;
 };

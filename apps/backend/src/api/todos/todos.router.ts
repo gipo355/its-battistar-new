@@ -17,6 +17,6 @@ r.get('/', getTodos);
 r.post('/', createTodo);
 r.patch('/:id/check', completeTodo);
 r.patch('/:id/uncheck', uncompleteTodo);
-r.patch('/:id/assign', assignTodo);
+r.post('/:id/assign', assignTodo);
 
 export default r;

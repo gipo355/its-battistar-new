@@ -15,7 +15,7 @@ export const getTodos = catchAsync(async (req, res) => {
     };
 
     const todos = await TodoModel.find({
-        ...(showCompleted ? {} : { completed: false }),
+        ...(showCompleted === true ? {} : { completed: false }),
     })
         .populate({
             path: 'createdBy',

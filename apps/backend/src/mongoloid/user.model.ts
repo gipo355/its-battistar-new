@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema<FullUser, {}, IUserMethods>(
         username: {
             type: String,
             required: [true, 'A user must have a username'],
+            unique: true,
             validate: {
                 validator: function validator(value: string) {
                     // eslint-disable-next-line no-magic-numbers
