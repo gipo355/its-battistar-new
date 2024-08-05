@@ -3,7 +3,7 @@ import { isStrongPassword } from 'validator';
 import isAscii from 'validator/lib/isAscii';
 import isURL from 'validator/lib/isURL';
 
-import type { FullUser } from '../schemas/user.schema';
+import type { IUserMongoose } from '../schemas/user.schema';
 import { comparePassword, hashPassword } from '../utils/bcrypt';
 
 interface IUserMethods {
@@ -11,7 +11,7 @@ interface IUserMethods {
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-const userSchema = new mongoose.Schema<FullUser, {}, IUserMethods>(
+const userSchema = new mongoose.Schema<IUserMongoose, {}, IUserMethods>(
     {
         username: {
             type: String,
@@ -54,6 +54,11 @@ const userSchema = new mongoose.Schema<FullUser, {}, IUserMethods>(
                 message:
                     'A user first name must have more than 2 characters and only contain ASCII characters',
             },
+        },
+
+        createdAt: {
+            type: Date,
+            default: Date.now,
         },
 
         password: {

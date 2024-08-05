@@ -14,18 +14,85 @@ export const getTodos = catchAsync(async (req, res) => {
         showCompleted: boolean | undefined;
     };
 
-    const todos = await TodoModel.find({
-        ...(showCompleted === true ? {} : { completed: false }),
-    })
-        .populate({
-            path: 'createdBy',
-            select: 'firstName lastName fullName picture',
-        })
-        .populate({
-            path: 'assignedTo',
-            select: 'firstName lastName fullName picture',
-        })
-        .exec();
+    //
+    // const todos = await TodoModel.find({
+    //     ...(showCompleted === true ? {} : { completed: false }),
+    // })
+    //     .sort({ dueDate: 'asc' })
+    //     .populate({
+    //         path: 'createdBy',
+    //         select: 'firstName lastName fullName picture',
+    //     })
+    //     .populate({
+    //         path: 'assignedTo',
+    //         select: 'firstName lastName fullName picture',
+    //     })
+    //     .exec();
+
+    const todos = await TodoModel.aggregate([
+        {
+            $match: {
+                ...(showCompleted === true ? {} : { completed: false }),
+            },
+        },
+        {
+            $addFields: {
+                dueDateExists: {
+                    $cond: {
+                        if: { $ifNull: ['$dueDate', false] },
+                        then: 1,
+                        else: 0,
+                    },
+                },
+            },
+        },
+        {
+            $sort: {
+                dueDateExists: -1, // Items with dueDate come first
+                dueDate: 1, // Sort by dueDate ascending
+                createdAt: 1, // Sort by createdAt for items without dueDate
+            },
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'createdBy',
+                foreignField: '_id',
+                as: 'createdBy',
+            },
+        },
+        {
+            $unwind: '$createdBy',
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'assignedTo',
+                foreignField: '_id',
+                as: 'assignedTo',
+            },
+        },
+        {
+            $unwind: '$assignedTo',
+        },
+        {
+            $project: {
+                dueDate: 1,
+                completed: 1,
+                expired: 1,
+                title: 1,
+                createdAt: 1,
+                'createdBy.firstName': 1,
+                'createdBy.lastName': 1,
+                'createdBy.fullName': 1,
+                'createdBy.picture': 1,
+                'assignedTo.firstName': 1,
+                'assignedTo.lastName': 1,
+                'assignedTo.fullName': 1,
+                'assignedTo.picture': 1,
+            },
+        },
+    ]).exec();
 
     res.json(todos);
 });

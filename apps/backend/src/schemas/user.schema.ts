@@ -12,3 +12,7 @@ export interface Credentials {
 }
 
 export type FullUser = IUser & Credentials;
+
+export interface IUserMongoose extends FullUser {
+    createdAt: Date;
+}
