@@ -292,7 +292,7 @@ importers:
         specifier: 18.3.4
         version: 18.3.4(@swc-node/register@1.9.0)(@swc/core@1.4.17)(@types/node@20.12.7)(@typescript-eslint/parser@7.7.1)(eslint-config-prettier@9.1.0)(eslint@9.1.1)(nx@18.3.4)(typescript@5.4.5)
       '@nx/express':
-        specifier: ^18.3.3
+        specifier: 18.3.4
         version: 18.3.4(@swc-node/register@1.9.0)(@swc/core@1.4.17)(@types/node@20.12.7)(express@4.19.2)(nx@18.3.4)(ts-node@10.9.2)(typescript@5.4.5)
       '@nx/jest':
         specifier: 18.3.4
@@ -567,21 +567,6 @@ importers:
       webpack-cli:
         specifier: ^5.1.4
         version: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.91.0)
-
-  apps/its-battistar-angular: {}
-
-  apps/its-battistar-express:
-    dependencies:
-      pino-loki:
-        specifier: ^2.2.1
-        version: 2.2.1
-      pino-pretty:
-        specifier: ^11.0.0
-        version: 11.0.0
-
-  libs/shared-types: {}
-
-  libs/shared-utils: {}
 
 packages:
 

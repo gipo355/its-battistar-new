@@ -1,4 +1,0 @@
-{
-    // required for angulars lsp to start in neovim
-    "extends": "./tsconfig.json"
-}
