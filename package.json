@@ -1,19 +1,12 @@
 {
-    "name": "@its-battistar/source",
+    "name": "@its-battistar-new/source",
     "version": "0.0.1",
     "license": "MIT",
     "scripts": {
-        "preinstall": "npx only-allow pnpm",
         "commit": "git-cz",
-        "serve-all": "nx run-many -t serve its-battistar-express its-battistar-angular",
-        "lint-test-build": "nx run-many -t lint test build",
-        "serve-express": "nx run its-battistar-express:serve",
-        "serve-angular": "nx run its-battistar-angular:serve",
-        "serve-nest": "nx run its-battistar-nest:serve",
-        "serve-go": "nx run its-battistar-be-go:dev",
-        "prepare": "husky",
-        "storybook": "nx run its-battistar-angular:storybook",
-        "version": "nx affected --target version",
+        "serve-all": "nx run-many -t serve backend frontend",
+        "serve-backend": "nx run backend:serve",
+        "serve-frontend": "nx run frontend:serve",
         "create-angular-lib": "nx g @nx/angular:lib --directory=libs --style=scss --lazy=true --routing=true --changeDetection=OnPush --standalone=true --setParserOptionsProject=true",
         "create-angular-component": "nx g @nx/angular:component --style=scss --changeDetection=OnPush --standalone=true "
     },
