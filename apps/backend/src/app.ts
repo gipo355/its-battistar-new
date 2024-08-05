@@ -21,7 +21,7 @@ app.use(globalMiddleware);
 app.use('/api', apiRouter);
 
 // catch all and return 404
-app.use('*', (req, res) => {
+app.use('*', () => {
     throw new AppError({
         message: 'Method not allowed',
         code: StatusCodes.METHOD_NOT_ALLOWED,
