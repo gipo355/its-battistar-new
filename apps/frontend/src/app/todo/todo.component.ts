@@ -13,4 +13,32 @@ import type { Todo } from '../../model/todo';
 })
 export class TodoComponent {
     todo = input<Todo>();
+
+    onDelete(id: string | undefined): void {
+        if (!id) {
+            return;
+        }
+        console.log('Delete todo with id:', id);
+    }
+
+    onAssignTo(id: string | undefined): void {
+        if (!id) {
+            return;
+        }
+        console.log('Assign todo with id:', id);
+    }
+
+    onComplete(id: string | undefined): void {
+        if (!id) {
+            return;
+        }
+        console.log('Complete todo with id:', id);
+    }
+
+    onUncomplete(id: string | undefined): void {
+        if (!id) {
+            return;
+        }
+        console.log('Uncomplete todo with id:', id);
+    }
 }
