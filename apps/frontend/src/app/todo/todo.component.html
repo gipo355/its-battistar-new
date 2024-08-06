@@ -1,6 +1,26 @@
-Here's the updated version of your card with added "Assign To", "Complete", and
-"Uncomplete" buttons: ```angular.html
-<div class="max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow-md">
+<div
+    class="relative max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow-md"
+>
+    <button
+        type="button"
+        class="absolute right-2 top-2 inline-flex items-center rounded-full bg-red-600 p-2 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+        (click)="onDelete(todo()?.id)"
+    >
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+            />
+        </svg>
+    </button>
     <h1 class="mb-2 text-xl font-bold text-gray-900">{{ todo()?.title }}</h1>
     <p class="mb-2 text-sm text-gray-600">Due date: {{ todo()?.dueDate }}</p>
     <p class="mb-2 text-sm text-gray-600">Completed: {{ todo()?.completed }}</p>
@@ -11,14 +31,7 @@ Here's the updated version of your card with added "Assign To", "Complete", and
     <p class="text-sm text-gray-600">
         Assigned to: {{ todo()?.assignedTo?.fullName }}
     </p>
-    <div class="mt-4 flex space-x-2">
-        <button
-            type="button"
-            class="inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-            (click)="onDelete(todo()?.id)"
-        >
-            Delete
-        </button>
+    <div class="mt-4 flex flex-col gap-2">
         <button
             type="button"
             class="inline-flex items-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
