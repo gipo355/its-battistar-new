@@ -8,5 +8,10 @@ import type { Todo } from '../model/todo';
 })
 export class AppService {
     todos: Signal<Todo[]> = signal(fakeTodos);
-    isEditing = signal(true);
+    // todos: Signal<Todo[]> = signal([]);
+    isEditing = signal(false);
+
+    onChangeEditing(edit: boolean): void {
+        this.isEditing.set(edit);
+    }
 }

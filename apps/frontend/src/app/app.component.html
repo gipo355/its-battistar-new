@@ -3,11 +3,19 @@
     @if (appService.isEditing()) {
         <app-todo-form></app-todo-form>
     }
-    <app-todos-list>
-        @for (todo of appService.todos(); track todo) {
-            <app-todo [todo]="todo"></app-todo>
-        }
-    </app-todos-list>
+    @if (appService.todos().length) {
+        <app-todos-list>
+            @for (todo of appService.todos(); track todo) {
+                <app-todo [todo]="todo"></app-todo>
+            }
+        </app-todos-list>
+    } @else {
+        <div class="flex flex-col items-center justify-center">
+            <p class="text-center text-gray-500">
+                No todos, start by creating one!
+            </p>
+        </div>
+    }
 </div>
 
 <app-info-popup></app-info-popup>

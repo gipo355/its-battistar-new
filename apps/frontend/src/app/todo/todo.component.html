@@ -23,8 +23,18 @@
     </button>
     <h1 class="mb-2 text-xl font-bold text-gray-900">{{ todo()?.title }}</h1>
     <p class="mb-2 text-sm text-gray-600">Due date: {{ todo()?.dueDate }}</p>
-    <p class="mb-2 text-sm text-gray-600">Completed: {{ todo()?.completed }}</p>
-    <p class="mb-2 text-sm text-gray-600">Expired: {{ todo()?.expired }}</p>
+    <p
+        class="mb-2 text-sm text-gray-600"
+        [ngClass]="{ 'text-green-500': todo()?.completed }"
+    >
+        Completed: {{ todo()?.completed }}
+    </p>
+    <p
+        class="mb-2 text-sm text-gray-600"
+        [ngClass]="{ 'text-red-500': todo()?.expired }"
+    >
+        Expired: {{ todo()?.expired }}
+    </p>
     <p class="mb-2 text-sm text-gray-600">
         Created by: {{ todo()?.createdBy?.fullName }}
     </p>
@@ -32,26 +42,22 @@
         Assigned to: {{ todo()?.assignedTo?.fullName }}
     </p>
     <div class="mt-4 flex flex-col gap-2">
-        <button
-            type="button"
-            class="inline-flex items-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            (click)="onAssignTo(todo()?.id)"
-        >
-            Assign To
-        </button>
-        <button
-            type="button"
-            class="inline-flex items-center rounded-md border border-transparent bg-green-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-            (click)="onComplete(todo()?.id)"
-        >
-            Complete
-        </button>
-        <button
-            type="button"
-            class="inline-flex items-center rounded-md border border-transparent bg-gray-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-            (click)="onUncomplete(todo()?.id)"
-        >
-            Uncomplete
-        </button>
+        @if (!todo()?.completed) {
+            <button
+                type="button"
+                class="inline-flex items-center rounded-md border border-transparent bg-green-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                (click)="onComplete(todo()?.id)"
+            >
+                Complete
+            </button>
+        } @else {
+            <button
+                type="button"
+                class="inline-flex items-center rounded-md border border-transparent bg-gray-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                (click)="onUncomplete(todo()?.id)"
+            >
+                Uncomplete
+            </button>
+        }
     </div>
 </div>

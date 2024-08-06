@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, type OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    inject,
+    type OnInit,
+} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import { AppService } from '../app.service';
 
 @Component({
     selector: 'app-todo-form',
@@ -12,6 +19,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 })
 export class TodoFormComponent implements OnInit {
     todoForm: FormGroup = new FormGroup({});
+    appService = inject(AppService);
 
     constructor(private fb: FormBuilder) {}
 

@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
+import { AppService } from '../app.service';
 
 @Component({
     selector: 'app-todos-filter',
@@ -10,6 +12,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodosFilterComponent {
+    appService = inject(AppService);
     // this comp is the top bar allowing to filter the todos with showCompleted and dueDate
     // it also has  a button to create a new todo
 }
