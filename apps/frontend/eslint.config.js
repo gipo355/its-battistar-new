@@ -45,6 +45,7 @@ module.exports = tseslint.config(
         },
         rules: {
             ...ng.configs.recommended.rules,
+            '@typescript-eslint/no-extraneous-class': 'off',
             '@angular-eslint/directive-selector': [
                 'error',
                 { type: 'attribute', prefix: 'app', style: 'camelCase' },
