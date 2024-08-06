@@ -1,1 +1,8 @@
-<p>todo works!</p>
+<div class="rounded-lg border-2 border-black bg-slate-100 p-4">
+    <h1>{{ todo()?.title }}</h1>
+    <p>Due date: {{ todo()?.dueDate }}</p>
+    <p>Completed: {{ todo()?.completed }}</p>
+    <p>Expired: {{ todo()?.expired }}</p>
+    <p>Created by: {{ todo()?.createdBy?.fullName }}</p>
+    <p>Assigned to: {{ todo()?.assignedTo?.fullName }}</p>
+</div>

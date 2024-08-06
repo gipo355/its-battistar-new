@@ -1,1 +1,50 @@
-<p>todo-form works!</p>
+<section class="mb-4 rounded-lg bg-white p-4 shadow-md">
+    <form [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="flex flex-col">
+            <label for="title" class="mb-1 font-semibold">Title:</label>
+            <input
+                id="title"
+                formControlName="title"
+                type="text"
+                class="rounded-md border p-2"
+            />
+        </div>
+
+        <div class="flex flex-col">
+            <label for="assignedTo" class="mb-1 font-semibold"
+                >Assigned To:</label
+            >
+            <input
+                id="assignedTo"
+                formControlName="assignedTo"
+                type="text"
+                class="rounded-md border p-2"
+            />
+        </div>
+
+        <div class="flex flex-col">
+            <label for="dueDate" class="mb-1 font-semibold">Due Date:</label>
+            <input
+                id="dueDate"
+                formControlName="dueDate"
+                type="date"
+                class="rounded-md border p-2"
+            />
+        </div>
+
+        <div class="flex justify-end gap-2">
+            <button
+                type="submit"
+                class="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            >
+                Create Todo
+            </button>
+            <button
+                type="button"
+                class="rounded-md bg-gray-500 px-4 py-2 text-white hover:bg-gray-600"
+            >
+                Cancel
+            </button>
+        </div>
+    </form>
+</section>

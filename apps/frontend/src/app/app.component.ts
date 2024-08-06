@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
+import { AppService } from './app.service';
 import { TodoComponent } from './todo/todo.component';
 import { TodoFormComponent } from './todo-form/todo-form.component';
 import { TodosFilterComponent } from './todos-filter/todos-filter.component';
@@ -20,5 +21,5 @@ import { TodosListComponent } from './todos-list/todos-list.component';
     styleUrl: './app.component.scss',
 })
 export class AppComponent {
-    title = 'frontend';
+    appService = inject(AppService);
 }

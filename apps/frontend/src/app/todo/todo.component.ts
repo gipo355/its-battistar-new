@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+
+import type { Todo } from '../../model/todo';
 
 @Component({
     selector: 'app-todo',
@@ -9,4 +11,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     styleUrl: './todo.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TodoComponent {}
+export class TodoComponent {
+    todo = input<Todo>();
+}

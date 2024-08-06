@@ -1,5 +1,11 @@
-<app-todos-filter></app-todos-filter>
-<app-todo-form></app-todo-form>
-<app-todos-list>
-    <app-todo></app-todo>
-</app-todos-list>
+<div class="container mx-auto w-full max-w-screen-lg p-4">
+    <app-todos-filter></app-todos-filter>
+    @if (appService.isEditing()) {
+        <app-todo-form></app-todo-form>
+    }
+    <app-todos-list>
+        @for (todo of appService.todos(); track todo) {
+            <app-todo [todo]="todo"></app-todo>
+        }
+    </app-todos-list>
+</div>

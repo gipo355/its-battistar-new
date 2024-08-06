@@ -9,4 +9,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     styleUrl: './todos-filter.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TodosFilterComponent {}
+export class TodosFilterComponent {
+    // this comp is the top bar allowing to filter the todos with showCompleted and dueDate
+    // it also has  a button to create a new todo
+}
