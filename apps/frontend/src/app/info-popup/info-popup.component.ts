@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
-    input,
-    model,
+    inject,
     OnInit,
 } from '@angular/core';
+
+import { InfoPopupService } from './info-popup.service';
 
 @Component({
     selector: 'app-info-popup',
@@ -16,18 +17,13 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InfoPopupComponent implements OnInit {
-    message = model('');
-
-    type = model<'info' | 'success' | 'warning' | 'error'>('info');
-
-    // eslint-disable-next-line no-magic-numbers
-    duration = input(3000);
+    infoPopupService = inject(InfoPopupService);
 
     ngOnInit(): void {
-        if (this.message.length) {
+        if (this.infoPopupService.message().length) {
             setTimeout(() => {
-                this.message.set('');
-            }, this.duration());
+                this.infoPopupService.message.set('');
+            }, this.infoPopupService.duration());
         }
     }
 }
