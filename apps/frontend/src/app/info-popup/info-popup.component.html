@@ -1,1 +1,8 @@
-<p>info-popup works!</p>
+@if (message().length) {
+    <div
+        class="fixed bottom-4 right-4 w-full max-w-xs rounded-lg p-4 shadow-lg"
+        [ngClass]="type()"
+    >
+        <p>{{ message() }}</p>
+    </div>
+}
