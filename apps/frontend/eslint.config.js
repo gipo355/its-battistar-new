@@ -27,7 +27,7 @@ module.exports = tseslint.config(
     {
         languageOptions: {
             parserOptions: {
-                project: ['tsconfig.*?.json', '.storybook/tsconfig.json'],
+                project: ['tsconfig.*?.json'],
                 tsconfigRootDir: __dirname,
             },
             globals: {
@@ -55,20 +55,6 @@ module.exports = tseslint.config(
             ],
         },
     },
-
-    // {
-    //   files: ['**/*.html'],
-    //   plugins: {
-    //     '@angular-eslint/template': ngTeplate,
-    //   },
-    //   languageOptions: {
-    //     // BUG: not using the parser
-    //     parser: ngParser,
-    //   },
-    //   rules: {
-    //     ...ngTeplate.configs.recommended.rules,
-    //     ...ngTeplate.configs.accessibility.rules,
-    //   },
     // },
 
     {
@@ -79,56 +65,4 @@ module.exports = tseslint.config(
             },
         },
     }
-
-    // FIXME: old compatibility mode
-    // do these even work?
-    // ...compat
-    //   .config({
-    //     extends: [
-    //       'plugin:@nx/angular',
-    //       'plugin:@angular-eslint/recommended',
-    //       'plugin:@angular-eslint/template/process-inline-templates',
-    //       'plugin:angular/johnpapa',
-    //     ],
-    //     // why do i need to specify this in the overrides too?
-    //     parserOptions: {
-    //       // project: ['./tsconfig.*?.json'],
-    //       tsconfigRootDir: __dirname,
-    //       project: ['tsconfig.*?.json', '.storybook/tsconfig.json'],
-    //     },
-    //   })
-    //   .map((config) => ({
-    //     ...config,
-    //     files: ['**/*.ts'],
-    //     rules: {
-    //       '@angular-eslint/directive-selector': [
-    //         'error',
-    //         {
-    //           type: 'attribute',
-    //           prefix: 'app',
-    //           style: 'camelCase',
-    //         },
-    //       ],
-    //       '@angular-eslint/component-selector': [
-    //         'error',
-    //         {
-    //           type: 'element',
-    //           prefix: 'app',
-    //           style: 'kebab-case',
-    //         },
-    //       ],
-    //     },
-    //   })),
-
-    // FIXME: doesn't lint html files
-    // ...compat
-    //   .config({
-    //     parser: '@angular-eslint/template-parser',
-    //     extends: ['plugin:@nx/angular-template'],
-    //   })
-    //   .map((config) => ({
-    //     ...config,
-    //     files: ['**/*.html'],
-    //     rules: {},
-    //   })),
 );
