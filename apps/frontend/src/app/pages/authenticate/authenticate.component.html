@@ -234,6 +234,9 @@
                     [disabled]="
                         authService.isLoading() || authService.isAuthenticated()
                     "
+                    [style.cursor]="
+                        registerForm.invalid ? 'not-allowed' : 'pointer'
+                    "
                 >
                     Register
                 </button>
