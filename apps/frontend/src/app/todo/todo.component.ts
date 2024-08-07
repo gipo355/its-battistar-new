@@ -9,7 +9,6 @@ import {
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import type { Todo } from '../../model/todo';
-import { inputIsMongoDbID } from '../shared/inputIsMongodb';
 import { UserListService } from '../user-list/user-list.service';
 import { TodoService } from './todo.service';
 
@@ -27,13 +26,15 @@ export class TodoComponent {
     fb = inject(FormBuilder);
     userListService = inject(UserListService);
 
-    assigneeForm = this.fb.control('', [inputIsMongoDbID()]);
+    assigneeForm = this.fb.control('');
 
     todo = input<Todo>();
 
     selecteUser = effect(() => {
         if (this.userListService.selectedUser()?.id) {
-            this.assigneeForm.setValue(this.userListService.selectedUser()?.id ?? '');
+            this.assigneeForm.setValue(
+                this.userListService.selectedUser()?.id ?? ''
+            );
         }
-    })
+    });
 }

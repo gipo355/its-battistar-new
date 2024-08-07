@@ -1,6 +1,11 @@
 /* eslint-disable no-magic-numbers */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    effect,
+    inject,
+} from '@angular/core';
 import {
     FormBuilder,
     FormControl,
@@ -26,11 +31,7 @@ interface TodoForm {
 @Component({
     selector: 'app-todo-form',
     standalone: true,
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        UserListComponent
-    ],
+    imports: [CommonModule, ReactiveFormsModule, UserListComponent],
     templateUrl: './todo-form.component.html',
     styleUrl: './todo-form.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,12 +54,11 @@ export class TodoFormComponent {
             Validators.required.bind(Validators).bind(this),
             Validators.minLength(3).bind(this),
         ]),
-        assignedTo: new FormControl(
-            ''
-            , [
+        assignedTo: new FormControl('', [
             // Validators.required.bind(this),
             // inputIsMongoDbID().bind(this),
         ]),
+
         dueDate: new FormControl('', [
             Validators.required.bind(this),
             Validators.pattern(
@@ -71,12 +71,13 @@ export class TodoFormComponent {
     //     this.todoForm = this.fb.group({});
     // }
 
-     updateUser = effect(() => {
+    updateUser = effect(() => {
         if (this.userListService.selectedUser()) {
-            this.todoForm.controls.assignedTo.setValue(this.userListService.selectedUser()?.id ?? '');
+            this.todoForm.controls.assignedTo.setValue(
+                this.userListService.selectedUser()?.id ?? ''
+            );
         }
-    })
-    
+    });
 
     onAssignedToClick(): void {
         this.userListService.openModal();
@@ -105,6 +106,6 @@ export class TodoFormComponent {
             'success'
         );
 
-        this.userListService.selectedUser.set(null)
+        this.userListService.selectedUser.set(null);
     }
 }

@@ -21,7 +21,7 @@
             />
         </svg>
     </button>
-    <div class="flex items-center mb-4">
+    <div class="mb-4 flex items-center">
         <h1 class="text-xl font-bold text-gray-900">{{ todo()?.title }}</h1>
     </div>
     <p class="mb-2 text-sm text-gray-600">
@@ -39,29 +39,29 @@
     >
         Expired: {{ todo()?.expired }}
     </p>
-    <div class="flex items-center mb-2">
+    <div class="mb-2 flex items-center">
         <img
             *ngIf="todo()?.createdBy?.picture"
             [src]="todo()?.createdBy?.picture"
             alt="Avatar"
-            class="h-8 w-8 rounded-full mr-2"
+            class="mr-2 h-8 w-8 rounded-full"
         />
         <p class="text-sm text-gray-600">
             Created by: {{ todo()?.createdBy?.fullName }}
         </p>
     </div>
     @if (todo()?.assignedTo) {
-    <div class="flex items-center">
-        <img
-            *ngIf="todo()?.assignedTo?.picture"
-            [src]="todo()?.assignedTo?.picture"
-            alt="Avatar"
-            class="h-8 w-8 rounded-full mr-2"
-        />
-        <p class="text-sm text-gray-600">
-            Assigned to: {{ todo()?.assignedTo?.fullName }}
-        </p>
-    </div>
+        <div class="flex items-center">
+            <img
+                *ngIf="todo()?.assignedTo?.picture"
+                [src]="todo()?.assignedTo?.picture"
+                alt="Avatar"
+                class="mr-2 h-8 w-8 rounded-full"
+            />
+            <p class="text-sm text-gray-600">
+                Assigned to: {{ todo()?.assignedTo?.fullName }}
+            </p>
+        </div>
     }
     <div class="mt-4 flex flex-col gap-2">
         @if (!todo()?.completed) {
@@ -96,11 +96,6 @@
                 [formControl]="assigneeForm"
                 (click)="userListService.openModal()"
             />
-            @if (assigneeForm.touched && assigneeForm.invalid) {
-                <p class="mt-2 text-sm text-red-500">
-                    Please enter a valid mongoID
-                </p>
-            }
             <div class="mt-2 flex space-x-2">
                 <button
                     type="button"
