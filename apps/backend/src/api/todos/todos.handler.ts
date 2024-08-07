@@ -67,8 +67,8 @@ export const getTodos = catchAsync(async (req, res) => {
             $addFields: {
                 expired: {
                     $cond: {
-                        if: { $lt: ['$dueDate', new Date()] },
-                        then: true,
+                        if: { $ifNull: ['$dueDate', false] },
+                        then: { $lt: ['$dueDate', new Date()] },
                         else: false,
                     },
                 },
