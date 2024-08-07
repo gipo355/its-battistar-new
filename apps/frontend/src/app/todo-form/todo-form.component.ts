@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
@@ -5,9 +6,15 @@ import {
     inject,
     type OnInit,
 } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+    FormBuilder,
+    FormGroup,
+    ReactiveFormsModule,
+    Validators,
+} from '@angular/forms';
 
 import { AppService } from '../app.service';
+import { inputIsMongoDbID } from '../shared/inputIsMongodb';
 
 @Component({
     selector: 'app-todo-form',
@@ -25,13 +32,27 @@ export class TodoFormComponent implements OnInit {
 
     ngOnInit(): void {
         this.todoForm = this.fb.group({
-            title: [''],
-            assignedTo: [''],
-            completed: [false],
-            createdBy: [''],
-            dueDate: [''],
-            expired: [false],
-            id: [''],
+            title: [
+                '',
+                [
+                    Validators.required.bind(Validators).bind(this),
+                    Validators.minLength(3).bind(this),
+                ],
+            ],
+            assignedTo: [
+                '',
+                [Validators.required.bind(this), inputIsMongoDbID().bind(this)],
+            ],
+            dueDate: [
+                '',
+                [
+                    Validators.required.bind(this),
+                    // 2024-08-16
+                    Validators.pattern(
+                        '^([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])$'
+                    ).bind(this),
+                ],
+            ],
         });
     }
 

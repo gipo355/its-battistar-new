@@ -1,7 +1,9 @@
 <section class="mb-4 rounded-lg bg-white p-4 shadow-md">
     <form [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="space-y-4">
         <div class="flex flex-col">
-            <label for="title" class="mb-1 font-semibold">Title:</label>
+            <label for="title" class="mb-1 font-semibold"
+                >Title<span class="text-red-500">*</span>:</label
+            >
             <input
                 id="title"
                 formControlName="title"
@@ -9,10 +11,30 @@
                 class="rounded-md border p-2"
             />
         </div>
+        <p
+            class="text-sm text-red-500"
+            *ngIf="
+                todoForm.controls['title'].touched &&
+                todoForm.controls['title'].errors &&
+                todoForm.controls['title'].errors['required']
+            "
+        >
+            Title is required
+        </p>
+        <p
+            class="text-sm text-red-500"
+            *ngIf="
+                todoForm.controls['title'].touched &&
+                todoForm.controls['title'].errors &&
+                todoForm.controls['title'].errors['minlength']
+            "
+        >
+            Title must be at least 3 characters
+        </p>
 
         <div class="flex flex-col">
             <label for="assignedTo" class="mb-1 font-semibold"
-                >Assigned To:</label
+                >Assigned To<span class="text-red-500">*</span>:</label
             >
             <input
                 id="assignedTo"
@@ -21,9 +43,31 @@
                 class="rounded-md border p-2"
             />
         </div>
+        <p
+            class="text-sm text-red-500"
+            *ngIf="
+                todoForm.controls['assignedTo'].touched &&
+                todoForm.controls['assignedTo'].errors &&
+                todoForm.controls['assignedTo'].errors['required']
+            "
+        >
+            Assigned To is required
+        </p>
+        <p
+            class="text-sm text-red-500"
+            *ngIf="
+                todoForm.controls['assignedTo'].touched &&
+                todoForm.controls['assignedTo'].errors &&
+                todoForm.controls['assignedTo'].errors['invalidMongoId']
+            "
+        >
+            Assigned To must be a valid mongo id
+        </p>
 
         <div class="flex flex-col">
-            <label for="dueDate" class="mb-1 font-semibold">Due Date:</label>
+            <label for="dueDate" class="mb-1 font-semibold"
+                >Due Date<span class="text-red-500">*</span>:</label
+            >
             <input
                 id="dueDate"
                 formControlName="dueDate"
@@ -31,6 +75,16 @@
                 class="rounded-md border p-2"
             />
         </div>
+        <p
+            class="text-sm text-red-500"
+            *ngIf="
+                todoForm.controls['dueDate'].touched &&
+                todoForm.controls['dueDate'].errors &&
+                todoForm.controls['dueDate'].errors['required']
+            "
+        >
+            Due Date is required
+        </p>
 
         <div class="flex justify-end gap-2">
             <button
