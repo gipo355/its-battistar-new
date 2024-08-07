@@ -2,17 +2,21 @@
     <div class="w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-md">
         <div *ngIf="isLoginForm" class="space-y-4">
             <h2 class="text-center text-2xl font-bold">Login</h2>
-            <form (ngSubmit)="onSubmit()">
+            <form
+                [formGroup]="loginForm"
+                (ngSubmit)="onSubmitLoginForm()"
+                class="space-y-4"
+            >
                 <div>
                     <label
-                        for="login-email"
+                        for="login-username"
                         class="block text-sm font-medium text-gray-700"
-                        >Email:</label
+                        >Username:</label
                     >
                     <input
-                        type="email"
-                        id="login-email"
-                        name="email"
+                        type="text"
+                        id="login-username"
+                        formControlName="username"
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />
@@ -26,7 +30,7 @@
                     <input
                         type="password"
                         id="login-password"
-                        name="password"
+                        formControlName="password"
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />
@@ -47,17 +51,63 @@
         </div>
         <div *ngIf="!isLoginForm" class="space-y-4">
             <h2 class="text-center text-2xl font-bold">Register</h2>
-            <form>
+            <form
+                [formGroup]="registerForm"
+                (ngSubmit)="onSubmitRegisterForm()"
+                class="space-y-4"
+            >
                 <div>
                     <label
-                        for="register-email"
+                        for="register-firstName"
                         class="block text-sm font-medium text-gray-700"
-                        >Email:</label
+                        >First Name:</label
                     >
                     <input
-                        type="email"
-                        id="register-email"
-                        name="email"
+                        type="text"
+                        id="register-firstName"
+                        formControlName="firstName"
+                        required
+                        class="w-full rounded-md border px-3 py-2"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="register-lastName"
+                        class="block text-sm font-medium text-gray-700"
+                        >Last Name:</label
+                    >
+                    <input
+                        type="text"
+                        id="register-lastName"
+                        formControlName="lastName"
+                        required
+                        class="w-full rounded-md border px-3 py-2"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="register-picture"
+                        class="block text-sm font-medium text-gray-700"
+                        >Picture:</label
+                    >
+                    <input
+                        type="text"
+                        id="register-picture"
+                        formControlName="picture"
+                        required
+                        class="w-full rounded-md border px-3 py-2"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="register-username"
+                        class="block text-sm font-medium text-gray-700"
+                        >Username:</label
+                    >
+                    <input
+                        type="text"
+                        id="register-username"
+                        formControlName="username"
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />
@@ -71,21 +121,21 @@
                     <input
                         type="password"
                         id="register-password"
-                        name="password"
+                        formControlName="password"
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />
                 </div>
                 <div>
                     <label
-                        for="register-confirm-password"
-                        class="block text-sm font-medium text-gray-700"
+                        for="register-confirmPassword"
+                        class="mt-2 block text-sm font-medium text-gray-700"
                         >Confirm Password:</label
                     >
                     <input
                         type="password"
-                        id="register-confirm-password"
-                        name="confirm-password"
+                        id="register-confirmPassword"
+                        formControlName="confirmPassword"
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />

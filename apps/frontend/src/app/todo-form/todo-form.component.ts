@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 
 import { ApiService } from '../api/api.service';
-import { AppService } from '../app.service';
+import { InfoPopupService } from '../info-popup/info-popup.service';
 import { TodosService } from '../pages/todos/todos.service';
 import { inputIsMongoDbID } from '../shared/inputIsMongodb';
 
@@ -34,6 +34,8 @@ export class TodoFormComponent {
     apiService = inject(ApiService);
 
     todosService = inject(TodosService);
+
+    infoPopupService = inject(InfoPopupService);
 
     todoForm = this.fb.group({
         title: new FormControl('', [
@@ -74,6 +76,11 @@ export class TodoFormComponent {
             todo.assignedTo
         );
 
-        console.log(this.todoForm.value);
+        this.infoPopupService.showNotification(
+            'Successfully created todo!',
+
+            5000,
+            'success'
+        );
     }
 }

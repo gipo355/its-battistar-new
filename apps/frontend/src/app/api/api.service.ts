@@ -1,9 +1,17 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal, WritableSignal } from '@angular/core';
+import {
+    computed,
+    effect,
+    inject,
+    Injectable,
+    signal,
+    WritableSignal,
+} from '@angular/core';
 import { StatusCodes } from 'http-status-codes';
 import { retry, take } from 'rxjs';
 
 import type { Todo } from '../../model/todo';
+import { InfoPopupService } from '../info-popup/info-popup.service';
 import { AppError } from '../shared/app-error';
 
 @Injectable({
@@ -19,11 +27,31 @@ export class ApiService {
     todos: WritableSignal<Todo[]> = signal([]);
     isLoading = signal(false);
     error: WritableSignal<AppError | null> = signal(null);
+    infoPopupService = inject(InfoPopupService);
+
+    displayError = effect(
+        () => {
+            const error = this.error();
+            if (error) {
+                this.infoPopupService.showNotification(
+                    error.message,
+
+                    // eslint-disable-next-line no-magic-numbers
+                    5000,
+                    'error'
+                );
+            }
+        },
+        {
+            allowSignalWrites: true,
+        }
+    );
 
     getTodos(): void {
         this.isLoading.set(true);
         this.httpClient
             .get<Todo[]>(`${this.baseUrl}/todos`)
+            // eslint-disable-next-line no-magic-numbers
             .pipe(take(1), retry(1))
             .subscribe({
                 next: (todos) => {
