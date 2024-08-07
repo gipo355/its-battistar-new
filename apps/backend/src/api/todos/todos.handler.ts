@@ -330,3 +330,41 @@ export const assignTodo = catchAsync(async (req, res) => {
 
     res.status(StatusCodes.OK).json(populatedTodo);
 });
+
+export const deleteTodo = catchAsync(async (req, res) => {
+    const currUser = req.user;
+    if (!currUser) {
+        throw new AppError({
+            message: 'Unauthorized',
+            code: StatusCodes.UNAUTHORIZED,
+        });
+    }
+
+    const { id } = req.params;
+    if (!isMongoId(id)) {
+        throw new AppError({
+            message: 'Invalid id, must be a valid mongo id',
+            code: StatusCodes.BAD_REQUEST,
+        });
+    }
+
+    const todo = await TodoModel.findById(id);
+
+    if (!todo) {
+        throw new AppError({
+            message: 'Todo not found',
+            code: StatusCodes.NOT_FOUND,
+        });
+    }
+
+    if (todo.createdBy.toString() !== currUser.id) {
+        throw new AppError({
+            message: 'You do not have permission to delete this todo',
+            code: StatusCodes.NOT_FOUND,
+        });
+    }
+
+    await TodoModel.deleteOne({ _id: id });
+
+    res.status(StatusCodes.NO_CONTENT).json();
+});

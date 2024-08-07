@@ -1,7 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    inject,
+    input,
+} from '@angular/core';
 
 import type { Todo } from '../../model/todo';
+import { ApiService } from '../api/api.service';
 
 @Component({
     selector: 'app-todo',
@@ -12,6 +18,8 @@ import type { Todo } from '../../model/todo';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoComponent {
+    apiService = inject(ApiService);
+
     todo = input<Todo>();
 
     onDelete(id: string | undefined): void {

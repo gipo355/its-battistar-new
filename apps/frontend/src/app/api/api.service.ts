@@ -131,4 +131,19 @@ export class ApiService {
                 error: this.errorHandler,
             });
     }
+
+    deleteTodo(id: string): void {
+        this.isLoading.set(true);
+        this.httpClient
+            .delete<Todo>(`${this.baseUrl}/todos/${id}`)
+            .pipe(take(1), retry(1))
+            .subscribe({
+                next: () => {
+                    // realign local state with remote state
+                    this.getTodos();
+                    this.isLoading.set(false);
+                },
+                error: this.errorHandler,
+            });
+    }
 }
