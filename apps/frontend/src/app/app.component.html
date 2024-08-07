@@ -3,9 +3,9 @@
     @if (appService.isEditing()) {
         <app-todo-form></app-todo-form>
     }
-    @if (appService.todos().length) {
+    @if (apiService.todos().length) {
         <app-todos-list>
-            @for (todo of appService.todos(); track todo) {
+            @for (todo of apiService.todos(); track todo) {
                 <app-todo [todo]="todo"></app-todo>
             }
         </app-todos-list>

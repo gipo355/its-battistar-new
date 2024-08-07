@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 
+import { ApiService } from './api/api.service';
 import { AppService } from './app.service';
 import { InfoPopupComponent } from './info-popup/info-popup.component';
 import { InfoPopupService } from './info-popup/info-popup.service';
@@ -12,7 +12,6 @@ import { TodosListComponent } from './todos-list/todos-list.component';
 @Component({
     standalone: true,
     imports: [
-        CommonModule,
         TodoFormComponent,
         TodosListComponent,
         TodosFilterComponent,
@@ -26,4 +25,5 @@ import { TodosListComponent } from './todos-list/todos-list.component';
 export class AppComponent {
     infoPopupService = inject(InfoPopupService);
     appService = inject(AppService);
+    apiService = inject(ApiService);
 }

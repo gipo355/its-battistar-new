@@ -1,13 +1,9 @@
-import { Injectable, type Signal, signal } from '@angular/core';
-
-import { fakeTodos } from '../data/todos';
-import type { Todo } from '../model/todo';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AppService {
-    todos: Signal<Todo[]> = signal(fakeTodos);
     // todos: Signal<Todo[]> = signal([]);
     isEditing = signal(false);
 
