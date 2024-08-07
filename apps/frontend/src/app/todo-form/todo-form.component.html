@@ -34,7 +34,7 @@
 
         <div class="flex flex-col">
             <label for="assignedTo" class="mb-1 font-semibold"
-                >Assigned To<span class="text-red-500">*</span>:</label
+                >Assigned To:</label
             >
             <input
                 id="assignedTo"
@@ -43,16 +43,16 @@
                 class="rounded-md border p-2"
             />
         </div>
-        <p
-            class="text-sm text-red-500"
-            *ngIf="
-                todoForm.controls['assignedTo'].touched &&
-                todoForm.controls['assignedTo'].errors &&
-                todoForm.controls['assignedTo'].errors['required']
-            "
-        >
-            Assigned To is required
-        </p>
+        <!-- <p -->
+        <!--     class="text-sm text-red-500" -->
+        <!--     *ngIf=" -->
+        <!--         todoForm.controls['assignedTo'].touched && -->
+        <!--         todoForm.controls['assignedTo'].errors && -->
+        <!--         todoForm.controls['assignedTo'].errors['required'] -->
+        <!--     " -->
+        <!-- > -->
+        <!--     Assigned To is required -->
+        <!-- </p> -->
         <p
             class="text-sm text-red-500"
             *ngIf="

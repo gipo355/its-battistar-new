@@ -13,7 +13,7 @@ import { ApiService } from '../api/api.service';
 import { AuthService } from '../api/auth.service';
 import { InfoPopupService } from '../info-popup/info-popup.service';
 import { TodosService } from '../pages/todos/todos.service';
-import { inputIsMongoDbID } from '../shared/inputIsMongodb';
+// import { inputIsMongoDbID } from '../shared/inputIsMongodb';
 
 interface TodoForm {
     assignedTo: FormControl<string>;
@@ -45,9 +45,9 @@ export class TodoFormComponent {
             Validators.required.bind(Validators).bind(this),
             Validators.minLength(3).bind(this),
         ]),
-        assignedTo: new FormControl(this.authService.user()?.id, [
-            Validators.required.bind(this),
-            inputIsMongoDbID().bind(this),
+        assignedTo: new FormControl('', [
+            // Validators.required.bind(this),
+            // inputIsMongoDbID().bind(this),
         ]),
         dueDate: new FormControl('', [
             Validators.required.bind(this),

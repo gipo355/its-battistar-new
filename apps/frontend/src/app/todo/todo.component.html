@@ -50,6 +50,7 @@
             Created by: {{ todo()?.createdBy?.fullName }}
         </p>
     </div>
+    @if (todo()?.assignedTo) {
     <div class="flex items-center">
         <img
             *ngIf="todo()?.assignedTo?.picture"
@@ -61,6 +62,7 @@
             Assigned to: {{ todo()?.assignedTo?.fullName }}
         </p>
     </div>
+    }
     <div class="mt-4 flex flex-col gap-2">
         @if (!todo()?.completed) {
             <button

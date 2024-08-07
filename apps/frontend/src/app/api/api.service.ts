@@ -11,6 +11,7 @@ import { retry, take } from 'rxjs';
 
 import type { ApiError } from '../../model/api-error';
 import type { Todo } from '../../model/todo';
+import { User } from '../../model/user';
 import { InfoPopupService } from '../info-popup/info-popup.service';
 import { AppError } from '../shared/app-error';
 
@@ -28,6 +29,7 @@ export class ApiService {
     isLoading = signal(false);
     error: WritableSignal<AppError | null> = signal(null);
     infoPopupService = inject(InfoPopupService);
+    users: WritableSignal<User[]> = signal([]);
 
     displayError = effect(
         () => {
@@ -162,4 +164,19 @@ export class ApiService {
                 error: this.errorHandler,
             });
     }
+
+    listUsers(): void {
+        this.isLoading.set(true);
+        this.httpClient
+            .get<User[]>(`${this.baseUrl}/users`)
+            .pipe(take(1), retry(1))
+            .subscribe({
+                next: (users) => {
+                    this.users.set(users);
+                    this.isLoading.set(false);
+                },
+                error: this.errorHandler,
+            });
+    }
+
 }
