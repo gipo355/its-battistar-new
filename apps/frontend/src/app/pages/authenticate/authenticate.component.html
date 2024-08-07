@@ -2,7 +2,7 @@
     <div class="w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-md">
         <div *ngIf="isLoginForm" class="space-y-4">
             <h2 class="text-center text-2xl font-bold">Login</h2>
-            <form>
+            <form (ngSubmit)="onSubmit()">
                 <div>
                     <label
                         for="login-email"
