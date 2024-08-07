@@ -51,7 +51,10 @@ export class AuthenticateComponent {
                 Validators.required.bind(this),
                 inputIsUrl(),
             ]),
-            username: new FormControl('', [inputIsASCII()]),
+            username: new FormControl('', [
+                inputIsASCII(),
+                Validators.minLength(3),
+            ]),
             password: new FormControl('', [inputIsStrongPassword()]),
             confirmPassword: new FormControl('', []),
         },

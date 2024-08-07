@@ -20,6 +20,15 @@
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />
+                    <div
+                        *ngIf="
+                            loginForm.get('username')?.invalid &&
+                            loginForm.get('username')?.touched
+                        "
+                        class="text-sm text-red-500"
+                    >
+                        Username is required.
+                    </div>
                 </div>
                 <div>
                     <label
@@ -34,6 +43,15 @@
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />
+                    <div
+                        *ngIf="
+                            loginForm.get('password')?.invalid &&
+                            loginForm.get('password')?.touched
+                        "
+                        class="text-sm text-red-500"
+                    >
+                        Password is required.
+                    </div>
                 </div>
                 <button
                     type="submit"
@@ -72,6 +90,16 @@
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />
+                    <div
+                        *ngIf="
+                            registerForm.get('firstName')?.invalid &&
+                            registerForm.get('firstName')?.touched
+                        "
+                        class="text-sm text-red-500"
+                    >
+                        First Name is required and must be at least 2
+                        characters.
+                    </div>
                 </div>
                 <div>
                     <label
@@ -86,6 +114,15 @@
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />
+                    <div
+                        *ngIf="
+                            registerForm.get('lastName')?.invalid &&
+                            registerForm.get('lastName')?.touched
+                        "
+                        class="text-sm text-red-500"
+                    >
+                        Last Name is required and must be at least 2 characters.
+                    </div>
                 </div>
                 <div>
                     <label
@@ -100,6 +137,15 @@
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />
+                    <div
+                        *ngIf="
+                            registerForm.get('picture')?.invalid &&
+                            registerForm.get('picture')?.touched
+                        "
+                        class="text-sm text-red-500"
+                    >
+                        Picture URL is required and must be valid.
+                    </div>
                 </div>
                 <div>
                     <label
@@ -114,6 +160,15 @@
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />
+                    <div
+                        *ngIf="
+                            registerForm.get('username')?.invalid &&
+                            registerForm.get('username')?.touched
+                        "
+                        class="text-sm text-red-500"
+                    >
+                        Username is required and must be ASCII and min 3 chars.
+                    </div>
                 </div>
                 <div>
                     <label
@@ -128,6 +183,18 @@
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />
+                    <div
+                        *ngIf="
+                            registerForm.get('password')?.invalid &&
+                            registerForm.get('password')?.touched
+                        "
+                        class="text-sm text-red-500"
+                    >
+                        Password is required and must be strong (8 chars, must
+                        contain a number, a lowercase letter, an uppercase
+                        letter, and a special character between
+                        !&commat;#$%^&*).
+                    </div>
                 </div>
                 <div>
                     <label
@@ -142,6 +209,24 @@
                         required
                         class="w-full rounded-md border px-3 py-2"
                     />
+                    <div
+                        *ngIf="
+                            registerForm.get('confirmPassword')?.invalid &&
+                            registerForm.get('confirmPassword')?.touched
+                        "
+                        class="text-sm text-red-500"
+                    >
+                        Confirm Password is required.
+                    </div>
+                    <div
+                        *ngIf="
+                            registerForm.errors?.['passwordMismatch'] &&
+                            registerForm.get('confirmPassword')?.touched
+                        "
+                        class="text-sm text-red-500"
+                    >
+                        Passwords do not match.
+                    </div>
                 </div>
                 <button
                     type="submit"
