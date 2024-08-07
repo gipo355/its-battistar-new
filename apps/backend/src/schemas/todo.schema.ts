@@ -17,7 +17,7 @@ export interface ITodoBase {
 }
 
 export interface ITodo extends ITodoBase {
-    assignedTo: string;
+    assignedTo?: string;
     createdBy: string;
     dueDate?: string;
 }
@@ -38,13 +38,12 @@ export interface IPopulatedTodo extends ITodoBase {
 export class TodoDTO {
     @IsString()
     @IsNotEmpty()
-    title: string;
+    title?: string;
     @IsOptional()
     @IsDate()
     dueDate?: Date;
-    @IsMongoId()
-    @IsNotEmpty()
-    assignedTo: string;
+    @IsOptional()
+    assignedTo?: string;
     @IsMongoId()
     @IsNotEmpty()
     createdBy: string;
@@ -61,7 +60,9 @@ export class TodoDTO {
         if (dueDate) {
             this.dueDate = new Date(dueDate);
         }
-        this.assignedTo = assignedTo;
+        if (assignedTo) {
+            this.assignedTo = assignedTo;
+        }
         this.createdBy = createdBy;
     }
 }

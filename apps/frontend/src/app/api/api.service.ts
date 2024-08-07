@@ -68,12 +68,13 @@ export class ApiService {
             });
     }
 
-    createTodo(title: string, dueDate: Date, assignedTo: string): void {
+    createTodo(title: string, dueDate?: string, assignedTo?: string): void {
+        console.log(title, dueDate, assignedTo);
         this.isLoading.set(true);
         this.httpClient
             .post<Todo>(`${this.baseUrl}/todos`, {
                 title,
-                dueDate: dueDate.toISOString(),
+                dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
                 assignedTo,
             })
             .pipe(take(1), retry(1))
@@ -178,5 +179,4 @@ export class ApiService {
                 error: this.errorHandler,
             });
     }
-
 }

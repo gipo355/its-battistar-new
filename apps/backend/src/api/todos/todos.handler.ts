@@ -25,16 +25,121 @@ export const getTodos = catchAsync(async (req, res) => {
     // WARN: aggregate doesn't provide virtual fields by default
     // https://github.com/Automattic/mongoose/issues/8345
 
-
+    // const todos = await TodoModel.aggregate([
+    //     {
+    //         $match: {
+    //             $or: [
+    //                 { createdBy: new mongoose.Types.ObjectId(currUser.id) },
+    //                 { assignedTo: new mongoose.Types.ObjectId(currUser.id) },
+    //             ],
+    //             ...(showCompleted ? {} : { completed: false }),
+    //         },
+    //     },
+    //     {
+    //         $addFields: {
+    //             dueDateExists: {
+    //                 $cond: {
+    //                     if: { $ifNull: ['$dueDate', false] },
+    //                     then: 1,
+    //                     else: 0,
+    //                 },
+    //             },
+    //         },
+    //     },
+    //     {
+    //         $sort: {
+    //             dueDateExists: -1, // Items with dueDate come first
+    //             dueDate: 1, // Sort by dueDate ascending
+    //             createdAt: 1, // Sort by createdAt for items without dueDate
+    //         },
+    //     },
+    //     {
+    //         $lookup: {
+    //             from: 'users',
+    //             localField: 'createdBy',
+    //             foreignField: '_id',
+    //             as: 'createdBy',
+    //         },
+    //     },
+    //     {
+    //         $unwind: '$createdBy',
+    //     },
+    //     {
+    //         $lookup: {
+    //             from: 'users',
+    //             localField: 'assignedTo',
+    //             foreignField: '_id',
+    //             as: 'assignedTo',
+    //         },
+    //     },
+    //     {
+    //         $unwind: '$assignedTo',
+    //     },
+    //     {
+    //         $addFields: {
+    //             expired: {
+    //                 $cond: {
+    //                     if: { $ifNull: ['$dueDate', false] },
+    //                     then: { $lt: ['$dueDate', new Date()] },
+    //                     else: false,
+    //                 },
+    //             },
+    //             'createdBy.fullName': {
+    //                 $concat: [
+    //                     '$createdBy.firstName',
+    //                     ' ',
+    //                     '$createdBy.lastName',
+    //                 ],
+    //             },
+    //             'assignedTo.fullName': {
+    //                 $concat: [
+    //                     '$assignedTo.firstName',
+    //                     ' ',
+    //                     '$assignedTo.lastName',
+    //                 ],
+    //             },
+    //         },
+    //     },
+    //     {
+    //         $project: {
+    //             dueDate: 1,
+    //             completed: 1,
+    //             expired: 1,
+    //             title: 1,
+    //             createdAt: 1,
+    //             'createdBy.firstName': 1,
+    //             'createdBy.lastName': 1,
+    //             'createdBy.fullName': 1,
+    //             'createdBy.picture': 1,
+    //             'assignedTo.firstName': 1,
+    //             'assignedTo.lastName': 1,
+    //             'assignedTo.fullName': 1,
+    //             'assignedTo.picture': 1,
+    //         },
+    //     },
+    // ]).exec();
     const todos = await TodoModel.aggregate([
         {
             $match: {
                 $or: [
-                    {createdBy: new mongoose.Types.ObjectId(currUser.id)},
-                    {assignedTo: new mongoose.Types.ObjectId(currUser.id)},
-            //     { createdBy: currUser.id },
-            //     { assignedTo: currUser.id },
-            ],
+                    { createdBy: new mongoose.Types.ObjectId(currUser.id) },
+                    { assignedTo: new mongoose.Types.ObjectId(currUser.id) },
+                    {
+                        $and: [
+                            {
+                                createdBy: new mongoose.Types.ObjectId(
+                                    currUser.id
+                                ),
+                            },
+                            {
+                                $or: [
+                                    { assignedTo: { $exists: false } },
+                                    { assignedTo: null },
+                                ],
+                            },
+                        ],
+                    },
+                ],
                 ...(showCompleted ? {} : { completed: false }),
             },
         },
@@ -76,7 +181,10 @@ export const getTodos = catchAsync(async (req, res) => {
             },
         },
         {
-            $unwind: '$assignedTo',
+            $unwind: {
+                path: '$assignedTo',
+                preserveNullAndEmptyArrays: true,
+            },
         },
         {
             $addFields: {
@@ -135,8 +243,8 @@ export const createTodo = catchAsync(async (req, res) => {
     }
 
     const { title, dueDate, assignedTo } = req.body as {
-        assignedTo: string;
-        dueDate: string;
+        assignedTo: string | undefined;
+        dueDate: string | undefined;
         title: string;
     };
 
@@ -147,6 +255,8 @@ export const createTodo = catchAsync(async (req, res) => {
         createdBy: currUser.id,
     });
     const errors = await validate(todo);
+
+    console.log(todo);
 
     if (errors.length) {
         const details: Record<string, unknown> = {};
@@ -163,13 +273,15 @@ export const createTodo = catchAsync(async (req, res) => {
         });
     }
 
-    const assignedUser = await UserModel.findById(assignedTo);
+    if (assignedTo) {
+        const assignedUser = await UserModel.findById(assignedTo);
 
-    if (!assignedUser) {
-        throw new AppError({
-            message: 'Invalid assigned user',
-            code: StatusCodes.BAD_REQUEST,
-        });
+        if (!assignedUser) {
+            throw new AppError({
+                message: 'Invalid assigned user',
+                code: StatusCodes.BAD_REQUEST,
+            });
+        }
     }
 
     const createdTodo = new TodoModel(todo);

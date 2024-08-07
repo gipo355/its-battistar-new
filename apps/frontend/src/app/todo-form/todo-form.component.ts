@@ -61,10 +61,10 @@ export class TodoFormComponent {
         ]),
 
         dueDate: new FormControl('', [
-            Validators.required.bind(this),
-            Validators.pattern(
-                '^([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])$'
-            ).bind(this),
+            // Validators.required.bind(this),
+            // Validators.pattern(
+            //     '^([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])$'
+            // ).bind(this),
         ]),
     }) as FormGroup<TodoForm>;
 
@@ -92,16 +92,12 @@ export class TodoFormComponent {
             assignedTo: this.todoForm.value.assignedTo,
         };
 
-        if (!todo.title || !todo.assignedTo || !todo.dueDate) {
+        if (!todo.title) {
             this.todoForm.markAllAsTouched();
             return;
         }
 
-        this.apiService.createTodo(
-            todo.title,
-            new Date(todo.dueDate),
-            todo.assignedTo
-        );
+        this.apiService.createTodo(todo.title, todo.dueDate, todo.assignedTo);
 
         this.infoPopupService.showNotification(
             'Successfully created todo!',
