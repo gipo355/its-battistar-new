@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { ApiService } from '../../api/api.service';
 import { AuthService } from '../../api/auth.service';
@@ -28,14 +28,14 @@ import { TodosService } from './todos.service';
     templateUrl: './todos.component.html',
     styleUrl: './todos.component.scss',
 })
-export class TodosComponent implements OnInit {
+export class TodosComponent {
     infoPopupService = inject(InfoPopupService);
     appService = inject(AppService);
     todosService = inject(TodosService);
     authService = inject(AuthService);
     apiService = inject(ApiService);
 
-    ngOnInit(): void {
+    constructor() {
         this.apiService.getTodos();
     }
 }
