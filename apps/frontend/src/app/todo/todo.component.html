@@ -22,12 +22,6 @@
         </svg>
     </button>
     <div class="flex items-center mb-4">
-        <img
-            *ngIf="todo()?.createdBy?.picture"
-            [src]="todo()?.createdBy?.picture"
-            alt="Avatar"
-            class="h-10 w-10 rounded-full mr-4"
-        />
         <h1 class="text-xl font-bold text-gray-900">{{ todo()?.title }}</h1>
     </div>
     <p class="mb-2 text-sm text-gray-600">
@@ -45,12 +39,28 @@
     >
         Expired: {{ todo()?.expired }}
     </p>
-    <p class="mb-2 text-sm text-gray-600">
-        Created by: {{ todo()?.createdBy?.fullName }}
-    </p>
-    <p class="text-sm text-gray-600">
-        Assigned to: {{ todo()?.assignedTo?.fullName }}
-    </p>
+    <div class="flex items-center mb-2">
+        <img
+            *ngIf="todo()?.createdBy?.picture"
+            [src]="todo()?.createdBy?.picture"
+            alt="Avatar"
+            class="h-8 w-8 rounded-full mr-2"
+        />
+        <p class="text-sm text-gray-600">
+            Created by: {{ todo()?.createdBy?.fullName }}
+        </p>
+    </div>
+    <div class="flex items-center">
+        <img
+            *ngIf="todo()?.assignedTo?.picture"
+            [src]="todo()?.assignedTo?.picture"
+            alt="Avatar"
+            class="h-8 w-8 rounded-full mr-2"
+        />
+        <p class="text-sm text-gray-600">
+            Assigned to: {{ todo()?.assignedTo?.fullName }}
+        </p>
+    </div>
     <div class="mt-4 flex flex-col gap-2">
         @if (!todo()?.completed) {
             <button
