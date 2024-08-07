@@ -28,12 +28,12 @@ export const authGuard: CanActivateFn = (route, state) => {
     const isAuthenticated = authService.isAuthenticated();
 
     if (!isAuthenticated && state.url !== '/authenticate') {
-        router.navigate(['/authenticate']);
+        void router.navigate(['/authenticate']);
         return false;
     }
 
     if (isAuthenticated && state.url === '/authenticate') {
-        router.navigate(['/']);
+        void router.navigate(['/']);
         return false;
     }
 
