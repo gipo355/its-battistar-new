@@ -8,7 +8,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
     const url = req.url;
     if (url.includes('/todos') || url.includes('/users')) {
-        console.log('intercepted', authService.token());
         const authReq = req.clone({
             setHeaders: {
                 Authorization: `Bearer ${authService.token() ?? ''}`,
