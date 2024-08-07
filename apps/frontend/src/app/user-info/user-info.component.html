@@ -5,8 +5,13 @@
             alt="User Picture"
             class="mr-4 h-10 w-10 rounded-full"
         />
-        <div>
-            <div class="font-bold">{{ user()?.fullName }}</div>
+        <div class="flex flex-col">
+            <div>
+                <div class="font-bold">{{ user()?.fullName }}</div>
+            </div>
+            <div class="ml-auto">
+                <div class="text-sm text-gray-500">{{ user()?.id }}</div>
+            </div>
         </div>
     </div>
     <button
