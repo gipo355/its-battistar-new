@@ -32,6 +32,7 @@ interface TodoForm {
     selector: 'app-todo-form',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, UserListComponent],
+    providers: [UserListService],
     templateUrl: './todo-form.component.html',
     styleUrl: './todo-form.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -80,6 +81,7 @@ export class TodoFormComponent {
     });
 
     onAssignedToClick(): void {
+        this.apiService.getUsers();
         this.userListService.openModal();
     }
 

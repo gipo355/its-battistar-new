@@ -9,14 +9,15 @@ import {
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import type { Todo } from '../../model/todo';
+import { UserListComponent } from '../user-list/user-list.component';
 import { UserListService } from '../user-list/user-list.service';
 import { TodoService } from './todo.service';
 
 @Component({
     selector: 'app-todo',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule],
-    providers: [TodoService],
+    imports: [CommonModule, ReactiveFormsModule, UserListComponent],
+    providers: [TodoService, UserListService],
     templateUrl: './todo.component.html',
     styleUrl: './todo.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
