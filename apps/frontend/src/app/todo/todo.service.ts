@@ -1,6 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 
 import { ApiService } from '../api/api.service';
+import { UserListService } from '../user-list/user-list.service';
 
 /**
  * NOTE: we don't want to provide this globally.
@@ -11,6 +12,7 @@ import { ApiService } from '../api/api.service';
 export class TodoService {
     isReassigning = signal(false);
     apiService = inject(ApiService);
+    userListService = inject(UserListService);
 
     onDelete(id: string | undefined): void {
         if (!id) {
@@ -43,6 +45,8 @@ export class TodoService {
         }
         this.apiService.assignTodo(id, newAssignee);
         this.isReassigning.set(false);
+        this.userListService.selectedUser.set(null);
+
     }
 
     onCancelReassign(): void {
