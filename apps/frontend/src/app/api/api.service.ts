@@ -134,6 +134,10 @@ export class ApiService {
                 next: () => {
                     // realign local state with remote state
                     this.getTodos();
+                    this.infoPopupService.showNotification(
+                        'Todo assigned!',
+                        'success'
+                    );
                     this.isLoading.set(false);
                 },
                 error: this.errorHandler,

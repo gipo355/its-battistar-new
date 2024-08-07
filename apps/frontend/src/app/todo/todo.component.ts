@@ -5,41 +5,26 @@ import {
     inject,
     input,
 } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import type { Todo } from '../../model/todo';
-import { ApiService } from '../api/api.service';
+import { inputIsMongoDbID } from '../shared/inputIsMongodb';
+import { TodoService } from './todo.service';
 
 @Component({
     selector: 'app-todo',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, ReactiveFormsModule],
+    providers: [TodoService],
     templateUrl: './todo.component.html',
     styleUrl: './todo.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoComponent {
-    apiService = inject(ApiService);
+    todoService = inject(TodoService);
+    fb = inject(FormBuilder);
+
+    assigneeForm = this.fb.control('', [inputIsMongoDbID()]);
 
     todo = input<Todo>();
-
-    onDelete(id: string | undefined): void {
-        if (!id) {
-            return;
-        }
-        this.apiService.deleteTodo(id);
-    }
-
-    onComplete(id: string | undefined): void {
-        if (!id) {
-            return;
-        }
-        this.apiService.completeTodo(id);
-    }
-
-    onUncomplete(id: string | undefined): void {
-        if (!id) {
-            return;
-        }
-        this.apiService.uncompleteTodo(id);
-    }
 }

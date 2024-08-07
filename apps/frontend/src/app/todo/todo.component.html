@@ -4,7 +4,7 @@
     <button
         type="button"
         class="absolute right-2 top-2 inline-flex items-center rounded-full bg-red-600 p-2 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-        (click)="onDelete(todo()?._id)"
+        (click)="todoService.onDelete(todo()?._id)"
     >
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +46,7 @@
             <button
                 type="button"
                 class="inline-flex items-center rounded-md border border-transparent bg-green-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                (click)="onComplete(todo()?._id)"
+                (click)="todoService.onComplete(todo()?._id)"
             >
                 Complete
             </button>
@@ -54,10 +54,55 @@
             <button
                 type="button"
                 class="inline-flex items-center rounded-md border border-transparent bg-gray-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                (click)="onUncomplete(todo()?._id)"
+                (click)="todoService.onUncomplete(todo()?._id)"
             >
                 Uncomplete
             </button>
+        }
+        <button
+            type="button"
+            class="inline-flex items-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            (click)="todoService.onReassign()"
+        >
+            Reassign
+        </button>
+        @if (todoService.isReassigning()) {
+            <input
+                type="text"
+                class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                placeholder="Enter new assignee"
+                [formControl]="assigneeForm"
+            />
+            @if (assigneeForm.touched && assigneeForm.invalid) {
+                <p class="mt-2 text-sm text-red-500">
+                    Please enter a valid mongoID
+                </p>
+            }
+            <div class="mt-2 flex space-x-2">
+                <button
+                    type="button"
+                    class="inline-flex items-center rounded-md border border-transparent bg-green-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    [disabled]="!assigneeForm.valid"
+                    [style.cursor]="
+                        !assigneeForm.valid ? 'not-allowed' : 'pointer'
+                    "
+                    (click)="
+                        todoService.onSendReassign(
+                            todo()?._id,
+                            assigneeForm.value
+                        )
+                    "
+                >
+                    Reassign
+                </button>
+                <button
+                    type="button"
+                    class="inline-flex items-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                    (click)="todoService.onCancelReassign()"
+                >
+                    Cancel
+                </button>
+            </div>
         }
     </div>
 </div>
