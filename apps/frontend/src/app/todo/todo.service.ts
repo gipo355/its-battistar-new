@@ -39,14 +39,11 @@ export class TodoService {
         this.isReassigning.set(true);
     }
 
-    onSendReassign(id: string | undefined, newAssignee: string | null): void {
-        if (!id || !newAssignee) {
-            return;
-        }
-        this.apiService.assignTodo(id, newAssignee);
-        this.isReassigning.set(false);
-        this.userListService.selectedUser.set(null);
-
+    onClickReassignInput(): void {
+        // BUG: why is this closing the modal? i can see the spinner instead of todos but why is it rerendering the todos?
+        // because it was setting isLoading to true
+        this.apiService.getUsers();
+        this.userListService.openModal();
     }
 
     onCancelReassign(): void {

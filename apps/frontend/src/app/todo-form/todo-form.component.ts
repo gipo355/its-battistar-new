@@ -72,7 +72,7 @@ export class TodoFormComponent {
     //     this.todoForm = this.fb.group({});
     // }
 
-    updateUser = effect(() => {
+    selectedUser = effect(() => {
         if (this.userListService.selectedUser()) {
             this.todoForm.controls.assignedTo.setValue(
                 this.userListService.selectedUser()?.id ?? ''

@@ -167,7 +167,6 @@ export class ApiService {
     }
 
     getUsers(): void {
-        this.isLoading.set(true);
         this.httpClient
             .get<User[]>(`${this.baseUrl}/users`)
             .pipe(take(1), retry(1))
