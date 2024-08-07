@@ -11,7 +11,7 @@
  */
 import type { User } from './user';
 
-export interface Login {
+export interface LoginResponse {
     /**
      * JWT token
      */
