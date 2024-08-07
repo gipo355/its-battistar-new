@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -18,39 +17,16 @@ export class AuthenticateComponent {
     fb = inject(FormBuilder);
 
     loginForm = this.fb.group({
-        username: new FormControl('', [
-            Validators.required.bind(Validators).bind(this),
-            Validators.minLength(3).bind(this),
-        ]),
-        password: new FormControl('', [
-            Validators.required.bind(Validators).bind(this),
-            Validators.minLength(8).bind(this),
-        ]),
+        username: new FormControl('', []),
+        password: new FormControl('', []),
     });
 
     registerForm = this.fb.group({
-        firstName: new FormControl('', [
-            Validators.required.bind(Validators).bind(this),
-            Validators.minLength(3).bind(this),
-        ]),
-        lastName: new FormControl('', [
-            Validators.required.bind(Validators).bind(this),
-            Validators.minLength(3).bind(this),
-        ]),
-        picture: new FormControl('', [
-            Validators.required.bind(Validators).bind(this),
-            Validators.minLength(3).bind(this),
-        ]),
-        username: new FormControl('', [
-            Validators.required.bind(Validators).bind(this),
-            Validators.pattern(
-                '^([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])$'
-            ).bind(this),
-        ]),
-        password: new FormControl('', [
-            Validators.required.bind(Validators).bind(this),
-            Validators.minLength(8).bind(this),
-        ]),
+        firstName: new FormControl('', []),
+        lastName: new FormControl('', []),
+        picture: new FormControl('', []),
+        username: new FormControl('', []),
+        password: new FormControl('', []),
     });
 
     authService = inject(AuthService);
