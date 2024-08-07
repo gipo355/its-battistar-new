@@ -1,6 +1,5 @@
 import type { StatusCodes } from 'http-status-codes';
 import { getReasonPhrase } from 'http-status-codes';
-import type { HTTPError } from 'ky';
 
 interface IErrorJSON {
     cause?: {
@@ -73,16 +72,6 @@ export class AppError extends Error {
      */
     type?: TErrorType = 'app';
 
-    /**
-     * The HTTP stack associated with the error.
-     * Comes from the `ky` library.
-     * Automatically set when the error is of type `http` and the cause is an instance of `HTTPError` or `TimeoutError`.
-     */
-    httpStack?: {
-        options?: HTTPError['options'];
-        request: HTTPError['request'];
-        response?: HTTPError['response'];
-    };
 
     /**
      * Constructs a new `AppError`.
@@ -140,7 +129,7 @@ export class AppError extends Error {
         this.name = 'AppError';
 
         // Capture the stack trace of the error
-        Error.captureStackTrace(this, this.constructor);
+        // Error.captureStackTrace(this, this.constructor);
 
         this.code = code;
         this.reason = getReasonPhrase(code);
