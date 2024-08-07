@@ -8,7 +8,9 @@ import { ApiService } from '../../api/api.service';
 export class TodosService {
     // todos: Signal<Todo[]> = signal([]);
     isEditing = signal(false);
+
     showCompleted = signal(false);
+    filterValue = signal('');
 
     apiService = inject(ApiService);
 
@@ -22,13 +24,23 @@ export class TodosService {
 
     filteredTodos = computed(() => {
         const todos = this.apiService.todos();
-        console.log(
-            'recalc filteredTodos with showCompleted',
-            this.showCompleted()
-        );
-        if (this.showCompleted()) {
-            return todos;
-        }
-        return todos.filter((todo) => !todo.completed);
+        const filterValue = this.filterValue().toLowerCase();
+        const showCompleted = this.showCompleted();
+
+        return todos.filter((todo) => {
+            const includesSearchValue = todo.title
+                ?.toLowerCase()
+                .includes(filterValue);
+
+            if (filterValue.length) {
+                if (showCompleted) return includesSearchValue;
+
+                return includesSearchValue && !todo.completed;
+            }
+
+            if (showCompleted) return true;
+
+            return !todo.completed;
+        });
     });
 }
