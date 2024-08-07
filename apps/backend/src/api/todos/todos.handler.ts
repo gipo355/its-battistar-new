@@ -10,6 +10,14 @@ import { AppError } from '../../utils/app-error';
 import { catchAsync } from '../../utils/catch-async';
 
 export const getTodos = catchAsync(async (req, res) => {
+    const currUser = req.user;
+    if (!currUser) {
+        throw new AppError({
+            message: 'Unauthorized',
+            code: StatusCodes.UNAUTHORIZED,
+        });
+    }
+
     const { showCompleted } = req.query as {
         showCompleted: boolean | undefined;
     };
@@ -17,9 +25,16 @@ export const getTodos = catchAsync(async (req, res) => {
     // WARN: aggregate doesn't provide virtual fields by default
     // https://github.com/Automattic/mongoose/issues/8345
 
+
     const todos = await TodoModel.aggregate([
         {
             $match: {
+                $or: [
+                    {createdBy: new mongoose.Types.ObjectId(currUser.id)},
+                    {assignedTo: new mongoose.Types.ObjectId(currUser.id)},
+            //     { createdBy: currUser.id },
+            //     { assignedTo: currUser.id },
+            ],
                 ...(showCompleted ? {} : { completed: false }),
             },
         },
