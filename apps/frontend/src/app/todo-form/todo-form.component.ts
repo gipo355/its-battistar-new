@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 
 import { ApiService } from '../api/api.service';
+import { AuthService } from '../api/auth.service';
 import { InfoPopupService } from '../info-popup/info-popup.service';
 import { TodosService } from '../pages/todos/todos.service';
 import { inputIsMongoDbID } from '../shared/inputIsMongodb';
@@ -35,6 +36,8 @@ export class TodoFormComponent {
 
     todosService = inject(TodosService);
 
+    authService = inject(AuthService);
+
     infoPopupService = inject(InfoPopupService);
 
     todoForm = this.fb.group({
@@ -42,7 +45,7 @@ export class TodoFormComponent {
             Validators.required.bind(Validators).bind(this),
             Validators.minLength(3).bind(this),
         ]),
-        assignedTo: new FormControl('', [
+        assignedTo: new FormControl(this.authService.user()?.id, [
             Validators.required.bind(this),
             inputIsMongoDbID().bind(this),
         ]),
