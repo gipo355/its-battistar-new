@@ -46,6 +46,16 @@ export class AuthService {
         }
     );
 
+    errorHandler = (err: HttpErrorResponse): void => {
+        const originalError: ApiError = err.error as ApiError;
+        const newError = new AppError({
+            message: `${originalError.status.toString()}: ${originalError.message}`,
+            code: originalError.status,
+        });
+        this.error.set(newError);
+        this.isLoading.set(false);
+    };
+
     login(username: string, password: string): void {
         this.isLoading.set(true);
         this.httpClient
@@ -68,19 +78,7 @@ export class AuthService {
                     this.isAuthenticated.set(true);
                     this.isLoading.set(false);
                 },
-                error: (err: HttpErrorResponse) => {
-                    const originalError: ApiError = err.error as ApiError;
-                    console.log(originalError);
-                    // console.log(err.name);
-                    // console.log(err.message);
-                    // console.log(err.statusText);
-                    const newError = new AppError({
-                        message: `${originalError.status.toString()}: ${originalError.message}`,
-                        code: originalError.status,
-                    });
-                    this.error.set(newError);
-                    this.isLoading.set(false);
-                },
+                error: this.errorHandler,
             });
     }
 
@@ -113,29 +111,7 @@ export class AuthService {
                     this.isAuthenticated.set(true);
                     this.isLoading.set(false);
                 },
-                error: (err) => {
-                    console.log(err);
-                    if (err instanceof Error) {
-                        const newError = new AppError({
-                            message: 'Error registering',
-                            code: StatusCodes.INTERNAL_SERVER_ERROR,
-                            details: {
-                                error: err.message,
-                            },
-                            unknownError: true,
-                            cause: err,
-                        });
-                        this.error.set(newError);
-                    } else {
-                        this.error.set(
-                            new AppError({
-                                message: 'Error registering',
-                                code: StatusCodes.INTERNAL_SERVER_ERROR,
-                            })
-                        );
-                    }
-                    this.isLoading.set(false);
-                },
+                error: this.errorHandler,
             });
     }
 }

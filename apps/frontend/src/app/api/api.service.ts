@@ -1,4 +1,5 @@
-import { HttpClient } from '@angular/common/http';
+/* eslint-disable no-magic-numbers */
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
     computed,
     effect,
@@ -10,6 +11,7 @@ import {
 import { StatusCodes } from 'http-status-codes';
 import { retry, take } from 'rxjs';
 
+import { ApiError } from '../../model/api-error';
 import type { Todo } from '../../model/todo';
 import { InfoPopupService } from '../info-popup/info-popup.service';
 import { AppError } from '../shared/app-error';
@@ -36,7 +38,6 @@ export class ApiService {
                 this.infoPopupService.showNotification(
                     error.message,
 
-                    // eslint-disable-next-line no-magic-numbers
                     5000,
                     'error'
                 );
@@ -47,34 +48,28 @@ export class ApiService {
         }
     );
 
+    errorHandler = (err: HttpErrorResponse): void => {
+        const originalError: ApiError = err.error as ApiError;
+        const newError = new AppError({
+            message: `${originalError.status.toString()}: ${originalError.message}`,
+            code: originalError.status,
+        });
+        this.error.set(newError);
+        this.isLoading.set(false);
+    };
+
     getTodos(): void {
         this.isLoading.set(true);
         this.httpClient
             .get<Todo[]>(`${this.baseUrl}/todos`)
-            // eslint-disable-next-line no-magic-numbers
+
             .pipe(take(1), retry(1))
             .subscribe({
                 next: (todos) => {
                     this.todos.set(todos);
                     this.isLoading.set(false);
                 },
-                error: (err) => {
-                    console.log(err);
-
-                    const newError = new AppError({
-                        message: 'Error getting todos',
-                        code: StatusCodes.INTERNAL_SERVER_ERROR,
-                        details: {
-                            error: err.message,
-                        },
-                        unknownError: true,
-                        cause: err,
-                    });
-
-                    this.error.set(newError);
-
-                    this.isLoading.set(false);
-                },
+                error: this.errorHandler,
             });
     }
 
@@ -93,20 +88,7 @@ export class ApiService {
                     this.getTodos();
                     this.isLoading.set(false);
                 },
-                error: (err) => {
-                    console.log(err);
-                    const newError = new AppError({
-                        message: 'Error creating todo',
-                        code: StatusCodes.INTERNAL_SERVER_ERROR,
-                        details: {
-                            error: err.message,
-                        },
-                        unknownError: true,
-                        cause: err,
-                    });
-                    this.error.set(newError);
-                    this.isLoading.set(false);
-                },
+                error: this.errorHandler,
             });
     }
 
@@ -121,20 +103,7 @@ export class ApiService {
                     this.getTodos();
                     this.isLoading.set(false);
                 },
-                error: (err) => {
-                    console.log(err);
-                    const newError = new AppError({
-                        message: 'Error completing todo',
-                        code: StatusCodes.INTERNAL_SERVER_ERROR,
-                        details: {
-                            error: err.message,
-                        },
-                        unknownError: true,
-                        cause: err,
-                    });
-                    this.error.set(newError);
-                    this.isLoading.set(false);
-                },
+                error: this.errorHandler,
             });
     }
 
@@ -149,20 +118,7 @@ export class ApiService {
                     this.getTodos();
                     this.isLoading.set(false);
                 },
-                error: (err) => {
-                    console.log(err);
-                    const newError = new AppError({
-                        message: 'Error uncompleting todo',
-                        code: StatusCodes.INTERNAL_SERVER_ERROR,
-                        details: {
-                            error: err.message,
-                        },
-                        unknownError: true,
-                        cause: err,
-                    });
-                    this.error.set(newError);
-                    this.isLoading.set(false);
-                },
+                error: this.errorHandler,
             });
     }
 
@@ -179,20 +135,7 @@ export class ApiService {
                     this.getTodos();
                     this.isLoading.set(false);
                 },
-                error: (err) => {
-                    console.log(err);
-                    const newError = new AppError({
-                        message: 'Error assigning todo',
-                        code: StatusCodes.INTERNAL_SERVER_ERROR,
-                        details: {
-                            error: err.message,
-                        },
-                        unknownError: true,
-                        cause: err,
-                    });
-                    this.error.set(newError);
-                    this.isLoading.set(false);
-                },
+                error: this.errorHandler,
             });
     }
 }
