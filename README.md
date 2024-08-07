@@ -15,7 +15,7 @@ npm ci
 ## Run
 
 Make sure you have a mongodb instance running on `localhost:27017` (can use the
-`compose.yml` file with `docker-compose up -d from root`)
+`compose.yml` file with `docker-compose up -d` from root)
 
 then run
 
