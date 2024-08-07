@@ -3,7 +3,10 @@
     @if (appService.isEditing()) {
         <app-todo-form></app-todo-form>
     }
-    @if (apiService.todos().length) {
+
+    @if (apiService.isLoading()) {
+        <app-spinner></app-spinner>
+    } @else if (apiService.todos().length) {
         <app-todos-list>
             @for (todo of apiService.todos(); track todo) {
                 <app-todo [todo]="todo"></app-todo>
