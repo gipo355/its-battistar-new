@@ -1,7 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
-import { ApiService } from './api/api.service';
-import { AppService } from './app.service';
 import { InfoPopupComponent } from './info-popup/info-popup.component';
 import { InfoPopupService } from './info-popup/info-popup.service';
 import { SpinnerComponent } from './spinner/spinner.component';
@@ -19,17 +18,13 @@ import { TodosListComponent } from './todos-list/todos-list.component';
         SpinnerComponent,
         TodoComponent,
         InfoPopupComponent,
+        RouterOutlet,
     ],
+
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
     infoPopupService = inject(InfoPopupService);
-    appService = inject(AppService);
-    apiService = inject(ApiService);
-
-    ngOnInit(): void {
-        this.apiService.getTodos();
-    }
 }

@@ -12,7 +12,9 @@ export const routes: Routes = [
     {
         path: '',
         loadComponent: async () =>
-            import('./app.component').then((m) => m.AppComponent),
+            import('./pages/todos/todos.component').then(
+                (m) => m.TodosComponent
+            ),
     },
 
     {
