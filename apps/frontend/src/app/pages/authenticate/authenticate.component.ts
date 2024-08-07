@@ -1,10 +1,21 @@
+/* eslint-disable no-magic-numbers */
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
+import {
+    FormBuilder,
+    FormControl,
+    ReactiveFormsModule,
+    Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
+import { isStrongPassword } from 'validator';
 
 import { AuthService } from '../../api/auth.service';
 import { InfoPopupService } from '../../info-popup/info-popup.service';
+import { inputIsASCII } from '../../shared/inputIsASCII';
+import { inputIsStrongPassword } from '../../shared/inputIsStrongPassword';
+import { inputIsUrl } from '../../shared/inputIsUrl';
+import { passwordMatchValidator } from '../../shared/passwordMatchValidator';
 
 @Component({
     selector: 'app-authenticate',
@@ -26,14 +37,26 @@ export class AuthenticateComponent {
         password: new FormControl('', []),
     });
 
-    registerForm = this.fb.group({
-        firstName: new FormControl('', []),
-        lastName: new FormControl('', []),
-        picture: new FormControl('', []),
-        username: new FormControl('', []),
-        password: new FormControl('', []),
-        confirmPassword: new FormControl('', []),
-    });
+    registerForm = this.fb.group(
+        {
+            firstName: new FormControl('', [
+                Validators.required.bind(this),
+                Validators.minLength(2),
+            ]),
+            lastName: new FormControl('', [
+                Validators.required.bind(this),
+                Validators.minLength(2),
+            ]),
+            picture: new FormControl('', [
+                Validators.required.bind(this),
+                inputIsUrl(),
+            ]),
+            username: new FormControl('', [inputIsASCII()]),
+            password: new FormControl('', [inputIsStrongPassword()]),
+            confirmPassword: new FormControl('', []),
+        },
+        { validators: passwordMatchValidator }
+    );
 
     authService = inject(AuthService);
 
@@ -57,7 +80,6 @@ export class AuthenticateComponent {
         // BUG: doesn't navigate to the home page on first click
         setTimeout(() => {
             void this.router.navigate(['/']);
-            // eslint-disable-next-line no-magic-numbers
         }, 1000);
     }
     onSubmitRegisterForm(): void {
@@ -90,7 +112,6 @@ export class AuthenticateComponent {
         // must wait for signals to be updated
         setTimeout(() => {
             void this.router.navigate(['/']);
-            // eslint-disable-next-line no-magic-numbers
         }, 1000);
     }
 
