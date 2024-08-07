@@ -1,6 +1,5 @@
 # How to run
 
-
 ## Download
 
 ```bash
@@ -20,11 +19,7 @@ npm run frontend
 ```
 
 or to run all at once
-# Requirements
-
-make sure a mongodb instance is running on `localhost:27017`
 
 ```bash
 npm run serve-all
 ```
-
