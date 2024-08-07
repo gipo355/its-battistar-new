@@ -11,6 +11,7 @@ import {
 
 import { ApiService } from '../api/api.service';
 import { AppService } from '../app.service';
+import { TodosService } from '../pages/todos/todos.service';
 import { inputIsMongoDbID } from '../shared/inputIsMongodb';
 
 interface TodoForm {
@@ -32,6 +33,8 @@ export class TodoFormComponent {
 
     apiService = inject(ApiService);
 
+    todosService = inject(TodosService);
+
     todoForm = this.fb.group({
         title: new FormControl('', [
             Validators.required.bind(Validators).bind(this),
@@ -48,8 +51,6 @@ export class TodoFormComponent {
             ).bind(this),
         ]),
     }) as FormGroup<TodoForm>;
-
-    appService = inject(AppService);
 
     // ngOnInit(): void {
     //     this.todoForm = this.fb.group({});

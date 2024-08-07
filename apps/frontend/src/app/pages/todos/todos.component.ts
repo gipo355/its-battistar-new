@@ -9,6 +9,7 @@ import { TodoComponent } from '../../todo/todo.component';
 import { TodoFormComponent } from '../../todo-form/todo-form.component';
 import { TodosFilterComponent } from '../../todos-filter/todos-filter.component';
 import { TodosListComponent } from '../../todos-list/todos-list.component';
+import { TodosService } from './todos.service';
 
 @Component({
     standalone: true,
@@ -27,6 +28,7 @@ import { TodosListComponent } from '../../todos-list/todos-list.component';
 export class TodosComponent implements OnInit {
     infoPopupService = inject(InfoPopupService);
     appService = inject(AppService);
+    todosService = inject(TodosService);
     apiService = inject(ApiService);
 
     ngOnInit(): void {
