@@ -1,4 +1,4 @@
 - stacking info popup
-- assign todo
 - better UX for loading after CRUD operations
     - the loading spinner should be async in the bottom right, before the notification
+- fix the sorting of the todos
