@@ -7,9 +7,9 @@
 
     @if (apiService.isLoading()) {
         <app-spinner></app-spinner>
-    } @else if (apiService.todos().length) {
+    } @else if (todosService.filteredTodos().length) {
         <app-todos-list>
-            @for (todo of apiService.todos(); track todo) {
+            @for (todo of todosService.filteredTodos(); track todo) {
                 <app-todo [todo]="todo"></app-todo>
             }
         </app-todos-list>

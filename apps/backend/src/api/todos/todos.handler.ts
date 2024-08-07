@@ -14,10 +14,12 @@ export const getTodos = catchAsync(async (req, res) => {
         showCompleted: boolean | undefined;
     };
 
+    console.log('showcompleted received', showCompleted);
+
     const todos = await TodoModel.aggregate([
         {
             $match: {
-                ...(showCompleted === true ? {} : { completed: false }),
+                ...(showCompleted ? {} : { completed: false }),
             },
         },
         {

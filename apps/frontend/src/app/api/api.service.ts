@@ -1,17 +1,15 @@
 /* eslint-disable no-magic-numbers */
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, type HttpErrorResponse } from '@angular/common/http';
 import {
-    computed,
     effect,
     inject,
     Injectable,
     signal,
-    WritableSignal,
+    type WritableSignal,
 } from '@angular/core';
-import { StatusCodes } from 'http-status-codes';
 import { retry, take } from 'rxjs';
 
-import { ApiError } from '../../model/api-error';
+import type { ApiError } from '../../model/api-error';
 import type { Todo } from '../../model/todo';
 import { InfoPopupService } from '../info-popup/info-popup.service';
 import { AppError } from '../shared/app-error';
@@ -56,11 +54,12 @@ export class ApiService {
     getTodos(): void {
         this.isLoading.set(true);
         this.httpClient
-            .get<Todo[]>(`${this.baseUrl}/todos`)
+            .get<Todo[]>(`${this.baseUrl}/todos?showCompleted=true`)
 
             .pipe(take(1), retry(1))
             .subscribe({
                 next: (todos) => {
+                    console.log(todos);
                     this.todos.set(todos);
                     this.isLoading.set(false);
                 },
