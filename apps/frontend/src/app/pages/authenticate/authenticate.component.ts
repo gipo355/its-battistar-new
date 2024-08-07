@@ -51,8 +51,7 @@ export class AuthenticateComponent {
         this.authService.login(login.username, login.password);
         this.infoPopupService.showNotification(
             'Successfully logged in!',
-            // eslint-disable-next-line no-magic-numbers
-            5000,
+
             'success'
         );
         // BUG: doesn't navigate to the home page on first click
@@ -83,8 +82,7 @@ export class AuthenticateComponent {
 
         this.infoPopupService.showNotification(
             'Successfully registered!',
-            // eslint-disable-next-line no-magic-numbers
-            5000,
+
             'success'
         );
 

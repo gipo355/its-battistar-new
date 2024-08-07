@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 
 import { ApiService } from '../../api/api.service';
+import { AuthService } from '../../api/auth.service';
 import { AppService } from '../../app.service';
 import { InfoPopupComponent } from '../../info-popup/info-popup.component';
 import { InfoPopupService } from '../../info-popup/info-popup.service';
@@ -9,6 +10,7 @@ import { TodoComponent } from '../../todo/todo.component';
 import { TodoFormComponent } from '../../todo-form/todo-form.component';
 import { TodosFilterComponent } from '../../todos-filter/todos-filter.component';
 import { TodosListComponent } from '../../todos-list/todos-list.component';
+import { UserInfoComponent } from '../../user-info/user-info.component';
 import { TodosService } from './todos.service';
 
 @Component({
@@ -20,6 +22,7 @@ import { TodosService } from './todos.service';
         SpinnerComponent,
         TodoComponent,
         InfoPopupComponent,
+        UserInfoComponent,
     ],
     selector: 'app-todos',
     templateUrl: './todos.component.html',
@@ -29,6 +32,7 @@ export class TodosComponent implements OnInit {
     infoPopupService = inject(InfoPopupService);
     appService = inject(AppService);
     todosService = inject(TodosService);
+    authService = inject(AuthService);
     apiService = inject(ApiService);
 
     ngOnInit(): void {

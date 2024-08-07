@@ -11,9 +11,9 @@ export class InfoPopupService {
 
     showNotification(
         message: string,
+        type: 'info' | 'success' | 'warning' | 'error' = 'info',
         // eslint-disable-next-line no-magic-numbers
-        duration = 5000,
-        type: 'info' | 'success' | 'warning' | 'error' = 'info'
+        duration = 3000
     ): void {
         this.message.set(message);
         this.type.set(type);

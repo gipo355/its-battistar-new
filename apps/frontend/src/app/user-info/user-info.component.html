@@ -1,0 +1,18 @@
+<div class="flex items-center justify-between bg-gray-800 p-4 text-white">
+    <div class="flex items-center">
+        <img
+            [src]="user()?.picture"
+            alt="User Picture"
+            class="mr-4 h-10 w-10 rounded-full"
+        />
+        <div>
+            <div class="font-bold">{{ user()?.fullName }}</div>
+        </div>
+    </div>
+    <button
+        (click)="logout()"
+        class="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+    >
+        Logout
+    </button>
+</div>

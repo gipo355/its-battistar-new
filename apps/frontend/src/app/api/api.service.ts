@@ -35,12 +35,7 @@ export class ApiService {
         () => {
             const error = this.error();
             if (error) {
-                this.infoPopupService.showNotification(
-                    error.message,
-
-                    5000,
-                    'error'
-                );
+                this.infoPopupService.showNotification(error.message, 'error');
             }
         },
         {

@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, type HttpErrorResponse } from '@angular/common/http';
 import {
     effect,
     inject,
@@ -10,7 +10,7 @@ import {
 import { StatusCodes } from 'http-status-codes';
 import { retry, take } from 'rxjs';
 
-import { ApiError } from '../../model/api-error';
+import type { ApiError } from '../../model/api-error';
 import type { LoginResponse } from '../../model/login';
 import type { User } from '../../model/user';
 import { InfoPopupService } from '../info-popup/info-popup.service';
@@ -44,12 +44,7 @@ export class AuthService {
         () => {
             const error = this.error();
             if (error) {
-                this.infoPopupService.showNotification(
-                    error.message,
-
-                    5000,
-                    'error'
-                );
+                this.infoPopupService.showNotification(error.message, 'error');
             }
         },
         {
@@ -103,9 +98,19 @@ export class AuthService {
         }
     });
 
+    clearLocalStorage(): void {
+        localStorage.clear();
+    }
+
     logout(): void {
         this.token.set(null);
         this.user.set(null);
+        this.isAuthenticated.set(false);
+        this.clearLocalStorage();
+        this.infoPopupService.showNotification(
+            'Successfully logged out!',
+            'success'
+        );
     }
 
     login(username: string, password: string): void {

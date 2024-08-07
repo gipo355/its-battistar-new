@@ -81,8 +81,6 @@ export class TodoFormComponent {
 
         this.infoPopupService.showNotification(
             'Successfully created todo!',
-
-            5000,
             'success'
         );
     }
