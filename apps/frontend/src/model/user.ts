@@ -11,6 +11,7 @@
  */
 
 export interface User {
+    _id?: string;
     firstName?: string;
     fullName?: string;
     id?: string;

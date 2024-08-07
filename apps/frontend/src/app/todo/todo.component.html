@@ -47,9 +47,7 @@
             alt="Avatar"
             class="mr-2 h-8 w-8 rounded-full"
         />
-        <p class="text-sm text-gray-600">
-            Created by: {{ todo()?.createdBy?.fullName }}
-        </p>
+        <p class="text-sm text-gray-600">Created by: {{ createdBy() }}</p>
     </div>
     @if (todo()?.assignedTo) {
         <div class="flex items-center">
@@ -59,9 +57,7 @@
                 alt="Avatar"
                 class="mr-2 h-8 w-8 rounded-full"
             />
-            <p class="text-sm text-gray-600">
-                Assigned to: {{ todo()?.assignedTo?.fullName }}
-            </p>
+            <p class="text-sm text-gray-600">Assigned to: {{ assignedTo() }}</p>
         </div>
     }
     <div class="mt-4 flex flex-col gap-2">
