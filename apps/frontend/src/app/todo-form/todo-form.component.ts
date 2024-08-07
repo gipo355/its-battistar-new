@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import {
     FormBuilder,
     FormControl,
