@@ -45,7 +45,8 @@ export class TodosFilterComponent implements OnDestroy {
                 distinctUntilChanged()
             )
             .subscribe((value) => {
-                if (value?.length) this.todosService.filterValue.set(value);
+                if (typeof value === 'string')
+                    this.todosService.filterValue.set(value);
             });
     }
 }
