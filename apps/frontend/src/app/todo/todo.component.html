@@ -22,7 +22,9 @@
         </svg>
     </button>
     <h1 class="mb-2 text-xl font-bold text-gray-900">{{ todo()?.title }}</h1>
-    <p class="mb-2 text-sm text-gray-600">Due date: {{ todo()?.dueDate }}</p>
+    <p class="mb-2 text-sm text-gray-600">
+        Due date: {{ todo()?.dueDate | date }}
+    </p>
     <p
         class="mb-2 text-sm text-gray-600"
         [ngClass]="{ 'text-green-500': todo()?.completed }"
