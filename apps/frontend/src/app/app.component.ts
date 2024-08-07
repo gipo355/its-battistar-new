@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
 import { ApiService } from './api/api.service';
 import { AppService } from './app.service';
@@ -24,8 +24,12 @@ import { TodosListComponent } from './todos-list/todos-list.component';
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     infoPopupService = inject(InfoPopupService);
     appService = inject(AppService);
     apiService = inject(ApiService);
+
+    ngOnInit(): void {
+        this.apiService.getTodos();
+    }
 }

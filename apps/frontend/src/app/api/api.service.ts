@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { lastValueFrom, retry, take } from 'rxjs';
+import { StatusCodes } from 'http-status-codes';
+import { retry, take } from 'rxjs';
 
-import { fakeTodos } from '../../data/todos';
 import type { Todo } from '../../model/todo';
 import { AppError } from '../shared/app-error';
-import { StatusCodes } from 'http-status-codes';
 
 @Injectable({
     providedIn: 'root',
@@ -17,7 +16,7 @@ export class ApiService {
 
     httpClient = inject(HttpClient);
     baseUrl = 'http://localhost:3000/api';
-    todos: WritableSignal<Todo[]> = signal(fakeTodos);
+    todos: WritableSignal<Todo[]> = signal([]);
     isLoading = signal(false);
     error: WritableSignal<AppError | null> = signal(null);
 

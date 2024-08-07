@@ -1,0 +1,29 @@
+<div class="container mx-auto w-full max-w-screen-lg p-4"><app-todos-filter></app-todos-filter>@if (appService.isEditing()) {
+  <app-todo-form></app-todo-form>
+}
+
+@if (apiService.isLoading()) {
+  <app-spinner></app-spinner>
+}
+
+@else if (apiService.todos().length) {
+  <app-todos-list>@for (todo of apiService.todos(); track todo) {
+    <app-todo [todo]="todo"></app-todo>
+  }
+
+  </app-todos-list>
+}
+
+@else {
+  <div class="flex flex-col items-center justify-center"><p class="text-center text-gray-500">No todos,
+  start by creating one ! </p></div>
+}
+
+</div><app-info-popup></app-info-popup><button type="button"
+class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-500 dark:focus:ring-offset-indigo-900"
+(click)="
+ infoPopupService.showNotification('CRUD operation successful!',
+  5000,
+  'success'
+) "
+>CRUD operation </button>
