@@ -1,0 +1,21 @@
+<div class="relative">
+    @if (userListService.isModalOpen()) {
+  <div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg w-1/3 max-h-96 overflow-y-auto">
+      <div class="p-4 border-b">
+        <h2 class="text-lg font-semibold">Select a User</h2>
+      </div>
+      <ul class="p-4">
+          @for (user of apiService.users(); track user.id) {
+          <li class="p-2 border-b hover:bg-gray-100 cursor-pointer" (click)="userListService.selectUser(user)">
+            <span class="font-medium">{{ user.fullName }}</span> - <span class="text-gray-600">{{ user.id }}</span>
+          </li>
+        }
+      </ul>
+      <div class="p-4 border-t text-right">
+        <button class="bg-blue-500 text-white px-4 py-2 rounded" (click)="userListService.closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+    }
+</div>
