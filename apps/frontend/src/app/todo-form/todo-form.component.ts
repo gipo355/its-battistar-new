@@ -104,5 +104,7 @@ export class TodoFormComponent {
             'Successfully created todo!',
             'success'
         );
+
+        this.userListService.selectedUser.set(null)
     }
 }
