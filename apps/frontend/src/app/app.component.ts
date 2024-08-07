@@ -1,6 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { environment } from '../environments/environment';
 import { AuthService } from './api/auth.service';
 import { InfoPopupComponent } from './info-popup/info-popup.component';
 import { InfoPopupService } from './info-popup/info-popup.service';
@@ -26,11 +27,12 @@ import { TodosListComponent } from './todos-list/todos-list.component';
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
     infoPopupService = inject(InfoPopupService);
     authService = inject(AuthService);
 
-    ngOnInit(): void {
+    constructor() {
+        console.log('production:', environment.production);
         this.authService.loadFromLocalStorage();
     }
 }

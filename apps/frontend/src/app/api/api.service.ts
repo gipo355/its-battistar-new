@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { retry, take } from 'rxjs';
 
+import { environment } from '../../environments/environment';
 import type { ApiError } from '../../model/api-error';
 import type { Todo } from '../../model/todo';
 import { User } from '../../model/user';
@@ -24,7 +25,7 @@ export class ApiService {
      */
 
     httpClient = inject(HttpClient);
-    baseUrl = 'http://localhost:3000/api';
+    baseUrl = environment.baseUrl;
     todos: WritableSignal<Todo[]> = signal([]);
     isLoading = signal(false);
     error: WritableSignal<AppError | null> = signal(null);
