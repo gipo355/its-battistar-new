@@ -12,6 +12,7 @@
 import type { User } from './user';
 
 export interface Todo {
+    _id?: string;
     assignedTo?: User;
     completed?: boolean;
     createdBy?: User;

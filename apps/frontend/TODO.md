@@ -1,0 +1,4 @@
+- stacking info popup
+- assign todo
+- search query filter
+- better UX for loading after CRUD operations

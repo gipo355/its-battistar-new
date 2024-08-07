@@ -95,6 +95,10 @@ export class ApiService {
                     // realign local state with remote state
                     this.getTodos();
                     this.isLoading.set(false);
+                    this.infoPopupService.showNotification(
+                        'Todo completed!',
+                        'success'
+                    );
                 },
                 error: this.errorHandler,
             });
@@ -110,6 +114,10 @@ export class ApiService {
                     // realign local state with remote state
                     this.getTodos();
                     this.isLoading.set(false);
+                    this.infoPopupService.showNotification(
+                        'Todo uncompleted!',
+                        'success'
+                    );
                 },
                 error: this.errorHandler,
             });
@@ -135,13 +143,17 @@ export class ApiService {
     deleteTodo(id: string): void {
         this.isLoading.set(true);
         this.httpClient
-            .delete<Todo>(`${this.baseUrl}/todos/${id}`)
+            .delete<null>(`${this.baseUrl}/todos/${id}`)
             .pipe(take(1), retry(1))
             .subscribe({
                 next: () => {
                     // realign local state with remote state
                     this.getTodos();
                     this.isLoading.set(false);
+                    this.infoPopupService.showNotification(
+                        'Todo deleted!',
+                        'success'
+                    );
                 },
                 error: this.errorHandler,
             });

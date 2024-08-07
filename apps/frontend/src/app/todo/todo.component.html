@@ -4,7 +4,7 @@
     <button
         type="button"
         class="absolute right-2 top-2 inline-flex items-center rounded-full bg-red-600 p-2 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-        (click)="onDelete(todo()?.id)"
+        (click)="onDelete(todo()?._id)"
     >
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +46,7 @@
             <button
                 type="button"
                 class="inline-flex items-center rounded-md border border-transparent bg-green-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                (click)="onComplete(todo()?.id)"
+                (click)="onComplete(todo()?._id)"
             >
                 Complete
             </button>
@@ -54,7 +54,7 @@
             <button
                 type="button"
                 class="inline-flex items-center rounded-md border border-transparent bg-gray-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                (click)="onUncomplete(todo()?.id)"
+                (click)="onUncomplete(todo()?._id)"
             >
                 Uncomplete
             </button>

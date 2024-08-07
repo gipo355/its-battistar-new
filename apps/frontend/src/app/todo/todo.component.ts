@@ -26,20 +26,20 @@ export class TodoComponent {
         if (!id) {
             return;
         }
-        console.log('Delete todo with id:', id);
+        this.apiService.deleteTodo(id);
     }
 
     onComplete(id: string | undefined): void {
         if (!id) {
             return;
         }
-        console.log('Complete todo with id:', id);
+        this.apiService.completeTodo(id);
     }
 
     onUncomplete(id: string | undefined): void {
         if (!id) {
             return;
         }
-        console.log('Uncomplete todo with id:', id);
+        this.apiService.uncompleteTodo(id);
     }
 }
