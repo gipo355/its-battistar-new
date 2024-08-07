@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import {
     FormBuilder,
     FormControl,
@@ -13,6 +13,8 @@ import { ApiService } from '../api/api.service';
 import { AuthService } from '../api/auth.service';
 import { InfoPopupService } from '../info-popup/info-popup.service';
 import { TodosService } from '../pages/todos/todos.service';
+import { UserListComponent } from '../user-list/user-list.component';
+import { UserListService } from '../user-list/user-list.service';
 // import { inputIsMongoDbID } from '../shared/inputIsMongodb';
 
 interface TodoForm {
@@ -24,7 +26,11 @@ interface TodoForm {
 @Component({
     selector: 'app-todo-form',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        UserListComponent
+    ],
     templateUrl: './todo-form.component.html',
     styleUrl: './todo-form.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,6 +42,8 @@ export class TodoFormComponent {
 
     todosService = inject(TodosService);
 
+    userListService = inject(UserListService);
+
     authService = inject(AuthService);
 
     infoPopupService = inject(InfoPopupService);
@@ -45,7 +53,9 @@ export class TodoFormComponent {
             Validators.required.bind(Validators).bind(this),
             Validators.minLength(3).bind(this),
         ]),
-        assignedTo: new FormControl('', [
+        assignedTo: new FormControl(
+            ''
+            , [
             // Validators.required.bind(this),
             // inputIsMongoDbID().bind(this),
         ]),
@@ -60,6 +70,17 @@ export class TodoFormComponent {
     // ngOnInit(): void {
     //     this.todoForm = this.fb.group({});
     // }
+
+     updateUser = effect(() => {
+        if (this.userListService.selectedUser()) {
+            this.todoForm.controls.assignedTo.setValue(this.userListService.selectedUser()?.id ?? '');
+        }
+    })
+    
+
+    onAssignedToClick(): void {
+        this.userListService.openModal();
+    }
 
     onSubmit(): void {
         const todo = {

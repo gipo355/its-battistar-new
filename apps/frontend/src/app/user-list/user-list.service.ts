@@ -3,11 +3,14 @@ import { Injectable, signal,WritableSignal } from "@angular/core";
 import { User } from "../../model/user";
 
 
-@Injectable(
-    {
-        providedIn: 'root'
-    }
-)
+/**
+ * Service for managing the user list modal.
+ * This is not a singleton, because it is used in multiple places.
+ * Every time it should have a new state
+ */
+@Injectable({
+    providedIn: 'root'
+})
 export class UserListService {
     isModalOpen = signal(false)
     selectedUser: WritableSignal<User | null> = signal(null)

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject,OnInit } from '@angular/core';
 
 import { ApiService } from '../api/api.service';
 import { UserListService } from './user-list.service';
@@ -13,7 +13,12 @@ import { UserListService } from './user-list.service';
     styleUrl: './user-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserListComponent {
+export class UserListComponent implements OnInit {
     apiService = inject(ApiService);
     userListService = inject(UserListService);
+
+
+    ngOnInit(): void {
+        this.apiService.getUsers();
+    }
 }

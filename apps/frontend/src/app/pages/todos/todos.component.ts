@@ -11,6 +11,8 @@ import { TodoFormComponent } from '../../todo-form/todo-form.component';
 import { TodosFilterComponent } from '../../todos-filter/todos-filter.component';
 import { TodosListComponent } from '../../todos-list/todos-list.component';
 import { UserInfoComponent } from '../../user-info/user-info.component';
+import { UserListComponent } from '../../user-list/user-list.component';
+import { UserListService } from '../../user-list/user-list.service';
 import { TodosService } from './todos.service';
 
 @Component({
@@ -23,6 +25,7 @@ import { TodosService } from './todos.service';
         TodoComponent,
         InfoPopupComponent,
         UserInfoComponent,
+        UserListComponent,
     ],
     selector: 'app-todos',
     templateUrl: './todos.component.html',
@@ -30,6 +33,7 @@ import { TodosService } from './todos.service';
 })
 export class TodosComponent implements OnInit {
     infoPopupService = inject(InfoPopupService);
+    userListService = inject(UserListService);
     appService = inject(AppService);
     todosService = inject(TodosService);
     authService = inject(AuthService);

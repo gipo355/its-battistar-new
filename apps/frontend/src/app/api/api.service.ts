@@ -165,7 +165,7 @@ export class ApiService {
             });
     }
 
-    listUsers(): void {
+    getUsers(): void {
         this.isLoading.set(true);
         this.httpClient
             .get<User[]>(`${this.baseUrl}/users`)
