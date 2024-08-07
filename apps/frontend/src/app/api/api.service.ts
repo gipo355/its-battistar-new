@@ -59,7 +59,6 @@ export class ApiService {
             .pipe(take(1), retry(1))
             .subscribe({
                 next: (todos) => {
-                    console.log(todos);
                     this.todos.set(todos);
                     this.isLoading.set(false);
                 },
