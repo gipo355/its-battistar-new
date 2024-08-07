@@ -4,7 +4,12 @@
 
 ```bash
 git clone https://github.com/gipo355/its-battistar-new && cd its-battistar-new
-npm install
+```
+
+## Install
+
+```bash
+npm ci
 ```
 
 ## Run
@@ -14,12 +19,12 @@ Make sure you have a mongodb instance running on `localhost:27017`
 then run
 
 ```bash
-npm run backend
-npm run frontend
+npm run backend:serve
+npm run frontend:serve
 ```
 
-or to run all at once
+or to run both at once
 
 ```bash
-npm run serve-all
+npm run all:serve
 ```

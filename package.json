@@ -3,9 +3,9 @@
     "version": "0.0.1",
     "license": "MIT",
     "scripts": {
-        "serve-all": "nx run-many -t serve backend frontend",
-        "serve-backend": "nx run backend:serve",
-        "serve-frontend": "nx run frontend:serve",
+        "all:serve": "nx run-many -t serve backend frontend",
+        "backend:serve": "nx run backend:serve",
+        "frontend:serve": "nx run frontend:serve",
         "create-angular-lib": "nx g @nx/angular:lib --directory=libs --style=scss --lazy=true --routing=true --changeDetection=OnPush --standalone=true --setParserOptionsProject=true",
         "create-angular-component": "nx g @nx/angular:component --style=scss --changeDetection=OnPush --standalone=true "
     },
