@@ -37,7 +37,10 @@
                 </div>
                 <button
                     type="submit"
-                    class="w-full rounded-md bg-blue-500 px-4 py-2 text-white"
+                    class="w-full rounded-md bg-blue-500 px-4 py-2 text-white disabled:bg-gray-500"
+                    [disabled]="
+                        authService.isLoading() || authService.isAuthenticated()
+                    "
                 >
                     Login
                 </button>
@@ -142,7 +145,10 @@
                 </div>
                 <button
                     type="submit"
-                    class="w-full rounded-md bg-blue-500 px-4 py-2 text-white"
+                    class="w-full rounded-md bg-blue-500 px-4 py-2 text-white disabled:bg-gray-500"
+                    [disabled]="
+                        authService.isLoading() || authService.isAuthenticated()
+                    "
                 >
                     Register
                 </button>

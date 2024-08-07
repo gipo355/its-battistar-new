@@ -56,7 +56,10 @@ export class AuthenticateComponent {
             'success'
         );
         // BUG: doesn't navigate to the home page on first click
-        this.router.navigate(['/']);
+        setTimeout(() => {
+            void this.router.navigate(['/']);
+            // eslint-disable-next-line no-magic-numbers
+        }, 1000);
     }
     onSubmitRegisterForm(): void {
         const firstName = this.registerForm.value.firstName;
@@ -86,7 +89,11 @@ export class AuthenticateComponent {
         );
 
         // BUG: doesn't navigate to the home page on first click
-        this.router.navigate(['/']);
+        // must wait for signals to be updated
+        setTimeout(() => {
+            void this.router.navigate(['/']);
+            // eslint-disable-next-line no-magic-numbers
+        }, 1000);
     }
 
     toggleForms(): void {

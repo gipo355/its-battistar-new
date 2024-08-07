@@ -5,6 +5,7 @@ import { authGuard } from './api/auth.guard';
 export const routes: Routes = [
     {
         path: 'authenticate',
+        canActivate: [authGuard],
         loadComponent: async () =>
             import('./pages/authenticate/authenticate.component').then(
                 (m) => m.AuthenticateComponent

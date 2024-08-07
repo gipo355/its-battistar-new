@@ -16,6 +16,17 @@ import type { User } from '../../model/user';
 import { InfoPopupService } from '../info-popup/info-popup.service';
 import { AppError } from '../shared/app-error';
 
+const dataIsUser = (data: unknown): data is User => {
+    return (
+        data !== null &&
+        typeof data === 'object' &&
+        'firstName' in data &&
+        'lastName' in data &&
+        'fullName' in data &&
+        'picture' in data
+    );
+};
+
 @Injectable({
     providedIn: 'root',
 })
@@ -55,6 +66,47 @@ export class AuthService {
         this.error.set(newError);
         this.isLoading.set(false);
     };
+
+    loadFromLocalStorage(): void {
+        const token = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
+
+        if (!token || !user) {
+            localStorage.clear();
+            return;
+        }
+
+        this.token.set(token);
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const parsedUser = user ? JSON.parse(user) : null;
+
+        if (dataIsUser(parsedUser)) {
+            this.user.set(parsedUser);
+        } else {
+            localStorage.clear();
+            return;
+        }
+
+        this.isAuthenticated.set(true);
+    }
+
+    syncWithLocalStorage = effect(() => {
+        const token = this.token();
+        const user = this.user();
+        if (token) {
+            localStorage.setItem('token', token);
+        }
+
+        if (user) {
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+    });
+
+    logout(): void {
+        this.token.set(null);
+        this.user.set(null);
+    }
 
     login(username: string, password: string): void {
         this.isLoading.set(true);
