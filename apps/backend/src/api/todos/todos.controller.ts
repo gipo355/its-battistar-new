@@ -6,7 +6,7 @@ import { isMongoId } from 'validator';
 import { AppError } from '../../errors/app-error';
 import { catchAsync } from '../../utils/catch-async';
 import { UserModel } from '../users/user.model';
-import { TodoDTO } from './todo.entity';
+import { TodoDTO } from './todo.dto';
 import { TodoModel } from './todo.model';
 
 export const getTodos = catchAsync(async (req, res) => {

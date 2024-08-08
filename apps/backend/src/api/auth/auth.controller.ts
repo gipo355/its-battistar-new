@@ -5,10 +5,10 @@ import mongoose from 'mongoose';
 import { AppError } from '../../errors/app-error';
 import { generateToken } from '../../utils/auth/jwt';
 import { catchAsync } from '../../utils/catch-async';
+import { UserDTO } from '../users/user.dto';
 import type { IUser } from '../users/user.entity';
 import { UserModel } from '../users/user.model';
 import type { LoginResponse } from './auth.entity';
-import { RegisterDTO } from './auth.entity';
 
 export const login = catchAsync(async (req, res) => {
     const { username, password } = req.body as {
@@ -68,7 +68,7 @@ export const register = catchAsync(async (req, res) => {
         username: string | undefined;
     };
 
-    const userDto = new RegisterDTO({
+    const userDto = new UserDTO({
         firstName,
         lastName,
         picture,
