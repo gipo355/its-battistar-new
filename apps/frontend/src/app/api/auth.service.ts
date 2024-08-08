@@ -37,25 +37,7 @@ export class AuthService {
     token: WritableSignal<string | null> = signal(null);
     isAuthenticated = signal(false);
     isLoading = signal(false);
-    errors: WritableSignal<AppError[] | null> = signal(null);
     infoPopupService = inject(InfoPopupService);
-
-    displayError = effect(
-        () => {
-            const errors = this.errors();
-            if (errors?.length) {
-                for (const error of errors) {
-                    this.infoPopupService.showNotification(
-                        error.message,
-                        'error'
-                    );
-                }
-            }
-        },
-        {
-            allowSignalWrites: true,
-        }
-    );
 
     errorHandler = (err: HttpErrorResponse): void => {
         const originalError: ApiError = err.error as ApiError;
@@ -63,8 +45,7 @@ export class AuthService {
             message: `${originalError.status.toString()}: ${originalError.message}`,
             code: originalError.status,
         });
-        const errors = this.errors() ?? [];
-        this.errors.set([...errors, newError]);
+        this.infoPopupService.showNotification(newError.message, 'error');
         this.isLoading.set(false);
     };
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import { HttpClient, type HttpErrorResponse } from '@angular/common/http';
 import {
-    effect,
+    // effect,
     inject,
     Injectable,
     signal,
@@ -12,7 +12,7 @@ import { retry, take } from 'rxjs';
 import { environment } from '../../environments/environment';
 import type { ApiError } from '../../model/api-error';
 import type { Todo } from '../../model/todo';
-import { User } from '../../model/user';
+import type { User } from '../../model/user';
 import { InfoPopupService } from '../info-popup/info-popup.service';
 import { AppError } from '../shared/app-error';
 
@@ -28,21 +28,8 @@ export class ApiService {
     baseUrl = environment.baseUrl;
     todos: WritableSignal<Todo[]> = signal([]);
     isLoading = signal(false);
-    error: WritableSignal<AppError | null> = signal(null);
     infoPopupService = inject(InfoPopupService);
     users: WritableSignal<User[]> = signal([]);
-
-    displayError = effect(
-        () => {
-            const error = this.error();
-            if (error) {
-                this.infoPopupService.showNotification(error.message, 'error');
-            }
-        },
-        {
-            allowSignalWrites: true,
-        }
-    );
 
     errorHandler = (err: HttpErrorResponse): void => {
         const originalError: ApiError = err.error as ApiError;
@@ -50,7 +37,8 @@ export class ApiService {
             message: `${originalError.status.toString()}: ${originalError.message}`,
             code: originalError.status,
         });
-        this.error.set(newError);
+        // this.error.set(newError);
+        this.infoPopupService.showNotification(newError.message, 'error');
         this.isLoading.set(false);
     };
 
