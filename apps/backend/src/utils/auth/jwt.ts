@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import { sign, verify } from 'jsonwebtoken';
 
 import type { IUser } from '../../api/users/user.entity';
-import { AppError } from '../app-error';
+import { AppError } from '../../errors/app-error';
 
 const SECRET = 'secret';
 

@@ -1,3 +1,3 @@
-import { errorHandler } from './error-handler';
+import { errorHandler } from './error.service';
 
 export const errorHandlers = [errorHandler];

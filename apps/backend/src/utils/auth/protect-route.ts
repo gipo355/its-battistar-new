@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import { StatusCodes } from 'http-status-codes';
 
-import { AppError } from '../app-error';
+import { AppError } from '../../errors/app-error';
 import { catchAsync } from '../catch-async';
 import { verifyToken } from './jwt';
 

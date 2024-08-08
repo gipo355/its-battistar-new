@@ -7,7 +7,7 @@ import morgan from 'morgan';
 import apiRouter from './api/routes';
 import type { IUser } from './api/users/user.entity';
 import { errorHandlers } from './errors';
-import { AppError } from './utils/app-error';
+import { AppError } from './errors/app-error';
 import { globalMiddleware } from './utils/global-middleware';
 
 const app = express();

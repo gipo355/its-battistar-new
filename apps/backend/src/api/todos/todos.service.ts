@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 import { isMongoId } from 'validator';
 
-import { AppError } from '../../utils/app-error';
+import { AppError } from '../../errors/app-error';
 import { catchAsync } from '../../utils/catch-async';
 import { UserModel } from '../users/user.model';
 import { TodoDTO } from './todo.entity';

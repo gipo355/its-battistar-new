@@ -1,8 +1,8 @@
 import type { ErrorRequestHandler } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
-import { AppError } from '../utils/app-error';
-import { ErrorMessage } from '../utils/error-message';
+import { AppError } from './app-error';
+import { ErrorMessage } from './error-message';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {

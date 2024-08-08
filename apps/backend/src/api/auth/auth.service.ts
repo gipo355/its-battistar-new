@@ -2,7 +2,7 @@ import { validate, ValidationError } from 'class-validator';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 
-import { AppError } from '../../utils/app-error';
+import { AppError } from '../../errors/app-error';
 import { generateToken } from '../../utils/auth/jwt';
 import { catchAsync } from '../../utils/catch-async';
 import type { IUser } from '../users/user.entity';
