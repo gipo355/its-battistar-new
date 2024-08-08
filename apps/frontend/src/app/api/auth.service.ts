@@ -42,10 +42,26 @@ export class AuthService {
     errorHandler = (err: HttpErrorResponse): void => {
         const originalError: ApiError = err.error as ApiError;
         const newError = new AppError({
-            message: `${originalError.status.toString()}: ${originalError.message}`,
+            message: originalError.message,
             code: originalError.status,
+            details: originalError.details,
         });
-        this.infoPopupService.showNotification(newError.message, 'error');
+        const details = newError.details;
+        const detailsExists = details && Object.keys(details).length;
+        let detailsMessage = '';
+        if (detailsExists) {
+            for (const key of Object.keys(details)) {
+                const innerDetails = details[key] as Record<string, unknown>;
+
+                for (const innerKey of Object.keys(innerDetails)) {
+                    detailsMessage += `\n${key}: ${innerKey}: ${innerDetails[innerKey]}`;
+                }
+            }
+        }
+
+        const message = `${newError.code.toString()}: ${newError.message} ${detailsMessage}`;
+
+        this.infoPopupService.showNotification(message, 'error', 5000);
         this.isLoading.set(false);
     };
 
