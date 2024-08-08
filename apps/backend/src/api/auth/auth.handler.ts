@@ -115,6 +115,7 @@ export const register = catchAsync(async (req, res) => {
                 });
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-magic-numbers, @typescript-eslint/no-unsafe-member-access
             if ((error as any).code === 11000) {
                 throw new AppError({
                     message: 'Username already exists',

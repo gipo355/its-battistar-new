@@ -134,6 +134,11 @@ export class AuthService {
                     this.token.set(login.token);
                     this.isAuthenticated.set(true);
                     this.isLoading.set(false);
+                    this.infoPopupService.showNotification(
+                        'Successfully logged in!',
+
+                        'success'
+                    );
                 },
                 error: this.errorHandler,
             });
@@ -166,10 +171,12 @@ export class AuthService {
                 next: () => {
                     this.isLoading.set(false);
                     this.infoPopupService.showNotification(
-                        'Successfully registered, please login with your credentials now! I could not send you a token during registration because it is not in the swagger spec',
+                        'Successfully registered!',
                         'success',
                         5000
                     );
+
+                    this.login(username, password);
                 },
                 error: this.errorHandler,
             });

@@ -75,11 +75,6 @@ export class AuthenticateComponent {
         }
 
         this.authService.login(login.username, login.password);
-        this.infoPopupService.showNotification(
-            'Successfully logged in!',
-
-            'success'
-        );
         // BUG: doesn't navigate to the home page on first click
         setTimeout(() => {
             void this.router.navigate(['/']);
