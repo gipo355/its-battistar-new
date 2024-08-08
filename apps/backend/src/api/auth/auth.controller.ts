@@ -5,9 +5,9 @@ import mongoose from 'mongoose';
 import { AppError } from '../../errors/app-error';
 import { generateToken } from '../../utils/auth/jwt';
 import { catchAsync } from '../../utils/catch-async';
-import { UserDTO } from '../users/user.dto';
 import type { IUser } from '../users/user.entity';
 import { UserModel } from '../users/user.model';
+import { LoginUserDTO, RegisterUserDTO } from './auth.dto';
 import type { LoginResponse } from './auth.entity';
 
 export const login = catchAsync(async (req, res) => {
@@ -16,10 +16,25 @@ export const login = catchAsync(async (req, res) => {
         username: string | undefined;
     };
 
-    if (!username || !password) {
+    const userDto = new LoginUserDTO({
+        username,
+        password,
+    });
+
+    const errors = await validate(userDto);
+
+    if (errors.length) {
+        const details: Record<string, unknown> = {};
+        for (const error of errors) {
+            if (error instanceof ValidationError) {
+                details[error.property] = error.constraints;
+            }
+        }
+
         throw new AppError({
-            message: 'Missing username or password',
+            message: 'Validation error',
             code: StatusCodes.BAD_REQUEST,
+            details,
         });
     }
 
@@ -34,7 +49,8 @@ export const login = catchAsync(async (req, res) => {
         });
     }
 
-    const isMatch = await user.comparePassword(password);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const isMatch = await user.comparePassword(userDto.password!);
 
     if (!isMatch) {
         throw new AppError({
@@ -68,7 +84,7 @@ export const register = catchAsync(async (req, res) => {
         username: string | undefined;
     };
 
-    const userDto = new UserDTO({
+    const userDto = new RegisterUserDTO({
         firstName,
         lastName,
         picture,

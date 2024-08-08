@@ -4,8 +4,6 @@ interface Token {
     token: string;
 }
 
-export type LoginDTO = Credentials;
-
 export type LoginResponse = Token & {
     user: IUser;
 };

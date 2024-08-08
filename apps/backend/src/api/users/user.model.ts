@@ -103,7 +103,7 @@ userSchema.virtual('fullName').get(function getFullName() {
  * encrypt password before saving
  */
 userSchema.pre('save', async function encryptPassword(next) {
-    if (this.isModified('password')) {
+    if (this.isModified('password') && this.password) {
         this.password = await hashPassword(this.password);
     }
 
@@ -113,6 +113,9 @@ userSchema.pre('save', async function encryptPassword(next) {
 userSchema.methods.comparePassword = async function (
     password: string
 ): Promise<boolean> {
+    if (!this.password) {
+        return false;
+    }
     return comparePassword(password, this.password);
 };
 

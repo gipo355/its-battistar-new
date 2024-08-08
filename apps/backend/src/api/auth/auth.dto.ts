@@ -1,8 +1,24 @@
 import { IsNotEmpty, IsString, IsStrongPassword, IsUrl } from 'class-validator';
 
-import { TRegisterDTO } from '../auth/auth.entity';
+import { Credentials } from '../users/user.entity';
+import { TRegisterDTO } from './auth.entity';
 
-export class UserDTO {
+export class LoginUserDTO implements Credentials {
+    @IsString()
+    @IsNotEmpty()
+    username?: string;
+
+    @IsString()
+    @IsNotEmpty()
+    password?: string;
+
+    constructor({ username, password }: Partial<TRegisterDTO>) {
+        this.username = username;
+        this.password = password;
+    }
+}
+
+export class RegisterUserDTO {
     @IsString()
     @IsNotEmpty()
     firstName?: string;

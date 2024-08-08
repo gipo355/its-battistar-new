@@ -7,8 +7,8 @@ export interface IUser {
 }
 
 export interface Credentials {
-    password: string;
-    username: string;
+    password?: string;
+    username?: string;
 }
 
 export type FullUser = IUser & Credentials;
