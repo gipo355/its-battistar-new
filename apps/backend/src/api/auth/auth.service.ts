@@ -3,8 +3,8 @@ import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 
 import { AppError } from '../../utils/app-error';
+import { generateToken } from '../../utils/auth/jwt';
 import { catchAsync } from '../../utils/catch-async';
-import { generateToken } from '../../utils/jwt';
 import type { IUser } from '../users/user.entity';
 import { UserModel } from '../users/user.model';
 import type { LoginResponse } from './auth.entity';

@@ -3,8 +3,8 @@ import { isStrongPassword } from 'validator';
 import isAscii from 'validator/lib/isAscii';
 import isURL from 'validator/lib/isURL';
 
+import { comparePassword, hashPassword } from '../../utils/auth/bcrypt';
 import type { IUserMongoose } from './user.entity';
-import { comparePassword, hashPassword } from '../../utils/bcrypt';
 
 interface IUserMethods {
     comparePassword(password: string): Promise<boolean>;

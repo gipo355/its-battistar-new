@@ -3,7 +3,7 @@ import type { Handler } from 'express';
 // import type { UserDocument } from '../mongoloid/user.model';
 // import { UserModel } from '../mongoloid/user.model';
 // import { generateToken } from '../utils/jwt';
-import { catchAsync } from '../utils/catch-async';
+import { catchAsync } from './catch-async';
 
 export const globalMiddleware: Handler = catchAsync(async (req, res, next) => {
     // reset on every request

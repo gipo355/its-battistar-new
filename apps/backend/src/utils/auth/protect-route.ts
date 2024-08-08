@@ -1,9 +1,9 @@
 /* eslint-disable no-magic-numbers */
 import { StatusCodes } from 'http-status-codes';
 
-import { AppError } from '../utils/app-error';
-import { catchAsync } from '../utils/catch-async';
-import { verifyToken } from '../utils/jwt';
+import { AppError } from '../app-error';
+import { catchAsync } from '../catch-async';
+import { verifyToken } from './jwt';
 
 export const protectRoute = catchAsync(async (req, res, next) => {
     // WARN: bad implementation of client side auth for fake exam
