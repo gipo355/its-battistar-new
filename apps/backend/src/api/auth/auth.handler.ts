@@ -115,6 +115,13 @@ export const register = catchAsync(async (req, res) => {
                 });
             }
 
+            if ((error as any).code === 11000) {
+                throw new AppError({
+                    message: 'Username already exists',
+                    code: StatusCodes.BAD_REQUEST,
+                });
+            }
+
             throw new AppError({
                 message: 'Error creating user',
                 code: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -128,7 +135,7 @@ export const register = catchAsync(async (req, res) => {
         }
 
         throw new AppError({
-            message: 'Error creating user',
+            message: 'Error creating user 2',
             code: StatusCodes.INTERNAL_SERVER_ERROR,
         });
     }
