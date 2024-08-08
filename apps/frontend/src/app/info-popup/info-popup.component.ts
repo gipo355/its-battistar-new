@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-    ChangeDetectionStrategy,
-    Component,
-    inject,
-    OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { InfoPopupService } from './info-popup.service';
 
@@ -16,14 +11,14 @@ import { InfoPopupService } from './info-popup.service';
     styleUrl: './info-popup.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InfoPopupComponent implements OnInit {
+export class InfoPopupComponent {
     infoPopupService = inject(InfoPopupService);
 
-    ngOnInit(): void {
-        if (this.infoPopupService.message().length) {
-            setTimeout(() => {
-                this.infoPopupService.message.set('');
-            }, this.infoPopupService.duration());
-        }
-    }
+    // ngOnInit(): void {
+    //     if (this.infoPopupService.message().length) {
+    //         setTimeout(() => {
+    //             this.infoPopupService.message.set('');
+    //         }, this.infoPopupService.duration());
+    //     }
+    // }
 }

@@ -99,13 +99,6 @@ export class AuthenticateComponent {
             username,
             password,
         });
-
-        this.infoPopupService.showNotification(
-            'Successfully registered!',
-
-            'success'
-        );
-
         // BUG: doesn't navigate to the home page on first click
         // must wait for signals to be updated
         setTimeout(() => {

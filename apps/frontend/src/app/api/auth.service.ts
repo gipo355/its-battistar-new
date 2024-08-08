@@ -37,14 +37,19 @@ export class AuthService {
     token: WritableSignal<string | null> = signal(null);
     isAuthenticated = signal(false);
     isLoading = signal(false);
-    error: WritableSignal<AppError | null> = signal(null);
+    errors: WritableSignal<AppError[] | null> = signal(null);
     infoPopupService = inject(InfoPopupService);
 
     displayError = effect(
         () => {
-            const error = this.error();
-            if (error) {
-                this.infoPopupService.showNotification(error.message, 'error');
+            const errors = this.errors();
+            if (errors?.length) {
+                for (const error of errors) {
+                    this.infoPopupService.showNotification(
+                        error.message,
+                        'error'
+                    );
+                }
             }
         },
         {
@@ -58,7 +63,8 @@ export class AuthService {
             message: `${originalError.status.toString()}: ${originalError.message}`,
             code: originalError.status,
         });
-        this.error.set(newError);
+        const errors = this.errors() ?? [];
+        this.errors.set([...errors, newError]);
         this.isLoading.set(false);
     };
 
@@ -172,8 +178,7 @@ export class AuthService {
                     this.isLoading.set(false);
                     this.infoPopupService.showNotification(
                         'Successfully registered!',
-                        'success',
-                        5000
+                        'success'
                     );
 
                     this.login(username, password);

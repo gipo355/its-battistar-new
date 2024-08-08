@@ -1,8 +1,23 @@
-@if (infoPopupService.message().length) {
+<!-- @if (infoPopupService.messages().size) { -->
+<!--     @for (message of Array.from(infoPopupService.messages); track message) { -->
+<!--         <div -->
+<!--             class="fixed bottom-4 right-4 w-full max-w-xs rounded-lg p-4 shadow-lg" -->
+<!--             [ngClass]="infoPopupService.type()" -->
+<!--         > -->
+<!--             <p>{{ infoPopupService.message() }}</p> -->
+<!--         </div> -->
+<!--     } -->
+<!-- } -->
+<div *ngIf="infoPopupService.messages().size">
     <div
+        *ngFor="
+            let message of infoPopupService.messages() | keyvalue;
+            let i = index
+        "
         class="fixed bottom-4 right-4 w-full max-w-xs rounded-lg p-4 shadow-lg"
-        [ngClass]="infoPopupService.type()"
+        [ngClass]="message.value.type"
+        [style.bottom.px]="4 + i * 60"
     >
-        <p>{{ infoPopupService.message() }}</p>
+        <p>{{ message.value.message }}</p>
     </div>
-}
+</div>
