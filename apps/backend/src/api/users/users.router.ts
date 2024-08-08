@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { protectRoute } from '../../utils/auth/protect-route';
-import { getUsers } from './users.service';
+import { getUsers } from './users.controller';
 
 const r = Router();
 

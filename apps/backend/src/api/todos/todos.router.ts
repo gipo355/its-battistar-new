@@ -8,7 +8,7 @@ import {
     deleteTodo,
     getTodos,
     uncompleteTodo,
-} from './todos.service';
+} from './todos.controller';
 
 const r = Router();
 
