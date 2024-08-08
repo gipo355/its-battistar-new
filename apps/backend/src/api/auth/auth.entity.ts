@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsStrongPassword, IsUrl } from 'class-validator';
 
-import type { Credentials, IUser } from './user.schema';
+import type { Credentials, IUser } from '../users/user.entity';
 
 interface Token {
     token: string;

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { protectRoute } from '../../middleware/protect-route';
-import { getUsers } from './users.handler';
+import { getUsers } from './users.service';
 
 const r = Router();
 

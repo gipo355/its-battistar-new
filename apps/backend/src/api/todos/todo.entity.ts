@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import type mongoose from 'mongoose';
 
-import type { IUser } from './user.schema';
+import type { IUser } from '../users/user.entity';
 
 export interface ITodoBase {
     completed: boolean;

@@ -5,9 +5,9 @@ import { StatusCodes } from 'http-status-codes';
 import morgan from 'morgan';
 
 import apiRouter from './api/routes';
+import type { IUser } from './api/users/user.entity';
 import { errorHandlers } from './errors';
 import { globalMiddleware } from './middleware/global-middleware';
-import type { IUser } from './schemas/user.schema';
 import { AppError } from './utils/app-error';
 
 const app = express();

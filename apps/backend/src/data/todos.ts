@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import { faker } from '@faker-js/faker';
 
-import type { ITodo } from '../schemas/todo.schema';
+import type { ITodo } from '../api/todos/todo.entity';
 
 export const fakeTodos: ITodo[] = [
     // {

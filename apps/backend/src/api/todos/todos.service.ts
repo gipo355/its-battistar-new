@@ -3,11 +3,11 @@ import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 import { isMongoId } from 'validator';
 
-import { TodoModel } from '../../mongoloid/todo.model';
-import { UserModel } from '../../mongoloid/user.model';
-import { TodoDTO } from '../../schemas/todo.schema';
 import { AppError } from '../../utils/app-error';
 import { catchAsync } from '../../utils/catch-async';
+import { UserModel } from '../users/user.model';
+import { TodoDTO } from './todo.entity';
+import { TodoModel } from './todo.model';
 
 export const getTodos = catchAsync(async (req, res) => {
     const currUser = req.user;

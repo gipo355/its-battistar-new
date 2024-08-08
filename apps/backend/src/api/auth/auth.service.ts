@@ -2,13 +2,13 @@ import { validate, ValidationError } from 'class-validator';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 
-import { UserModel } from '../../mongoloid/user.model';
-import type { LoginResponse } from '../../schemas/auth.schema';
-import { RegisterDTO } from '../../schemas/auth.schema';
-import type { IUser } from '../../schemas/user.schema';
 import { AppError } from '../../utils/app-error';
 import { catchAsync } from '../../utils/catch-async';
 import { generateToken } from '../../utils/jwt';
+import type { IUser } from '../users/user.entity';
+import { UserModel } from '../users/user.model';
+import type { LoginResponse } from './auth.entity';
+import { RegisterDTO } from './auth.entity';
 
 export const login = catchAsync(async (req, res) => {
     const { username, password } = req.body as {

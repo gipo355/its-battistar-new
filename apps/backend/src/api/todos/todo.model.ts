@@ -2,7 +2,7 @@
 import mongoose from 'mongoose';
 import isAscii from 'validator/lib/isAscii';
 
-import type { ITodoMongoose } from '../schemas/todo.schema';
+import type { ITodoMongoose } from './todo.entity';
 
 const todoSchema = new mongoose.Schema<ITodoMongoose>(
     {

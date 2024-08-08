@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { login, register } from './auth.handler';
+import { login, register } from './auth.service';
 
 const r = Router();
 

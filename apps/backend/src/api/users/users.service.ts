@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { UserModel } from '../../mongoloid/user.model';
 import { catchAsync } from '../../utils/catch-async';
+import { UserModel } from './user.model';
 
 export const getUsers = catchAsync(async (_req, res) => {
     // retuirn users without password
