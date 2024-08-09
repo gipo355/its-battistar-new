@@ -10,6 +10,7 @@ import {
 import { StatusCodes } from 'http-status-codes';
 import { retry, take } from 'rxjs';
 
+import { environment } from '../../environments/environment';
 import type { ApiError } from '../../model/api-error';
 import type { LoginResponse } from '../../model/login';
 import type { User } from '../../model/user';
@@ -32,7 +33,7 @@ const dataIsUser = (data: unknown): data is User => {
 })
 export class AuthService {
     httpClient = inject(HttpClient);
-    baseUrl = 'http://localhost:3000/api';
+    baseApiUrl = environment.baseApiUrl;
     user: WritableSignal<User | null> = signal(null);
     token: WritableSignal<string | null> = signal(null);
     isAuthenticated = signal(false);
@@ -119,7 +120,7 @@ export class AuthService {
     login(username: string, password: string): void {
         this.isLoading.set(true);
         this.httpClient
-            .post<LoginResponse>(`${this.baseUrl}/login`, {
+            .post<LoginResponse>(`${this.baseApiUrl}/login`, {
                 username,
                 password,
             })
@@ -162,7 +163,7 @@ export class AuthService {
     }): void {
         this.isLoading.set(true);
         this.httpClient
-            .post<User>(`${this.baseUrl}/register`, {
+            .post<User>(`${this.baseApiUrl}/register`, {
                 username,
                 password,
                 firstName,
